@@ -12,10 +12,12 @@ This document defines the initial requirements for `samsung-jog-api`. It is a pr
 - The system must support directional actions equivalent to `up`, `down`, `left`, and `right`.
 - The system must support center press behavior equivalent to `enter`.
 - The system should preserve use of the original front-panel `JOG` board when practical.
+- The system must observe the front-panel `LED` state as a feedback input.
 - The system must expose local software control through a REST API.
 - The API must provide high-level actions in addition to raw low-level button primitives.
 - The system should support scripted navigation sequences for common OSD workflows.
 - The system should read monitor state through DDC/CI whenever reliable and available.
+- The system should use front-panel `LED` behavior as an additional confirmation signal for monitor-state changes and OSD workflows.
 - The system should provide direct software control for features that already work over DDC, such as brightness and power state.
 - The system should provide enough state to support a local touch-screen UI.
 - The device must auto-start the application stack on boot.
@@ -49,7 +51,8 @@ This document defines the initial requirements for `samsung-jog-api`. It is a pr
 - The monitor decodes front-panel actions by measuring analog thresholds on `KEY_ADC1` and `KEY_ADC2`.
 - Reproducing the original resistance values closely enough will allow the monitor to interpret emulated actions as native `JOG` input.
 - DDC/CI remains useful as a feedback and telemetry channel even where it is incomplete as a control channel.
-- Common user goals can be represented as a combination of low-level button actions and DDC-assisted readback.
+- The front-panel `LED` exposes observable behavior that can help confirm state changes such as input switching, idle state, and some menu boundary conditions.
+- Common user goals can be represented as a combination of low-level button actions, `DDC` readback, and `LED`-assisted feedback.
 
 ## Out of scope for initial implementation
 
@@ -67,5 +70,6 @@ This document defines the initial requirements for `samsung-jog-api`. It is a pr
 - What latency is acceptable between API request and monitor-visible action
 - What level of hardware isolation is required to safely share the original `JOG` board and an inline controller
 - Whether the first implementation should use fixed resistor switching, digital potentiometers, or another analog method
+- How the `KED_LED` line behaves electrically and how reliably it can be sampled by the controller
 - Whether the UI should run in Chromium kiosk mode or a more native runtime
 - Whether a read-only root filesystem is worth the operational complexity for the first deployment

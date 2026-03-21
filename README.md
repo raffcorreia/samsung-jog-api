@@ -33,6 +33,7 @@ In practice, this project uses a hybrid model:
 
 - `JOG` emulation for actions that need true front-panel behavior
 - `DDC/CI` for machine-readable feedback and the functions that already work reliably
+- front-panel `LED` observation for local feedback cues such as input-change blink patterns, idle state, and possible OSD boundary signals
 - a local Raspberry Pi touch device as the always-on operator-facing control surface
 
 ## System overview
@@ -41,6 +42,7 @@ High-level system shape:
 
 - custom inline controller sits between the original `JOG` board and the monitor main board
 - controller reproduces the same resistance-to-ground states the monitor expects on `KEY_ADC1` and `KEY_ADC2`
+- controller observes the front-panel `LED` state as an additional feedback signal
 - local backend software exposes high-level actions through a REST API
 - a local touch UI runs in kiosk mode on a Raspberry Pi and calls the same API
 - DDC/CI provides state readback and supported direct controls such as brightness and power

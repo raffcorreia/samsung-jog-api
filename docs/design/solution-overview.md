@@ -14,6 +14,7 @@ The solution has four major parts:
 
 - an inline hardware module attached to the `JOG` harness
 - a low-level control layer that can reproduce `JOG` electrical states
+- a feedback path that combines `DDC` readback with front-panel `LED` observation
 - a local REST API that exposes high-level monitor actions
 - a local touch UI running on a Raspberry Pi in kiosk mode and using the same API
 
@@ -21,6 +22,7 @@ The solution has four major parts:
 
 - Prefer native monitor behavior over unsupported shortcuts.
 - Use DDC/CI where it is reliable, but do not force it to cover unsupported control paths.
+- Treat front-panel `LED` behavior as a first-class feedback signal when it reveals monitor state changes that software APIs do not.
 - Keep the low-level electrical interface separate from high-level monitor semantics.
 - Keep frontend interaction simple and centralize monitor logic in the backend.
 - Preserve the original front-panel controls when feasible.
@@ -41,7 +43,7 @@ The API layer expresses actions like `switch-input`, `open-menu`, or `set-bright
 
 - direct `DDC` command
 - direct `JOG` sequence
-- hybrid sequence using `JOG` for navigation and `DDC` for verification
+- hybrid sequence using `JOG` for navigation with `DDC` and `LED` verification
 
 The frontend should stay thin. It renders state, sends user actions, and avoids owning complex monitor workflow logic.
 
@@ -52,13 +54,14 @@ The inline controller sits between the original front control board and the moni
 - reproducing the measured resistance-to-ground values for directional and center actions
 - deciding when the original `JOG` board or the controller owns the line
 - preventing unsafe contention between physical and emulated input paths
-- optionally observing or controlling the front LED line if useful
+- observing the front `LED` line so higher layers can correlate visible behavior with control actions
 
 ## Software concept
 
 The software stack will likely need these logical modules:
 
 - hardware driver abstraction for `JOG` line control
+- `LED` observation or sampling abstraction
 - DDC service abstraction for monitor readback and supported direct controls
 - monitor behavior layer that translates high-level intents into action sequences
 - REST API layer
@@ -102,6 +105,7 @@ Operationally, the kiosk should also aim to be conservative:
 - whether the original `JOG` board remains permanently inline or is switched out during emulation
 - whether resistor selection is done with analog switches, relays, transistor networks, digital potentiometers, or a mixed design
 - how much OSD state can be inferred from DDC versus timing and workflow assumptions
+- how much monitor state can be inferred from front-panel `LED` behavior, and how deterministic those cues are
 - whether a simple stateless action API is enough or a richer monitor state machine is needed
 - whether the first kiosk runtime should be browser-based or use a native UI stack
 - whether read-only root storage is worth adopting in the first release

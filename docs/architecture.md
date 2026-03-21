@@ -7,7 +7,7 @@
 - electrically emulate the front-panel `JOG` control path
 - expose that behavior through a local REST API
 - pair it with a small local touch UI running on a Raspberry Pi control deck
-- use DDC/CI as a complementary feedback and status channel whenever possible
+- use DDC/CI and front-panel `LED` observation as complementary feedback and status channels whenever possible
 
 The guiding idea is simple: the monitor already knows how to respond to its own front-panel controls, so the most robust path to full control is to reproduce those same electrical states instead of relying on unsupported software-only shortcuts.
 
@@ -43,6 +43,7 @@ The intended control model combines two different paths:
 
 - `JOG` emulation for actions that require authentic front-panel behavior
 - `DDC/CI` for readback, health checks, and functions that already work reliably
+- front-panel `LED` observation for local visual confirmation of monitor behavior
 - a local kiosk device as the dedicated human interface layer
 
 At the API layer, the monitor should look like a normal controllable device rather than a collection of resistor values and timing hacks.
@@ -55,7 +56,7 @@ The controller will:
 
 - leave the original front-panel board usable when desired
 - reproduce the same resistance-to-ground states for `KEY_ADC1` and `KEY_ADC2`
-- optionally drive or observe the front LED line if useful
+- observe the front `LED` line and expose its state to higher layers
 - expose a local API for high-level actions such as `up`, `down`, `left`, `right`, `enter`, `back`, `open-menu`, and scripted navigation sequences
 - support a Raspberry Pi-based local touch UI that calls the same API in kiosk mode
 
@@ -79,10 +80,17 @@ Instead of using DDC as the entire solution, `samsung-jog-api` uses it where it 
 - verify that the monitor is alive and reachable over the video link
 - provide state to the local UI without inferring everything from blind menu timing
 
+The front-panel `LED` is the other important feedback source:
+
+- observe blink patterns during input changes
+- detect visible confirmation cues when a menu or scroll path reaches its boundary
+- distinguish some idle versus active monitor states even when `DDC` is incomplete or delayed
+
 This hybrid model is the point of the project:
 
 - `JOG` emulation gives access to the same menu and navigation path as a human user
 - `DDC` provides machine-readable feedback and state
+- `LED` observation provides immediate local feedback from the front-panel path itself
 - the control deck turns those capabilities into an always-on appliance-like interface
 
 That is much more robust than using only blind button presses, and much more capable than relying on DDC alone on this monitor. Blind-button operation is still possible, but this project prefers a feedback-aware path when available.
@@ -92,7 +100,7 @@ That is much more robust than using only blind button presses, and much more cap
 - build a reliable inline `JOG` controller for the Samsung `CJ791`
 - expose monitor actions through a local REST API
 - provide a Raspberry Pi-based local touch-screen UI for everyday use
-- use DDC/CI for feedback, status, and supported direct controls
+- use `DDC/CI` and front-panel `LED` state for feedback and status, and `DDC/CI` for supported direct controls
 - keep the design understandable enough that other Samsung owners can adapt it
 
 ## Related documents

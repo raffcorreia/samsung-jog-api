@@ -16,6 +16,7 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - confirm `CN1001` pinout and wiring on the target unit
 - repeat and validate resistor measurements for each `JOG` action
 - determine idle-state behavior of `KEY_ADC1` and `KEY_ADC2`
+- characterize the `KED_LED` line electrically and document observable `LED` behavior patterns
 - validate whether the original `JOG` board can safely remain inline
 - choose an emulation method for reproducing resistor states
 
@@ -33,14 +34,20 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - verify which direct writes are reliable enough for production use
 - define fallback behavior when DDC is unavailable over a given input path
 
-## Phase 4: monitor control service
+## Phase 4: LED feedback characterization
+
+- capture `LED` behavior during input changes, idle states, and OSD navigation boundaries
+- determine whether `LED` cues are reliable enough to use in control confirmation logic
+- expose normalized `LED` state or events to the monitor control layer
+
+## Phase 5: monitor control service
 
 - define low-level primitives such as `press`, `hold`, `release`, and `sequence`
 - implement higher-level actions such as `open-menu`, `navigate-source-list`, and `switch-to-next-input`
-- integrate DDC-assisted verification where it improves reliability
+- integrate `DDC`-assisted and `LED`-assisted verification where they improve reliability
 - add structured logging for action attempts and observed state
 
-## Phase 5: local platform bring-up
+## Phase 6: local platform bring-up
 
 - provision a Raspberry Pi OS Lite image or equivalent minimal host OS
 - configure the device to auto-start the application stack on boot
@@ -48,25 +55,27 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - validate local-only frontend and backend communication over `localhost`
 - add process supervision and restart behavior
 
-## Phase 6: local API
+## Phase 7: local API
 
 - define REST endpoints for low-level and high-level actions
 - expose monitor status and health information
 - define request validation and error handling behavior
 - document response semantics for synchronous versus queued actions
 
-## Phase 7: local UI
+## Phase 8: local UI
 
 - build a minimal touch-friendly interface for common actions
 - show current input, power state, and other useful feedback
+- show relevant `LED`-derived status or activity cues when useful
 - design workflows around actions that are reliable and repeatable first
 - validate the UI on Raspberry Pi 2 B-class hardware
 - ensure normal use requires no keyboard or terminal access
 
-## Phase 8: stabilization
+## Phase 9: stabilization
 
 - test common workflows repeatedly across monitor power cycles
 - validate recovery behavior after failed navigation or missing DDC state
+- validate recovery behavior when only `LED` feedback is available
 - document known limitations and unsafe operating conditions
 - refine the API and implementation boundaries based on real usage
 - test kiosk recovery after process crashes and full device reboot
@@ -74,16 +83,18 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 ## Milestones
 
 - milestone 1: confirmed electrical emulation of all `JOG` actions
-- milestone 2: confirmed DDC readback model for target workflows
-- milestone 3: working Raspberry Pi kiosk host with supervised app startup
-- milestone 4: working local API for primitive and scripted actions
-- milestone 5: working local UI for daily use
+- milestone 2: confirmed `LED` behavior model for target workflows
+- milestone 3: confirmed `DDC` readback model for target workflows
+- milestone 4: working Raspberry Pi kiosk host with supervised app startup
+- milestone 5: working local API for primitive and scripted actions
+- milestone 6: working local UI for daily use
 
 ## Immediate next steps
 
 - add photo assets and teardown evidence
 - create the first hardware evidence records under `docs/hardware/`
 - turn the DDC observations into reproducible command transcripts
+- record front-panel `LED` behavior during key monitor actions
 - decide the first hardware prototype approach for resistor-state emulation
 - decide the initial Raspberry Pi runtime stack for frontend and backend
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
