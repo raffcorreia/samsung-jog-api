@@ -6,11 +6,10 @@ This repository is organized around the Samsung `LC34J791WTNXZA / CJ791` hardwar
 
 ## Monitor photo
 
-Monitor image placeholder:
-
-`docs/assets/cj791-front.jpg`
-
-Add a product or teardown photo here and update the caption with source and attribution if required.
+<p align="center">
+  <img src="docs/assets/exterior/monitor/cj791-front.png" alt="Samsung CJ791 front view" width="48%" />
+  <img src="docs/assets/exterior/monitor/cj791-back.png" alt="Samsung CJ791 rear view" width="48%" />
+</p>
 
 ## Status
 
