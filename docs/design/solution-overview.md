@@ -45,7 +45,22 @@ The API layer expresses actions like `switch-input`, `open-menu`, or `set-bright
 - direct `JOG` sequence
 - hybrid sequence using `JOG` for navigation with `DDC` and `LED` verification
 
+For input selection specifically, the system should not assume a reliable direct `go to source X` operation. The practical model is source cycling:
+
+- `Thunderbolt -> HDMI -> DisplayPort -> Thunderbolt -> ...`
+
+That means current-state knowledge is what tells the controller when to stop. When `DDC` is working, the controller can cycle and verify. When `DDC` is not available, the workflow becomes user-assisted and blind.
+
 The frontend should stay thin. It renders state, sends user actions, and avoids owning complex monitor workflow logic.
+
+## Operating modes
+
+The system should explicitly support two source-control modes:
+
+- `DDC` mode: the backend reads current input state and can safely perform source-cycling, `PIP` changes, and related workflows while knowing when to stop
+- `manual` mode: the backend cannot trust `DDC`, so the UI asks for `from` and `to` inputs and the backend performs the required blind cycling sequence
+
+This mode split should be visible in the UI. If `DDC` state is present, the user can ask for a target state directly. If `DDC` state is not present, the UI should switch to a `from -> to` interaction model instead of pretending direct selection is possible.
 
 ## Hardware concept
 
@@ -64,6 +79,7 @@ The software stack will likely need these logical modules:
 - `LED` observation or sampling abstraction
 - DDC service abstraction for monitor readback and supported direct controls
 - monitor behavior layer that translates high-level intents into action sequences
+- mode-selection logic for `DDC`-aware versus blind workflows
 - REST API layer
 - local UI layer optimized for touch interaction
 - kiosk/runtime layer responsible for boot behavior and process supervision
@@ -107,5 +123,6 @@ Operationally, the kiosk should also aim to be conservative:
 - how much OSD state can be inferred from DDC versus timing and workflow assumptions
 - how much monitor state can be inferred from front-panel `LED` behavior, and how deterministic those cues are
 - whether a simple stateless action API is enough or a richer monitor state machine is needed
+- how the `manual` mode UX should represent `from` and `to` state for source and `PIP` workflows
 - whether the first kiosk runtime should be browser-based or use a native UI stack
 - whether read-only root storage is worth adopting in the first release

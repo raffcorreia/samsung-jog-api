@@ -33,6 +33,7 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - implement readback for input source, brightness, and power state
 - verify which direct writes are reliable enough for production use
 - define fallback behavior when DDC is unavailable over a given input path
+- document source-cycling behavior and validate that `VCP 0x60` can be used to stop on the correct input
 
 ## Phase 4: LED feedback characterization
 
@@ -46,6 +47,7 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - implement higher-level actions such as `open-menu`, `navigate-source-list`, and `switch-to-next-input`
 - integrate `DDC`-assisted and `LED`-assisted verification where they improve reliability
 - add structured logging for action attempts and observed state
+- implement separate control paths for `DDC` mode and `manual` blind mode
 
 ## Phase 6: local platform bring-up
 
@@ -61,6 +63,7 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - expose monitor status and health information
 - define request validation and error handling behavior
 - document response semantics for synchronous versus queued actions
+- represent whether the system is operating in `DDC` mode or `manual` mode
 
 ## Phase 8: local UI
 
@@ -70,12 +73,14 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - design workflows around actions that are reliable and repeatable first
 - validate the UI on Raspberry Pi 2 B-class hardware
 - ensure normal use requires no keyboard or terminal access
+- switch source-selection UX between direct target selection in `DDC` mode and `from -> to` selection in `manual` mode
 
 ## Phase 9: stabilization
 
 - test common workflows repeatedly across monitor power cycles
 - validate recovery behavior after failed navigation or missing DDC state
 - validate recovery behavior when only `LED` feedback is available
+- validate that blind `manual` mode remains usable when `DDC` state is missing
 - document known limitations and unsafe operating conditions
 - refine the API and implementation boundaries based on real usage
 - test kiosk recovery after process crashes and full device reboot

@@ -24,6 +24,8 @@ Known CJ791 input values reported over DDC:
 
 In practice, the monitor acknowledges standard DDC traffic, but `setvcp 0x60` does not successfully switch inputs on this unit. That makes DDC a good feedback channel, but not a complete control channel for the full user experience.
 
+More specifically, the practical source-switching problem is not `set input to HDMI`. It is `cycle inputs until readback says HDMI`. That makes `VCP 0x60` especially important, because it tells the controller when to stop.
+
 ## Observed monitor information
 
 DDC-reported information observed on this monitor:
@@ -56,12 +58,18 @@ Instead of using DDC as the only control path, `samsung-jog-api` uses it where i
 - verify that the monitor is alive and reachable over the video link
 - provide state to the local UI without needing to infer everything from blind menu timing
 
+This creates two obvious workflow modes:
+
+- `DDC` mode: read current input and use that state to terminate source-cycling and other stateful menu workflows
+- `manual` mode: when `DDC` cannot be trusted, ask the user for current and desired input so blind source-cycling still has a defined starting point
+
 ## Known gaps
 
 - raw command transcripts are not yet included
 - error behavior across different active inputs is not yet recorded
 - reliability of writes other than brightness and power is not yet documented
 - behavior during Picture-by-Picture modes is not yet captured here
+- whether `VCP 0x60` remains trustworthy during all source-transition and `PIP` workflows is not yet fully documented
 
 ## Suggested follow-up
 

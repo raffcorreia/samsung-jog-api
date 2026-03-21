@@ -20,6 +20,10 @@ This document defines the initial requirements for `samsung-jog-api`. It is a pr
 - The system should use front-panel `LED` behavior as an additional confirmation signal for monitor-state changes and OSD workflows.
 - The system should provide direct software control for features that already work over DDC, such as brightness and power state.
 - The system should provide enough state to support a local touch-screen UI.
+- The system must model input switching as source cycling rather than assuming direct selection is available.
+- The system must support a `DDC`-aware operating mode where current input state is read and used to terminate source-cycling and related workflows.
+- The system must support a `manual` operating mode for blind workflows when `DDC` readback is unavailable or unreliable.
+- In `manual` mode, the UI must let the user specify current input and desired input so the controller can calculate how far to cycle.
 - The device must auto-start the application stack on boot.
 - The device must recover automatically after process crashes or system reboots.
 - The device should not require a keyboard for normal operation.
@@ -51,8 +55,10 @@ This document defines the initial requirements for `samsung-jog-api`. It is a pr
 - The monitor decodes front-panel actions by measuring analog thresholds on `KEY_ADC1` and `KEY_ADC2`.
 - Reproducing the original resistance values closely enough will allow the monitor to interpret emulated actions as native `JOG` input.
 - DDC/CI remains useful as a feedback and telemetry channel even where it is incomplete as a control channel.
+- Input changes are reached by cycling through sources rather than reliably selecting a named input directly.
 - The front-panel `LED` exposes observable behavior that can help confirm state changes such as input switching, idle state, and some menu boundary conditions.
 - Common user goals can be represented as a combination of low-level button actions, `DDC` readback, and `LED`-assisted feedback.
+- When `DDC` is unavailable, the user can still drive blind workflows if the system is told the current and desired input state.
 
 ## Out of scope for initial implementation
 

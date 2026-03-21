@@ -36,6 +36,8 @@ In practice, this project uses a hybrid model:
 - front-panel `LED` observation for local feedback cues such as input-change blink patterns, idle state, and possible OSD boundary signals
 - a local Raspberry Pi touch device as the always-on operator-facing control surface
 
+This matters especially for input switching. On this monitor, source selection is effectively a cycle through available inputs rather than a reliable direct jump to a named source, so current-state feedback is what tells the controller when to stop cycling.
+
 ## System overview
 
 High-level system shape:
@@ -46,6 +48,11 @@ High-level system shape:
 - local backend software exposes high-level actions through a REST API
 - a local touch UI runs in kiosk mode on a Raspberry Pi and calls the same API
 - DDC/CI provides state readback and supported direct controls such as brightness and power
+
+The system is expected to support two obvious operating modes:
+
+- `DDC` mode, where the controller can read the current input and stop source-cycling or `PIP` navigation at the correct state
+- `manual` mode, where the UI asks the user for current and desired input so the controller can perform blind source cycling from a known starting point
 
 ## Documentation index
 

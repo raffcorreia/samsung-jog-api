@@ -48,6 +48,8 @@ The intended control model combines two different paths:
 
 At the API layer, the monitor should look like a normal controllable device rather than a collection of resistor values and timing hacks.
 
+One important constraint is that input changes are not reliably direct-addressable. In practice, the monitor behaves like it exposes `next input` behavior through the OSD path, so source control depends on knowing the current input and cycling until the desired state is reached.
+
 ## Planned control method
 
 The hardware plan is to insert a controller inline with the `JOG` harness.
@@ -63,6 +65,7 @@ The controller will:
 Example higher-level actions:
 
 - switch to the next available input
+- cycle from one known input to another known input
 - open source list
 - navigate to `Picture-by-Picture`
 - toggle a known setting
@@ -85,6 +88,15 @@ The front-panel `LED` is the other important feedback source:
 - observe blink patterns during input changes
 - detect visible confirmation cues when a menu or scroll path reaches its boundary
 - distinguish some idle versus active monitor states even when `DDC` is incomplete or delayed
+
+## Operating modes
+
+Two obvious operating modes fall out of this design:
+
+- `DDC` mode: use `DDC` readback to know the current input and stop source-cycling or `PIP` navigation when the target state is reached
+- `manual` mode: when `DDC` is unavailable or untrustworthy, ask the user for current input and desired input, then execute the required blind cycling sequence
+
+This distinction matters because the monitor does not provide a reliable direct `go to HDMI` or `go to Thunderbolt` control path. The safe abstraction is not direct selection. It is controlled cycling with feedback where available.
 
 This hybrid model is the point of the project:
 
