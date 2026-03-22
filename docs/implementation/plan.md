@@ -34,6 +34,7 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - verify which direct writes are reliable enough for production use
 - define fallback behavior when DDC is unavailable over a given input path
 - document source-cycling behavior and validate that `VCP 0x60` can be used to stop on the correct input
+- design and validate the custom `HDMI` and `DDC` interface hardware needed to preserve practical use of the monitor's `HDMI` input
 
 ## Phase 4: LED feedback characterization
 

@@ -6,7 +6,7 @@ This document defines the functional and non-functional requirements for `samsun
 
 This is explicitly a hardware-and-software project. The system requires interface hardware that can bridge between the host's control interfaces and the monitor's analog key and signal paths.
 
-The goal of this document is to define what the system must do. Setup procedures, implementation details, and exploratory notes belong in other documents unless they are necessary to state a requirement.
+The purpose of this document is to define the system's required behavior, constraints, and acceptance expectations. Setup procedures, implementation details, and exploratory notes belong in other documents unless they are necessary to clarify a requirement.
 
 ## System overview
 
@@ -77,6 +77,8 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 
 - The system must read monitor state through `DDC/CI` whenever reliable and available.
 - The system must provide direct software control for features that already work over `DDC`, such as brightness and power state.
+- The system must preserve practical use of the monitor's `HDMI` input while maintaining a `DDC` communication path for the control deck.
+- The system must include interface hardware that allows an external device to use the monitor's `HDMI` input while the control deck also communicates with the monitor over `DDC`.
 - The system must observe the front-panel `LED` state as a feedback input.
 - The system should use front-panel `LED` behavior as an additional confirmation signal for monitor-state changes and OSD workflows.
 - The UI should reflect relevant `LED` activity visually.
@@ -109,6 +111,7 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 - The system must detect both:
   - system-generated inputs
   - manual user inputs on the physical control path
+- The system must provide a hardware path for shared or multiplexed `HDMI` and `DDC` access so monitor input availability is not unnecessarily reduced by the control deck.
 
 ### LED input
 
@@ -213,6 +216,7 @@ The system must be organized into these logical layers:
 
 - The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 - The monitor does not appear to expose full input switching reliably through `DDC/CI` alone.
+- Occupying the monitor's `HDMI` path for `DDC` communication would reduce practical input availability unless compensated by custom interface hardware.
 - The front-panel control path is analog, not purely digital.
 - Hardware modification is expected and accepted.
 
@@ -227,6 +231,7 @@ The following criteria should be used to judge whether the initial implementatio
 - `Manual` mode source switching: given a user-selected `from` source and `to` source, the system performs the expected source-cycle sequence without relying on hidden state.
 - `PiP` configuration: the system can execute a `PiP` workflow where the user selects left and right inputs.
 - `LED` capture: the system can observe and expose `LED` behavior during at least idle state and source switching.
+- `HDMI` preservation: the control deck maintains `DDC` communication without permanently sacrificing the monitor's practical `HDMI` input for external devices.
 - Arbitration: conflicting simultaneous `JOG` actions are blocked, queued, or rejected consistently.
 - Synchronization: actions and state changes in one client are reflected in other connected clients in near real time.
 - Testing gate: backend, frontend, and hardware-facing tests pass before a feature is considered complete.

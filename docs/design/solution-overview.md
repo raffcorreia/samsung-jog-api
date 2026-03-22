@@ -51,6 +51,8 @@ For input selection specifically, the system should not assume a reliable direct
 
 That means current-state knowledge is what tells the controller when to stop. When `DDC` is working, the controller can cycle and verify. When `DDC` is not available, the workflow becomes user-assisted and blind.
 
+There is also a physical transport constraint around `DDC`: if the control deck occupies the monitor's `HDMI` path just to gain `DDC` access, the monitor effectively loses one of its usable inputs. The design therefore needs custom interface hardware that preserves practical `HDMI` input use while still allowing the deck to communicate with the monitor over `DDC`.
+
 The frontend should stay thin. It renders state, sends user actions, and avoids owning complex monitor workflow logic.
 
 ## Operating modes
@@ -70,6 +72,7 @@ The inline controller sits between the original front control board and the moni
 - deciding when the original `JOG` board or the controller owns the line
 - preventing unsafe contention between physical and emulated input paths
 - observing the front `LED` line so higher layers can correlate visible behavior with control actions
+- participating in or coordinating with whatever custom `HDMI` and `DDC` interface hardware is required to preserve the monitor's usable inputs
 
 ## Software concept
 
@@ -126,6 +129,7 @@ Operationally, the kiosk should also aim to be conservative:
 
 - whether the original `JOG` board remains permanently inline or is switched out during emulation
 - whether resistor selection is done with analog switches, relays, transistor networks, digital potentiometers, or a mixed design
+- how to preserve practical use of the monitor's `HDMI` input while still giving the control deck a reliable `DDC` path
 - how much OSD state can be inferred from DDC versus timing and workflow assumptions
 - how much monitor state can be inferred from front-panel `LED` behavior, and how deterministic those cues are
 - whether a simple stateless action API is enough or a richer monitor state machine is needed
