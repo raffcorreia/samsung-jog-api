@@ -68,6 +68,10 @@ Reference and reverse-engineering notes:
 - [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
 - [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
 
+Operational docs:
+
+- [Prepare Raspberry Pi](docs/runbooks/prepare-raspberry-pi.md)
+
 ## Start here
 
 Recommended reading order:
