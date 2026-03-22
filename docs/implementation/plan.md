@@ -85,6 +85,17 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - refine the API and implementation boundaries based on real usage
 - test kiosk recovery after process crashes and full device reboot
 
+## Later extensions
+
+- add a physical volume knob to the control deck and map it to monitor volume over `DDC`
+- define how physical volume-knob movement is synchronized with local and remote UI state
+
+## Future investigations
+
+- determine whether the deck display power-off action can also place the monitor into standby or power-off state
+- test both `DDC` power control and `JOG`-driven OSD power workflows for that behavior
+- verify whether monitor power-off or standby preserves power to attached `USB` and `Thunderbolt` devices before adopting this behavior
+
 ## Milestones
 
 - milestone 1: confirmed electrical emulation of all `JOG` actions

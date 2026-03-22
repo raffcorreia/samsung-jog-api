@@ -48,6 +48,14 @@ Samsung-specific observed behavior:
 
 - `VCP 0xE6 = 0x01` shows the monitor information OSD
 
+Confirmed useful result for future hardware extensions:
+
+- monitor volume control over `VCP 0x62` works and is a good candidate for a future physical volume knob on the control deck
+
+Future investigation:
+
+- whether `DDC` power control or a `JOG`-driven power-off workflow can turn the monitor off while still preserving power to attached `USB` or `Thunderbolt` devices
+
 ## Role in the system
 
 Instead of using DDC as the only control path, `samsung-jog-api` uses it where it is strongest:

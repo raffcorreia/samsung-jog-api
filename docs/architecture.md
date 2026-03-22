@@ -16,7 +16,7 @@ The guiding idea is simple: the monitor already knows how to respond to its own 
 The CJ791 is a capable monitor, but it is frustrating to automate.
 
 - It has multiple useful inputs: `HDMI`, `DisplayPort`, and `Thunderbolt / USB-C`
-- It has a front `JOG` control that can navigate the on-screen display and trigger functions the normal software control path cannot
+- It has a rear-mounted `JOG` control that can navigate the on-screen display and trigger functions the normal software control path cannot, but it is inconvenient to use repeatedly
 - It exposes DDC/CI, which is enough to read some state and control some functions
 - But it does not reliably expose the full monitor control surface over DDC alone
 

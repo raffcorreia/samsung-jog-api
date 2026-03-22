@@ -236,6 +236,7 @@ The following criteria should be used to judge whether the initial implementatio
 - external internet-facing access
 - mobile native applications
 - `ESP32` or other microcontroller companion work
+- a physical volume knob, even though monitor volume control over `DDC` has been confirmed to work
 - voice control
 - multi-deck scaling
 - `CI/CD`

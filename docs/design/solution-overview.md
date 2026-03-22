@@ -6,7 +6,7 @@ The proposed solution combines an inline hardware controller with a Raspberry Pi
 
 ## Problem statement
 
-The Samsung `CJ791` exposes useful DDC/CI functions, but it does not appear to provide a complete software control surface for the actions needed in this project. In particular, the monitor's front-panel `JOG` can navigate OSD paths and trigger behaviors that are not reliably available over standard DDC commands on this unit.
+The Samsung `CJ791` exposes useful DDC/CI functions, but it does not appear to provide a complete software control surface for the actions needed in this project. In particular, the monitor's rear-mounted `JOG` can navigate OSD paths and trigger behaviors that are not reliably available over standard DDC commands on this unit, but it is inconvenient to use repeatedly.
 
 ## Proposed solution
 
@@ -92,6 +92,10 @@ The intended host is a dedicated Raspberry Pi-based control deck:
 - `5"` to `7"` touch display, ideally using a non-`HDMI` connection so the `HDMI` port remains available for monitor and `DDC` workflows, and capacitive touch
 - Raspberry Pi OS Lite or another minimal Linux base
 - local-only frontend and backend communication over `localhost`
+
+The control deck may later include additional physical controls beyond touch input. One confirmed future candidate is a physical volume knob that adjusts monitor volume through `DDC`, since volume control has already been observed to work over `VCP 0x62`.
+
+Another future investigation is whether the deck's own power-off action can also send a monitor power-off or standby command, either through `DDC` or through a `JOG` workflow, without interrupting power delivery to attached `USB` or `Thunderbolt` devices.
 
 Initial operating characteristics:
 
