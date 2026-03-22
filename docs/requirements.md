@@ -2,7 +2,9 @@
 
 ## Purpose
 
-This document defines the functional and non-functional requirements for `samsung-jog-api` as a Raspberry Pi-based control deck for the Samsung `CJ791` monitor. The system combines a local kiosk UI, a backend control service, analog `JOG` emulation, `DDC/CI` readback, and front-panel `LED` observation.
+This document defines the functional and non-functional requirements for `samsung-jog-api` as a local control deck for the Samsung `CJ791` monitor. The system combines a local kiosk UI, a backend control service, analog `JOG` emulation, `DDC/CI` readback, and front-panel `LED` observation.
+
+This is explicitly a hardware-and-software project. The system requires interface hardware that can bridge between the host's control interfaces and the monitor's analog key and signal paths.
 
 The goal of this document is to define what the system must do. Setup procedures, implementation details, and exploratory notes belong in other documents unless they are necessary to state a requirement.
 
@@ -10,11 +12,11 @@ The goal of this document is to define what the system must do. Setup procedures
 
 The system consists of:
 
-- a Raspberry Pi-based kiosk device with a touch display
+- a local host device with a display and kiosk-style user interface
 - a local frontend UI
 - a local backend service
-- hardware that emulates the monitor's front-panel `JOG` inputs through the monitor's analog key lines
-- hardware that reads the front-panel `LED` signal
+- custom hardware that emulates the monitor's front-panel `JOG` inputs through the monitor's analog key lines
+- custom hardware that reads the front-panel `LED` signal and other relevant monitor-side signals
 - `DDC/CI` integration for monitor-state readback and supported direct controls
 
 The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
@@ -23,7 +25,7 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 
 ### Device and UI
 
-- The system must run as a dedicated local appliance on a Raspberry Pi-based control deck.
+- The system must run as a dedicated local appliance on a control deck or equivalent local host device.
 - The system must present a touch-first graphical UI on the device display.
 - The UI must run in kiosk mode.
 - The UI must be accessible both on the device itself and remotely from other clients on the same trusted local network, such as a phone or another computer.
@@ -115,7 +117,7 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 
 ### Physical controls and design outputs
 
-- The system must include a physical button for toggling the display power, not Raspberry Pi power.
+- The system must include a physical button for toggling the display power, while the deck itself remains powered so it can continue controlling the monitor.
 - The project must include and document:
   - circuit design
   - component specification and `BOM`
@@ -140,7 +142,7 @@ The system must be organized into these logical layers:
 ### Deployment
 
 - Deployment may be manual in the current phase.
-- Raspberry Pi administration may be performed over the local network using `SSH` with public-key authentication.
+- Host-device administration may be performed over the local network using `SSH` with public-key authentication when applicable.
 - `CI/CD` is out of scope for the current phase.
 
 ## Security requirements
@@ -176,9 +178,9 @@ The system must be organized into these logical layers:
 
 ### Performance
 
-- The system must monitor Raspberry Pi performance continuously during normal operation.
+- The system must monitor host-device performance continuously during normal operation.
 - The system must detect and expose throttling conditions.
-- The software stack should remain lightweight enough for Raspberry Pi `2 B` class hardware with `1 GB` RAM.
+- The software stack should remain lightweight enough for the initial target host class.
 
 ### Reliability
 
@@ -210,7 +212,6 @@ The system must be organized into these logical layers:
 ## Constraints
 
 - The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
-- The intended host platform is currently a Raspberry Pi `2 B` with `1 GB` RAM.
 - The monitor does not appear to expose full input switching reliably through `DDC/CI` alone.
 - The front-panel control path is analog, not purely digital.
 - Hardware modification is expected and accepted.

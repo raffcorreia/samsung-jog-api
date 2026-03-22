@@ -88,6 +88,8 @@ The software stack will likely need these logical modules:
 
 The intended host is a dedicated Raspberry Pi-based control deck:
 
+This is the current intended implementation platform, not a product-level requirement.
+
 - Raspberry Pi `2 B` with `1 GB` RAM
 - `5"` to `7"` touch display, ideally using a non-`HDMI` connection so the `HDMI` port remains available for monitor and `DDC` workflows, and capacitive touch
 - Raspberry Pi OS Lite or another minimal Linux base
