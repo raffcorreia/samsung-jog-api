@@ -15,9 +15,11 @@ This repository is organized around the Samsung `LC34J791WTNXZA / CJ791` hardwar
 
 Current state of the repository:
 
-- documentation and reverse-engineering notes
+- completed: `Phase 0: Documentation and Evidence Capture`
+- current phase: `Phase 1: Host Preparation and Conservative OS Cleanup`
+- repository now includes Phase 1 runbooks and host-preparation scripts
 - hardware findings for the `JOG` board and DDC behavior
-- requirements, design, and implementation planning for a Raspberry Pi kiosk-style control deck
+- requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
 - no production code yet
 
 ## Why this project exists
@@ -49,10 +51,11 @@ High-level system shape:
 - a local touch UI runs in kiosk mode on a Raspberry Pi and calls the same API
 - DDC/CI provides state readback and supported direct controls such as brightness and power
 
-The system is expected to support two obvious operating modes:
+The system is expected to support three operating modes:
 
+- `JOG` mode for raw low-level control, investigation, and recovery
 - `DDC` mode, where the controller can read the current input and stop source-cycling or `PIP` navigation at the correct state
-- `manual` mode, where the UI asks the user for current and desired input so the controller can perform blind source cycling from a known starting point
+- `Blind` mode, where the UI asks the user for current and desired input so the controller can perform blind source cycling from a known starting point
 
 ## Documentation index
 

@@ -69,7 +69,7 @@ Instead of using DDC as the only control path, `samsung-jog-api` uses it where i
 This creates two obvious workflow modes:
 
 - `DDC` mode: read current input and use that state to terminate source-cycling and other stateful menu workflows
-- `manual` mode: when `DDC` cannot be trusted, ask the user for current and desired input so blind source-cycling still has a defined starting point
+- `Blind` mode: when `DDC` cannot be trusted, ask the user for current and desired input so blind source-cycling still has a defined starting point
 
 ## Known gaps
 

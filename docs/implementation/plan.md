@@ -79,13 +79,18 @@ Prepare the Raspberry Pi host so it is stable, reproducible, and ready for kiosk
 - identify software and services that are unnecessary for this project
 - perform conservative cleanup rather than aggressive minimization
 - document exactly what was removed, disabled, or changed
-- create a repeatable host-preparation runbook or script where practical
+- create repeatable host-preparation scripts for baseline capture, cleanup review, cleanup application, and smoke checks
+- create a cleanup-config template that can be copied to the actual host without committing machine-specific choices
+- keep generated host-baseline artifacts out of git
+- update the repository status to reflect the start of Phase 1
 - create a backup image once the host baseline is considered ready
 
 ### Deliverables
 
 - prepared Raspberry Pi host
 - documented cleanup and preparation procedure
+- repeatable host-preparation scripts
+- local-only cleanup configuration template
 - baseline image or reproducible setup record
 
 ### Exit criteria
@@ -471,12 +476,12 @@ Turn validated monitor workflows into real user-facing features.
 
 ### Tasks
 
-- implement source switching in `DDC` mode and `manual` mode
+- implement source switching in `DDC` mode and `Blind` mode
 - productize validated `PiP` workflows
 - add user-facing controls for named features
 - expose proper error handling and failure states
 - keep feature behavior aligned with validated sequence assumptions
-- evolve the UI from raw `JOG`-only control into the richer `DDC` and `manual` mode control surface
+- evolve the UI from raw `JOG`-only control into the richer `DDC` and `Blind` mode control surface
 - preserve access to the raw `JOG` controller behind a manual-control entry point
 - add integration tests for source switching, `PiP`, and other productized monitor workflows
 
@@ -568,7 +573,7 @@ Harden the system for regular use.
 - test common workflows repeatedly across monitor power cycles
 - validate recovery after failed navigation or missing `DDC`
 - validate recovery when only `LED` feedback is available
-- validate that blind manual mode remains usable when `DDC` is missing
+- validate that `Blind` mode remains usable when `DDC` is missing
 - validate sequence abort behavior
 - document known limitations and unsafe operating conditions
 - refine the API and runtime boundaries based on real usage

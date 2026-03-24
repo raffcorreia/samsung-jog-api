@@ -53,7 +53,7 @@ Examples:
 - rejected command shows failure feedback
 - live log panel updates when new log events arrive
 - recording tools appear in advanced/settings
-- mode-specific controls change correctly between `DDC` and `manual`
+- mode-specific controls change correctly between `DDC` and `Blind`
 
 ### 3. Sequence validation tests
 
@@ -114,7 +114,7 @@ Purpose:
 Examples:
 
 - source switch in `DDC` mode
-- source switch in `manual` mode
+- source switch in `Blind` mode
 - `PiP` enable flow
 - `PiP` source selection flow
 - replay of a shipped validated sequence

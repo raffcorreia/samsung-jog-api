@@ -62,8 +62,8 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 - The system must model input switching as source cycling rather than assuming reliable direct selection is available.
 - The system must treat current input state as operationally important for source switching.
 - The system must support a `DDC` mode in which current input state is read from the monitor and used to terminate source-cycling at the correct target input.
-- The system must support a `manual` mode for blind workflows when `DDC` readback is unavailable or unreliable.
-- In `manual` mode, the UI must let the user choose the current input and desired input so the controller can calculate how far to cycle.
+- The system must support a `Blind` mode for workflows where `DDC` readback is unavailable or unreliable.
+- In `Blind` mode, the UI must let the user choose the current input and desired input so the controller can calculate how far to cycle.
 - In `DDC` mode, the UI should allow simplified target-driven source selection.
 
 ### Picture-in-Picture and related monitor workflows
@@ -71,7 +71,7 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 - The system must support enabling and configuring `PiP`.
 - The UI must provide a `PiP` action that lets the user choose the left input and right input.
 - In `DDC` mode, the system should simplify `PiP` configuration by using available monitor-state feedback.
-- In `manual` mode, the system must still allow `PiP` workflows using user-provided starting state and blind `JOG` sequencing.
+- In `Blind` mode, the system must still allow `PiP` workflows using user-provided starting state and blind `JOG` sequencing.
 
 ### DDC and LED feedback
 
@@ -190,7 +190,7 @@ The system must be organized into these logical layers:
 - The system must operate continuously in kiosk mode.
 - The UI must recover automatically after crashes or reboot.
 - The system should degrade gracefully when `DDC` readback is unavailable.
-- The system should remain usable in `manual` mode when `DDC` state is unavailable.
+- The system should remain usable in `Blind` mode when `DDC` state is unavailable.
 
 ### Usability
 

@@ -94,7 +94,7 @@ The front-panel `LED` is the other important feedback source:
 Two obvious operating modes fall out of this design:
 
 - `DDC` mode: use `DDC` readback to know the current input and stop source-cycling or `PIP` navigation when the target state is reached
-- `manual` mode: when `DDC` is unavailable or untrustworthy, ask the user for current input and desired input, then execute the required blind cycling sequence
+- `Blind` mode: when `DDC` is unavailable or untrustworthy, ask the user for current input and desired input, then execute the required blind cycling sequence
 
 This distinction matters because the monitor does not provide a reliable direct `go to HDMI` or `go to Thunderbolt` control path. The safe abstraction is not direct selection. It is controlled cycling with feedback where available.
 

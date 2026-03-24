@@ -95,7 +95,18 @@ The design should capture and expose this information, but should avoid overstat
 
 ## Operating modes
 
-The monitor-control model explicitly supports two modes:
+The monitor-control model explicitly supports three operating modes:
+
+### JOG mode
+
+Used for raw low-level monitor control.
+
+Characteristics:
+
+- direct `up`, `down`, `left`, `right`, and `center` actions
+- press and hold timing
+- useful for investigation, recovery, and direct manual low-level operation
+- remains available even after higher-level workflows are added
 
 ### DDC mode
 
@@ -108,7 +119,7 @@ Characteristics:
 - `PiP` workflows can be simplified using feedback
 - UI can expose target-oriented controls
 
-### Manual mode
+### Blind mode
 
 Used when `DDC` is unavailable, incomplete, or untrusted.
 
@@ -136,7 +147,7 @@ The monitor-control UI should evolve in stages:
 
 - early phases: raw `JOG` controller only
 - after validated JSON-backed workflows exist: richer monitor features built on those workflows
-- later phases: full user-facing `DDC` mode and `manual` mode controls
+- later phases: full user-facing `DDC` mode and `Blind` mode controls
 
 This prevents the project from presenting fake higher-level controls before the underlying monitor behavior has actually been proven.
 
