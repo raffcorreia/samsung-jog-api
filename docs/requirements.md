@@ -115,7 +115,7 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 
 ### LED input
 
-- The `KED_LED` signal must be connected as input only.
+- The `KEY_LED` signal must be connected as input only.
 - The system must not drive the monitor's `LED` output line.
 
 ### Physical controls and design outputs
@@ -195,6 +195,7 @@ The system must be organized into these logical layers:
 ### Usability
 
 - The UI must be touch-friendly.
+- The initial UI design target is a `1024x600` display while remaining responsive for other screen sizes used through the host URL.
 - The UI must adapt to the target screen size and orientation used by the control deck.
 - The UI should make the active operating mode clear to the user.
 
