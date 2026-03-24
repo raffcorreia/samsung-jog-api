@@ -2,140 +2,565 @@
 
 ## Summary
 
-The proposed solution combines an inline hardware controller with a Raspberry Pi-based local kiosk that treats the monitor as a controllable device rather than a passive display.
+The proposed solution is a Raspberry Pi-based local control deck for the Samsung `CJ791` monitor. It combines:
 
-## Problem statement
+- a touch-first web UI
+- a local backend service
+- custom interface hardware for `JOG` emulation and signal observation
+- `DDC/CI` readback and supported direct controls
+- file-based sequence recording and replay
 
-The Samsung `CJ791` exposes useful DDC/CI functions, but it does not appear to provide a complete software control surface for the actions needed in this project. In particular, the monitor's rear-mounted `JOG` can navigate OSD paths and trigger behaviors that are not reliably available over standard DDC commands on this unit, but it is inconvenient to use repeatedly.
+The design is intentionally built around the monitor behavior that has already been measured and verified:
 
-## Proposed solution
+- `JOG` input is required for OSD-driven workflows
+- `DDC/CI` is useful for feedback and selected direct controls, but not for full OSD control
+- front-panel `LED` behavior may provide additional feedback cues
 
-The solution has four major parts:
+## Design goals
 
-- an inline hardware module attached to the `JOG` harness
-- a low-level control layer that can reproduce `JOG` electrical states
-- a feedback path that combines `DDC` readback with front-panel `LED` observation
-- a local REST API that exposes high-level monitor actions
-- a local touch UI running on a Raspberry Pi in kiosk mode and using the same API
+- preserve the original monitor `JOG` behavior and hardware usability
+- provide a usable touch controller for daily monitor control
+- support LAN access through the same UI used on the deck
+- allow low-level control, recording, replay, and later feature productization from recorded sequences
+- keep the runtime simple enough for Raspberry Pi `2 B` hardware
+- document the hardware design deeply enough to support PCB and circuit implementation
 
-## Design principles
+## Target implementation platform
 
-- Prefer native monitor behavior over unsupported shortcuts.
-- Use DDC/CI where it is reliable, but do not force it to cover unsupported control paths.
-- Treat front-panel `LED` behavior as a first-class feedback signal when it reveals monitor state changes that software APIs do not.
-- Keep the low-level electrical interface separate from high-level monitor semantics.
-- Keep frontend interaction simple and centralize monitor logic in the backend.
-- Preserve the original front-panel controls when feasible.
-- Record uncertainty explicitly and validate assumptions against measurements.
-- Design the host device like an appliance: always-on, touch-only, and self-recovering.
+This design phase is explicitly targeting the following implementation platform:
 
-## System context
+- Raspberry Pi `2 B v1.1`
+- `1024x600` capacitive touch display
+- Raspberry Pi OS Lite or equivalent terminal-only base image
+- Chromium kiosk runtime
+- `systemd` process supervision
+
+This is an implementation choice for this project phase, not a product-level requirement.
+
+## System model
 
 Conceptually, the system looks like this:
 
-`Touch UI on Raspberry Pi -> local backend service -> JOG emulator + DDC adapter -> Samsung CJ791`
+`Touch UI / LAN UI -> backend API and websocket service -> monitor control services -> hardware interface + DDC adapter -> Samsung CJ791`
 
-and where needed:
+The system has four major technical areas:
 
-`local backend service -> external APIs`
+- UI and application control
+- monitor-control logic
+- custom hardware interface
+- host platform and kiosk runtime
 
-The API layer expresses actions like `switch-input`, `open-menu`, or `set-brightness`. Internally, those actions may be implemented by one of three paths:
+## Functional control model
 
-- direct `DDC` command
-- direct `JOG` sequence
-- hybrid sequence using `JOG` for navigation with `DDC` and `LED` verification
+### 1. JOG-driven monitor control
 
-For input selection specifically, the system should not assume a reliable direct `go to source X` operation. The practical model is source cycling:
+The monitor's OSD-driven features are controlled through `JOG` behavior, not by direct software commands.
+
+This means the system must support:
+
+- low-level directional and center actions
+- press and hold timing
+- sequence replay
+- sequence recording for later cleanup and reuse
+
+This also means higher-level monitor features such as input switching and `PiP` configuration must be built on top of measured and verified `JOG` sequences.
+
+### 2. DDC-assisted feedback
+
+`DDC/CI` is used where it has already proven useful:
+
+- current input readback
+- brightness control
+- volume control
+- power-state related investigation
+- general monitor readback
+
+Input switching remains a cycling problem, not a direct-selection problem:
 
 - `Thunderbolt -> HDMI -> DisplayPort -> Thunderbolt -> ...`
 
-That means current-state knowledge is what tells the controller when to stop. When `DDC` is working, the controller can cycle and verify. When `DDC` is not available, the workflow becomes user-assisted and blind.
+So `DDC` is mainly used to know when to stop cycling.
 
-There is also a physical transport constraint around `DDC`: if the control deck occupies the monitor's `HDMI` path just to gain `DDC` access, the monitor effectively loses one of its usable inputs. The design therefore needs custom interface hardware that preserves practical `HDMI` input use while still allowing the deck to communicate with the monitor over `DDC`.
+### 3. LED-assisted feedback
 
-The frontend should stay thin. It renders state, sends user actions, and avoids owning complex monitor workflow logic.
+The front-panel `KEY_LED` line is treated as another feedback source.
+
+It may help:
+
+- confirm input changes
+- distinguish idle versus active behavior
+- reveal some OSD boundary conditions
+
+The design should capture and expose this information, but should avoid overstating what the LED means before it has been fully characterized.
 
 ## Operating modes
 
-The system should explicitly support two source-control modes:
+The monitor-control model explicitly supports two modes:
 
-- `DDC` mode: the backend reads current input state and can safely perform source-cycling, `PIP` changes, and related workflows while knowing when to stop
-- `manual` mode: the backend cannot trust `DDC`, so the UI asks for `from` and `to` inputs and the backend performs the required blind cycling sequence
+### DDC mode
 
-This mode split should be visible in the UI. If `DDC` state is present, the user can ask for a target state directly. If `DDC` state is not present, the UI should switch to a `from -> to` interaction model instead of pretending direct selection is possible.
+Used when `DDC` readback is available and trustworthy.
 
-## Hardware concept
+Characteristics:
 
-The inline controller sits between the original front control board and the monitor main board. Its responsibilities are expected to include:
+- current input is known
+- source cycling can stop on the correct state
+- `PiP` workflows can be simplified using feedback
+- UI can expose target-oriented controls
 
-- reproducing the measured resistance-to-ground values for directional and center actions
-- deciding when the original `JOG` board or the controller owns the line
-- preventing unsafe contention between physical and emulated input paths
-- observing the front `LED` line so higher layers can correlate visible behavior with control actions
-- participating in or coordinating with whatever custom `HDMI` and `DDC` interface hardware is required to preserve the monitor's usable inputs
+### Manual mode
 
-## Software concept
+Used when `DDC` is unavailable, incomplete, or untrusted.
 
-The software stack will likely need these logical modules:
+Characteristics:
 
-- hardware driver abstraction for `JOG` line control
-- `LED` observation or sampling abstraction
-- DDC service abstraction for monitor readback and supported direct controls
-- monitor behavior layer that translates high-level intents into action sequences
-- mode-selection logic for `DDC`-aware versus blind workflows
-- REST API layer
-- local UI layer optimized for touch interaction
-- kiosk/runtime layer responsible for boot behavior and process supervision
+- the user provides current and desired input state
+- workflows assume `OSD closed` as the baseline
+- source changes and `PiP` control are blind `JOG`-driven sequences
+- UI must expose a `from -> to` workflow rather than pretend direct selection exists
 
-## Host platform concept
+## UI design approach
 
-The intended host is a dedicated Raspberry Pi-based control deck:
+### One UI, two access patterns
 
-This is the current intended implementation platform, not a product-level requirement.
+There is only one UI:
 
-- Raspberry Pi `2 B` with `1 GB` RAM
-- `1024x600` capacitive touch display, ideally using a non-`HDMI` connection so the `HDMI` port remains available for monitor and `DDC` workflows
-- Raspberry Pi OS Lite or another minimal Linux base
-- local-only frontend and backend communication over `localhost`
+- it runs locally on the deck in kiosk mode
+- it is also accessible from other devices on the same trusted LAN
 
-The control deck may later include additional physical controls beyond touch input. One confirmed future candidate is a physical volume knob that adjusts monitor volume through `DDC`, since volume control has already been observed to work over `VCP 0x62`.
+There is no separate deck product and remote product. The same screens and workflows are used in both cases.
 
-Another future investigation is whether the deck's own power-off action can also send a monitor power-off or standby command, either through `DDC` or through a `JOG` workflow, without interrupting power delivery to attached `USB` or `Thunderbolt` devices.
+### Display target
 
-Another future investigation is whether one of the monitor's `Thunderbolt` or `USB-C` paths can be used for `DDC` communication, which could avoid a more complex `HDMI` sharing solution. One possible direction is a dedicated low-power device, such as a Raspberry Pi Zero 2 W, connected through that path purely for monitor communication.
+The initial design target is `1024x600`.
 
-Initial operating characteristics:
+The UI should remain responsive for other screen sizes, but the layout and interaction density should be optimized for the deck display first.
 
-- auto-start on boot
-- fullscreen kiosk behavior
-- automatic restart after failure
-- no keyboard required for normal use
-- minimal background services
+### Screen model
 
-## Safety model
+The UI should be organized around these areas:
 
-This project is not warranty-safe. The design should still aim to be electrically conservative:
+- main monitor control area
+- dashboard area with live/local widgets
+- advanced/settings area
+- live log area
 
-- avoid unsafe drive conditions on analog key lines
-- minimize the chance of controller and original board contention
-- default to an idle state that does not look like a pressed button
-- make recovery paths explicit when the monitor and software state diverge
+The advanced/settings area should include:
 
-Operationally, the kiosk should also aim to be conservative:
+- recording controls
+- replay tools
+- sequence management
+- theme and preference controls
+- status and debugging information that is useful during development and bring-up
 
-- avoid exposing unnecessary local services
-- store secrets locally and minimally
-- tolerate network and API outages without trapping the user in a broken state
+### First usable controller
 
-## Initial design decisions to validate
+The first usable controller should be a direct `JOG` console:
 
-- whether the original `JOG` board remains permanently inline or is switched out during emulation
-- whether resistor selection is done with analog switches, relays, transistor networks, digital potentiometers, or a mixed design
-- how to preserve practical use of the monitor's `HDMI` input while still giving the control deck a reliable `DDC` path
-- whether a `Thunderbolt` or `USB-C` path can provide the needed `DDC` communication and remove the need for more complex `HDMI` interface hardware
-- how much OSD state can be inferred from DDC versus timing and workflow assumptions
-- how much monitor state can be inferred from front-panel `LED` behavior, and how deterministic those cues are
-- whether a simple stateless action API is enough or a richer monitor state machine is needed
-- how the `manual` mode UX should represent `from` and `to` state for source and `PIP` workflows
-- whether the first kiosk runtime should be browser-based or use a native UI stack
-- whether read-only root storage is worth adopting in the first release
+- `up`
+- `down`
+- `left`
+- `right`
+- `center`
+- press and hold support on each button
+- visible feedback when a command succeeds or fails
+- live log output
+- recording controls in the advanced/settings area
+
+This first controller is not the end state of the product. It is the first functional control surface from which reusable monitor features can be developed.
+
+## Sequence recording and replay design
+
+### Purpose
+
+Recorded sequences are central to the project.
+
+They allow:
+
+- exploration of unknown OSD workflows
+- cleanup and editing after recording
+- promotion of validated recordings into named product features
+- timing refinement after capture
+
+### Recording source
+
+Recording observes the bus itself, not only commands sent by the app.
+
+That means both:
+
+- app-generated control actions
+- physical monitor `JOG` actions
+
+can become part of a recording.
+
+### Sequence abstraction level
+
+Sequences should be stored at the logical action layer, not at the low-level analog bus layer.
+
+So recordings should represent things like:
+
+- `press`
+- `delay`
+- `wait_led`
+- `wait_ddc`
+
+and not expose internal bus wiring details such as `KEY_ADC1` or `KEY_ADC2`.
+
+The runtime is responsible for mapping those logical actions into:
+
+- bus/channel selection
+- resistor-state reproduction
+- `DDC` readback and interpretation
+
+### Format
+
+The canonical sequence format should be `JSON`.
+
+Reasons:
+
+- ordered arrays preserve event sequence
+- easy parsing and validation
+- easy file-based storage
+- easy editing and later extension
+
+Each recording should include:
+
+- metadata
+- ordered events
+- start and end state where known
+- `DDC` status snapshots or normalized status checks where useful
+- `LED` wait events where the next event should not continue until a matching `LED` cue is observed
+- `DDC` wait or check events with retry interval and timeout behavior
+- optional annotations for later cleanup
+
+Event behavior should support:
+
+- logical press or hold actions
+- delays
+- `LED`-triggered continuation
+- `DDC` status checks and `DDC` wait loops
+- configurable polling interval where repeated checks are needed
+- timeout-based failure when an expected `LED` or `DDC` state never arrives
+
+If the last event completes without timeout failure, the sequence is considered successful.
+
+A representative shape for the recording model is:
+
+```json
+{
+  "name": "enable-pip",
+  "version": 1,
+  "description": "Open OSD and enable PiP from OSD-closed state",
+  "start_state": {
+    "osd": "closed",
+    "mode": "ddc"
+  },
+  "end_state": {
+    "pip": "enabled"
+  },
+  "events": [
+    {
+      "type": "press",
+      "action": "center",
+      "duration_ms": 120
+    },
+    {
+      "type": "delay",
+      "duration_ms": 180
+    },
+    {
+      "type": "wait_led",
+      "match": {
+        "pattern": "blink"
+      },
+      "poll_interval_ms": 50,
+      "timeout_ms": 1500
+    },
+    {
+      "type": "press",
+      "action": "left",
+      "duration_ms": 100
+    },
+    {
+      "type": "delay",
+      "duration_ms": 120
+    },
+    {
+      "type": "wait_ddc",
+      "match": {
+        "input": "HDMI"
+      },
+      "poll_interval_ms": 200,
+      "timeout_ms": 5000
+    }
+  ]
+}
+```
+
+This example is illustrative rather than final code, but it captures the intended abstraction:
+
+- actions remain logical rather than bus-specific
+- waits are explicit event types
+- timeout semantics are implicit: if a wait times out, the sequence fails
+
+User-created recordings should live in a writable local directory.
+Shipped validated sequences should live in the repository and be versioned with the code.
+
+### Productization flow
+
+Expected lifecycle:
+
+1. record a raw sequence
+2. inspect and clean it up
+3. adjust timing if needed
+4. rename it to a meaningful workflow name
+5. ship it as part of an implemented feature
+
+Example:
+
+`recording_2026-03-23-21-55-35.json -> cleanup -> enable-pip.json`
+
+## Runtime architecture
+
+### Repository structure
+
+The project should be structured like this:
+
+```text
+pi-deck/
+  frontend/
+  backend/
+  docs/
+  hardware/
+```
+
+### Production process model
+
+Production should use:
+
+- one backend process
+- one frontend build artifact
+- backend serving the built frontend
+- websocket support from the backend
+
+This reduces runtime complexity on Raspberry Pi `2 B`.
+
+### Backend internal layers
+
+Even though production uses a single backend process, the backend code should be layered clearly:
+
+- API layer
+- application/service layer
+- hardware integration layer
+- storage layer
+
+Suggested conceptual structure:
+
+```text
+backend/
+  api/
+  services/
+  hardware/
+  storage/
+  models/
+```
+
+### Chosen stack
+
+- Backend: `Python`
+- Backend framework: `FastAPI`
+- Frontend: `React`
+- Frontend language: `TypeScript`
+- Frontend build tool: `Vite`
+- API style: `REST` + `WebSocket`
+- Process supervision: `systemd`
+- Kiosk browser: `Chromium`
+
+## Host platform design
+
+### OS and kiosk model
+
+The host starts from a terminal-only Raspberry Pi OS image.
+
+The design must include:
+
+- conservative OS cleanup
+- documentation of every host modification
+- repeatable host preparation
+- browser auto-start
+- cursor hiding
+- kiosk fullscreen behavior
+- crash recovery
+
+The deck should behave like a dedicated appliance, not like a general workstation.
+
+### Logging model
+
+The design includes three distinct capabilities:
+
+- file logging
+- live log streaming to the UI
+- recording mode for sequence capture
+
+File logging must be configurable and disableable to avoid unnecessary SD-card wear.
+
+Default retention policy:
+
+- one log file per day
+- three months retention
+
+The live log should surface:
+
+- UI actions
+- API command activity
+- hardware command attempts
+- bus state changes where useful
+- `DDC` status and errors where useful
+
+## Hardware design
+
+### Core principle
+
+The hardware interface must explicitly separate:
+
+- observe bus
+- drive bus
+
+These are different responsibilities even if they eventually share board-level circuitry.
+
+### Monitor-side signals
+
+Current known connector:
+
+- `CN1001`
+
+Pinout:
+
+- pin 1: `GND`
+- pin 2: `KEY_ADC2`
+- pin 3: `KEY_ADC1`
+- pin 4: `KEY_LED`
+- pin 5: `NC`
+
+Measured observations:
+
+- `KEY_ADC1` idle: `3.3V` to `GND`
+- `KEY_ADC2` idle: `3.3V` to `GND`
+
+Measured resistor-to-ground values with the joystick board disconnected:
+
+`KEY_ADC2`
+
+- `Down`: `3.3 kOhm`
+- `Right`: `9 kOhm`
+- `Up`: `22.6 kOhm`
+- `Left`: `32.8 kOhm`
+
+`KEY_ADC1`
+
+- `Center`: `23 kOhm`
+
+### Hardware paths
+
+The hardware architecture should include these logical paths:
+
+- bus observation path for `KEY_ADC1`
+- bus observation path for `KEY_ADC2`
+- bus drive path for `KEY_ADC1`
+- bus drive path for `KEY_ADC2`
+- `KEY_LED` observation path
+- display power button input path
+
+The first architecture pass should define signal ownership and required host I/O categories, even if final Raspberry Pi pin assignment is completed later in implementation.
+
+### Original JOG preservation
+
+Preserving the original `JOG` is mandatory.
+
+The hardware design must therefore:
+
+- avoid breaking physical `JOG` use
+- tolerate physical and software activity on the bus
+- detect bus activity for arbitration purposes
+
+### Arbitration behavior
+
+The hardware/software behavior should be:
+
+- if the target bus is idle, execute the command
+- if the target bus is busy, fail immediately
+- if a second command targets a bus already in use by the app, fail it
+- allow simultaneous actions across separate buses
+- do not attempt complex recovery if a physical user interferes during an app-driven action
+
+This is intentionally simple and matches the physical reality of the shared control path.
+
+## HDMI and DDC transport design
+
+### Current development path
+
+For development, a temporary sacrificial `HDMI` path is acceptable. This is only a development-stage compromise.
+
+### Long-term requirement
+
+Keeping the monitor's `HDMI` input practically available for real devices is important to the final system. The production direction should preserve that input while still providing the control deck with a reliable `DDC` communication path.
+
+### Future investigations
+
+The solution should explicitly leave room for these follow-up investigations:
+
+- `HDMI` sharing or multiplexing hardware for long-term `DDC` access, with priority because preserving usable `HDMI` input is important to the final system
+- use of `Thunderbolt` or `USB-C` for `DDC` communication instead of a more complex `HDMI` sharing design
+- use of a small dedicated device, such as a Raspberry Pi Zero 2 W, on a `Thunderbolt` or `USB-C` path purely for monitor communication
+- monitor power/standby behavior that preserves attached `USB` or `Thunderbolt` device power
+
+## Dashboard design
+
+The dashboard is part of the same UI and should show live/local data where possible.
+
+Expected early widgets:
+
+- clock
+- calendar view
+- appointments list
+- notes
+- host performance
+
+The design should prefer:
+
+- local OS time once synchronized after boot
+- locally available host metrics
+- configured location or explicit browser/user input when location is needed
+
+External services should be used only where they actually add value.
+
+Because Raspberry Pi does not retain reliable time across full shutdown by default, the design must include a boot-time time synchronization strategy.
+
+Weather is also a valid future dashboard widget and should be treated as a configurable external data source rather than a hardcoded integration.
+
+## Development phases implied by this design
+
+This solution implies the following development order:
+
+1. documentation and evidence capture
+2. host preparation and conservative OS cleanup
+3. hardware signal observation and validation
+4. hardware design discussion and approval for bus observation circuitry
+5. hardware design discussion and approval for analog drive circuitry
+6. GPIO assignment after the approved hardware design is known
+7. low-level `JOG` console UI
+8. recording and replay subsystem
+9. state investigation and sequence cleanup workflows
+10. dashboard data-source spike for boot-time time synchronization, location strategy, and weather provider selection
+11. productized monitor features built on validated sequences
+12. expanded dashboard and quality-of-life features
+
+This ordering matters because many higher-level features are blocked on sequence investigation first.
+
+## Remaining implementation-level details
+
+- exact electrical topology chosen during hardware design approval
+- exact Raspberry Pi pin mapping after the approved hardware design is known
+- exact JSON field names for the recording schema
+- exact time synchronization implementation choice on the host
+- exact weather provider and location-source strategy

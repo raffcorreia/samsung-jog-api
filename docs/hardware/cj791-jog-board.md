@@ -24,12 +24,12 @@ The relevant connector is documented as `CN1001` on the monitor main board with 
 - pin 1: `GND`
 - pin 2: `KEY_ADC2`
 - pin 3: `KEY_ADC1`
-- pin 4: `KED_LED`
+- pin 4: `KEY_LED`
 - pin 5: `NC`
 
 This matters because it suggests the `JOG` is not simply a bank of digital switches. The monitor appears to read button activity through analog key-sense lines.
 
-The `KED_LED` line is also important. It is not just a cosmetic output if it can be observed reliably by the controller, because front-panel `LED` behavior may provide useful confirmation cues during input changes, idle states, and some OSD workflows.
+The `KEY_LED` line is also important. It is not just a cosmetic output if it can be observed reliably by the controller, because front-panel `LED` behavior may provide useful confirmation cues during input changes, idle states, and some OSD workflows.
 
 ## Resistor ladder behavior
 
@@ -103,7 +103,7 @@ This is why an inline electrical emulator is attractive. The system does not nec
 
 - idle-state measurements are not yet documented here
 - tolerance ranges for each button value are not yet known
-- the electrical characteristics and exact semantics of `KED_LED` still need confirmation
+- the electrical characteristics and exact semantics of `KEY_LED` still need confirmation
 - contention behavior between the original board and a parallel controller is not yet characterized
 
 ## Suggested follow-up
