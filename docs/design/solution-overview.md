@@ -365,6 +365,14 @@ backend/
   models/
 ```
 
+Recommended responsibilities:
+
+- `api`: REST endpoints, websocket endpoints, request validation, and response shaping
+- `services`: command arbitration, sequence execution, monitor workflow logic, and widget/service orchestration
+- `hardware`: `jog_drive`, `jog_observe`, `led_observe`, `ddc`, and `display_power`
+- `storage`: recordings, settings, and other local persisted files
+- `models`: typed domain objects, validation models, and error types
+
 ### Chosen stack
 
 - Backend: `Python`
@@ -375,6 +383,52 @@ backend/
 - API style: `REST` + `WebSocket`
 - Process supervision: `systemd`
 - Kiosk browser: `Chromium`
+
+## Sequence runner architecture
+
+Sequence execution should be handled by a dedicated unified sequence runner rather than scattered service logic.
+
+Its responsibilities should include:
+
+- validating a sequence before execution
+- enforcing sequence timeout and non-runaway behavior
+- rejecting concurrent sequence execution
+- supporting immediate manual abort
+- reporting step-by-step progress and failure back to the API and UI
+
+If a sequence is already running and another sequence is triggered, the second request should fail immediately.
+
+Manual stop should be immediate abort, with the runner returning the system to a safe idle state where possible.
+
+## Command arbitration architecture
+
+Command arbitration should be split across two layers:
+
+- service layer decides whether a command or sequence is allowed to start
+- hardware layer enforces final safety at execution time
+
+This means:
+
+- same-bus overlaps are rejected
+- busy-bus conditions return immediate failure
+- separate buses may still operate in parallel when explicitly supported
+
+## WebSocket event model
+
+The websocket channel should be used for live system state and activity updates.
+
+Expected event categories:
+
+- button activity
+- command accepted or rejected
+- bus busy or idle state
+- `DDC` status updates
+- `LED` events
+- recording state
+- live log stream
+
+Clock display should remain frontend-local rather than websocket-driven.
+Calendar and appointment widgets should start as normal API-driven widgets and only move to push updates later if there is a real need.
 
 ## Host platform design
 
@@ -416,6 +470,31 @@ The live log should surface:
 - hardware command attempts
 - bus state changes where useful
 - `DDC` status and errors where useful
+
+Log records should be unified in one file-oriented stream and one live-view stream.
+
+Each log line should include:
+
+- date
+- time
+- type or category such as `event`, `operational`, `sequence`, or `error`
+- message
+
+The file log and live log should represent the same event stream with different output destinations.
+
+## Settings architecture
+
+Settings should remain touch-friendly and avoid typed input wherever possible.
+
+Initial settings should be simple toggles or discrete choices such as:
+
+- theme
+- show or hide advanced area
+- enable or disable the live log panel
+- default operating mode preference
+- widget visibility
+
+Future authentication or entitlements may later gate parts of the same UI, but that is not part of the current design.
 
 ## Hardware design
 
@@ -494,6 +573,23 @@ The hardware/software behavior should be:
 - do not attempt complex recovery if a physical user interferes during an app-driven action
 
 This is intentionally simple and matches the physical reality of the shared control path.
+
+## Dashboard widget architecture
+
+Dashboard widgets should be treated as individual frontend and backend responsibilities rather than one monolithic dashboard subsystem.
+
+That means:
+
+- each widget has its own backend data provider or service when needed
+- each widget has its own frontend panel or controller
+- widgets should not interfere with one another unnecessarily
+
+Expected early ownership model:
+
+- clock: frontend-local
+- calendar and appointments: backend-provided data with normal API fetch
+- notes: local application data
+- host performance: backend-provided host metrics
 
 ## HDMI and DDC transport design
 
