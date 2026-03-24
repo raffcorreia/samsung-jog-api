@@ -62,6 +62,7 @@ Project definition:
 - [Solution Overview](docs/design/solution-overview.md)
 - [Implementation Plan](docs/implementation/plan.md)
 - [Test Strategy](docs/testing/test-strategy.md)
+- [Code Guidelines](docs/development/code-guidelines.md)
 
 Reference and reverse-engineering notes:
 
