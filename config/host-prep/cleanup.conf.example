@@ -1,0 +1,21 @@
+# Copy this file to a local path such as:
+#   /etc/samsung-jog-api/cleanup.conf
+# or another host-local location that will not be committed.
+#
+# Then edit the package and service lists for the specific Raspberry Pi host.
+# The cleanup script reads this file with `source`, so keep it valid shell.
+
+PACKAGES_TO_PURGE=(
+  avahi-daemon
+  bluez
+  modemmanager
+  packagekit
+)
+
+SERVICES_TO_DISABLE=(
+  avahi-daemon
+  bluetooth
+  hciuart
+  ModemManager
+  packagekit
+)
