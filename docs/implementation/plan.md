@@ -303,6 +303,8 @@ Build the first usable controller UI for direct monitor interaction.
 - live log view
 - touch-first layout
 
+At this stage, this raw `JOG` controller should be the only monitor-control UI exposed.
+
 ### Tasks
 
 - implement `up`, `down`, `left`, `right`, and `center`
@@ -321,6 +323,7 @@ Build the first usable controller UI for direct monitor interaction.
 ### Exit criteria
 
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions
+- no unvalidated high-level monitor feature UI is exposed yet
 
 ## Phase 9: Recording and Replay Subsystem
 
@@ -473,6 +476,8 @@ Turn validated monitor workflows into real user-facing features.
 - add user-facing controls for named features
 - expose proper error handling and failure states
 - keep feature behavior aligned with validated sequence assumptions
+- evolve the UI from raw `JOG`-only control into the richer `DDC` and `manual` mode control surface
+- preserve access to the raw `JOG` controller behind a manual-control entry point
 - add integration tests for source switching, `PiP`, and other productized monitor workflows
 
 ### Deliverables

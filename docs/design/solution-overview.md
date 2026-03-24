@@ -130,6 +130,16 @@ There is only one UI:
 
 There is no separate deck product and remote product. The same screens and workflows are used in both cases.
 
+### UI evolution by phase
+
+The monitor-control UI should evolve in stages:
+
+- early phases: raw `JOG` controller only
+- after validated JSON-backed workflows exist: richer monitor features built on those workflows
+- later phases: full user-facing `DDC` mode and `manual` mode controls
+
+This prevents the project from presenting fake higher-level controls before the underlying monitor behavior has actually been proven.
+
 ### Display target
 
 The initial design target is `1024x600`.
@@ -184,6 +194,12 @@ The first usable controller should be a direct `JOG` console:
 - recording controls in the advanced/settings area
 
 This first controller is not the end state of the product. It is the first functional control surface from which reusable monitor features can be developed.
+
+In the early phases, this raw `JOG` controller should be the only monitor-control UI exposed.
+
+Only after validated sequence files exist should the UI grow into the richer feature model discussed elsewhere in the design.
+
+Even after higher-level controls are added, the raw `JOG` controller should remain available behind a manual-control entry point for investigation, recovery, and direct low-level use.
 
 ## Sequence recording and replay design
 
