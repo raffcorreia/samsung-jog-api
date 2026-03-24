@@ -153,6 +153,22 @@ The advanced/settings area should include:
 - theme and preference controls
 - status and debugging information that is useful during development and bring-up
 
+### Visual interaction direction
+
+The UI should take inspiration from the Stream Deck style of interaction:
+
+- icon-driven controls
+- large, easy-to-press buttons
+- quick visual recognition of primary actions
+
+At the same time, the layout should remain flexible rather than forcing every element into identical button tiles.
+
+That means:
+
+- primary monitor controls should be large and easy to hit
+- supporting widgets such as clock and calendar do not need to consume the same amount of space as primary controls
+- the screen should be used intentionally based on function, not by giving every panel equal weight
+
 ### First usable controller
 
 The first usable controller should be a direct `JOG` console:
