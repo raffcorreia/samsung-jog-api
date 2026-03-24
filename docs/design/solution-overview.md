@@ -102,6 +102,8 @@ The control deck may later include additional physical controls beyond touch inp
 
 Another future investigation is whether the deck's own power-off action can also send a monitor power-off or standby command, either through `DDC` or through a `JOG` workflow, without interrupting power delivery to attached `USB` or `Thunderbolt` devices.
 
+Another future investigation is whether one of the monitor's `Thunderbolt` or `USB-C` paths can be used for `DDC` communication, which could avoid a more complex `HDMI` sharing solution. One possible direction is a dedicated low-power device, such as a Raspberry Pi Zero 2 W, connected through that path purely for monitor communication.
+
 Initial operating characteristics:
 
 - auto-start on boot
@@ -130,6 +132,7 @@ Operationally, the kiosk should also aim to be conservative:
 - whether the original `JOG` board remains permanently inline or is switched out during emulation
 - whether resistor selection is done with analog switches, relays, transistor networks, digital potentiometers, or a mixed design
 - how to preserve practical use of the monitor's `HDMI` input while still giving the control deck a reliable `DDC` path
+- whether a `Thunderbolt` or `USB-C` path can provide the needed `DDC` communication and remove the need for more complex `HDMI` interface hardware
 - how much OSD state can be inferred from DDC versus timing and workflow assumptions
 - how much monitor state can be inferred from front-panel `LED` behavior, and how deterministic those cues are
 - whether a simple stateless action API is enough or a richer monitor state machine is needed

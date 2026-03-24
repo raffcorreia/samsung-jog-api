@@ -96,6 +96,8 @@ This document describes the proposed implementation order for `samsung-jog-api`.
 - determine whether the deck display power-off action can also place the monitor into standby or power-off state
 - test both `DDC` power control and `JOG`-driven OSD power workflows for that behavior
 - verify whether monitor power-off or standby preserves power to attached `USB` and `Thunderbolt` devices before adopting this behavior
+- investigate whether one of the monitor's `Thunderbolt` or `USB-C` paths can be used for `DDC` communication instead of a more complex `HDMI` sharing design
+- evaluate whether a low-power dedicated device, such as a Raspberry Pi Zero 2 W, could be attached there purely for monitor communication
 
 ## Milestones
 
