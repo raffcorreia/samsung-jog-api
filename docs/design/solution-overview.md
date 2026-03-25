@@ -644,13 +644,22 @@ For development, a temporary sacrificial `HDMI` path is acceptable. This is only
 
 Keeping the monitor's `HDMI` input practically available for real devices is important to the final system. The production direction should preserve that input while still providing the control deck with a reliable `DDC` communication path.
 
+### Practical rejected direction
+
+`Thunderbolt` or `USB-C` was considered as a possible `DDC` path, but it is not the current project direction.
+
+Reasoning:
+
+- it is an obvious idea because the monitor already has two `Thunderbolt` / `USB-C` ports, so using one of them for monitor communication would appear simpler than adding dedicated `HDMI`-sharing hardware
+- even if the monitor exposes usable `DDC` communication there, the project does not currently have a practical low-cost device that can attach on that path and access it in a useful way
+- a simple `USB-C` connector on a cheap microcontroller board does not make that board a real `Thunderbolt` endpoint
+- this makes the approach a poor fit for the current hardware plan compared with solving `HDMI` and `DDC` communication directly
+
 ### Future investigations
 
 The solution should explicitly leave room for these follow-up investigations:
 
 - `HDMI` sharing or multiplexing hardware for long-term `DDC` access, with priority because preserving usable `HDMI` input is important to the final system
-- use of `Thunderbolt` or `USB-C` for `DDC` communication instead of a more complex `HDMI` sharing design
-- use of a small dedicated device, such as a Raspberry Pi Zero 2 W, on a `Thunderbolt` or `USB-C` path purely for monitor communication
 - monitor power/standby behavior that preserves attached `USB` or `Thunderbolt` device power
 
 ## Dashboard design

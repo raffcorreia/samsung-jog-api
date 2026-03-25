@@ -163,7 +163,7 @@ Design, document, and approve the complete observation circuit needed to observe
 ### Deliverables
 
 - approved observation-path design
-- documented rationale and component choices
+- documented component and topology decisions
 - observation schematic
 - observation BOM
 - observation verification approach
@@ -216,7 +216,42 @@ Design, document, and approve the complete analog drive circuit needed to reprod
 - the drive circuit has a reviewable schematic and BOM
 - the drive path is documented well enough to be integrated into a full controller board
 
-## Phase 5: Integrated Controller Board Design
+## Phase 5: HDMI and DDC Communication Design
+
+### Goal
+
+Define and validate how the final system preserves practical use of the monitor's `HDMI` input while still maintaining a reliable `DDC` communication path.
+
+### Scope
+
+- `HDMI` and `DDC` transport strategy
+- evaluation of shared or multiplexed `HDMI` / `DDC` access
+- impact on final controller-board interfaces
+- custom hardware needed beyond the core controller board, if any
+
+### Tasks
+
+- document the current development compromise of temporary full `HDMI` takeover
+- define the final-system requirement for preserving practical `HDMI` use
+- evaluate candidate approaches for shared or multiplexed `HDMI` / `DDC` access
+- determine how the chosen transport approach affects connectors, harnessing, and board interfaces
+- identify any additional custom hardware required beyond the controller board itself
+- document the selected transport direction and its rationale
+- define how the chosen transport approach will be verified later in implementation
+
+### Deliverables
+
+- approved `HDMI` / `DDC` communication direction for the final system
+- documented rationale for the chosen transport approach
+- defined interface impact on the integrated hardware design
+- communication verification approach
+
+### Exit criteria
+
+- the project has an approved direction for preserving practical `HDMI` use while maintaining `DDC` communication
+- the hardware plan no longer depends on permanent `HDMI` sacrifice as a final-system assumption
+
+## Phase 6: Integrated Controller Board Design
 
 ### Goal
 
@@ -235,6 +270,7 @@ Combine the approved observation and drive circuits into a manufacturable contro
 ### Tasks
 
 - combine the approved observation and drive circuits into one integrated schematic
+- incorporate the approved `HDMI` / `DDC` communication direction into the board interfaces and connector strategy
 - GPIO allocation
 - define all required monitor-side, host-side, and display-side interfaces
 - assign GPIO usage after the approved hardware design is known
@@ -244,6 +280,7 @@ Combine the approved observation and drive circuits into a manufacturable contro
   - original `JOG` harness
   - Raspberry Pi interface
   - display power or related host-side power connections if required
+  - any `HDMI` / `DDC` transport-related interfaces required by the chosen communication design
 - define board dimensions and mechanical constraints
 - define mounting holes, screw usage, and cable-routing assumptions
 - define the PCB stack-up and board-level layout constraints
@@ -264,10 +301,11 @@ Combine the approved observation and drive circuits into a manufacturable contro
 ### Exit criteria
 
 - the observation and drive circuits are combined into one coherent controller-board design
+- the approved `HDMI` / `DDC` communication direction is reflected in the integrated hardware design
 - all required pins and interfaces are defined
 - the board is documented well enough to prototype or manufacture
 
-## Phase 6: GPIO Assignment and Low-Level Control Prototype
+## Phase 7: GPIO Assignment and Low-Level Control Prototype
 
 ### Goal
 
@@ -299,7 +337,7 @@ Build and validate the first working hardware prototype from the approved integr
 - the system can reliably perform each low-level `JOG` action through the custom hardware
 - the integrated board design is proven well enough to support software bring-up
 
-## Phase 7: Local Platform Bring-Up
+## Phase 8: Local Platform Bring-Up
 
 ### Goal
 
@@ -334,7 +372,7 @@ Make the deck boot into its intended local runtime and behave like a dedicated a
 - the deck boots into the application without manual intervention
 - the kiosk runtime recovers from process failures
 
-## Phase 8: Local API
+## Phase 9: Local API
 
 ### Goal
 
@@ -366,7 +404,7 @@ Define and implement the local backend command surface that all UI and control f
 
 - the frontend can drive low-level control and receive live state from the backend
 
-## Phase 9: Low-Level JOG Console UI
+## Phase 10: Low-Level JOG Console UI
 
 ### Goal
 
@@ -401,7 +439,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions
 - no unvalidated high-level monitor feature UI is exposed yet
 
-## Phase 10: Recording and Replay Subsystem
+## Phase 11: Recording and Replay Subsystem
 
 ### Goal
 
@@ -439,7 +477,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 
 - sequences can be recorded, replayed, stopped, and validated reliably
 
-## Phase 11: DDC Capability Investigation
+## Phase 12: DDC Capability Investigation
 
 ### Goal
 
@@ -472,7 +510,7 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 
-## Phase 12: LED Feedback Characterization
+## Phase 13: LED Feedback Characterization
 
 ### Goal
 
@@ -502,7 +540,7 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 
 - the project knows when LED feedback can be trusted as part of sequence execution
 
-## Phase 13: State Investigation and Sequence Cleanup
+## Phase 14: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -534,7 +572,7 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 
 - important monitor workflows are represented by stable, reusable, named sequence files
 
-## Phase 14: Productized Monitor Features
+## Phase 15: Productized Monitor Features
 
 ### Goal
 
@@ -565,7 +603,7 @@ Turn validated monitor workflows into real user-facing features.
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
 
-## Phase 15: Dashboard Data-Source Spike
+## Phase 16: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -596,7 +634,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
 
-## Phase 16: Dashboard Widgets
+## Phase 17: Dashboard Widgets
 
 ### Goal
 
@@ -627,7 +665,7 @@ Implement the dashboard side of the product using the data-source decisions from
 
 - the dashboard is useful and stable without compromising the monitor-control surface
 
-## Phase 17: Stabilization
+## Phase 18: Stabilization
 
 ### Goal
 
@@ -670,28 +708,28 @@ Harden the system for regular use.
 - determine whether the deck display power-off action can also place the monitor into standby or power-off state
 - test both `DDC` power control and `JOG`-driven OSD power workflows for that behavior
 - verify whether monitor power-off or standby preserves power to attached `USB` and `Thunderbolt` devices before adopting this behavior
-- investigate how to preserve practical use of the monitor's `HDMI` input while still providing `DDC` communication, beyond the temporary full `HDMI` takeover used during development
-- investigate whether one of the monitor's `Thunderbolt` or `USB-C` paths can be used for `DDC` communication instead of a more complex `HDMI` sharing design
 - evaluate whether a low-power dedicated device, such as a Raspberry Pi Zero 2 W, could be attached there purely for monitor communication
 
 ## Milestones
 
 - milestone 1: approved observation circuit design with schematic and BOM
 - milestone 2: approved analog drive circuit design with schematic and BOM
-- milestone 3: approved integrated controller board design with GPIO map, PCB layout, and manufacturing-ready documentation
-- milestone 4: confirmed electrical emulation of all `JOG` actions
-- milestone 5: confirmed `LED` behavior model for target workflows
-- milestone 6: confirmed `DDC` behavior model for target workflows
-- milestone 7: working Raspberry Pi kiosk host with supervised app startup
-- milestone 8: working recording and replay subsystem
-- milestone 9: working local API for primitive and scripted actions
-- milestone 10: working low-level `JOG` controller UI
-- milestone 11: productized monitor-control features
+- milestone 3: approved final-system `HDMI` / `DDC` communication direction
+- milestone 4: approved integrated controller board design with GPIO map, PCB layout, and manufacturing-ready documentation
+- milestone 5: confirmed electrical emulation of all `JOG` actions
+- milestone 6: confirmed `LED` behavior model for target workflows
+- milestone 7: confirmed `DDC` behavior model for target workflows
+- milestone 8: working Raspberry Pi kiosk host with supervised app startup
+- milestone 9: working recording and replay subsystem
+- milestone 10: working local API for primitive and scripted actions
+- milestone 11: working low-level `JOG` controller UI
+- milestone 12: productized monitor-control features
 
 ## Immediate Next Steps
 
 - complete and review the Phase 3 observation circuit schematic and BOM
-- review whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
-- define the Phase 4 analog drive circuit deliverables to the same schematic-plus-BOM standard
+- decide whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
+- define the Phase 4 analog drive circuit deliverables to the schematic-plus-BOM standard
+- define the Phase 5 `HDMI` / `DDC` communication deliverables clearly enough to feed the integrated controller-board design
 - confirm the KiCad file and artifact-management workflow before more hardware design work lands
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
