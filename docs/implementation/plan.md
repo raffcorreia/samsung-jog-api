@@ -133,11 +133,11 @@ Confirm the measured electrical behavior of the monitor control path before comm
 - idle and action measurements are confirmed on the target hardware
 - no critical contradiction exists between the documented model and the real monitor
 
-## Phase 3: Bus Observation Hardware Design
+## Phase 3: Bus Observation Circuit Design
 
 ### Goal
 
-Design and approve the custom hardware needed to observe the monitor-side signals continuously.
+Design, document, and approve the complete observation circuit needed to observe the monitor-side signals continuously.
 
 ### Scope
 
@@ -145,6 +145,8 @@ Design and approve the custom hardware needed to observe the monitor-side signal
 - observation of `KEY_ADC2`
 - observation of `KEY_LED`
 - safe interface between monitor-side signals and Raspberry Pi inputs
+- component selection for the observation path
+- observation BOM and schematic
 
 ### Tasks
 
@@ -152,6 +154,9 @@ Design and approve the custom hardware needed to observe the monitor-side signal
 - determine how to sense bus activity safely without disturbing the monitor behavior
 - determine how continuous observation will be exposed to software
 - document the observation circuitry candidates
+- select the observation-path component families and exact parts
+- produce the observation-path schematic
+- produce the observation-path BOM
 - review and approve the observation design
 - define how the observation path will be verified during implementation
 
@@ -159,16 +164,21 @@ Design and approve the custom hardware needed to observe the monitor-side signal
 
 - approved observation-path design
 - documented rationale and component choices
+- observation schematic
+- observation BOM
+- observation verification approach
 
 ### Exit criteria
 
-- there is an approved design for continuous safe observation of the relevant monitor-side signals
+- there is an approved observation circuit for continuous safe observation of the relevant monitor-side signals
+- the observation circuit has a reviewable schematic and BOM
+- the observation path is documented well enough to be integrated into a full controller board
 
-## Phase 4: Analog Drive Hardware Design
+## Phase 4: Analog Drive Circuit Design
 
 ### Goal
 
-Design and approve the custom hardware needed to reproduce the monitor's analog `JOG` behavior.
+Design, document, and approve the complete analog drive circuit needed to reproduce the monitor's analog `JOG` behavior.
 
 ### Scope
 
@@ -176,6 +186,8 @@ Design and approve the custom hardware needed to reproduce the monitor's analog 
 - drive path for `KEY_ADC2`
 - safe interaction with the preserved original `JOG`
 - analog resistor-state reproduction
+- component selection for the drive path
+- drive BOM and schematic
 
 ### Tasks
 
@@ -184,6 +196,9 @@ Design and approve the custom hardware needed to reproduce the monitor's analog 
 - define how the original `JOG` remains preserved
 - define how drive and observe paths coexist
 - document the analog drive design candidates
+- select the drive-path component families and exact parts
+- produce the analog drive schematic
+- produce the analog drive BOM
 - review and approve the analog drive design
 - define how the analog drive path will be verified during implementation
 
@@ -191,44 +206,100 @@ Design and approve the custom hardware needed to reproduce the monitor's analog 
 
 - approved analog drive design
 - documented component and topology decisions
+- analog drive schematic
+- analog drive BOM
+- analog drive verification approach
 
 ### Exit criteria
 
-- there is an approved design for reproducing the required analog states safely and repeatably
+- there is an approved analog drive circuit for reproducing the required analog states safely and repeatably
+- the drive circuit has a reviewable schematic and BOM
+- the drive path is documented well enough to be integrated into a full controller board
 
-## Phase 5: GPIO Assignment and Low-Level Control Prototype
+## Phase 5: Integrated Controller Board Design
 
 ### Goal
 
-Map the approved hardware design onto Raspberry Pi GPIO usage and prove low-level control of the monitor.
+Combine the approved observation and drive circuits into a manufacturable controller-board design and define the full host integration.
 
 ### Scope
 
+- integrated controller schematic
 - GPIO allocation
-- low-level hardware control prototype
-- validation of basic `JOG` actions
+- PCB design and mechanical constraints
+- connectors and harness strategy
+- display and host power connections as needed
+- board size and mounting approach
+- manufacturability review
 
 ### Tasks
 
+- combine the approved observation and drive circuits into one integrated schematic
+- GPIO allocation
+- define all required monitor-side, host-side, and display-side interfaces
 - assign GPIO usage after the approved hardware design is known
 - define which pins are input-only, output-only, or otherwise constrained
-- build a bench prototype or first working hardware prototype
+- define connector choices for:
+  - monitor-side harness
+  - original `JOG` harness
+  - Raspberry Pi interface
+  - display power or related host-side power connections if required
+- define board dimensions and mechanical constraints
+- define mounting holes, screw usage, and cable-routing assumptions
+- define the PCB stack-up and board-level layout constraints
+- produce the integrated controller schematic
+- produce the integrated controller BOM
+- produce the first PCB layout
+- review the board for manufacturability and assembly risk
+
+### Deliverables
+
+- integrated controller schematic
+- integrated controller BOM
+- GPIO map
+- PCB layout
+- documented connector and mechanical decisions
+- manufacturability review notes
+
+### Exit criteria
+
+- the observation and drive circuits are combined into one coherent controller-board design
+- all required pins and interfaces are defined
+- the board is documented well enough to prototype or manufacture
+
+## Phase 6: GPIO Assignment and Low-Level Control Prototype
+
+### Goal
+
+Build and validate the first working hardware prototype from the approved integrated controller-board design.
+
+### Scope
+
+- low-level hardware control prototype
+- validation of basic `JOG` actions
+- timing characterization
+
+### Tasks
+
+- build a bench prototype or first manufactured hardware prototype
 - verify that each low-level `JOG` action is correctly interpreted by the monitor
 - measure press, hold, repeat, and release timing
 - record any timing sensitivity or debounce-like behavior
+- validate the observation path against the approved design
 - add hardware-facing verification tests for each low-level `JOG` action
 
 ### Deliverables
 
-- GPIO map
 - working low-level control prototype
 - verified timing baselines for individual `JOG` actions
+- initial prototype validation notes
 
 ### Exit criteria
 
 - the system can reliably perform each low-level `JOG` action through the custom hardware
+- the integrated board design is proven well enough to support software bring-up
 
-## Phase 6: Local Platform Bring-Up
+## Phase 7: Local Platform Bring-Up
 
 ### Goal
 
@@ -263,7 +334,7 @@ Make the deck boot into its intended local runtime and behave like a dedicated a
 - the deck boots into the application without manual intervention
 - the kiosk runtime recovers from process failures
 
-## Phase 7: Local API
+## Phase 8: Local API
 
 ### Goal
 
@@ -295,7 +366,7 @@ Define and implement the local backend command surface that all UI and control f
 
 - the frontend can drive low-level control and receive live state from the backend
 
-## Phase 8: Low-Level JOG Console UI
+## Phase 9: Low-Level JOG Console UI
 
 ### Goal
 
@@ -330,7 +401,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions
 - no unvalidated high-level monitor feature UI is exposed yet
 
-## Phase 9: Recording and Replay Subsystem
+## Phase 10: Recording and Replay Subsystem
 
 ### Goal
 
@@ -368,7 +439,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 
 - sequences can be recorded, replayed, stopped, and validated reliably
 
-## Phase 10: DDC Capability Investigation
+## Phase 11: DDC Capability Investigation
 
 ### Goal
 
@@ -401,7 +472,7 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 
-## Phase 11: LED Feedback Characterization
+## Phase 12: LED Feedback Characterization
 
 ### Goal
 
@@ -431,7 +502,7 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 
 - the project knows when LED feedback can be trusted as part of sequence execution
 
-## Phase 12: State Investigation and Sequence Cleanup
+## Phase 13: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -463,7 +534,7 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 
 - important monitor workflows are represented by stable, reusable, named sequence files
 
-## Phase 13: Productized Monitor Features
+## Phase 14: Productized Monitor Features
 
 ### Goal
 
@@ -494,7 +565,7 @@ Turn validated monitor workflows into real user-facing features.
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
 
-## Phase 14: Dashboard Data-Source Spike
+## Phase 15: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -525,7 +596,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
 
-## Phase 15: Dashboard Widgets
+## Phase 16: Dashboard Widgets
 
 ### Goal
 
@@ -556,7 +627,7 @@ Implement the dashboard side of the product using the data-source decisions from
 
 - the dashboard is useful and stable without compromising the monitor-control surface
 
-## Phase 16: Stabilization
+## Phase 17: Stabilization
 
 ### Goal
 
@@ -605,23 +676,22 @@ Harden the system for regular use.
 
 ## Milestones
 
-- milestone 1: confirmed electrical emulation of all `JOG` actions
-- milestone 2: confirmed `LED` behavior model for target workflows
-- milestone 3: confirmed `DDC` behavior model for target workflows
-- milestone 4: approved observation and analog drive hardware design
-- milestone 5: working Raspberry Pi kiosk host with supervised app startup
-- milestone 6: working recording and replay subsystem
-- milestone 7: working local API for primitive and scripted actions
-- milestone 8: working low-level `JOG` controller UI
-- milestone 9: productized monitor-control features
+- milestone 1: approved observation circuit design with schematic and BOM
+- milestone 2: approved analog drive circuit design with schematic and BOM
+- milestone 3: approved integrated controller board design with GPIO map, PCB layout, and manufacturing-ready documentation
+- milestone 4: confirmed electrical emulation of all `JOG` actions
+- milestone 5: confirmed `LED` behavior model for target workflows
+- milestone 6: confirmed `DDC` behavior model for target workflows
+- milestone 7: working Raspberry Pi kiosk host with supervised app startup
+- milestone 8: working recording and replay subsystem
+- milestone 9: working local API for primitive and scripted actions
+- milestone 10: working low-level `JOG` controller UI
+- milestone 11: productized monitor-control features
 
 ## Immediate Next Steps
 
-- add photo assets and teardown evidence
-- create the first hardware evidence records under `docs/hardware/`
-- turn the DDC observations into reproducible command transcripts
-- record front-panel `LED` behavior during key monitor actions
-- prepare the hardware design review for observation and analog drive circuitry
-- decide the initial Raspberry Pi runtime stack for frontend and backend
-- create a dedicated testing strategy document before implementation gets deep
+- complete and review the Phase 3 observation circuit schematic and BOM
+- review whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
+- define the Phase 4 analog drive circuit deliverables to the same schematic-plus-BOM standard
+- confirm the KiCad file and artifact-management workflow before more hardware design work lands
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

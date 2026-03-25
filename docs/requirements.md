@@ -122,8 +122,9 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 
 - The system must include a physical button for toggling the display power, while the deck itself remains powered so it can continue controlling the monitor.
 - The project must include and document:
-  - circuit design
+  - circuit design and schematic
   - component specification and `BOM`
+  - integrated controller board design
   - PCB design, if applicable
 
 ## Software architecture requirements
