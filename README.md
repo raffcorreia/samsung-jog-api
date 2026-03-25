@@ -16,8 +16,10 @@ This repository is organized around the Samsung `LC34J791WTNXZA / CJ791` hardwar
 Current state of the repository:
 
 - completed: `Phase 0: Documentation and Evidence Capture`
-- current phase: `Phase 1: Host Preparation and Conservative OS Cleanup`
+- completed: `Phase 1: Host Preparation and Conservative OS Cleanup`
+- current phase: `Phase 2: Hardware Validation`
 - repository now includes Phase 1 runbooks and host-preparation scripts
+- repository now includes a Phase 2 execution record for hardware validation
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
 - no production code yet
