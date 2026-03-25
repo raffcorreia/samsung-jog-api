@@ -75,13 +75,18 @@ Current recorded metadata for this evidence set:
 
 | Line | State | Measurement type | Value | Board connected? | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `KEY_ADC2` | `Idle` | voltage to `GND` | | | |
-| `KEY_ADC2` | `Down` | resistance to `GND` | | | |
-| `KEY_ADC2` | `Right` | resistance to `GND` | | | |
-| `KEY_ADC2` | `Up` | resistance to `GND` | | | |
-| `KEY_ADC2` | `Left` | resistance to `GND` | | | |
-| `KEY_ADC1` | `Idle` | voltage to `GND` | | | |
-| `KEY_ADC1` | `Center` | resistance to `GND` | | | |
+| `KEY_ADC2` | `Idle` | voltage to `GND` | `3.29V` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Down` | voltage to `GND` | `1.35V` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Down` | resistance to `GND` | `3.3 kOhm` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Right` | voltage to `GND` | `2.16V` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Right` | resistance to `GND` | `9 kOhm` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Up` | voltage to `GND` | `0.01V` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Up` | resistance to `GND` | `22.8 Ohm` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Left` | voltage to `GND` | `2.88V` | yes | latest powered measurement set |
+| `KEY_ADC2` | `Left` | resistance to `GND` | `32.8 kOhm` | yes | latest powered measurement set |
+| `KEY_ADC1` | `Idle` | voltage to `GND` | `3.29V` | yes | latest powered measurement set |
+| `KEY_ADC1` | `Center` | voltage to `GND` | `0.01V` | yes | latest powered measurement set |
+| `KEY_ADC1` | `Center` | resistance to `GND` | `22.71 Ohm` | yes | latest powered measurement set |
 
 ### `KEY_LED` basic evidence table
 
@@ -136,8 +141,8 @@ Phase 2 has started.
 Current confirmed evidence:
 
 - the photo set in this repo is considered sufficient to treat `CN1001` orientation and connector context as visually unambiguous
-- `KEY_ADC1` idle voltage to `GND`: `3.3V`
-- `KEY_ADC2` idle voltage to `GND`: `3.3V`
+- `KEY_ADC1` idle voltage to `GND`: initially `3.3V`, latest powered set `3.29V`
+- `KEY_ADC2` idle voltage to `GND`: initially `3.3V`, latest powered set `3.29V`
 - `KEY_LED` idle voltage: `0V`
 - `KEY_LED` active voltage with LED connected: `2.7V`
 - `KEY_LED` active voltage with LED disconnected: `2.9V`
@@ -165,6 +170,20 @@ Still pending in Phase 2:
 | `KEY_LED` | `Idle` | voltage to `GND` | `0V` | yes | confirmed during Phase 2 |
 | `KEY_LED` | `Active` | voltage to `GND` | `2.7V` | yes | LED connected |
 | `KEY_LED` | `Active` | voltage to `GND` | `2.9V` | no | LED disconnected |
+
+### Latest powered key-state measurements
+
+This later powered and connected measurement set adds the observed bus voltages for each active state:
+
+| Line | State | Voltage to `GND` | Resistance to `GND` | Board connected? | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `KEY_ADC2` | `Idle` | `3.29V` | | yes | latest powered set |
+| `KEY_ADC2` | `Left` | `2.88V` | `32.8 kOhm` | yes | latest powered set |
+| `KEY_ADC2` | `Right` | `2.16V` | `9 kOhm` | yes | latest powered set |
+| `KEY_ADC2` | `Up` | `0.01V` | `22.8 Ohm` | yes | latest powered set |
+| `KEY_ADC2` | `Down` | `1.35V` | `3.3 kOhm` | yes | latest powered set |
+| `KEY_ADC1` | `Idle` | `3.29V` | | yes | latest powered set |
+| `KEY_ADC1` | `Center` | `0.01V` | `22.71 Ohm` | yes | latest powered set |
 
 Measurement metadata for this set:
 
@@ -197,6 +216,8 @@ The previously documented resistance values were explicitly reconfirmed and rema
 | `KEY_ADC2` | `Up` | resistance to `GND` | `22.6 kOhm` | no | reconfirmed |
 | `KEY_ADC2` | `Left` | resistance to `GND` | `32.8 kOhm` | no | reconfirmed |
 | `KEY_ADC1` | `Center` | resistance to `GND` | `23 kOhm` | no | reconfirmed |
+
+These earlier disconnected measurements now coexist with the later powered-and-connected voltage set above. Both are preserved because the powered measurements are directly useful for the observation-circuit thresholds, while the disconnected values remain relevant to understanding the passive `JOG` behavior.
 
 ## Exit Decision
 
