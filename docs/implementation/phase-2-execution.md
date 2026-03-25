@@ -28,7 +28,7 @@ Confirm that the currently documented electrical model still matches the actual 
 - `CN1001` pinout confirmation
 - `KEY_ADC1` idle and center measurement
 - `KEY_ADC2` idle and directional measurements
-- `KEY_LED` viability as a feedback source
+- basic `KEY_LED` electrical readability
 - confirmation that the original physical `JOG` can remain preserved
 
 ## Required Evidence
@@ -40,12 +40,36 @@ Confirm that the currently documented electrical model still matches the actual 
 - wiring colors or harness orientation
 - `JOG` board and cable routing
 
+Selected reference photos already copied into the repo:
+
+- main board context: [cj791-mainboard-full.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-mainboard-full.jpg)
+- pushbutton and connector close-up: [cj791-pushbutton-close.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-pushbutton-close.jpg)
+- joystick board connection: [cj791-joystick-board-connection.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-joystick-board-connection.jpg)
+- joystick board rear view: [cj791-joystick-back.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-joystick-back.jpg)
+
+<p align="center">
+  <img src="../assets/hardware/cj791-mainboard-full.jpg" alt="CJ791 main board full view" width="48%" />
+  <img src="../assets/hardware/cj791-pushbutton-close.jpg" alt="CJ791 pushbutton and connector close view" width="48%" />
+</p>
+
+<p align="center">
+  <img src="../assets/hardware/cj791-joystick-board-connection.jpg" alt="CJ791 joystick board connection" width="48%" />
+  <img src="../assets/hardware/cj791-joystick-back.jpg" alt="CJ791 joystick board rear side" width="48%" />
+</p>
+
 ### Meter metadata
 
 - measurement date
 - meter model
 - whether the board was connected or disconnected
 - probe placement notes
+
+Current recorded metadata for this evidence set:
+
+- measurement date: `03/24/2026`
+- meter model: `EEVBlog 121GW`
+- board state during the voltage and LED measurements: connected, powered, and functional
+- ambiguity or instability observed: none
 
 ### Key-line evidence table
 
@@ -59,15 +83,12 @@ Confirm that the currently documented electrical model still matches the actual 
 | `KEY_ADC1` | `Idle` | voltage to `GND` | | | |
 | `KEY_ADC1` | `Center` | resistance to `GND` | | | |
 
-### `KEY_LED` evidence table
+### `KEY_LED` basic evidence table
 
-| Scenario | LED state or pattern | Timing | Measurement method | Notes |
+| State | Measurement type | Value | Measurement method | Notes |
 | --- | --- | --- | --- | --- |
-| idle | | | | |
-| menu open | | | | |
-| input switch start | | | | |
-| input switch complete | | | | |
-| scroll limit reached | | | | |
+| idle | voltage or logical level | | | |
+| active | voltage or logical level | | | |
 
 ## Expected Reference Values
 
@@ -98,13 +119,13 @@ These values are not assumed correct for controller design until revalidated her
 6. measure center resistance value on `KEY_ADC1`
 7. repeat key measurements at least once
 8. check whether results differ with the board connected versus disconnected
-9. characterize `KEY_LED` enough to decide whether it is usable as a controller feedback input
+9. confirm whether `KEY_LED` can be read as a usable controller input and note its basic on or off behavior
 10. note any contradiction, tolerance issue, or instability
 
 ## Open Questions
 
 - do the measured resistor values vary materially when the board remains connected?
-- how stable is `KEY_LED` under a meter or scope probe?
+- can `KEY_LED` be read safely as a simple controller input without disturbing monitor behavior?
 - are the documented resistor values exact enough for hardware design, or should acceptable ranges be defined now?
 - is any mechanical or electrical change needed to preserve the original `JOG` inline?
 
@@ -112,7 +133,70 @@ These values are not assumed correct for controller design until revalidated her
 
 Phase 2 has started.
 
-No new measurement data has been captured in this execution record yet.
+Current confirmed evidence:
+
+- the photo set in this repo is considered sufficient to treat `CN1001` orientation and connector context as visually unambiguous
+- `KEY_ADC1` idle voltage to `GND`: `3.3V`
+- `KEY_ADC2` idle voltage to `GND`: `3.3V`
+- `KEY_LED` idle voltage: `0V`
+- `KEY_LED` active voltage with LED connected: `2.7V`
+- `KEY_LED` active voltage with LED disconnected: `2.9V`
+- the monitor is currently configured for `LED off when monitor is on` and `LED on when monitor is off`
+- the LED is also observed to blink while the monitor is idle, but the blink frequency is intentionally deferred to the later LED characterization phase
+
+Still pending in Phase 2:
+
+- capture of measurement metadata such as meter model and exact measurement date if you want the record to be more formal
+
+## Captured Evidence
+
+### Connector and orientation
+
+- `CN1001` connector access is available on the target unit
+- the copied photo set is considered visually unambiguous enough to support connector and orientation confirmation
+- the documented pin order was visually reconfirmed personally and is supported by the photo set
+
+### Idle and basic LED measurements
+
+| Line | State | Measurement type | Value | Board connected? | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `KEY_ADC2` | `Idle` | voltage to `GND` | `3.3V` | yes | confirmed during Phase 2 |
+| `KEY_ADC1` | `Idle` | voltage to `GND` | `3.3V` | yes | confirmed during Phase 2 |
+| `KEY_LED` | `Idle` | voltage to `GND` | `0V` | yes | confirmed during Phase 2 |
+| `KEY_LED` | `Active` | voltage to `GND` | `2.7V` | yes | LED connected |
+| `KEY_LED` | `Active` | voltage to `GND` | `2.9V` | no | LED disconnected |
+
+Measurement metadata for this set:
+
+- date: `03/24/2026`
+- meter: `EEVBlog 121GW`
+- board state: connected, powered, and functional
+- ambiguity or instability: none observed
+
+### Board-connected versus board-disconnected comparison
+
+- `KEY_ADC1` and `KEY_ADC2` do not change when the `JOG` board is connected or disconnected
+- this was observed with the `JOG` side and either side of the cable disconnected
+
+### Current monitor LED configuration
+
+- configured behavior: `LED off when monitor is on`
+- alternate monitor option exists: keep the LED on while the monitor is on
+- observed additional behavior: the LED blinks while the monitor is idle
+
+The exact blink frequency is intentionally not treated as a Phase 2 deliverable. That timing work belongs to the later dedicated LED characterization phase, where recording and replay can correlate LED transitions with repeated monitor actions.
+
+### Reconfirmed resistance values
+
+The previously documented resistance values were explicitly reconfirmed and remain the current working values:
+
+| Line | State | Measurement type | Value | Board connected? | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `KEY_ADC2` | `Down` | resistance to `GND` | `3.3 kOhm` | no | reconfirmed |
+| `KEY_ADC2` | `Right` | resistance to `GND` | `9 kOhm` | no | reconfirmed |
+| `KEY_ADC2` | `Up` | resistance to `GND` | `22.6 kOhm` | no | reconfirmed |
+| `KEY_ADC2` | `Left` | resistance to `GND` | `32.8 kOhm` | no | reconfirmed |
+| `KEY_ADC1` | `Center` | resistance to `GND` | `23 kOhm` | no | reconfirmed |
 
 ## Exit Decision
 
@@ -120,5 +204,9 @@ Phase 2 can be considered complete when:
 
 - the `CN1001` pinout is confirmed on the actual unit
 - the documented `KEY_ADC1` and `KEY_ADC2` values are revalidated or corrected
-- `KEY_LED` viability is documented well enough to inform controller design
+- `KEY_LED` basic electrical readability is documented well enough to inform controller design
 - the hardware notes are updated with any corrections
+
+Current assessment:
+
+- all currently planned Phase 2 validation items have been covered well enough to proceed

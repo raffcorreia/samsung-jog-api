@@ -109,7 +109,7 @@ Confirm the measured electrical behavior of the monitor control path before comm
 
 - `CN1001` validation
 - `KEY_ADC1` and `KEY_ADC2` validation
-- `KEY_LED` validation
+- basic `KEY_LED` electrical validation
 - original `JOG` behavior observation
 
 ### Tasks
@@ -119,7 +119,7 @@ Confirm the measured electrical behavior of the monitor control path before comm
 - re-measure resistance-to-ground for each directional action and center press
 - capture connector photos, orientation, and wiring notes
 - confirm whether measurements differ with the board connected versus disconnected
-- characterize the `KEY_LED` signal enough to know whether it is viable as a feedback source
+- confirm whether `KEY_LED` is electrically readable as a simple input and note its basic on or off behavior
 - confirm the physical `JOG` can remain preserved as a hard requirement
 
 ### Deliverables
@@ -415,6 +415,7 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 
 ### Tasks
 
+- use recording and replay to correlate `KEY_LED` behavior with repeated monitor actions
 - repeat controlled monitor sequences while observing `KEY_LED`
 - record blink patterns and timing
 - identify any repeatable LED cues that can be used to gate continuation

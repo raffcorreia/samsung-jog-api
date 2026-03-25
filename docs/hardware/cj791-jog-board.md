@@ -19,6 +19,52 @@ Target monitor:
 
 Samsung refers to the rear control as the `JOG` button. On this monitor the rear control board appears to behave like a passive input board connected back to the main board.
 
+## Reference photos
+
+These photos are the current visual reference set for `Phase 2` hardware validation.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="../assets/hardware/cj791-mainboard-full.jpg" alt="CJ791 main board full view" width="100%" />
+      <br />
+      <strong>Main board context</strong>
+      <br />
+      Overall view of the main board and the area where the `JOG` harness lands.
+    </td>
+    <td align="center" width="50%">
+      <img src="../assets/hardware/cj791-pushbutton-close.jpg" alt="CJ791 pushbutton and connector close view" width="100%" />
+      <br />
+      <strong>Connector close-up</strong>
+      <br />
+      Closer view of the pushbutton and connector area used to confirm orientation and nearby labeling.
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="../assets/hardware/cj791-joystick-board-connection.jpg" alt="CJ791 joystick board connection" width="100%" />
+      <br />
+      <strong>Joystick board connection</strong>
+      <br />
+      Harness and board-side connection view used to correlate cable routing and pin order.
+    </td>
+    <td align="center" width="50%">
+      <img src="../assets/hardware/cj791-joystick-back.jpg" alt="CJ791 joystick board rear side" width="100%" />
+      <br />
+      <strong>Joystick board rear side</strong>
+      <br />
+      Rear view of the `JOG` board for component and trace inspection.
+    </td>
+  </tr>
+</table>
+
+Original asset links:
+
+- [cj791-mainboard-full.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-mainboard-full.jpg)
+- [cj791-pushbutton-close.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-pushbutton-close.jpg)
+- [cj791-joystick-board-connection.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-joystick-board-connection.jpg)
+- [cj791-joystick-back.jpg](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/assets/hardware/cj791-joystick-back.jpg)
+
 The relevant connector is documented as `CN1001` on the monitor main board with this pinout:
 
 - pin 1: `GND`
@@ -26,6 +72,8 @@ The relevant connector is documented as `CN1001` on the monitor main board with 
 - pin 3: `KEY_ADC1`
 - pin 4: `KEY_LED`
 - pin 5: `NC`
+
+This pin order was visually reconfirmed on the target unit and is supported by the current photo set in this repo.
 
 This matters because it suggests the `JOG` is not a bank of ordinary digital switch lines. The monitor appears to read button activity through analog key-sense lines.
 
@@ -51,11 +99,14 @@ Measured idle voltage relative to `GND`:
 | --- | --- |
 | `KEY_ADC1` | `3.3V` |
 | `KEY_ADC2` | `3.3V` |
+| `KEY_LED` | `0V` |
 
 Interpretation:
 
 - both key lines appear to be pulled high in idle state
 - actions are then likely detected by the monitor as changes toward ground through known resistor values
+- `KEY_LED` is low in idle state and rises when the LED is active
+- the current monitor setting is `LED off when monitor is on`, which means the steady on-state is not the normal runtime baseline
 
 ## Measured input behavior
 
@@ -85,7 +136,11 @@ Current interpretation:
 - `KEY_ADC2` is a resistor ladder for the four directional actions
 - `KEY_ADC1` is a separate analog sense line for center or enter
 - the monitor likely decodes button presses by reading analog thresholds on those ADC inputs
-- the front `LED` may provide observable feedback that can be sampled as part of control confirmation
+- `KEY_LED` is electrically readable and appears usable as a basic controller input
+- with the LED connected, the active state was observed around `2.7V`
+- with the LED disconnected, the active state was observed around `2.9V`
+- the monitor is currently configured so the LED is off while the monitor is on and on while the monitor is off
+- the LED also blinks while the monitor is idle, but the blink frequency and semantic meaning still need later characterization
 
 ## External controller responsibilities
 
@@ -115,6 +170,13 @@ To keep future measurements comparable, record:
 - whether the `JOG` board is connected or disconnected
 - probe placement
 
+Current recorded metadata for the latest confirmed voltage and LED readings:
+
+- date: `03/24/2026`
+- meter model: `EEVBlog 121GW`
+- board state: connected, powered, and functional
+- ambiguity or instability: none observed
+
 Recommended measurement sequence:
 
 1. Identify connector `CN1001` and confirm pin orientation.
@@ -137,15 +199,19 @@ Suggested key-line evidence table:
 | `KEY_ADC1` | `Idle` | voltage | | |
 | `KEY_ADC1` | `Center` | resistance | | |
 
-Suggested `LED` evidence table:
+Current connected-versus-disconnected observation:
 
-| Scenario | LED state or pattern | Timing | Notes |
+- `KEY_ADC1` and `KEY_ADC2` did not change when the `JOG` board was connected or disconnected
+- this held when the `JOG` side and either side of the cable were disconnected
+
+Suggested `LED` evidence table for later phases:
+
+| State | Measurement type | Value | Notes |
 | --- | --- | --- | --- |
-| idle | | | |
-| input switch start | | | |
-| input switch complete | | | |
-| menu open | | | |
-| scroll limit reached | | | |
+| idle | voltage or logical level | `0V` | confirmed in Phase 2 |
+| active | voltage or logical level | `2.7V` with LED connected | confirmed in Phase 2 |
+| active | voltage or logical level | `2.9V` with LED disconnected | confirmed in Phase 2 |
+| idle blink | timing pattern | to be measured later | observed in Phase 2, timing deferred |
 
 ## Known gaps
 
@@ -159,5 +225,6 @@ Suggested `LED` evidence table:
 - repeat all voltage and resistance measurements and record date, tool, and conditions
 - capture photos of connector orientation and wiring colors
 - record whether measurements differ while the board is connected versus isolated
-- record `LED` behavior during input changes, idle state, and menu navigation
+- confirm only basic `KEY_LED` readability in Phase 2, and defer richer LED pattern investigation until the later dedicated LED phase
+- measure idle blink timing and correlate it with repeated workflows only after recording and replay are available
 - test whether button recognition is tolerant to nearby resistor substitutions
