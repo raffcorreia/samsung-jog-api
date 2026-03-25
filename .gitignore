@@ -158,3 +158,9 @@ ENV/
 
 # Local host-preparation captures
 artifacts/
+
+# KiCad local and generated artifacts
+**/.history/
+*.kicad_prl
+*.lck
+*-backups/
