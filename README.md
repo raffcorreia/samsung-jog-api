@@ -17,9 +17,11 @@ Current state of the repository:
 
 - completed: `Phase 0: Documentation and Evidence Capture`
 - completed: `Phase 1: Host Preparation and Conservative OS Cleanup`
-- current phase: `Phase 2: Hardware Validation`
+- completed: `Phase 2: Hardware Validation`
+- current phase: `Phase 3: Bus Observation Hardware Design`
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
+- repository now includes a Phase 3 execution record for bus-observation hardware design
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
 - no production code yet
@@ -78,6 +80,8 @@ Reference and reverse-engineering notes:
 Operational docs:
 
 - [Prepare Raspberry Pi](docs/runbooks/prepare-raspberry-pi.md)
+- [Phase 2 Execution Record](docs/implementation/phase-2-execution.md)
+- [Phase 3 Execution Record](docs/implementation/phase-3-execution.md)
 
 ## Start here
 
