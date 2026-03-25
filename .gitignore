@@ -138,5 +138,23 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+# macOS Finder metadata
+.DS_Store
+**/.DS_Store
+
+# Python caches, test output, and virtual environments
+__pycache__/
+*.py[cod]
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+ENV/
+
 # Local host-preparation captures
 artifacts/
