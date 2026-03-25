@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <style>
+      .title { font: 700 30px sans-serif; fill: #111827; }
+      .section { font: 700 20px sans-serif; fill: #111827; }
+      .label { font: 500 16px sans-serif; fill: #111827; }
+      .small { font: 500 14px sans-serif; fill: #374151; }
+      .box { fill: #ffffff; stroke: #111827; stroke-width: 2; rx: 14; ry: 14; }
+      .soft { fill: #f9fafb; stroke: #111827; stroke-width: 2; rx: 14; ry: 14; }
+      .note { fill: #eef6ff; stroke: #2563eb; stroke-width: 2; rx: 12; ry: 12; }
+      .line { stroke: #111827; stroke-width: 3; fill: none; }
+      .thin { stroke: #6b7280; stroke-width: 2; fill: none; }
+      .bus { stroke: #0f766e; stroke-width: 4; fill: none; }
+      .adc { fill: #fef3c7; stroke: #92400e; stroke-width: 2; rx: 14; ry: 14; }
+      .pi { fill: #ecfccb; stroke: #3f6212; stroke-width: 2; rx: 14; ry: 14; }
+      .opamp { fill: #ede9fe; stroke: #5b21b6; stroke-width: 2; }
+      .arrow { marker-end: url(#mArrow); }
+    </style>
+    <marker id="mArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#111827"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="900" fill="#f3f4f6"/>
+  <text x="700" y="50" text-anchor="middle" class="title">Phase 3 Observation Path Schematic Concept</text>
+  <text x="700" y="78" text-anchor="middle" class="small">Samsung CJ791 CN1001 observation-only path: KEY_ADC1, KEY_ADC2, KEY_LED</text>
+
+  <rect x="50" y="130" width="250" height="430" class="box"/>
+  <text x="175" y="165" text-anchor="middle" class="section">Monitor Main Board</text>
+  <text x="175" y="192" text-anchor="middle" class="small">CN1001 monitor-side reference</text>
+
+  <rect x="95" y="235" width="160" height="48" class="soft"/>
+  <text x="175" y="265" text-anchor="middle" class="label">Pin 2: KEY_ADC2</text>
+
+  <rect x="95" y="325" width="160" height="48" class="soft"/>
+  <text x="175" y="355" text-anchor="middle" class="label">Pin 3: KEY_ADC1</text>
+
+  <rect x="95" y="415" width="160" height="48" class="soft"/>
+  <text x="175" y="445" text-anchor="middle" class="label">Pin 4: KEY_LED</text>
+
+  <rect x="95" y="505" width="160" height="48" class="soft"/>
+  <text x="175" y="535" text-anchor="middle" class="label">Pin 1: GND</text>
+
+  <rect x="50" y="615" width="250" height="180" class="box"/>
+  <text x="175" y="650" text-anchor="middle" class="section">Original JOG / LED Board</text>
+  <text x="175" y="677" text-anchor="middle" class="small">Preserved physical control path</text>
+  <rect x="90" y="715" width="170" height="38" class="soft"/>
+  <text x="175" y="739" text-anchor="middle" class="small">JOG direction + center</text>
+  <rect x="90" y="760" width="170" height="38" class="soft"/>
+  <text x="175" y="784" text-anchor="middle" class="small">Front-panel LED</text>
+
+  <rect x="370" y="110" width="350" height="470" class="box"/>
+  <text x="545" y="145" text-anchor="middle" class="section">Inline Observation Board</text>
+  <text x="545" y="172" text-anchor="middle" class="small">Parallel probe path, no drive path shown here</text>
+
+  <rect x="410" y="225" width="95" height="40" class="soft"/>
+  <text x="458" y="251" text-anchor="middle" class="small">R_PROT2</text>
+  <rect x="410" y="315" width="95" height="40" class="soft"/>
+  <text x="458" y="341" text-anchor="middle" class="small">R_PROT1</text>
+  <rect x="410" y="405" width="95" height="40" class="soft"/>
+  <text x="458" y="431" text-anchor="middle" class="small">R_PROT_LED</text>
+
+  <polygon points="560,210 655,255 560,300" class="opamp"/>
+  <text x="590" y="262" class="small">BUF A</text>
+  <text x="575" y="286" class="small">KEY_ADC2</text>
+
+  <polygon points="560,300 655,345 560,390" class="opamp"/>
+  <text x="590" y="352" class="small">BUF B</text>
+  <text x="575" y="376" class="small">KEY_ADC1</text>
+
+  <polygon points="560,390 655,435 560,480" class="opamp"/>
+  <text x="590" y="442" class="small">BUF C</text>
+  <text x="582" y="466" class="small">KEY_LED</text>
+
+  <rect x="770" y="200" width="220" height="200" class="adc"/>
+  <text x="880" y="235" text-anchor="middle" class="section">ADS1115</text>
+  <text x="880" y="262" text-anchor="middle" class="small">4-channel 16-bit I2C ADC</text>
+  <text x="800" y="305" class="label">AIN0  &lt;- KEY_ADC2 buffer</text>
+  <text x="800" y="340" class="label">AIN1  &lt;- KEY_ADC1 buffer</text>
+  <text x="800" y="375" class="small">AIN2/AIN3 spare</text>
+
+  <rect x="770" y="455" width="220" height="120" class="soft"/>
+  <text x="880" y="490" text-anchor="middle" class="section">LED Threshold Stage</text>
+  <text x="880" y="517" text-anchor="middle" class="small">Buffered observation -> digital read</text>
+  <text x="790" y="550" class="small">Comparator / Schmitt buffer /</text>
+  <text x="790" y="572" class="small">other digital interpretation stage</text>
+
+  <rect x="1080" y="170" width="250" height="430" class="pi"/>
+  <text x="1205" y="205" text-anchor="middle" class="section">Raspberry Pi</text>
+  <text x="1205" y="232" text-anchor="middle" class="small">Host-side observation interface</text>
+
+  <rect x="1120" y="275" width="170" height="46" class="soft"/>
+  <text x="1205" y="304" text-anchor="middle" class="label">I2C SDA / SCL</text>
+
+  <rect x="1120" y="360" width="170" height="46" class="soft"/>
+  <text x="1205" y="389" text-anchor="middle" class="label">GPIO LED_IN</text>
+
+  <rect x="1120" y="445" width="170" height="46" class="soft"/>
+  <text x="1205" y="474" text-anchor="middle" class="label">3.3V / GND</text>
+
+  <path d="M255 259 H360" class="bus"/>
+  <circle cx="360" cy="259" r="5" fill="#0f766e"/>
+  <path d="M360 259 H410" class="bus arrow"/>
+  <path d="M360 259 V734 H260" class="bus"/>
+
+  <path d="M255 349 H360" class="bus"/>
+  <circle cx="360" cy="349" r="5" fill="#0f766e"/>
+  <path d="M360 349 H410" class="bus arrow"/>
+  <path d="M360 349 V734 H260" class="bus"/>
+
+  <path d="M255 439 H360" class="bus"/>
+  <circle cx="360" cy="439" r="5" fill="#0f766e"/>
+  <path d="M360 439 H410" class="bus arrow"/>
+  <path d="M360 439 V779 H260" class="bus"/>
+
+  <path d="M255 529 H360" class="thin"/>
+  <circle cx="360" cy="529" r="5" fill="#6b7280"/>
+  <path d="M360 529 H720" class="thin"/>
+  <path d="M360 529 V779 H260" class="thin"/>
+  <path d="M720 529 H1010" class="thin"/>
+  <path d="M1010 529 H1120" class="thin"/>
+
+  <path d="M505 245 H560" class="line arrow"/>
+  <path d="M505 335 H560" class="line arrow"/>
+  <path d="M505 425 H560" class="line arrow"/>
+
+  <path d="M655 255 H770" class="line arrow"/>
+  <path d="M655 345 H770" class="line arrow"/>
+  <path d="M655 435 H770 V515" class="line arrow"/>
+
+  <path d="M990 290 H1120" class="line arrow"/>
+  <path d="M990 515 H1120" class="line arrow"/>
+
+  <path d="M990 320 V290" class="thin"/>
+  <path d="M990 355 V290" class="thin"/>
+
+  <rect x="365" y="615" width="980" height="220" class="note"/>
+  <text x="395" y="650" class="section">Signal Intent</text>
+  <text x="395" y="685" class="label">Bus topology</text>
+  <text x="500" y="685" class="small">The observation board taps each line in parallel. The original JOG board and front-panel LED remain connected to the same monitor-side bus.</text>
+  <text x="395" y="722" class="label">KEY_ADC2</text>
+  <text x="500" y="722" class="small">Analog resistor-ladder observation. Preserve raw voltage for software classification of up/down/left/right/idle.</text>
+  <text x="395" y="759" class="label">KEY_ADC1 / KEY_LED</text>
+  <text x="500" y="759" class="small">KEY_ADC1 stays probe-first. KEY_LED is also probed, then interpreted digitally after buffering to avoid materially loading the LED line.</text>
+  <text x="395" y="796" class="label">Ground</text>
+  <text x="500" y="796" class="small">Observation board and Raspberry Pi share monitor ground reference. Observation path must never drive any monitored signal.</text>
+</svg>

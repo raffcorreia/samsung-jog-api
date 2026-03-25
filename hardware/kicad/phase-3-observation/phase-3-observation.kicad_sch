@@ -1,0 +1,785 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd")
+	(paper "A3")
+	(title_block
+		(title "Phase 3 Observation Path")
+		(company "samsung-jog-api")
+		(comment 1 "Preliminary electrical schematic for observation-only path")
+		(comment 2 "CN1001 -> TLV9064 -> ADS1115 / LED threshold stage -> Raspberry Pi")
+	)
+	(lib_symbols)
+	(rectangle
+		(start 20 34)
+		(end 56 78)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111112")
+	)
+	(rectangle
+		(start 62 39)
+		(end 76 45)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111118")
+	)
+	(rectangle
+		(start 62 47)
+		(end 76 53)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111120")
+	)
+	(rectangle
+		(start 62 55)
+		(end 76 61)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111122")
+	)
+	(rectangle
+		(start 88 34)
+		(end 142 92)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111124")
+	)
+	(rectangle
+		(start 160 34)
+		(end 224 78)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111135")
+	)
+	(rectangle
+		(start 160 98)
+		(end 224 122)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111142")
+	)
+	(rectangle
+		(start 266 34)
+		(end 332 82)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "11111111-1111-4111-8111-111111111146")
+	)
+	(text "Monitor connector CN1001"
+		(exclude_from_sim no)
+		(at 30 28 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111111")
+	)
+	(text "Pin 2  KEY_ADC2"
+		(exclude_from_sim no)
+		(at 24 42 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111113")
+	)
+	(text "Pin 3  KEY_ADC1"
+		(exclude_from_sim no)
+		(at 24 50 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111114")
+	)
+	(text "Pin 4  KEY_LED"
+		(exclude_from_sim no)
+		(at 24 58 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111115")
+	)
+	(text "Pin 1  GND"
+		(exclude_from_sim no)
+		(at 24 66 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111116")
+	)
+	(text "R1 10k"
+		(exclude_from_sim no)
+		(at 68 42 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111117")
+	)
+	(text "R2 10k"
+		(exclude_from_sim no)
+		(at 68 50 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111119")
+	)
+	(text "R3 10k"
+		(exclude_from_sim no)
+		(at 68 58 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111121")
+	)
+	(text "U1 TLV9064"
+		(exclude_from_sim no)
+		(at 111 28 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111123")
+	)
+	(text "U1A  unity buffer"
+		(exclude_from_sim no)
+		(at 94 42 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111125")
+	)
+	(text "IN: KEY_ADC2"
+		(exclude_from_sim no)
+		(at 94 47 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111126")
+	)
+	(text "OUT: KEY_ADC2_BUF"
+		(exclude_from_sim no)
+		(at 94 52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111127")
+	)
+	(text "U1B  unity buffer"
+		(exclude_from_sim no)
+		(at 94 60 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111128")
+	)
+	(text "IN: KEY_ADC1"
+		(exclude_from_sim no)
+		(at 94 65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111129")
+	)
+	(text "OUT: KEY_ADC1_BUF"
+		(exclude_from_sim no)
+		(at 94 70 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111130")
+	)
+	(text "U1C  unity buffer"
+		(exclude_from_sim no)
+		(at 94 78 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111131")
+	)
+	(text "IN: KEY_LED"
+		(exclude_from_sim no)
+		(at 94 83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111132")
+	)
+	(text "OUT: KEY_LED_BUF"
+		(exclude_from_sim no)
+		(at 94 88 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111133")
+	)
+	(text "U2 ADS1115"
+		(exclude_from_sim no)
+		(at 184 28 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111134")
+	)
+	(text "AIN0 <- KEY_ADC2_BUF"
+		(exclude_from_sim no)
+		(at 166 42 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111136")
+	)
+	(text "AIN1 <- KEY_ADC1_BUF"
+		(exclude_from_sim no)
+		(at 166 50 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111137")
+	)
+	(text "AIN2 spare"
+		(exclude_from_sim no)
+		(at 166 58 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111138")
+	)
+	(text "AIN3 spare"
+		(exclude_from_sim no)
+		(at 166 66 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111139")
+	)
+	(text "SDA / SCL -> Pi"
+		(exclude_from_sim no)
+		(at 166 74 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111140")
+	)
+	(text "U3 LED threshold stage"
+		(exclude_from_sim no)
+		(at 184 92 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111141")
+	)
+	(text "IN  <- KEY_LED_BUF"
+		(exclude_from_sim no)
+		(at 166 106 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111143")
+	)
+	(text "OUT -> LED_IN_GPIO"
+		(exclude_from_sim no)
+		(at 166 114 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111144")
+	)
+	(text "Raspberry Pi interface"
+		(exclude_from_sim no)
+		(at 286 28 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111145")
+	)
+	(text "3V3"
+		(exclude_from_sim no)
+		(at 272 42 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111147")
+	)
+	(text "GND"
+		(exclude_from_sim no)
+		(at 272 50 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111148")
+	)
+	(text "SDA"
+		(exclude_from_sim no)
+		(at 272 58 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111149")
+	)
+	(text "SCL"
+		(exclude_from_sim no)
+		(at 272 66 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111150")
+	)
+	(text "GPIO LED_IN"
+		(exclude_from_sim no)
+		(at 272 74 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111151")
+	)
+	(text "Support parts and explicit net intent"
+		(exclude_from_sim no)
+		(at 20 142 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111176")
+	)
+	(text "R4 4.7k from SDA to 3V3"
+		(exclude_from_sim no)
+		(at 24 150 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111177")
+	)
+	(text "R5 4.7k from SCL to 3V3"
+		(exclude_from_sim no)
+		(at 24 156 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111178")
+	)
+	(text "C1 100n between U1 VCC and GND, placed close to TLV9064 power pins"
+		(exclude_from_sim no)
+		(at 24 162 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111179")
+	)
+	(text "C2 100n between U2 VDD and GND, placed close to ADS1115"
+		(exclude_from_sim no)
+		(at 24 168 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111180")
+	)
+	(text "U1A buffers KEY_ADC2 into ADS1115 AIN0"
+		(exclude_from_sim no)
+		(at 24 174 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111181")
+	)
+	(text "U1B buffers KEY_ADC1 into ADS1115 AIN1"
+		(exclude_from_sim no)
+		(at 24 180 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111182")
+	)
+	(text "U1C buffers KEY_LED into U3 digital threshold input"
+		(exclude_from_sim no)
+		(at 24 186 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111183")
+	)
+	(text "U3 output goes to a Pi GPIO named LED_IN_GPIO"
+		(exclude_from_sim no)
+		(at 24 192 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111184")
+	)
+	(text "All observation paths are probe-only and must not drive CN1001 lines"
+		(exclude_from_sim no)
+		(at 24 198 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111185")
+	)
+	(wire
+		(pts
+			(xy 56 42) (xy 62 42)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111163")
+	)
+	(wire
+		(pts
+			(xy 56 50) (xy 62 50)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111164")
+	)
+	(wire
+		(pts
+			(xy 56 58) (xy 62 58)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111165")
+	)
+	(wire
+		(pts
+			(xy 76 42) (xy 88 42)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111166")
+	)
+	(wire
+		(pts
+			(xy 76 50) (xy 88 50)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111167")
+	)
+	(wire
+		(pts
+			(xy 76 58) (xy 88 58)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111168")
+	)
+	(wire
+		(pts
+			(xy 142 42) (xy 160 42)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111169")
+	)
+	(wire
+		(pts
+			(xy 142 50) (xy 160 50)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111170")
+	)
+	(wire
+		(pts
+			(xy 142 58) (xy 160 58)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111171")
+	)
+	(wire
+		(pts
+			(xy 224 58) (xy 266 58)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111172")
+	)
+	(wire
+		(pts
+			(xy 224 66) (xy 266 66)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111173")
+	)
+	(wire
+		(pts
+			(xy 224 114) (xy 266 74)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111174")
+	)
+	(wire
+		(pts
+			(xy 56 66) (xy 266 50)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111175")
+	)
+	(wire
+		(pts
+			(xy 160 58) (xy 160 106)
+		)
+		(stroke
+			(width 0.15)
+			(type default)
+		)
+		(uuid "11111111-1111-4111-8111-111111111186")
+	)
+	(label "KEY_ADC2"
+		(at 56 42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111152")
+	)
+	(label "KEY_ADC1"
+		(at 56 50 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111153")
+	)
+	(label "KEY_LED"
+		(at 56 58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111154")
+	)
+	(label "GND"
+		(at 56 66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111155")
+	)
+	(label "KEY_ADC2_BUF"
+		(at 145 42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111156")
+	)
+	(label "KEY_ADC1_BUF"
+		(at 145 50 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111157")
+	)
+	(label "KEY_LED_BUF"
+		(at 145 58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111158")
+	)
+	(label "3V3"
+		(at 260 42 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111159")
+	)
+	(label "SDA"
+		(at 230 58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111160")
+	)
+	(label "SCL"
+		(at 230 66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111161")
+	)
+	(label "LED_IN_GPIO"
+		(at 230 114 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "11111111-1111-4111-8111-111111111162")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
