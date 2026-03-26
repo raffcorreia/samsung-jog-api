@@ -97,8 +97,8 @@ Measured idle voltage relative to `GND`:
 
 | Line | Idle voltage |
 | --- | --- |
-| `KEY_ADC1` | `3.3V` |
-| `KEY_ADC2` | `3.3V` |
+| `KEY_ADC1` | `3.29V` |
+| `KEY_ADC2` | `3.29V` |
 | `KEY_LED` | `0V` |
 
 Interpretation:
@@ -129,12 +129,35 @@ These measurements were taken with the joystick board disconnected and resistanc
 | `Idle` | `3.3V` to `GND` |
 | `Center` | `23 kOhm` to `GND` |
 
+## Latest powered key-state measurements
+
+The latest powered and connected measurement set adds the observed bus voltage for each active state.
+
+### `KEY_ADC2` powered behavior
+
+| State | Voltage to `GND` | Resistance to `GND` |
+| --- | --- | --- |
+| `Idle` | `3.29V` | |
+| `Left` | `2.88V` | `32.8 kOhm` |
+| `Right` | `2.16V` | `9 kOhm` |
+| `Up` | `0.01V` | `22.8 Ohm` |
+| `Down` | `1.35V` | `3.3 kOhm` |
+
+### `KEY_ADC1` powered behavior
+
+| State | Voltage to `GND` | Resistance to `GND` |
+| --- | --- | --- |
+| `Idle` | `3.29V` | |
+| `Center` | `0.01V` | `22.71 Ohm` |
+
 ## Interpretation
 
 Current interpretation:
 
 - `KEY_ADC2` is a resistor ladder for the four directional actions
 - `KEY_ADC1` is a separate analog sense line for center or enter
+- the powered measurements show that `KEY_ADC1` center and `KEY_ADC2` up both collapse very close to ground on the target unit
+- the powered measurements also show that the directional states are well separated by voltage on `KEY_ADC2`
 - the monitor likely decodes button presses by reading analog thresholds on those ADC inputs
 - `KEY_LED` is electrically readable and appears usable as a basic controller input
 - with the LED connected, the active state was observed around `2.7V`
@@ -172,7 +195,7 @@ To keep future measurements comparable, record:
 
 Current recorded metadata for the latest confirmed voltage and LED readings:
 
-- date: `03/24/2026`
+- date: `03/24/2026` for the initial Phase 2 set, plus a later supplemental powered-state set recorded during Phase 3 design review
 - meter model: `EEVBlog 121GW`
 - board state: connected, powered, and functional
 - ambiguity or instability: none observed

@@ -18,7 +18,7 @@ Current state of the repository:
 - completed: `Phase 0: Documentation and Evidence Capture`
 - completed: `Phase 1: Host Preparation and Conservative OS Cleanup`
 - completed: `Phase 2: Hardware Validation`
-- current phase: `Phase 3: Bus Observation Hardware Design`
+- current phase: `Phase 3: Bus Observation Circuit Design`
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
 - repository now includes a Phase 3 execution record for bus-observation hardware design
@@ -75,6 +75,7 @@ Reference and reverse-engineering notes:
 
 - [Architecture](docs/architecture.md)
 - [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
+- [Phase 3 Observation BOM](docs/hardware/phase-3-observation-bom.md)
 - [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
 
 Operational docs:

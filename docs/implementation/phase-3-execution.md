@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document records the actual execution of `Phase 3: Bus Observation Hardware Design`.
+This document records the actual execution of `Phase 3: Bus Observation Circuit Design`.
 
 It complements:
 
@@ -27,6 +27,7 @@ Preliminary connection-level schematic:
 
 - KiCad project: [phase-3-observation.kicad_pro](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_pro)
 - KiCad schematic: [phase-3-observation.kicad_sch](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_sch)
+- BOM: [phase-3-observation-bom.md](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/hardware/phase-3-observation-bom.md)
 
 This is the current connection-level schematic source for the observation path. It replaces the second SVG-style diagram and is intended to be the editable starting point for the actual electrical design.
 
@@ -42,6 +43,8 @@ The current observation design starts from these validated monitor-side facts:
 - pin 5: `NC`
 - `KEY_ADC1` idle: `3.3V` to `GND`
 - `KEY_ADC2` idle: `3.3V` to `GND`
+- powered state set: `KEY_ADC1` idle `3.29V`, center `0.01V`
+- powered state set: `KEY_ADC2` idle `3.29V`, `left` `2.88V`, `right` `2.16V`, `down` `1.35V`, `up` `0.01V`
 - `KEY_LED` idle: `0V`
 - `KEY_LED` active: `2.7V` with the LED connected
 - `KEY_LED` active: `2.9V` with the LED disconnected
@@ -133,13 +136,14 @@ Cons:
 
 ### Candidate C: Hybrid Observation
 
-Use buffered analog observation for `KEY_ADC1` and `KEY_ADC2`, and buffered high-impedance observation with digital-threshold interpretation for `KEY_LED`.
+Use buffered analog observation only where it is needed, and buffered high-impedance observation with digital-threshold interpretation where the measured voltage separation makes it practical.
 
 Pros:
 
 - matches the actual signal characteristics better
-- keeps the key buses observable as analog states
-- keeps `KEY_LED` simpler where only basic readability is needed at this stage while still following the low-interference probe philosophy
+- keeps `KEY_ADC2` observable as analog state
+- allows `KEY_ADC1` and `KEY_LED` to behave more like interrupt-friendly digital inputs after buffering
+- reduces dependence on a multiplexed ADC path for multiple signals
 
 Cons:
 
@@ -152,23 +156,24 @@ The current recommended direction is `Candidate C`.
 
 Rationale:
 
-- `KEY_ADC1` and `KEY_ADC2` are analog resistor-ladder inputs and should remain observable as analog values during the first hardware implementation
-- `KEY_LED` currently looks suitable for high-or-low observation after a high-impedance probe stage
-- this keeps the observation path aligned with the known electrical model without prematurely collapsing the key buses into fixed digital thresholds
+- `KEY_ADC2` remains a true multi-state analog input and should stay observable as analog during the first hardware implementation
+- the latest powered measurements show that `KEY_ADC1` center collapses very close to ground and is strongly separable from idle
+- `KEY_LED` already looks suitable for high-or-low observation after a high-impedance probe stage
+- this keeps analog complexity only where it is justified and makes `KEY_ADC1` and `KEY_LED` easier to surface as GPIO-level events
 
 ## Selected Observation Architecture
 
 The current Phase 3 design decision is to use a hybrid observation path:
 
-- `KEY_ADC1` observed as analog through a high-impedance buffered path
+- `KEY_ADC1` observed through a high-impedance buffered path and then interpreted digitally
 - `KEY_ADC2` observed as analog through a high-impedance buffered path
 - `KEY_LED` observed through a buffered high-impedance path and then interpreted digitally
 
 This is now the selected architecture for the next phase, unless later bench testing reveals that the chosen analog front end disturbs the bus or produces unstable readings.
 
-### Selected key-bus observation path
+### Selected `KEY_ADC2` observation path
 
-For `KEY_ADC1` and `KEY_ADC2`, the preferred topology is:
+For `KEY_ADC2`, the preferred topology is:
 
 1. monitor-side tap from `CN1001`
 2. input protection resistor on each observed line
@@ -176,7 +181,19 @@ For `KEY_ADC1` and `KEY_ADC2`, the preferred topology is:
 4. high-input-impedance rail-to-rail buffer stage
 5. external ADC readable by the Raspberry Pi
 
-This keeps the monitor-side loading low, preserves analog visibility, and gives software the raw observations it needs to classify states and later tune thresholds.
+This keeps the monitor-side loading low, preserves analog visibility, and gives software the raw observations it needs to classify the directional states and later tune thresholds.
+
+### Selected `KEY_ADC1` observation path
+
+For `KEY_ADC1`, the preferred topology is:
+
+1. monitor-side tap from `CN1001`
+2. input protection resistor
+3. high-input-impedance rail-to-rail buffer stage
+4. Schmitt-trigger or equivalent threshold stage
+5. Raspberry Pi-readable digital input path
+
+This is now preferred because the latest powered measurements show a large voltage gap between `idle` and `center`, making a digital post-buffer interpretation reasonable for this channel.
 
 ### Selected `KEY_LED` observation path
 
@@ -192,14 +209,14 @@ At this stage `KEY_LED` does not need to be treated as a full analog recording c
 
 ## Component Direction
 
-Phase 3 does not lock exact part numbers yet, but it does lock the component direction.
+Phase 3 now locks both the component direction and the first exact part set for the reviewable observation design.
 
-### Key-bus observation component direction
+### `KEY_ADC2` observation component direction
 
-The key buses should be observed with:
+`KEY_ADC2` should be observed with:
 
 - a rail-to-rail high-input-impedance analog buffer stage
-- an external ADC with enough channels for at least `KEY_ADC1` and `KEY_ADC2`
+- an external ADC
 - a Raspberry Pi software path that reads raw ADC values and maps them into logical states
 
 Preferred component classes:
@@ -210,8 +227,22 @@ Preferred component classes:
 Why this direction is selected:
 
 - the Raspberry Pi does not provide native analog inputs
-- the key buses are fundamentally analog and should stay observable as analog values in the first implementation
-- using an external ADC keeps GPIO usage modest and the software model clean
+- `KEY_ADC2` is fundamentally multi-state analog and should stay observable as analog in the first implementation
+- using an external ADC keeps the software model clean while preserving state information
+
+### `KEY_ADC1` component direction
+
+`KEY_ADC1` should be observed with:
+
+- a high-input-impedance buffer stage
+- a digital threshold or Schmitt-trigger stage
+- a Raspberry Pi GPIO input
+
+Why this direction is selected:
+
+- the latest powered measurements show a strong separation between `idle` and `center`
+- `KEY_ADC1` is effectively binary on this monitor
+- removing `KEY_ADC1` from the ADC path avoids relying on multiplexed ADC observation for two different key buses
 
 ### `KEY_LED` component direction
 
@@ -233,7 +264,7 @@ Why this direction is selected:
 
 ## Reference Component Shortlist
 
-These are reference-level component targets to guide later schematic work. They are not yet locked BOM decisions.
+These reference families capture the reasoning behind the selected parts and remain valid alternates if later bench testing forces a package or sourcing change.
 
 ### Analog buffer stage
 
@@ -255,22 +286,24 @@ Reference examples to evaluate:
 Target characteristics:
 
 - I2C interface
-- at least 2 analog channels, with 4 preferred
+- at least 1 analog channel
 - input range compatible with `0V` to `3.3V`
 - enough sample rate for repeated human-driven `JOG` activity and later recording
+- optional `ALERT/RDY` support for interrupt-assisted observation
 
 Reference examples to evaluate:
 
-- `ADS1115`
+- `ADS1114`
 - similar I2C ADCs with adequate resolution and software support
 
-### `KEY_LED` digital input path
+### Digital input path for `KEY_ADC1` and `KEY_LED`
 
 Target characteristics:
 
 - protected Raspberry Pi-readable digital input after a high-impedance probe stage
 - simple high-or-low interpretation
-- optional logic conditioning only if later bench tests show it is needed
+- Schmitt-trigger behavior preferred
+- optional extra logic conditioning only if later bench tests show it is needed
 
 Reference building blocks to evaluate:
 
@@ -353,21 +386,71 @@ Success criteria:
 
 Only a narrower set of decisions remains open after the Phase 3 architecture selection:
 
-- exact buffer stage part number
-- exact ADC part number
 - whether a small RC filter is needed on the observed key buses
 - exact protection values for the observed lines
 - whether `KEY_LED` needs extra conditioning beyond a buffered protected digital-input path
+
+## Exact Part Selection
+
+The Phase 3 observation circuit now uses these selected parts for the first reviewable design:
+
+- `U1`: `TLV9064IDR`
+- `U2`: `ADS1114IDGST`
+- `U3`: `74LVC1G17GW`
+- `U4`: `74LVC1G17GW`
+
+Rationale:
+
+- `TLV9064IDR` provides four low-voltage rail-to-rail op-amp channels so the two analog key buses and the LED line can all be buffered while leaving one spare channel
+- `ADS1114IDGST` keeps `KEY_ADC2` observable as an analog signal through a Pi-friendly `I2C` ADC path while exposing `ALERT/RDY` as an optional interrupt source
+- `74LVC1G17GW` provides a clean digital interpretation stage for buffered `KEY_ADC1`
+- `74LVC1G17GW` provides a second clean digital interpretation stage for buffered `KEY_LED`
+
+## Default Component Values
+
+The current default values for the reviewable Phase 3 design are:
+
+- `R1`, `R2`, `R3`: `10 kOhm` series input resistors
+- `R4`, `R5`: `4.7 kOhm` `I2C` pull-ups
+- `C1`, `C2`, `C3`: `100 nF` local decoupling capacitors
+- `C4`: `1 uF` local bulk decoupling on the `3.3V` rail
+- `C5`, `C6`, `C7`: optional `1 nF` `DNP` filter footprints
+
+These values are intended to be the starting schematic defaults, not the final tuned values after bench bring-up.
+
+## Interrupt-Assisted Observation Note
+
+`ADS1114` is a better fit for the revised split architecture than the earlier multi-channel `ADS1115` direction.
+
+Important behavior:
+
+- the ADC result is still read over `I2C`
+- `ALERT/RDY` does not carry the measured value
+- `ALERT/RDY` can still be used as an interrupt-assisted notification source for `KEY_ADC2`
+- `KEY_ADC1` and `KEY_LED` can now be surfaced directly as GPIO-level events after buffering and thresholding
+
+## Phase 3 Deliverable Set
+
+The reviewable deliverables for this phase are now:
+
+- observation-path concept diagram
+- KiCad observation schematic
+- exact selected observation parts
+- default component values
+- observation BOM
+- observation verification plan
 
 ## Approval Decision
 
 Current Phase 3 approval decision:
 
 - approve hybrid observation architecture
-- approve analog observation for `KEY_ADC1` and `KEY_ADC2`
+- approve analog observation for `KEY_ADC2`
+- approve high-impedance buffered observation with digital interpretation for `KEY_ADC1`
 - approve high-impedance buffered observation with digital interpretation for `KEY_LED`
-- approve software-side classification of key-bus ranges
-- approve external ADC direction rather than trying to force pure Raspberry Pi digital observation on the key buses
+- approve software-side classification of `KEY_ADC2` analog ranges
+- approve digital threshold interpretation for `KEY_ADC1` after buffering
+- approve single-channel ADC direction for `KEY_ADC2` rather than multiplexed ADC observation of both key buses
 
 These decisions are sufficient to proceed into detailed circuit selection and later implementation work.
 
@@ -375,28 +458,33 @@ These decisions are sufficient to proceed into detailed circuit selection and la
 
 The earlier broader open items are now narrowed by the selected architecture:
 
-- exact analog front-end topology for `KEY_ADC1` and `KEY_ADC2`
+- exact analog front-end topology for `KEY_ADC2`
 - exact ADC and buffer selection
 - voltage-protection approach for Raspberry Pi-facing inputs
-- acceptable threshold and tolerance ranges for classifying observed states
+- acceptable threshold and tolerance ranges for `KEY_ADC1`
+- acceptable threshold and tolerance ranges for `KEY_ADC2` software classification
 - whether `KEY_LED` needs extra conditioning beyond a buffered protected digital-input path
 
 ## Deliverables To Close Phase 3
 
 - approved observation-path architecture
-- approved component-direction decision for key-bus observation
-- approved component-direction decision for `KEY_LED` observation
+- approved key-bus observation schematic
+- approved `KEY_LED` observation schematic path
+- approved observation BOM
 - documented rationale for the selected observation approach
 - defined verification plan for the implemented observation path
 
 ## Current Status
 
-Phase 3 has started.
+Phase 3 is in detailed design.
 
 Current assessment:
 
 - the Phase 2 evidence is sufficient to begin observation-path design
 - the selected observation architecture is hybrid
-- the selected component direction is buffered analog observation plus external ADC for `KEY_ADC1` and `KEY_ADC2`
-- `KEY_LED` is selected as a simpler protected digital observation path
-- exact part numbers and protection values are still pending
+- the selected component direction is buffered analog observation plus external ADC for `KEY_ADC2`
+- `KEY_ADC1` is selected as a buffered digital-observation path
+- `KEY_LED` is selected as a buffered digital-observation path
+- the first exact part set and starting passive values are now defined
+- the KiCad schematic and BOM are present and ready for review
+- remaining Phase 3 work is now limited to circuit review and any final adjustment before approval
