@@ -984,7 +984,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Amplifier_Operational:LM2902"
+		(symbol "Amplifier_Operational:TLV9064"
 			(pin_names
 				(offset 0.127)
 			)
@@ -1004,7 +1004,7 @@
 					(justify left)
 				)
 			)
-			(property "Value" "LM2902"
+			(property "Value" "TLV9064"
 				(at 0 -5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1026,7 +1026,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/tlv9064.pdf"
 				(at 1.27 5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1037,21 +1037,11 @@
 					)
 				)
 			)
-			(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
+			(property "Description" "Quad Rail-to-Rail, Operational Amplifiers, 10MHz, SOIC-14/TSSOP-14"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_locked" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1069,7 +1059,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "SOIC*3.9x8.7mm*P1.27mm* DIP*W7.62mm* TSSOP*4.4x5mm*P0.65mm* SSOP*5.3x6.2mm*P0.65mm* MSOP*3x3mm*P0.5mm*"
+			(property "ki_fp_filters" "SOIC*3.9x8.7mm*P1.27mm* TSSOP*4.4x5mm*P0.65mm*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1080,7 +1070,7 @@
 					)
 				)
 			)
-			(symbol "LM2902_1_1"
+			(symbol "TLV9064_1_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -1148,7 +1138,7 @@
 					)
 				)
 			)
-			(symbol "LM2902_2_1"
+			(symbol "TLV9064_2_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -1216,7 +1206,7 @@
 					)
 				)
 			)
-			(symbol "LM2902_3_1"
+			(symbol "TLV9064_3_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -1284,7 +1274,7 @@
 					)
 				)
 			)
-			(symbol "LM2902_4_1"
+			(symbol "TLV9064_4_1"
 				(polyline
 					(pts
 						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
@@ -1352,7 +1342,7 @@
 					)
 				)
 			)
-			(symbol "LM2902_5_1"
+			(symbol "TLV9064_5_1"
 				(pin power_in line
 					(at -2.54 7.62 270)
 					(length 3.81)
@@ -1392,7 +1382,12 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Analog_ADC:ADS1114IDGS"
+		(symbol "Analog_ADC:ADS1015IDGS"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "U"
 				(at 2.54 13.97 0)
 				(show_name no)
@@ -1403,7 +1398,7 @@
 					)
 				)
 			)
-			(property "Value" "ADS1114IDGS"
+			(property "Value" "ADS1015IDGS"
 				(at 7.62 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1424,7 +1419,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ads1113.pdf"
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ads1015.pdf"
 				(at -1.27 -22.86 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1435,7 +1430,7 @@
 					)
 				)
 			)
-			(property "Description" "Ultra-Small, Low-Power, I2C-Compatible, 860-SPS, 16-Bit ADCs With Internal Reference, Oscillator, and Programmable Comparator, VSSOP-10"
+			(property "Description" "Ultra-Small, Low-Power, I2C-Compatible, 3.3-kSPS, 12-Bit ADCs With Internal Reference, Oscillator, and Programmable Comparator, VSSOP-10"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1446,7 +1441,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "16 bit single channel I2C ADC"
+			(property "ki_keywords" "12 bit 4 channel I2C ADC"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1468,13 +1463,7 @@
 					)
 				)
 			)
-			(embedded_fonts no)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(symbol "ADS1114IDGS_0_1"
+			(symbol "ADS1015IDGS_0_1"
 				(rectangle
 					(start -7.62 10.16)
 					(end 7.62 -7.62)
@@ -1487,7 +1476,7 @@
 					)
 				)
 			)
-			(symbol "ADS1114IDGS_1_1"
+			(symbol "ADS1015IDGS_1_1"
 				(pin input line
 					(at 10.16 -5.08 180)
 					(length 2.54)
@@ -1578,11 +1567,10 @@
 						)
 					)
 				)
-				(pin no_connect line
-					(at -7.62 7.62 0)
+				(pin input line
+					(at -10.16 -2.54 0)
 					(length 2.54)
-					(hide yes)
-					(name ""
+					(name "AIN2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1597,11 +1585,10 @@
 						)
 					)
 				)
-				(pin no_connect line
-					(at -7.62 5.08 0)
+				(pin input line
+					(at -10.16 -5.08 0)
 					(length 2.54)
-					(hide yes)
-					(name ""
+					(name "AIN3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1668,6 +1655,85 @@
 								(size 1.27 1.27)
 							)
 						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Analog_ADC:ADS1115IDGSR"
+			(extends "Analog_ADC:ADS1015IDGS")
+			(property "Reference" "U"
+				(at 2.54 13.97 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "ADS1115IDGSR"
+				(at 7.62 11.43 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Package_SO:TSSOP-10_3x3mm_P0.5mm"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/ads1113.pdf"
+				(at -1.27 -22.86 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Ultra-Small, Low-Power, I2C-Compatible, 860-SPS, 16-Bit ADCs With Internal Reference, Oscillator, and Programmable Comparator, VSSOP-10"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "16 bit 4 channel I2C ADC"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TSSOP*3x3mm*P0.5mm*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
 					)
 				)
 			)
@@ -2005,6 +2071,109 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 -1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 0)
+					(radius 0.508)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 270)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x04")
@@ -2058,7 +2227,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "PinHeader_1x04_P2.54mm"
@@ -2067,7 +2236,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2143,7 +2312,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "PinHeader_1x07_P2.54mm"
@@ -2152,7 +2321,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2237,7 +2406,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "PinHeader_1x02_P2.54mm"
@@ -2246,7 +2415,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2292,7 +2461,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 52.832 34.29 90)
 			(effects
 				(font
@@ -2316,16 +2485,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603WAF1002T5E"
+		(property "MPN" "0402WGF1002TCE"
 			(at 57.15 39.3699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2371,7 +2540,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 52.832 59.69 90)
 			(effects
 				(font
@@ -2395,16 +2564,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603WAF1002T5E"
+		(property "MPN" "0402WGF1002TCE"
 			(at 57.15 64.7699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2450,7 +2619,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 52.832 86.36 90)
 			(effects
 				(font
@@ -2474,16 +2643,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603WAF1002T5E"
+		(property "MPN" "0402WGF1002TCE"
 			(at 57.15 91.4399 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2529,7 +2698,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 186.182 39.37 90)
 			(effects
 				(font
@@ -2553,16 +2722,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603WAF4701T5E"
+		(property "MPN" "0402WGF4701TCE"
 			(at 190.5 44.4499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2608,7 +2777,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 186.182 52.07 90)
 			(effects
 				(font
@@ -2632,16 +2801,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603WAF4701T5E"
+		(property "MPN" "0402WGF4701TCE"
 			(at 190.5 57.1499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2687,7 +2856,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 83.5152 24.13 0.0000)
 			(effects
 				(font
@@ -2711,16 +2880,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603B102K500NT"
+		(property "MPN" "CL05C102JB5NNNC"
 			(at 85.09 33.0199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2766,7 +2935,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 83.5152 55.88 0.0000)
 			(effects
 				(font
@@ -2790,16 +2959,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603B102K500NT"
+		(property "MPN" "CL05C102JB5NNNC"
 			(at 85.09 64.7699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2845,7 +3014,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 83.5152 87.63 0.0000)
 			(effects
 				(font
@@ -2869,16 +3038,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "0603B102K500NT"
+		(property "MPN" "CL05C102JB5NNNC"
 			(at 85.09 96.5199 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -2897,7 +3066,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:LM2902")
+		(lib_id "Amplifier_Operational:TLV9064")
 		(at 105.41 34.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2948,7 +3117,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "TLV9064IDR"
@@ -2957,7 +3126,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3012,7 +3181,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:LM2902")
+		(lib_id "Amplifier_Operational:TLV9064")
 		(at 105.41 59.69 0)
 		(unit 2)
 		(exclude_from_sim no)
@@ -3100,7 +3269,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:LM2902")
+		(lib_id "Amplifier_Operational:TLV9064")
 		(at 105.41 86.36 0)
 		(unit 3)
 		(exclude_from_sim no)
@@ -3188,7 +3357,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:LM2902")
+		(lib_id "Amplifier_Operational:TLV9064")
 		(at 105.41 144.78 0)
 		(unit 4)
 		(exclude_from_sim no)
@@ -3276,7 +3445,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Amplifier_Operational:LM2902")
+		(lib_id "Amplifier_Operational:TLV9064")
 		(at 105.41 118.11 0)
 		(unit 5)
 		(exclude_from_sim no)
@@ -3364,7 +3533,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Analog_ADC:ADS1114IDGS")
+		(lib_id "Analog_ADC:ADS1115IDGSR")
 		(at 154.94 34.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3382,7 +3551,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ADS1114IDGS"
+		(property "Value" "ADS1115IDGSR"
 			(at 162.56 45.72 0.0000)
 			(effects
 				(font
@@ -3415,16 +3584,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "ADS1114IDGS"
+		(property "MPN" "ADS1115IDGSR"
 			(at 157.48 39.3699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3518,7 +3687,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "74LVC1G17GW"
@@ -3527,7 +3696,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3606,7 +3775,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(property "MPN" "74LVC1G17GW"
@@ -3615,7 +3784,7 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3670,7 +3839,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 129.2352 114.3 0.0000)
 			(effects
 				(font
@@ -3694,16 +3863,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "CL10B104KB8NNNC"
+		(property "MPN" "CL05B104KO5NNNC"
 			(at 130.81 123.1899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3749,7 +3918,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 172.4152 13.97 0.0000)
 			(effects
 				(font
@@ -3773,16 +3942,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "CL10B104KB8NNNC"
+		(property "MPN" "CL05B104KO5NNNC"
 			(at 173.99 22.8599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3828,7 +3997,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 172.4152 52.07 0.0000)
 			(effects
 				(font
@@ -3852,16 +4021,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "CL10B104KB8NNNC"
+		(property "MPN" "CL05B104KO5NNNC"
 			(at 173.99 60.9599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3907,7 +4076,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 172.4152 80.01 0.0000)
 			(effects
 				(font
@@ -3931,16 +4100,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "CL10B104KB8NNNC"
+		(property "MPN" "CL05B104KO5NNNC"
 			(at 173.99 88.8999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -3986,7 +4155,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
 			(at 224.4852 13.97 0.0000)
 			(effects
 				(font
@@ -4010,16 +4179,16 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
-		(property "MPN" "CL10A105KB8NNNC"
+		(property "MPN" "CL05A105KA5NNNC"
 			(at 226.06 22.8599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(hide yes)
 			)
 		)
 		(pin "1"
@@ -4096,6 +4265,212 @@
 			(project "phase-3-observation-reva"
 				(path "/e7eda247-d0fb-4af8-8688-d42be1b38b79"
 					(reference "#FLG02")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 120.65 144.78 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "r6-spare-feedback-0ohm")
+		(property "Reference" "R6"
+			(at 120.65 142.24 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0"
+			(at 120.65 147.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 120.65 144.78 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "0Ohm solder bridge: U1D OUT to -IN feedback. Cut to break loop and repurpose U1D."
+			(at 120.65 144.78 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1" (uuid "r6-pin1"))
+		(pin "2" (uuid "r6-pin2"))
+		(instances
+			(project "phase-3-observation-reva"
+				(path "/e7eda247-d0fb-4af8-8688-d42be1b38b79"
+					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 105.41 162.56 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "r7-spare-gnd-tie-0ohm")
+		(property "Reference" "R7"
+			(at 107.95 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0"
+			(at 107.95 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 105.41 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "0Ohm solder bridge: U1D +IN to GND. Cut to break GND tie and repurpose U1D."
+			(at 105.41 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1" (uuid "r7-pin1"))
+		(pin "2" (uuid "r7-pin2"))
+		(instances
+			(project "phase-3-observation-reva"
+				(path "/e7eda247-d0fb-4af8-8688-d42be1b38b79"
+					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:TestPoint")
+		(at 97.79 162.56 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "tp8-u1d-plus-in")
+		(property "Reference" "TP8"
+			(at 97.79 160.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "U1D_IN"
+			(at 97.79 164.465 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 97.79 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1" (uuid "tp8-pin1"))
+		(instances
+			(project "phase-3-observation-reva"
+				(path "/e7eda247-d0fb-4af8-8688-d42be1b38b79"
+					(reference "TP8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:TestPoint")
+		(at 128.27 144.78 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "tp9-u1d-out")
+		(property "Reference" "TP9"
+			(at 128.27 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "U1D_OUT"
+			(at 128.27 146.685 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
+			(at 128.27 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1" (uuid "tp9-pin1"))
+		(instances
+			(project "phase-3-observation-reva"
+				(path "/e7eda247-d0fb-4af8-8688-d42be1b38b79"
+					(reference "TP9")
 					(unit 1)
 				)
 			)
@@ -4713,66 +5088,6 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 114.3) (xy 114.3 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "828346d5-c29a-462d-9cba-6cef872f768f")
-	)
-	(wire
-		(pts
-			(xy 114.3 114.3) (xy 114.3 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "57e5c64c-2421-4a02-9fc4-c375cbcc83ec")
-	)
-	(wire
-		(pts
-			(xy 114.3 125.73) (xy 102.87 125.73)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cc5b2750-d402-4e19-a092-117812de195b")
-	)
-	(wire
-		(pts
-			(xy 128.27 121.92) (xy 114.3 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f99724aa-47c7-43db-a1d0-6b6cd31b0be9")
-	)
-	(wire
-		(pts
-			(xy 114.3 121.92) (xy 114.3 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b559588b-4a6e-4d0b-a5e4-ba2619a04866")
-	)
-	(wire
-		(pts
-			(xy 114.3 110.49) (xy 102.87 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "71bed294-3955-4831-ad23-2dd796d70587")
-	)
-	(wire
-		(pts
 			(xy 154.94 21.59) (xy 171.45 13.97)
 		)
 		(stroke
@@ -4830,26 +5145,6 @@
 			(type default)
 		)
 		(uuid "7c8a8bc0-38a9-49c7-abc5-7812bb00e90a")
-	)
-	(wire
-		(pts
-			(xy 234.95 52.07) (xy 223.52 13.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9c28024d-057f-4e72-8e04-210a59402a61")
-	)
-	(wire
-		(pts
-			(xy 234.95 54.61) (xy 223.52 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c1b5bd7-82be-40aa-8fc4-5477a7e9e2f9")
 	)
 	(wire
 		(pts
@@ -4993,16 +5288,6 @@
 	)
 	(wire
 		(pts
-			(xy 198.12 13.97) (xy 223.52 13.97)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "026ee9be-0fec-44c6-8e15-1ff9b73c4036")
-	)
-	(wire
-		(pts
 			(xy 165.1 34.29) (xy 179.07 34.29)
 		)
 		(stroke
@@ -5090,6 +5375,96 @@
 			(type default)
 		)
 		(uuid "8c48cf06-8ac1-40ef-b12d-6c17c65cbb81")
+	)
+	(wire
+		(pts
+			(xy 115.57 144.78) (xy 116.84 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "u1d-out-to-r6pin1")
+	)
+	(wire
+		(pts
+			(xy 124.46 144.78) (xy 128.27 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "r6pin2-to-tp9")
+	)
+	(wire
+		(pts
+			(xy 115.57 144.78) (xy 95.25 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "u1d-out-to-minus-in-junc")
+	)
+	(wire
+		(pts
+			(xy 95.25 144.78) (xy 95.25 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "u1d-minus-in-vert")
+	)
+	(wire
+		(pts
+			(xy 97.79 162.56) (xy 97.79 158.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "tp8-to-r7pin1-vert")
+	)
+	(wire
+		(pts
+			(xy 97.79 158.75) (xy 105.41 158.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "tp8-to-r7pin1-horiz")
+	)
+	(wire
+		(pts
+			(xy 97.79 162.56) (xy 95.25 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "tp8-to-plus-in-horiz")
+	)
+	(wire
+		(pts
+			(xy 95.25 162.56) (xy 95.25 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "tp8-to-plus-in-vert")
+	)
+	(label "GND"
+		(at 105.41 166.37 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "r7-gnd-label")
 	)
 	(label "GND"
 		(at 15.24 57.15 180)
@@ -5689,7 +6064,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "2821a641-bd1e-4a05-a461-ea2c34a024ca")
+		(uuid "u1-vplus-label-3v3")
 	)
 	(label "GND"
 		(at 102.87 110.49 270)
@@ -5697,9 +6072,9 @@
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "ccec456d-c1ce-4716-8f2b-751dc422ff9f")
+		(uuid "u1-vminus-label-gnd")
 	)
 	(label "+3V3"
 		(at 236.22 13.97 0)
@@ -5720,6 +6095,26 @@
 			(justify left bottom)
 		)
 		(uuid "2d59a9e2-a674-461e-b1cc-e81e5ae0ce31")
+	)
+	(label "+3V3"
+		(at 234.95 52.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "j2-pin1-label-3v3")
+	)
+	(label "GND"
+		(at 234.95 54.61 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "j2-pin2-label-gnd")
 	)
 	(no_connect
 		(at 147.32 26.67)
@@ -5787,7 +6182,7 @@
 		)
 		(uuid "6330daf8-bd16-4832-9378-3e89653dfeee")
 	)
-	(text "AIN1 tied to GND for single-ended ADS1114 measurement"
+	(text "AIN1 tied to GND for single-ended ADS1115 measurement"
 		(exclude_from_sim no)
 		(at 145 48 0.0000)
 		(effects

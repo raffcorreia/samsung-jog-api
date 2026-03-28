@@ -164,3 +164,6 @@ artifacts/
 *.kicad_prl
 *.lck
 *-backups/
+production/backups/
+production/designators.csv
+production/netlist.ipc

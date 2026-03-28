@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "phase-3-obs-reva")(type "KiCad")(uri "${KIPRJMOD}/symbols/phase-3-obs-reva.kicad_sym")(options "")(descr "Phase 3 observation board — project-local symbol library"))
+)
