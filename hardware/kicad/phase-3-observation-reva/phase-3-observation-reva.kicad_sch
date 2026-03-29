@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "Phase 3 Observation Circuit")
-		(rev "A.08")
+		(rev "A.09")
 		(company "samsung-jog-api")
 		(comment 1 "Observation-only board for KEY_ADC2, KEY_ADC1, and KEY_LED")
 		(comment 2 "Generated for KiCad 10")
@@ -3040,16 +3040,6 @@
 		)
 		(uuid "09bd3a71-48f2-4323-92b4-87faf98c861b")
 	)
-	(label "KEY_ADC1_SENSE"
-		(at 82.55 55.88 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "11a1d966-372f-4ff2-83a7-270f9ad7adb7")
-	)
 	(label "GND"
 		(at 15.24 57.15 0)
 		(effects
@@ -3240,35 +3230,65 @@
 		)
 		(uuid "1a2b3c4d-0001-4000-8000-000000000006")
 	)
-	(label "KEY_ADC2_SENSE"
-		(at 97.79 31.75 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+	(wire
+		(pts
+			(xy 82.55 24.13) (xy 97.79 24.13)
 		)
-		(uuid "1a2b3c4d-0001-4000-8000-000000000007")
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000001")
 	)
-	(label "KEY_ADC1_SENSE"
-		(at 97.79 57.15 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+	(wire
+		(pts
+			(xy 97.79 24.13) (xy 97.79 31.75)
 		)
-		(uuid "1a2b3c4d-0001-4000-8000-000000000008")
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000002")
 	)
-	(label "KEY_LED_SENSE"
-		(at 97.79 83.82 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+	(wire
+		(pts
+			(xy 82.55 55.88) (xy 97.79 55.88)
 		)
-		(uuid "1a2b3c4d-0001-4000-8000-000000000009")
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000003")
+	)
+	(wire
+		(pts
+			(xy 97.79 55.88) (xy 97.79 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000004")
+	)
+	(wire
+		(pts
+			(xy 82.55 87.63) (xy 97.79 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000005")
+	)
+	(wire
+		(pts
+			(xy 97.79 87.63) (xy 97.79 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0002-4000-8000-000000000006")
 	)
 	(label "KEY_ADC2_BUF"
 		(at 113.03 34.29 0)
@@ -3369,26 +3389,6 @@
 			(justify right bottom)
 		)
 		(uuid "5d157592-52fe-49bd-8b38-2e88af7f7af4")
-	)
-	(label "KEY_LED_SENSE"
-		(at 82.55 87.63 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5ed14f5a-7f11-43cd-8908-21a9f1e9e37f")
-	)
-	(label "KEY_ADC2_SENSE"
-		(at 82.55 24.13 90)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "64abf6aa-1777-45c8-9425-3bd918b91083")
 	)
 	(label "GND"
 		(at 154.94 44.45 270)
