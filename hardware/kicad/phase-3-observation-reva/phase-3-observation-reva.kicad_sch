@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "Phase 3 Observation Circuit")
-		(rev "A.01")
+		(rev "A.03")
 		(company "samsung-jog-api")
 		(comment 1 "Observation-only board for KEY_ADC2, KEY_ADC1, and KEY_LED")
 		(comment 2 "Generated for KiCad 10")
