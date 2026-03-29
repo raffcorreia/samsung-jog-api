@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "Phase 3 Observation Circuit")
-		(rev "A.06")
+		(rev "A.07")
 		(company "samsung-jog-api")
 		(comment 1 "Observation-only board for KEY_ADC2, KEY_ADC1, and KEY_LED")
 		(comment 2 "Generated for KiCad 10")
@@ -2442,16 +2442,6 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 31.75) (xy 105.41 34.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "03576a0f-5bc9-47d6-a3fa-14bbfead1b55")
-	)
-	(wire
-		(pts
 			(xy 129.54 86.36) (xy 129.54 91.44)
 		)
 		(stroke
@@ -2572,16 +2562,6 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 57.15) (xy 105.41 57.15)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3b4f0b45-a2a5-4037-8e2c-f12508126da3")
-	)
-	(wire
-		(pts
 			(xy 165.1 34.29) (xy 179.07 34.29)
 		)
 		(stroke
@@ -2632,26 +2612,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 38.1) (xy 76.2 36.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4c587de0-05c3-42a6-a519-84da68261515")
-	)
-	(wire
-		(pts
-			(xy 105.41 83.82) (xy 105.41 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4e366e49-1e0b-4355-9a94-7c9f582e35ea")
-	)
-	(wire
-		(pts
 			(xy 187.96 43.18) (xy 210.82 43.18)
 		)
 		(stroke
@@ -2669,16 +2629,6 @@
 			(type default)
 		)
 		(uuid "53181f1e-3646-45fb-aea3-0c41a34e42b4")
-	)
-	(wire
-		(pts
-			(xy 105.41 57.15) (xy 105.41 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "55bbd833-29a5-4136-9fdc-32ae64b2b600")
 	)
 	(wire
 		(pts
@@ -2762,16 +2712,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 36.83) (xy 97.79 36.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "71052cdb-4870-474b-9327-2aeab892ffdb")
-	)
-	(wire
-		(pts
 			(xy 165.1 63.5) (xy 180.34 63.5)
 		)
 		(stroke
@@ -2809,16 +2749,6 @@
 			(type default)
 		)
 		(uuid "7c8a8bc0-38a9-49c7-abc5-7812bb00e90a")
-	)
-	(wire
-		(pts
-			(xy 105.41 34.29) (xy 113.03 34.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7d1c9970-6f9a-4f76-8e36-76b26f8d58ad")
 	)
 	(wire
 		(pts
@@ -2882,26 +2812,6 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 86.36) (xy 113.03 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "97df9d80-40c7-4bae-98e5-4af351856ede")
-	)
-	(wire
-		(pts
-			(xy 76.2 90.17) (xy 76.2 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a30e8e18-c0c6-41ce-bbd5-23f31ddb9548")
-	)
-	(wire
-		(pts
 			(xy 182.88 67.31) (xy 234.95 67.31)
 		)
 		(stroke
@@ -2942,16 +2852,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 63.5) (xy 76.2 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aeb42aaa-636c-409b-be39-05e3aaef32aa")
-	)
-	(wire
-		(pts
 			(xy 38.1 81.28) (xy 54.61 82.55)
 		)
 		(stroke
@@ -2959,26 +2859,6 @@
 			(type default)
 		)
 		(uuid "aec57174-486d-48c0-8293-b13c386d9b2b")
-	)
-	(wire
-		(pts
-			(xy 97.79 83.82) (xy 105.41 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b126a42d-ecd5-4e0f-89f4-343ccf7474cc")
-	)
-	(wire
-		(pts
-			(xy 105.41 59.69) (xy 113.03 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b6764c60-4e4f-4175-bb80-b454a79b9574")
 	)
 	(wire
 		(pts
@@ -3072,26 +2952,6 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 31.75) (xy 105.41 31.75)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d7ab7633-5f2b-460b-8a7d-2e2493ef7285")
-	)
-	(wire
-		(pts
-			(xy 76.2 88.9) (xy 97.79 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d8f35b30-cb91-44b2-a191-d833332ac46a")
-	)
-	(wire
-		(pts
 			(xy 54.61 90.17) (xy 82.55 87.63)
 		)
 		(stroke
@@ -3139,16 +2999,6 @@
 			(type default)
 		)
 		(uuid "ec8135b3-c5dc-42f2-ba75-224264e31ce1")
-	)
-	(wire
-		(pts
-			(xy 76.2 62.23) (xy 97.79 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f2538995-2614-41f7-bc9f-82631f9ffd00")
 	)
 	(wire
 		(pts
@@ -3359,6 +3209,96 @@
 			(justify left bottom)
 		)
 		(uuid "2d59a9e2-a674-461e-b1cc-e81e5ae0ce31")
+	)
+	(wire
+		(pts
+			(xy 113.03 34.29) (xy 113.03 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000001")
+	)
+	(wire
+		(pts
+			(xy 113.03 36.83) (xy 97.79 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000002")
+	)
+	(wire
+		(pts
+			(xy 113.03 59.69) (xy 113.03 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000003")
+	)
+	(wire
+		(pts
+			(xy 113.03 62.23) (xy 97.79 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000004")
+	)
+	(wire
+		(pts
+			(xy 113.03 86.36) (xy 113.03 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000005")
+	)
+	(wire
+		(pts
+			(xy 113.03 88.9) (xy 97.79 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000006")
+	)
+	(label "KEY_ADC2_SENSE"
+		(at 97.79 31.75 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000007")
+	)
+	(label "KEY_ADC1_SENSE"
+		(at 97.79 57.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000008")
+	)
+	(label "KEY_LED_SENSE"
+		(at 97.79 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1a2b3c4d-0001-4000-8000-000000000009")
 	)
 	(label "KEY_ADC2_BUF"
 		(at 113.03 34.29 0)
@@ -3700,16 +3640,6 @@
 		)
 		(uuid "bd2bd058-2559-41cb-ae26-7d2748651d7f")
 	)
-	(label "KEY_ADC2_SENSE"
-		(at 97.79 36.83 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bf99472d-9feb-436e-a427-65de32a19614")
-	)
 	(label "KEY_ADC1_RAW"
 		(at 15.24 62.23 0)
 		(effects
@@ -3720,16 +3650,6 @@
 		)
 		(uuid "c91083ff-058e-4fe6-b366-5017586fcbbe")
 	)
-	(label "KEY_LED_SENSE"
-		(at 97.79 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d3507fb9-b770-4cdb-924c-9027678c18ed")
-	)
 	(label "LED_IN_GPIO"
 		(at 165.1 91.44 180)
 		(effects
@@ -3739,16 +3659,6 @@
 			(justify right bottom)
 		)
 		(uuid "d5563cda-8d30-496b-a3db-8c840b95f2fb")
-	)
-	(label "KEY_ADC1_SENSE"
-		(at 97.79 62.23 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d68f6ae2-3976-4df1-90dd-bc4091c33a5f")
 	)
 	(label "GND"
 		(at 223.52 21.59 270)
