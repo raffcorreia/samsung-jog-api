@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "Phase 3 Observation Circuit")
-		(rev "A.07")
+		(rev "A.08")
 		(company "samsung-jog-api")
 		(comment 1 "Observation-only board for KEY_ADC2, KEY_ADC1, and KEY_LED")
 		(comment 2 "Generated for KiCad 10")
@@ -2472,16 +2472,6 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 38.1) (xy 76.2 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "26c25075-83aa-442e-afb3-12fc1614afad")
-	)
-	(wire
-		(pts
 			(xy 113.03 86.36) (xy 129.54 86.36)
 		)
 		(stroke
@@ -2619,16 +2609,6 @@
 			(type default)
 		)
 		(uuid "52df4f01-eedb-4dd8-8820-884e74246ecd")
-	)
-	(wire
-		(pts
-			(xy 54.61 63.5) (xy 76.2 63.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "53181f1e-3646-45fb-aea3-0c41a34e42b4")
 	)
 	(wire
 		(pts
@@ -2829,16 +2809,6 @@
 			(type default)
 		)
 		(uuid "a8340ae2-f403-43ba-8ae4-2f00604934aa")
-	)
-	(wire
-		(pts
-			(xy 54.61 90.17) (xy 76.2 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a8870162-6c57-4245-b727-4a4a782ed0c8")
 	)
 	(wire
 		(pts
