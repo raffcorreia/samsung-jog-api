@@ -1,5 +1,5 @@
 (kicad_sch
-	(version 20250114)
+	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
 	(uuid "2f2fd7c8-cdb2-40b8-9f16-5240d6fa4c14")
@@ -12,87 +12,390 @@
 		(comment 2 "Generated for KiCad 10")
 	)
 	(lib_symbols)
-	(sheet_instances
-		(path "/"
-			(page "1")
+	(text "KEY_ADC2 switched resistor legs: R1/R2/R3/R4 -> U1 -> monitor line"
+		(exclude_from_sim no)
+		(at 22.86 147.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5d6ee898-bcd2-4e09-852a-560af15cb992")
+	)
+	(text "KEY_ADC1 center: U2 gates R6 pull-down. Default state is high-impedance."
+		(exclude_from_sim no)
+		(at 22.86 153.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f55f687b-184c-4fd4-b069-a5945b43dfc1")
+	)
+	(symbol
+		(lib_id "Analog_Switch:TMUX1108")
+		(at 104.14 78.74 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "28f37ffa-0464-4f1a-83f6-b9a86574dc69")
+		(property "Reference" "U1"
+			(at 104.14 67.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TMUX1108PWR"
+			(at 104.14 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_SO:TSSOP-16_4.4x5mm_P0.65mm"
+			(at 104.14 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 104.14 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 104.14 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "phase-4-analog-drive"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x06")
+		(at 172.72 71.12 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "48e17e76-b4dd-44ff-ae2b-9a43a3319ca5")
+		(property "Reference" "J2"
+			(at 172.72 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "HOST_CTRL"
+			(at 172.72 64.77 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+			(at 172.72 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 172.72 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 172.72 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "phase-4-analog-drive"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "J2")
+					(unit 1)
+				)
+			)
 		)
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x03")
 		(at 45.72 71.12 0)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "68cc85e4-80ea-4d0a-8f98-f71fce4ef4fb")
-		(property "Reference" "J1" (at 45.72 62.23 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "MONITOR_DRIVE" (at 45.72 64.77 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (at 45.72 71.12 0) (effects (font (size 1.27 1.27)) hide))
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x06")
-		(at 172.72 71.12 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "48e17e76-b4dd-44ff-ae2b-9a43a3319ca5")
-		(property "Reference" "J2" (at 172.72 62.23 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "HOST_CTRL" (at 172.72 64.77 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" (at 172.72 71.12 0) (effects (font (size 1.27 1.27)) hide))
-	)
-	(symbol
-		(lib_id "Analog_Switch:TMUX1108")
-		(at 104.14 78.74 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "28f37ffa-0464-4f1a-83f6-b9a86574dc69")
-		(property "Reference" "U1" (at 104.14 67.31 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "TMUX1108PWR" (at 104.14 69.85 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Package_SO:TSSOP-16_4.4x5mm_P0.65mm" (at 104.14 78.74 0) (effects (font (size 1.27 1.27)) hide))
-	)
-	(symbol
-		(lib_id "Analog_Switch:TS5A3159")
-		(at 104.14 119.38 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "af5f962c-6ab3-4de5-82ad-7cdde48b6e3c")
-		(property "Reference" "U2" (at 104.14 110.49 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "TS5A3159DBVR" (at 104.14 113.03 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (at 104.14 119.38 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Reference" "J1"
+			(at 45.72 62.23 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MONITOR_DRIVE"
+			(at 45.72 64.77 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
+			(at 45.72 71.12 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 45.72 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 45.72 71.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "phase-4-analog-drive"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Device:R")
 		(at 78.74 88.9 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "71387e6e-5d7d-4589-a9ca-a5f179732370")
-		(property "Reference" "R1" (at 76.2 86.36 0) (effects (font (size 1.27 1.27))))
-		(property "Value" "10k" (at 76.2 91.44 0) (effects (font (size 1.27 1.27))))
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 78.74 88.9 0) (effects (font (size 1.27 1.27)) hide))
+		(property "Reference" "R1"
+			(at 76.2 86.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 76.2 91.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 78.74 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 78.74 88.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "phase-4-analog-drive"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(text "KEY_ADC2 switched resistor legs: R1/R2/R3/R4 -> U1 -> monitor line"
-		(at 22.86 147.32 0)
-		(effects (font (size 1.27 1.27)))
+	(symbol
+		(lib_id "Analog_Switch:TS5A3159")
+		(at 104.14 119.38 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "af5f962c-6ab3-4de5-82ad-7cdde48b6e3c")
+		(property "Reference" "U2"
+			(at 104.14 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TS5A3159DBVR"
+			(at 104.14 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
+			(at 104.14 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 104.14 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 104.14 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "phase-4-analog-drive"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(text "KEY_ADC1 center: U2 gates R6 pull-down. Default state is high-impedance."
-		(at 22.86 153.67 0)
-		(effects (font (size 1.27 1.27)))
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
 	)
+	(embedded_fonts no)
 )
