@@ -141,20 +141,30 @@ The Phase 4 verification approach is:
 ## Deliverables Completed
 
 - approved analog drive topology and part families
-- analog drive BOM with default values and placeholders
-- architectural schematic artifact for review
+- analog drive BOM with tested commercial resistor substitutions
+- architectural schematic artifact for review, including resistor-direction annotations
 - documented verification plan for implementation phase
 
 ## Exit-Criteria Assessment
 
-Phase 4 exit criteria from the implementation plan are satisfied at the design-document level:
+Phase 4 is not fully complete yet.
+
+The design direction, resistor selections, and review artifacts exist, but the KiCad schematic still needs one more cleanup pass before the phase can be considered closed. The remaining gap is the connector-to-IC presentation in the schematic: `J1` and `J2` are partially reworked toward explicit drawn wiring, but the current sheet still needs visual and ERC cleanup before it is ready to sign off as the final Phase 4 schematic.
+
+At this point, the following Phase 4 criteria are satisfied:
 
 - there is a reviewable analog-drive design for reproducing required states
 - there is a reviewable BOM and schematic artifact
 - integration assumptions and verification strategy are documented for implementation
 
+The following Phase 4 work is still open:
+
+- finish the connector-to-IC routing cleanup in the KiCad schematic
+- return ERC to the prior clean baseline for schematic-structure checks
+- do one final visual review pass in KiCad before declaring the schematic finished
+
 ## Open Items Deferred to Later Phases
 
-- final resistor trims after first powered prototype characterization
 - final integrated-board connector and mechanical constraints
 - exact software timing constants after hardware-in-loop testing
+- JLCPCB production-part finalization beyond the already-tested substitute resistor set
