@@ -26,12 +26,12 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 
 | RefDes | Qty | Value | Notes |
 | --- | --- | --- | --- |
-| `R1` | 1 | `10 kOhm`, `1%` | `KEY_ADC2_LEFT` target leg |
-| `R2` | 1 | `22 kOhm`, `1%` | `KEY_ADC2_RIGHT` target leg |
-| `R3` | 1 | `39 kOhm`, `1%` | `KEY_ADC2_DOWN` target leg |
-| `R4` | 1 | `68 kOhm`, `1%` | `KEY_ADC2_UP` target leg |
+| `R1` | 1 | `30 kOhm` | `KEY_ADC2_LEFT` validated commercial substitute for `32.8 kOhm` measured target |
+| `R2` | 1 | `10 kOhm` | `KEY_ADC2_RIGHT` validated commercial substitute for `9 kOhm` measured target |
+| `R3` | 1 | `3.3 kOhm` | `KEY_ADC2_DOWN` measured target leg |
+| `R4` | 1 | `22 kOhm` | `KEY_ADC2_UP` validated commercial substitute for `22.8 kOhm` measured target |
 | `R5` | 1 | `DNP`, `1%` | optional `KEY_ADC2` calibration leg reserved for later tuning |
-| `R6` | 1 | `0 Ohm`, `1%` | `KEY_ADC1_CENTER` pull-down leg, subject to prototype confirmation |
+| `R6` | 1 | `22 kOhm` | `KEY_ADC1_CENTER` validated commercial substitute for `22.71 kOhm` measured target |
 | `R7` | 1 | `100 kOhm`, `1%` | `ADC2_LEFT_EN` default-off bias |
 | `R8` | 1 | `100 kOhm`, `1%` | `ADC2_RIGHT_EN` default-off bias |
 | `R9` | 1 | `100 kOhm`, `1%` | `ADC2_DOWN_EN` default-off bias |
@@ -73,6 +73,6 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 
 ## Open Items For Later Phases
 
-- per-state resistor trim based on prototype voltage measurements
+- final production resistor selection after first switched prototype confirms tolerance against the measured target values
 - confirmation whether additional series protection is needed for ESD robustness
 - final connector family and keyed harness selection
