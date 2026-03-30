@@ -135,20 +135,20 @@ The latest powered and connected measurement set adds the observed bus voltage f
 
 ### `KEY_ADC2` powered behavior
 
-| State | Voltage to `GND` | Resistance to `GND` |
-| --- | --- | --- |
-| `Idle` | `3.29V` | |
-| `Left` | `2.88V` | `32.8 kOhm` |
-| `Right` | `2.16V` | `9 kOhm` |
-| `Up` | `0.01V` | `22.8 Ohm` |
-| `Down` | `1.35V` | `3.3 kOhm` |
+| State | Voltage to `GND` | Resistance to `GND` | Commercially Available |
+| --- | --- | --- | --- |
+| `Idle` | `3.29V` | | |
+| `Left` | `2.88V` | `32.8 kOhm` | `30 kOhm` |
+| `Right` | `2.16V` | `9 kOhm` | `10 kOhm` |
+| `Up` | `0.01V` | `22.8 kOhm` | `22 kOhm` |
+| `Down` | `1.35V` | `3.3 kOhm` | `3.3 kOhm` |
 
 ### `KEY_ADC1` powered behavior
 
-| State | Voltage to `GND` | Resistance to `GND` |
-| --- | --- | --- |
-| `Idle` | `3.29V` | |
-| `Center` | `0.01V` | `22.71 Ohm` |
+| State | Voltage to `GND` | Resistance to `GND` | Commercially Available |
+| --- | --- | --- | --- |
+| `Idle` | `3.29V` | | |
+| `Center` | `0.01V` | `22.71 kOhm` | `22 kOhm` |
 
 ## Interpretation
 
