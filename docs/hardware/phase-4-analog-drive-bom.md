@@ -19,9 +19,8 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 
 | RefDes | Qty | Part | Package | Purpose | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `U1` | 1 | `TMUX1108PWR` | `TSSOP-16` | `KEY_ADC2` switched resistor-state selection | 8:1 mux style analog switch for one-of-many resistor-leg selection |
-| `U2` | 1 | `TS5A3159DBVR` | `SOT-23-6` | `KEY_ADC1` center pull-down gating | used to apply or release center-state resistor leg |
-| `U3` | 1 | `SN74LVC1G04DBVR` | `SOT-23-5` | optional logic inversion / timing conditioning | populate only if firmware polarity/timing integration requires it |
+| `U1` | 1 | `SN74LV4066APWR` | `TSSOP-14` | `KEY_ADC2` per-leg analog switch bank | 4 independent bilateral switch channels for `LEFT`, `RIGHT`, `DOWN`, `UP` |
+| `U2` | 1 | `SN74LVC1G66DBVR` | `SOT-23-5` | `KEY_ADC1` center pull-down gating | single bilateral analog switch for the center resistor leg |
 
 ## Default Passive Values
 
@@ -31,10 +30,13 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 | `R2` | 1 | `22 kOhm`, `1%` | `KEY_ADC2_RIGHT` target leg |
 | `R3` | 1 | `39 kOhm`, `1%` | `KEY_ADC2_DOWN` target leg |
 | `R4` | 1 | `68 kOhm`, `1%` | `KEY_ADC2_UP` target leg |
-| `R5` | 1 | `0 Ohm`, `1%` | optional direct pull-down test leg for calibration/debug |
-| `R6` | 1 | `0 Ohm`, `1%` | `KEY_ADC1_CENTER` pull-down leg |
-| `R7` | 1 | `100 kOhm`, `1%` | gate pulldown for fail-safe default-off behavior |
-| `R8` | 1 | `100 kOhm`, `1%` | enable-line pulldown for fail-safe default-off behavior |
+| `R5` | 1 | `DNP`, `1%` | optional `KEY_ADC2` calibration leg reserved for later tuning |
+| `R6` | 1 | `0 Ohm`, `1%` | `KEY_ADC1_CENTER` pull-down leg, subject to prototype confirmation |
+| `R7` | 1 | `100 kOhm`, `1%` | `ADC2_LEFT_EN` default-off bias |
+| `R8` | 1 | `100 kOhm`, `1%` | `ADC2_RIGHT_EN` default-off bias |
+| `R9` | 1 | `100 kOhm`, `1%` | `ADC2_DOWN_EN` default-off bias |
+| `R10` | 1 | `100 kOhm`, `1%` | `ADC2_UP_EN` default-off bias |
+| `R11` | 1 | `100 kOhm`, `1%` | `ADC1_CENTER_EN` default-off bias |
 | `C1` | 1 | `100 nF`, `X7R` | local decoupling at `U1` |
 | `C2` | 1 | `100 nF`, `X7R` | local decoupling at `U2` |
 | `C3` | 1 | `1 uF`, `X7R` | local bulk decoupling on `3.3V` |
@@ -45,18 +47,18 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 | RefDes | Qty | Part / Type | Purpose |
 | --- | --- | --- | --- |
 | `J1` | 1 | `1x3` monitor-drive header | `GND`, `KEY_ADC2`, `KEY_ADC1` to monitor-side harness |
-| `J2` | 1 | `1x6` host-control header | `3.3V`, `GND`, `ADC2_SEL0`, `ADC2_SEL1`, `ADC2_EN`, `ADC1_CENTER_EN` |
-| `TP1-TP6` | 6 | test points | `KEY_ADC2_DRIVE`, `KEY_ADC1_DRIVE`, `SEL0`, `SEL1`, `ADC2_EN`, `ADC1_EN` |
+| `J2` | 1 | `1x7` host-control header | `3.3V`, `GND`, `ADC2_LEFT_EN`, `ADC2_RIGHT_EN`, `ADC2_DOWN_EN`, `ADC2_UP_EN`, `ADC1_CENTER_EN` |
+| `TP1-TP7` | 7 | test points | `KEY_ADC2_DRIVE`, `KEY_ADC1_DRIVE`, `LEFT_EN`, `RIGHT_EN`, `DOWN_EN`, `UP_EN`, `CENTER_EN` |
 
 ## Channel Allocation
 
-### `TMUX1108PWR` (`U1`)
+### `SN74LV4066APWR` (`U1`)
 
-- common node tied to `KEY_ADC2`
-- one selected channel at a time connects `KEY_ADC2` to a chosen resistor leg toward `GND`
-- unselected channels remain isolated
+- four independent channels connect `KEY_ADC2` to four dedicated resistor legs toward `GND`
+- each directional resistor leg has its own enable input
+- all channels remain isolated unless their specific enable line is asserted
 
-### `TS5A3159DBVR` (`U2`)
+### `SN74LVC1G66DBVR` (`U2`)
 
 - toggles `KEY_ADC1` center resistor leg to `GND`
 - defaults to open/high-impedance when not enabled
@@ -66,7 +68,8 @@ This markdown BOM is the review-friendly version; the CSV is the KiCad export ar
 - controller never sources voltage onto monitor lines
 - controller only switches resistance-to-ground states
 - default inactive state is high-impedance on both driven channels
-- drive arbitration and break-before-make behavior are enforced in software
+- each switch enable line has a hardware default-off bias resistor
+- software still enforces one action at a time, but the hardware default state is already safe before firmware starts
 
 ## Open Items For Later Phases
 

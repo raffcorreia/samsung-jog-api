@@ -1,5 +1,5 @@
 (kicad_pcb
-	(version 20260206)
+	(version 20250114)
 	(generator "pcbnew")
 	(generator_version "10.0")
 	(general
@@ -8,10 +8,10 @@
 	(paper "A4")
 	(title_block
 		(title "Phase 4 Analog Drive PCB")
-		(rev "A")
+		(rev "E")
 		(company "samsung-jog-api")
-		(comment 1 "Prototype placement for U1 TMUX1108 and U2 TS5A3159")
-		(comment 2 "Generated for KiCad 10")
+		(comment 1 "Board placeholder for fail-safe switched resistor architecture")
+		(comment 2 "Schematic now targets SN74LV4066A and SN74LVC1G66")
 	)
 	(layers
 		(0 "F.Cu" signal)
@@ -28,21 +28,22 @@
 	(net 2 "3V3")
 	(net 3 "KEY_ADC2")
 	(net 4 "KEY_ADC1")
-	(net 5 "ADC2_SEL0")
-	(net 6 "ADC2_SEL1")
-	(net 7 "ADC2_EN")
-	(net 8 "ADC1_CENTER_EN")
-	(footprint "Package_SO:TSSOP-16_4.4x5mm_P0.65mm"
+	(net 5 "ADC2_LEFT_EN")
+	(net 6 "ADC2_RIGHT_EN")
+	(net 7 "ADC2_DOWN_EN")
+	(net 8 "ADC2_UP_EN")
+	(net 9 "ADC1_CENTER_EN")
+	(footprint "Package_SO:TSSOP-14_4.4x5mm_P0.65mm"
 		(layer "F.Cu")
 		(at 100 80)
 		(property "Reference" "U1" (at 0 -4 0) (layer "F.SilkS"))
-		(property "Value" "TMUX1108PWR" (at 0 4 0) (layer "F.Fab"))
+		(property "Value" "SN74LV4066APWR" (at 0 4 0) (layer "F.Fab"))
 	)
-	(footprint "Package_TO_SOT_SMD:SOT-23-6"
+	(footprint "Package_TO_SOT_SMD:SOT-23-5"
 		(layer "F.Cu")
 		(at 100 110)
 		(property "Reference" "U2" (at 0 -3 0) (layer "F.SilkS"))
-		(property "Value" "TS5A3159DBVR" (at 0 3 0) (layer "F.Fab"))
+		(property "Value" "SN74LVC1G66DBVR" (at 0 3 0) (layer "F.Fab"))
 	)
 	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
 		(layer "F.Cu")
@@ -50,11 +51,11 @@
 		(property "Reference" "J1" (at 0 -3 0) (layer "F.SilkS"))
 		(property "Value" "MONITOR_DRIVE" (at 0 8 0) (layer "F.Fab"))
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x07_P2.54mm_Vertical"
 		(layer "F.Cu")
 		(at 160 80)
 		(property "Reference" "J2" (at 0 -3 0) (layer "F.SilkS"))
-		(property "Value" "HOST_CTRL" (at 0 16 0) (layer "F.Fab"))
+		(property "Value" "HOST_CTRL" (at 0 18 0) (layer "F.Fab"))
 	)
 	(gr_rect (start 20 30) (end 190 150) (layer "Edge.Cuts") (width 0.1) (fill none))
 	(gr_text "Phase 4 Analog Drive Prototype" (at 105 40 0) (layer "F.SilkS")

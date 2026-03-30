@@ -86,29 +86,32 @@ Cons:
 - wiper behavior and endpoint resistance may reduce state fidelity
 - update timing and nonlinearity may complicate repeatability
 
-### Candidate C: Hybrid (Selected)
+### Candidate C: Fail-Safe Per-Leg Analog Switch Drive (Selected)
 
-Use discrete resistor-state switching for `KEY_ADC2` multi-state drive and a simpler switched pull-down path for binary `KEY_ADC1` center actuation.
+Use one normally-open analog switch per resistor leg so every commanded resistance-to-ground path is individually off by default.
 
 Pros:
 
 - best fit to asymmetric signal behavior (`KEY_ADC2` multi-state, `KEY_ADC1` binary)
+- hardware-default safe state does not depend on mux address decoding during Pi boot or reset
 - predictable electrical states with low software ambiguity
 - preserves a clear path to later calibration refinement
 
 Cons:
 
-- mixed topology increases schematic complexity slightly
+- uses more switch-control GPIOs than a mux-based design
+- slightly higher part count than a shared-address mux approach
 
 ## Selected Architecture
 
-The selected Phase 4 architecture is a **hybrid switched-resistance drive path**:
+The selected Phase 4 architecture is a **fail-safe per-leg switched-resistance drive path**:
 
-- `KEY_ADC2`: analog-switch matrix selects one calibrated resistor leg to `GND` per logical direction.
-- `KEY_ADC1`: dedicated switched pull-down for center press emulation.
+- `KEY_ADC2`: four independent bilateral analog-switch channels gate four calibrated resistor legs to `GND`, one per logical direction.
+- `KEY_ADC1`: dedicated single bilateral analog switch gates the center pull-down leg.
 - both channels default to high-impedance (`idle`) when no command is active.
 - one command arbiter guarantees mutually exclusive drive state application.
-- software-enforced break-before-make timing prevents transient multi-leg shorts.
+- hardware biasing holds all switch enables in the off state until the host actively asserts a command.
+- software-enforced break-before-make timing remains in place as a second line of protection.
 
 ## Original `JOG` Preservation Strategy
 
