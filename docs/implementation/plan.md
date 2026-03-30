@@ -727,9 +727,8 @@ Harden the system for regular use.
 
 ## Immediate Next Steps
 
-- complete and review the Phase 3 observation circuit schematic and BOM
-- decide whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
+- begin Phase 4: design the analog drive circuit for `KEY_ADC1` and `KEY_ADC2`
 - define the Phase 4 analog drive circuit deliverables to the schematic-plus-BOM standard
+- decide whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
 - define the Phase 5 `HDMI` / `DDC` communication deliverables clearly enough to feed the integrated controller-board design
-- confirm the KiCad file and artifact-management workflow before more hardware design work lands
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

@@ -418,7 +418,7 @@ The locked passive values and LCSC part numbers for fabrication:
 | R6, R7 | 0 Ω | 0402 | C17168 | Optional signal routing jumpers |
 | C1, C2, C3, C4 | 100 nF X5R | 0402 | C307331 | Local decoupling (one per IC) |
 | C5 | 1 µF X5R | 0402 | C52923 | Bulk decoupling on 3.3V rail |
-| C6, C7, C8 | 1 nF C0G DNP | 0402 | C1525 | Optional filter footprints, do not populate |
+| C6, C7, C8 | 1 nF C0G | 0402 | C1525 | RC filter caps on observed key lines (populated) |
 
 All passives are 0402. All LCSC numbers confirmed in-stock at time of order.
 
@@ -492,14 +492,50 @@ KiCad project: `hardware/kicad/phase-3-observation-reva/`
 
 Generated with KiCad 10 + Fabrication Toolkit plugin. IC rotation corrections applied automatically (U1/U2 → 270°, U3/U4 → 180°).
 
-J1, J2, J3 are THT pin headers — solder manually after board arrives. C6/C7/C8 are DNP.
+J1, J2, J3 are THT pin headers — solder manually after board arrives. C6, C7, and C8 are populated.
+
+## Schematic Corrections (Post-Review)
+
+The following errors were identified and corrected in the schematic after the initial fabrication file generation. These corrections do not affect the PCB layout or BOM — only the schematic topology.
+
+### Op-amp voltage-follower wiring (U1A, U1B, U1C)
+
+All three active op-amp channels had positive feedback instead of negative feedback. The output was wired back to IN+ and the SENSE signal was wired to IN−, which is an oscillator topology, not a unity-gain buffer.
+
+Fixed: SENSE now connects to IN+ (non-inverting input). Output feeds back to IN− (negative feedback). SENSE routing uses an L-shaped detour for units A and B to avoid a routing conflict with the IN− pin on the same vertical trace.
+
+### U1D (spare op-amp channel) missing
+
+U1D had been accidentally removed from the schematic. The spare channel was not visible, leaving the unused op-amp inputs floating.
+
+Fixed: U1D symbol restored. IN+ tied to GND, output looped back to IN− — correct safe termination for an unused rail-to-rail op-amp.
+
+### TLV9064IDR power pin labels reversed (U1E)
+
+The schematic had pin 4 labeled V+ and pin 11 labeled V−. The TLV9064IDR datasheet shows the opposite: pin 4 is V− (negative supply) and pin 11 is V+ (positive supply). This is the reverse of the classic LM324 convention. The chip would have been powered with reversed supply rails.
+
+Fixed: pin 4 → GND (V−), pin 11 → +3V3 (V+). The embedded library symbol was also corrected to match.
+
+### C6/C7/C8 changed from DNP to populated
+
+C6, C7, and C8 (1 nF C0G RC filter caps on the observed key lines) were originally marked DNP. Changed to populated by default.
+
+### PWR_FLAG placement
+
+#FLG01 (PWR_FLAG) was stranded — not connected to any net. Fixed by moving it onto the GND net. #FLG02 remains on the +3V3 net. Each power net now has exactly one PWR_FLAG for ERC compliance.
+
+### C1 repositioned
+
+C1 (100 nF decoupling) was moved from its original position near U1E to sit adjacent to C5 near the +3V3/GND rail junction. Both are bulk/decoupling caps on the same rail; keeping them together improves schematic readability. PCB placement is unaffected.
+
+---
 
 ## Current Status
 
-Phase 3 fabrication files are complete and ready for JLCPCB order.
+Phase 3 is complete. Fabrication files are ready for JLCPCB order.
 
 - architecture selected and locked: Candidate C hybrid
-- schematic topology complete, all symbol fields updated to final parts
+- schematic corrected and reviewed (see Schematic Corrections above)
 - PCB components placed, 3D models linked
 - Gerbers, BOM, and CPL generated and validated against JLCPCB upload
 - remaining work: board arrives → bench verification per the verification plan above

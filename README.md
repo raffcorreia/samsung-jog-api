@@ -18,7 +18,8 @@ Current state of the repository:
 - completed: `Phase 0: Documentation and Evidence Capture`
 - completed: `Phase 1: Host Preparation and Conservative OS Cleanup`
 - completed: `Phase 2: Hardware Validation`
-- current phase: `Phase 3: Bus Observation Circuit Design`
+- completed: `Phase 3: Bus Observation Circuit Design`
+- current phase: `Phase 4: Analog Drive Circuit Design`
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
 - repository now includes a Phase 3 execution record for bus-observation hardware design
