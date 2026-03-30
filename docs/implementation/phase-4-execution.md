@@ -140,31 +140,36 @@ The Phase 4 verification approach is:
 
 ## Deliverables Completed
 
-- approved analog drive topology and part families
-- analog drive BOM with tested commercial resistor substitutions
-- architectural schematic artifact for review, including resistor-direction annotations
-- documented verification plan for implementation phase
+- reviewed analog-drive topology with explicit switch-to-resistor channel mapping
+- cleaned KiCad schematic with explicit connector wiring and zero ERC errors
+- compact KiCad PCB prototype layout for the analog-drive subcircuit
+- JLC-oriented BOM using tested commercial resistor substitutions and current orderable part numbers
+- exported manufacturing artifacts validated by `kicad-cli` gerber and position-file generation
 
 ## Exit-Criteria Assessment
 
-Phase 4 is not fully complete yet.
+Phase 4 is complete at the design-artifact level.
 
-The design direction, resistor selections, and review artifacts exist, but the KiCad schematic still needs one more cleanup pass before the phase can be considered closed. The remaining gap is the connector-to-IC presentation in the schematic: `J1` and `J2` are partially reworked toward explicit drawn wiring, but the current sheet still needs visual and ERC cleanup before it is ready to sign off as the final Phase 4 schematic.
+The final state now includes:
 
-At this point, the following Phase 4 criteria are satisfied:
+- a KiCad schematic with explicit monitor and host connector wiring
+- a routed KiCad PCB prototype for the analog-drive circuit
+- a JLC-oriented BOM for the tested resistor set
+- manufacturing artifact export from the board file
 
-- there is a reviewable analog-drive design for reproducing required states
-- there is a reviewable BOM and schematic artifact
-- integration assumptions and verification strategy are documented for implementation
+Verification status:
 
-The following Phase 4 work is still open:
+- `kicad-cli sch erc` passes with `0` errors and only embedded-library warnings
+- `kicad-cli pcb export gerbers` succeeds
+- `kicad-cli pcb export pos` succeeds
+- `kicad-cli pcb render` succeeds
 
-- finish the connector-to-IC routing cleanup in the KiCad schematic
-- return ERC to the prior clean baseline for schematic-structure checks
-- do one final visual review pass in KiCad before declaring the schematic finished
+Known limitation:
+
+- `kicad-cli pcb drc` crashes in this environment with a KiCad 10 CLI runtime error (`SwiftNativeNSArray` out-of-range), so a final GUI DRC pass remains advisable before sending the board to fabrication
 
 ## Open Items Deferred to Later Phases
 
 - final integrated-board connector and mechanical constraints
 - exact software timing constants after hardware-in-loop testing
-- JLCPCB production-part finalization beyond the already-tested substitute resistor set
+- validation of the JLC-orderable `U1` substitution on the physical assembled board
