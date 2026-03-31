@@ -141,14 +141,16 @@ The Phase 4 verification approach is:
 ## Deliverables Completed
 
 - reviewed analog-drive topology with explicit switch-to-resistor channel mapping
-- cleaned KiCad schematic with explicit connector wiring and zero ERC errors
+- cleaned KiCad schematic with explicit monitor and host connector wiring
+- corrected the final `KEY_ADC1_BUS`, `KEY_ADC2_BUS`, and connector-ground net assignments in the KiCad schematic
 - compact KiCad PCB prototype layout for the analog-drive subcircuit
+- attached standard KiCad 3D models to the PCB footprints so populated board rendering works again
 - JLC-oriented BOM using tested commercial resistor substitutions and current orderable part numbers
-- exported manufacturing artifacts validated by `kicad-cli` gerber and position-file generation
+- exported manufacturing artifacts validated by `kicad-cli` gerber, position-file, and board-render generation
 
 ## Exit-Criteria Assessment
 
-Phase 4 is complete at the design-artifact level.
+Phase 4 is complete at the prototype-design level.
 
 The final state now includes:
 
@@ -156,20 +158,23 @@ The final state now includes:
 - a routed KiCad PCB prototype for the analog-drive circuit
 - a JLC-oriented BOM for the tested resistor set
 - manufacturing artifact export from the board file
+- working 3D model references on the PCB footprints
 
 Verification status:
 
-- `kicad-cli sch erc` passes with `0` errors and only embedded-library warnings
+- `kicad-cli sch erc` passes with `0` errors and only library/symbol warnings
 - `kicad-cli pcb export gerbers` succeeds
 - `kicad-cli pcb export pos` succeeds
 - `kicad-cli pcb render` succeeds
 
 Known limitation:
 
-- `kicad-cli pcb drc` crashes in this environment with a KiCad 10 CLI runtime error (`SwiftNativeNSArray` out-of-range), so a final GUI DRC pass remains advisable before sending the board to fabrication
+- `kicad-cli pcb drc` crashes in this environment with a KiCad `10.0.0` macOS CLI runtime error (`SwiftNativeNSArray` out-of-range), so a final GUI DRC pass is still required before sending the board to fabrication
+- one remaining schematic warning cluster in the `ADC1_CENTER_EN` area should still be reviewed visually in KiCad GUI during the final PCB pass
 
 ## Open Items Deferred to Later Phases
 
 - final integrated-board connector and mechanical constraints
 - exact software timing constants after hardware-in-loop testing
 - validation of the JLC-orderable `U1` substitution on the physical assembled board
+- final GUI PCB DRC and visual routing review before fabrication release

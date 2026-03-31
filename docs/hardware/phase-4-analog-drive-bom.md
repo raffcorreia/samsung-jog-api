@@ -45,8 +45,9 @@ This markdown BOM is the review-friendly version; the CSV is the fabrication-ori
 ## PCB Outcome
 
 - the phase-4 KiCad PCB is now a routed compact prototype board in [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb)
-- KiCad successfully exports front-side placement CSV and gerbers from the board file
-- `kicad-cli pcb drc` still crashes in this environment with a KiCad 10 CLI runtime error, so final clearance review still needs an interactive KiCad GUI pass before ordering
+- KiCad successfully exports front-side placement CSV, gerbers, and 3D board renders from the board file
+- standard KiCad 3D models are now attached to the board footprints for connectors, ICs, passives, and capacitors
+- `kicad-cli pcb drc` still crashes in this environment with a KiCad `10.0.0` macOS CLI runtime error, so final clearance review still needs an interactive KiCad GUI pass before ordering
 
 ## Channel Allocation
 
@@ -74,3 +75,4 @@ This markdown BOM is the review-friendly version; the CSV is the fabrication-ori
 - `U1` is now JLC-orderable, but it is a `74HC4066`-class part rather than the original lower-on-resistance `LV4066A` target, so final bench confirmation on the assembled board is still required
 - the selected `30 kOhm` JLC resistor is currently a low-stock listing; if it disappears, swap to a validated stocked alternative before release
 - final connector family and keyed harness choice still belongs to the integrated-board phase
+- final PCB sign-off is still pending a successful GUI DRC pass because the CLI DRC path is currently unreliable in this environment
