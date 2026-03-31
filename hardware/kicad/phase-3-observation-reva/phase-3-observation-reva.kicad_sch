@@ -2451,11 +2451,11 @@
 		(uuid "3397f0a8-5e8c-4fb2-90e2-ac609ff11d8a")
 	)
 	(no_connect
-		(at 147.32 26.67)
+		(at 144.78 36.83)
 		(uuid "41fc1fe9-e4e1-4fb9-ad2f-04deb235db21")
 	)
 	(no_connect
-		(at 147.32 29.21)
+		(at 144.78 39.37)
 		(uuid "a4984e15-684c-4eaf-ba10-abe9c90c2faa")
 	)
 	(wire
@@ -2980,16 +2980,6 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 13.97) (xy 226.06 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "93586193-1c05-4424-9c91-ec8167f95599")
-	)
-	(wire
-		(pts
 			(xy 182.88 67.31) (xy 234.95 67.31)
 		)
 		(stroke
@@ -3097,16 +3087,6 @@
 			(type default)
 		)
 		(uuid "c6a7cc40-8020-4d53-89ad-51e2af2a4f98")
-	)
-	(wire
-		(pts
-			(xy 226.06 45.72) (xy 224.79 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c6ff0cbe-2aa7-48f1-ad5f-cc84a4d40c4a")
 	)
 	(wire
 		(pts
@@ -3378,16 +3358,6 @@
 		)
 		(uuid "2b857ae3-4bd0-430d-a570-d2da3a093175")
 	)
-	(label "GND"
-		(at 236.22 21.59 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "2d59a9e2-a674-461e-b1cc-e81e5ae0ce31")
-	)
 	(label "KEY_ADC2_BUF"
 		(at 113.03 34.29 0)
 		(effects
@@ -3647,16 +3617,6 @@
 			(justify left bottom)
 		)
 		(uuid "b2e8caf5-6423-43cf-8b74-30d43307117b")
-	)
-	(label "+3V3"
-		(at 236.22 13.97 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b3d761fc-d905-47be-8d24-b1c97a340b6f")
 	)
 	(label "GND"
 		(at 171.45 87.63 270)
@@ -5620,7 +5580,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 224.79 45.72 0)
+		(at 226.06 13.97 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5630,7 +5590,7 @@
 		(dnp no)
 		(uuid "9b0c37a9-f184-4913-afa3-6b002b9655bf")
 		(property "Reference" "#FLG02"
-			(at 224.79 47.625 0)
+			(at 226.06 15.875 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5642,7 +5602,7 @@
 			)
 		)
 		(property "Value" ""
-			(at 224.79 45.72 0)
+			(at 226.06 13.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5652,7 +5612,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 224.79 45.72 0)
+			(at 226.06 13.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5662,7 +5622,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 224.79 45.72 0)
+			(at 226.06 13.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5672,7 +5632,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 224.79 45.72 0)
+			(at 226.06 13.97 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
