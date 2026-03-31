@@ -392,31 +392,35 @@ Only a narrower set of decisions remains open after the Phase 3 architecture sel
 
 ## Exact Part Selection
 
-The Phase 3 observation circuit now uses these selected parts for the first reviewable design:
+The Phase 3 observation circuit uses these locked parts:
 
-- `U1`: `TLV9064IDR`
-- `U2`: `ADS1114IDGST`
-- `U3`: `74LVC1G17GW`
-- `U4`: `74LVC1G17GW`
+| Ref | Part | Package | LCSC | Notes |
+|-----|------|---------|------|-------|
+| U1 | TLV9064IDR | SOIC-14 | C388176 | Quad rail-to-rail op-amp, buffers all three lines + spare |
+| U2 | ADS1115IDGSR | MSOP-10 | C37593 | 16-bit I2C ADC, pin-compatible substitute for ADS1114IDGST (stock) |
+| U3 | 74LVC1G17GW | SC-70-5 | C426705 | Schmitt buffer for KEY_ADC1 |
+| U4 | 74LVC1G17GW | SC-70-5 | C426705 | Schmitt buffer for KEY_LED |
 
 Rationale:
 
 - `TLV9064IDR` provides four low-voltage rail-to-rail op-amp channels so the two analog key buses and the LED line can all be buffered while leaving one spare channel
-- `ADS1114IDGST` keeps `KEY_ADC2` observable as an analog signal through a Pi-friendly `I2C` ADC path while exposing `ALERT/RDY` as an optional interrupt source
-- `74LVC1G17GW` provides a clean digital interpretation stage for buffered `KEY_ADC1`
-- `74LVC1G17GW` provides a second clean digital interpretation stage for buffered `KEY_LED`
+- `ADS1115IDGSR` keeps `KEY_ADC2` observable as an analog signal through a Pi-friendly `I2C` ADC path. Substituted from `ADS1114IDGST` due to low LCSC stock — pin-compatible MSOP-10, same symbol and pinout, AIN1 tied to GND for single-ended measurement
+- `74LVC1G17GW` provides a clean digital interpretation stage for buffered `KEY_ADC1` and `KEY_LED`
 
 ## Default Component Values
 
-The current default values for the reviewable Phase 3 design are:
+The locked passive values and LCSC part numbers for fabrication:
 
-- `R1`, `R2`, `R3`: `10 kOhm` series input resistors
-- `R4`, `R5`: `4.7 kOhm` `I2C` pull-ups
-- `C1`, `C2`, `C3`: `100 nF` local decoupling capacitors
-- `C4`: `1 uF` local bulk decoupling on the `3.3V` rail
-- `C5`, `C6`, `C7`: optional `1 nF` `DNP` filter footprints
+| Ref | Value | Footprint | LCSC | Purpose |
+|-----|-------|-----------|------|---------|
+| R1, R2, R3 | 10 kΩ 1% | 0402 | C25744 | Series input protection |
+| R4, R5 | 4.7 kΩ 1% | 0402 | C25900 | I2C pull-ups |
+| R6, R7 | 0 Ω | 0402 | C17168 | Optional signal routing jumpers |
+| C1, C2, C3, C4 | 100 nF X5R | 0402 | C307331 | Local decoupling (one per IC) |
+| C5 | 1 µF X5R | 0402 | C52923 | Bulk decoupling on 3.3V rail |
+| C6, C7, C8 | 1 nF C0G | 0402 | C1525 | RC filter caps on observed key lines (populated) |
 
-These values are intended to be the starting schematic defaults, not the final tuned values after bench bring-up.
+All passives are 0402. All LCSC numbers confirmed in-stock at time of order.
 
 ## Interrupt-Assisted Observation Note
 
@@ -474,17 +478,65 @@ The earlier broader open items are now narrowed by the selected architecture:
 - documented rationale for the selected observation approach
 - defined verification plan for the implemented observation path
 
+## Fabrication Files
+
+KiCad project: `hardware/kicad/phase-3-observation-reva/`
+
+| File | Purpose |
+|------|---------|
+| `phase-3-observation-reva.kicad_sch` | Schematic (topology frozen, all fields updated) |
+| `phase-3-observation-reva.kicad_pcb` | PCB (components placed, 3D models linked) |
+| `production/phase-3-observation-reva.zip` | Gerbers for JLCPCB fabrication |
+| `production/bom.csv` | JLCPCB-format BOM with LCSC part numbers |
+| `production/positions.csv` | JLCPCB-format CPL with corrected IC rotations |
+
+Generated with KiCad 10 + Fabrication Toolkit plugin. IC rotation corrections applied automatically (U1/U2 → 270°, U3/U4 → 180°).
+
+J1, J2, J3 are THT pin headers — solder manually after board arrives. C6, C7, and C8 are populated.
+
+## Schematic Corrections (Post-Review)
+
+The following errors were identified and corrected in the schematic after the initial fabrication file generation. These corrections do not affect the PCB layout or BOM — only the schematic topology.
+
+### Op-amp voltage-follower wiring (U1A, U1B, U1C)
+
+All three active op-amp channels had positive feedback instead of negative feedback. The output was wired back to IN+ and the SENSE signal was wired to IN−, which is an oscillator topology, not a unity-gain buffer.
+
+Fixed: SENSE now connects to IN+ (non-inverting input). Output feeds back to IN− (negative feedback). SENSE routing uses an L-shaped detour for units A and B to avoid a routing conflict with the IN− pin on the same vertical trace.
+
+### U1D (spare op-amp channel) missing
+
+U1D had been accidentally removed from the schematic. The spare channel was not visible, leaving the unused op-amp inputs floating.
+
+Fixed: U1D symbol restored. IN+ tied to GND, output looped back to IN− — correct safe termination for an unused rail-to-rail op-amp.
+
+### TLV9064IDR power pin labels reversed (U1E)
+
+The schematic had pin 4 labeled V+ and pin 11 labeled V−. The TLV9064IDR datasheet shows the opposite: pin 4 is V− (negative supply) and pin 11 is V+ (positive supply). This is the reverse of the classic LM324 convention. The chip would have been powered with reversed supply rails.
+
+Fixed: pin 4 → GND (V−), pin 11 → +3V3 (V+). The embedded library symbol was also corrected to match.
+
+### C6/C7/C8 changed from DNP to populated
+
+C6, C7, and C8 (1 nF C0G RC filter caps on the observed key lines) were originally marked DNP. Changed to populated by default.
+
+### PWR_FLAG placement
+
+#FLG01 (PWR_FLAG) was stranded — not connected to any net. Fixed by moving it onto the GND net. #FLG02 remains on the +3V3 net. Each power net now has exactly one PWR_FLAG for ERC compliance.
+
+### C1 repositioned
+
+C1 (100 nF decoupling) was moved from its original position near U1E to sit adjacent to C5 near the +3V3/GND rail junction. Both are bulk/decoupling caps on the same rail; keeping them together improves schematic readability. PCB placement is unaffected.
+
+---
+
 ## Current Status
 
-Phase 3 is in detailed design.
+Phase 3 is complete. Fabrication files are ready for JLCPCB order.
 
-Current assessment:
-
-- the Phase 2 evidence is sufficient to begin observation-path design
-- the selected observation architecture is hybrid
-- the selected component direction is buffered analog observation plus external ADC for `KEY_ADC2`
-- `KEY_ADC1` is selected as a buffered digital-observation path
-- `KEY_LED` is selected as a buffered digital-observation path
-- the first exact part set and starting passive values are now defined
-- the KiCad schematic and BOM are present and ready for review
-- remaining Phase 3 work is now limited to circuit review and any final adjustment before approval
+- architecture selected and locked: Candidate C hybrid
+- schematic corrected and reviewed (see Schematic Corrections above)
+- PCB components placed, 3D models linked
+- Gerbers, BOM, and CPL generated and validated against JLCPCB upload
+- remaining work: board arrives → bench verification per the verification plan above
+- copper routing and GND pour not done — this is an observation-only board with short signal paths; routing is deferred to physical bring-up if needed for a rev B
