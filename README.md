@@ -18,11 +18,12 @@ Current state of the repository:
 - completed: `Phase 0: Documentation and Evidence Capture`
 - completed: `Phase 1: Host Preparation and Conservative OS Cleanup`
 - completed: `Phase 2: Hardware Validation`
-- completed: `Phase 3: Bus Observation Circuit Design`
-- current phase: `Phase 4: Analog Drive Circuit Design`
+- current phase: `Phase 3: Bus Observation Circuit Design`
+- completed: `Phase 4: Analog Drive Circuit Design` (design docs, KiCad schematic/PCB, BOM, and concept schematic)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
 - repository now includes a Phase 3 execution record for bus-observation hardware design
+- repository now includes a Phase 4 execution record, KiCad design files, and analog-drive BOM artifacts
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
 - no production code yet
