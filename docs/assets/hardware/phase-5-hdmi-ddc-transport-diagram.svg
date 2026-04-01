@@ -24,7 +24,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.7475722"
      inkscape:cx="701.8308"
-     inkscape:cy="782.80027"
+     inkscape:cy="828.57807"
      inkscape:window-width="3440"
      inkscape:window-height="1329"
      inkscape:window-x="1792"
@@ -149,7 +149,7 @@
      x="80"
      y="130"
      width="300"
-     height="240"
+     height="300"
      id="rect6" />
   <text
      class="label"
@@ -198,7 +198,7 @@
      x="1220"
      y="130"
      width="300"
-     height="240"
+     height="300"
      id="rect14" />
   <text
      class="label"
@@ -243,137 +243,155 @@
      y="400"
      id="text22">Pin 19     HPD from monitor</text>
   <rect
-     class="note"
-     x="440"
-     y="410"
-     width="720"
-     height="52"
-     id="rect22" />
-  <text
-     class="body"
-     x="800"
-     y="442"
-     text-anchor="middle"
-     id="text23">Normal state: source owns monitor DDC. Pi takes monitor DDC only for short explicit transactions.</text>
-  <rect
      class="outer"
      x="280"
-     y="500"
+     y="470"
      width="1040"
      height="260"
      id="rect23" />
   <text
      class="label"
      x="330"
-     y="540"
-     id="text24">Custom Hardware</text>
+     y="510"
+     id="text24"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">Custom Hardware</text>
   <text
      class="small"
      x="800"
-     y="540"
+     y="510"
      text-anchor="middle"
-     id="text25">Sideband transport only. High-speed video remains direct pass-through.</text>
+     id="text25"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:174.485;display:inline"
+     xml:space="preserve"><tspan
+       x="800"
+       y="510"
+       id="tspan2">Sideband transport only.<tspan
+   y="510"
+   id="tspan3"> </tspan></tspan><tspan
+       x="800"
+       y="526.24997"
+       id="tspan4">High-speed video remains<tspan
+   y="526.24997"
+   id="tspan5"> </tspan></tspan><tspan
+       x="800"
+       y="542.49997"
+       id="tspan6">direct pass-through.</tspan></text>
   <rect
      class="logic"
      x="350"
-     y="600"
+     y="570"
      width="230"
      height="90"
      id="rect25" />
   <text
      class="label"
      x="465"
-     y="638"
+     y="608"
      text-anchor="middle"
-     id="text26">DDC Switch / Mux</text>
+     id="text26"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">DDC Switch / Mux</text>
   <text
      class="body"
      x="465"
-     y="664"
+     y="634"
      text-anchor="middle"
-     id="text27">source or Pi owns</text>
+     id="text27"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">source or Pi owns</text>
   <text
      class="body"
      x="465"
-     y="686"
+     y="656"
      text-anchor="middle"
-     id="text28">monitor DDC</text>
+     id="text28"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">monitor DDC</text>
   <rect
      class="logic"
      x="685"
-     y="600"
+     y="570"
      width="230"
      height="90"
      id="rect28" />
   <text
      class="label"
      x="800"
-     y="638"
+     y="608"
      text-anchor="middle"
-     id="text29">EDID EEPROM</text>
+     id="text29"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">EDID EEPROM</text>
   <text
      class="body"
      x="800"
-     y="664"
+     y="634"
      text-anchor="middle"
-     id="text30">stable source-facing EDID</text>
+     id="text30"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">stable source-facing EDID</text>
   <rect
      class="logic"
      x="1020"
-     y="600"
+     y="570"
      width="230"
      height="90"
      id="rect30" />
   <text
      class="label"
      x="1135"
-     y="638"
+     y="608"
      text-anchor="middle"
-     id="text31">HPD Buffer / Gate</text>
+     id="text31"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">HPD Buffer / Gate</text>
   <text
      class="body"
      x="1135"
-     y="664"
+     y="634"
      text-anchor="middle"
-     id="text32">monitor HPD in,</text>
+     id="text32"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">monitor HPD in,</text>
   <text
      class="body"
      x="1135"
-     y="686"
+     y="656"
      text-anchor="middle"
-     id="text33">controlled HPD out</text>
+     id="text33"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">controlled HPD out</text>
   <rect
      class="logic"
      x="695"
-     y="710"
+     y="680"
      width="210"
      height="40"
      id="rect33" />
   <text
      class="label"
      x="800"
-     y="737"
+     y="707"
      text-anchor="middle"
-     id="text34">+5V Presence Detect</text>
+     id="text34"
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">+5V Presence Detect</text>
   <rect
      class="pi"
      x="540"
      y="830"
      width="520"
-     height="90"
+     height="120"
      id="rect34" />
   <text
      class="label"
      x="800"
-     y="868"
+     y="860"
      text-anchor="middle"
      id="text35">Raspberry Pi</text>
   <text
      class="body"
      x="800"
-     y="896"
+     y="888"
      text-anchor="middle"
-     id="text36">I2C for DDC/CI, GPIO for mux select, HPD control, and source-detect readback</text>
+     id="text36">I2C for DDC/CI, GPIO for mux select, HPD control,</text>
+  <text
+     class="body"
+     x="800"
+     y="914"
+     text-anchor="middle"
+     id="text36b">and source-detect readback</text>
   <path
      class="line-video"
      d="m 380,160 h 820"
@@ -410,122 +428,149 @@
      y="318"
      text-anchor="middle"
      id="text39"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:199.741"
-     transform="translate(-10.300004,-101.57781)"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:199.741;display:inline"
      xml:space="preserve"><tspan
        x="800"
        y="318"
-       id="tspan1">Pin 17 ground reference</tspan></text>
+       id="tspan7">Pin 17 ground reference</tspan></text>
   <path
      class="line-ddc"
-     d="M 381.14444,270.63891 430,271.21113 428.12552,583.81777"
+     d="M 381.14444,270.63891 430,271.21113 428.12552,547.76776"
      marker-end="url(#arrow-ddc)"
      id="path39"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="388"
-     y="610"
-     id="text40">source DDC into mux</text>
+     x="445.20001"
+     y="561.14447"
+     id="text40"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">source DDC into mux</text>
   <path
      class="line-ddc"
-     d="m 888.84993,598.48335 -4.00556,-348.46112 315.72783,-0.57222"
+     d="m 898.00548,567.01111 1.14445,-318.13332 301.42227,0.57222"
      marker-end="url(#arrow-ddc)"
      id="path40"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="1030"
-     y="290"
+     x="1014"
+     y="288"
      id="text41">monitor DDC from mux</text>
   <path
      class="line-ddc"
-     d="m 380,248 338.72226,0 -0.53335,330.27777"
+     d="m 380,248 325.56114,-0.57222 -0.53335,299.94998"
      marker-end="url(#arrow-ddc)"
      id="path41"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="488.85556"
-     y="288.51111"
+     x="520"
+     y="286"
      id="text42"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">source DDC branch to EDID</text>
   <path
      class="line-5v"
-     d="m 380.57149,305.32628 h 242.21772 l 1.14026,424.02945 h 50.537"
+     d="m 380.57149,305.32628 h 242.21772 l 1.14026,394.27388 h 50.537"
      marker-end="url(#arrow-5v)"
      id="path42"
      sodipodi:nodetypes="cccc" />
   <path
      class="line-5v"
-     d="m 905.57689,730.31024 h 74.015 l -3.42067,-424.59876 h 223.31828"
+     d="m 906.72133,700.55467 h 74.015 l -4.56511,-394.84319 h 223.31828"
      marker-end="url(#arrow-5v)"
      id="path43"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="800"
+     x="924.74451"
      y="770"
      text-anchor="middle"
-     id="text43">Pin 18 source +5V path with detect branch</text>
+     id="text43"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:147.752;display:inline"
+     transform="translate(-52.644463,-9.7277812)"
+     xml:space="preserve"><tspan
+       x="924.74451"
+       y="770"
+       id="tspan8">Pin 18 source +5V path<tspan
+   y="770"
+   id="tspan9"> </tspan></tspan><tspan
+       x="924.74451"
+       y="786.25003"
+       id="tspan10">with detect branch</tspan></text>
   <path
      class="line-hpd"
-     d="m 1217.1667,333.05553 -50.0278,0 0.4611,246.7389"
+     d="m 1217.1667,333.05553 h -50.0278 l 0.4611,216.41111"
      marker-end="url(#arrow-hpd)"
      id="path44"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="1124"
-     y="610"
-     id="text44">monitor HPD into gate</text>
+     x="1030.75"
+     y="561.4278"
+     id="text44"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">monitor HPD into gate</text>
   <path
      class="line-hpd"
-     d="M1020 670 H930 V705 H330"
+     d="M 1020,640 H 930 V 404.33879 l -532.47775,-0.57222"
      marker-end="url(#arrow-hpd)"
-     id="path45" />
+     id="path45"
+     sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="760"
-     y="722"
+     x="553.99994"
+     y="395.0499"
      text-anchor="middle"
-     id="text45">controlled HPD back to source</text>
+     id="text45"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:124.779;display:inline"
+     transform="translate(-38.338902,-12.588893)"
+     xml:space="preserve"><tspan
+       x="553.99994"
+       y="395.0499"
+       id="tspan11">controlled HPD back<tspan
+   y="395.0499"
+   id="tspan12"> </tspan></tspan><tspan
+       x="553.99994"
+       y="411.2999"
+       id="tspan13">to HDMI IN pin 19</tspan></text>
   <path
      class="line-ddc"
-     d="M 690,830 V 770 H 465 v -58.82777"
+     d="M 690,830 V 770 H 465 v -88.58334"
      marker-end="url(#arrow-ddc)"
      id="path46"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="576"
-     y="786"
-     id="text46">Pi I2C to mux</text>
+     x="572.56665"
+     y="765.97223"
+     id="text46"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pi I2C to mux</text>
   <path
      class="line-ctrl"
-     d="M 620,830 V 780 H 415 v -69.39999"
+     d="M 620,830 V 780 H 415 v -99.15556"
      marker-end="url(#arrow-ctrl)"
      id="path47"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="392"
-     y="798"
-     id="text47">mux select</text>
+     x="424.61667"
+     y="792.84998"
+     id="text47"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">mux select</text>
   <path
      class="line-ctrl"
-     d="M 930,830 V 780 H 800 v -11.68888"
+     d="M 930,830 V 780 H 800 v -41.44445"
      marker-end="url(#arrow-ctrl)"
      id="path48"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="944"
-     y="792"
-     id="text48">source detect</text>
+     x="1036.1278"
+     y="775.40552"
+     id="text48"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">source detect</text>
   <path
      class="line-ctrl"
-     d="m 1010,830 v -50 h 125 v -69.39999"
+     d="m 1010,830 v -50 h 125 v -99.15556"
      marker-end="url(#arrow-ctrl)"
      id="path49"
      sodipodi:nodetypes="cccc" />
@@ -570,55 +615,60 @@
      id="text53">Pins 15-16, pin 18, and pin 19</text>
   <text
      class="legend"
-     x="500"
-     y="960"
-     id="text54">Legend:</text>
+     x="350"
+     y="970"
+     id="text54"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:normal;font-family:Arial, sans-serif">Legend:</text>
   <line
      class="line-video"
-     x1="570"
-     y1="954"
-     x2="650"
-     y2="954"
+     x1="420"
+     y1="964"
+     x2="500"
+     y2="964"
      id="line54" />
   <text
      class="legend"
-     x="665"
-     y="960"
-     id="text55">direct pass-through</text>
+     x="515"
+     y="970"
+     id="text55"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:normal;font-family:Arial, sans-serif">direct pass-through</text>
   <line
      class="line-ddc"
-     x1="810"
-     y1="954"
-     x2="890"
-     y2="954"
+     x1="660"
+     y1="964"
+     x2="740"
+     y2="964"
      id="line55" />
   <text
      class="legend"
-     x="905"
-     y="960"
-     id="text56">DDC / EDID</text>
+     x="755"
+     y="970"
+     id="text56"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:normal;font-family:Arial, sans-serif">DDC / EDID</text>
   <line
      class="line-hpd"
-     x1="1050"
-     y1="954"
-     x2="1130"
-     y2="954"
+     x1="900"
+     y1="964"
+     x2="980"
+     y2="964"
      id="line56" />
   <text
      class="legend"
-     x="1145"
-     y="960"
-     id="text57">HPD</text>
+     x="995"
+     y="970"
+     id="text57"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:normal;font-family:Arial, sans-serif">HPD</text>
   <line
      class="line-5v"
-     x1="1240"
-     y1="954"
-     x2="1320"
-     y2="954"
+     x1="1090"
+     y1="964"
+     x2="1170"
+     y2="964"
      id="line57" />
   <text
      class="legend"
-     x="1335"
-     y="960"
-     id="text58">+5V detect</text>
+     x="1185"
+     y="970"
+     id="text58"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:normal;font-family:Arial, sans-serif">+5V detect</text>
 </svg>
