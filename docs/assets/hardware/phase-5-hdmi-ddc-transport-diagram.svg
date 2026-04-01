@@ -23,8 +23,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.7475722"
-     inkscape:cx="701.8308"
-     inkscape:cy="828.57807"
+     inkscape:cx="839.16418"
+     inkscape:cy="599.6891"
      inkscape:window-width="3440"
      inkscape:window-height="1329"
      inkscape:window-x="1792"
@@ -251,8 +251,8 @@
      id="rect23" />
   <text
      class="label"
-     x="330"
-     y="510"
+     x="704.80566"
+     y="491.11667"
      id="text24"
      style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">Custom Hardware</text>
   <text
@@ -262,7 +262,8 @@
      text-anchor="middle"
      id="text25"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:174.485;display:inline"
-     xml:space="preserve"><tspan
+     xml:space="preserve"
+     transform="translate(-6.8666691,-1.7166673)"><tspan
        x="800"
        y="510"
        id="tspan2">Sideband transport only.<tspan
@@ -278,57 +279,57 @@
        id="tspan6">direct pass-through.</tspan></text>
   <rect
      class="logic"
-     x="350"
-     y="570"
+     x="428"
+     y="552"
      width="230"
      height="90"
      id="rect25" />
   <text
      class="label"
-     x="465"
-     y="608"
+     x="543"
+     y="590"
      text-anchor="middle"
      id="text26"
      style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">DDC Switch / Mux</text>
   <text
      class="body"
-     x="465"
-     y="634"
+     x="543"
+     y="616"
      text-anchor="middle"
      id="text27"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">source or Pi owns</text>
   <text
      class="body"
-     x="465"
-     y="656"
+     x="543"
+     y="638"
      text-anchor="middle"
      id="text28"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">monitor DDC</text>
   <rect
      class="logic"
-     x="1020"
-     y="570"
+     x="934.57233"
+     y="550.83337"
      width="230"
      height="90"
      id="rect30" />
   <text
      class="label"
-     x="1135"
-     y="608"
+     x="1049.5721"
+     y="588.83337"
      text-anchor="middle"
      id="text31"
      style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">HPD Buffer / Gate</text>
   <text
      class="body"
-     x="1135"
-     y="634"
+     x="1049.5721"
+     y="614.83337"
      text-anchor="middle"
      id="text32"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">monitor HPD in,</text>
   <text
      class="body"
-     x="1135"
-     y="656"
+     x="1049.5721"
+     y="636.83337"
      text-anchor="middle"
      id="text33"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">controlled HPD out</text>
@@ -378,9 +379,9 @@
      id="path36" />
   <text
      class="small"
-     x="800"
-     y="148"
-     text-anchor="middle"
+     x="659.21118"
+     y="175.98889"
+     text-anchor="start"
      id="text37"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pins 1-12 TMDS / CLK direct pass-through</text>
   <path
@@ -390,9 +391,9 @@
      id="path37" />
   <text
      class="small"
-     x="800"
-     y="182"
-     text-anchor="middle"
+     x="684.00195"
+     y="205.98889"
+     text-anchor="start"
      id="text38"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pin 13 CEC optional pass-through</text>
   <path
@@ -403,123 +404,136 @@
      sodipodi:nodetypes="cc" />
   <text
      class="small"
-     x="800"
-     y="216"
-     text-anchor="middle"
+     x="404"
+     y="244"
+     text-anchor="start"
      id="text39"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:199.741;display:inline"
-     xml:space="preserve"><tspan
-       x="800"
-       y="216"
+     xml:space="preserve"
+     transform="translate(308.36965,-8.0111139)"><tspan
+       x="404"
+       y="244"
        id="tspan7">Pin 17 ground reference</tspan></text>
   <path
      class="line-ddc"
-     d="M 381.14444,270.63891 430,271.21113 428.12552,547.76776"
+     d="m 381.14444,270.63891 143.84448,0.57222 -1.87448,258.81773"
      marker-end="url(#arrow-ddc)"
      id="path39"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="446"
-     y="540"
+     x="455.12598"
+     y="287.42221"
      id="text40"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pins 15-16 source DDC into mux</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:141.852;display:inline"
+     transform="translate(-5.1500018,-2.8611121)"
+     xml:space="preserve"><tspan
+       x="455.12598"
+       y="287.42221"
+       id="tspan8">Pins 15-16 source DDC<tspan
+   y="287.42221"
+   id="tspan9"> </tspan></tspan><tspan
+       x="455.12598"
+       y="303.67221"
+       id="tspan10">into mux</tspan></text>
   <path
      class="line-ddc"
-     d="M 580,612 H 890 V 248.87779 H 1200"
+     d="m 559.97222,547.91108 -0.14456,-275.57217 640.17234,0"
      marker-end="url(#arrow-ddc)"
      id="path40"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="1000"
-     y="226"
-     id="text41">Pins 15-16 monitor DDC from mux</text>
+     x="987.98334"
+     y="285.17224"
+     id="text41"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pins 15-16 monitor DDC from mux</text>
   <path
      class="line-5v"
-     d="m 380.57149,305.32628 h 242.21772 l 1.14026,394.27388 h 50.537"
+     d="m 380.57149,318.4874 h 316.60663 l 1.89391,339.91275"
      marker-end="url(#arrow-5v)"
      id="path42"
-     sodipodi:nodetypes="cccc" />
+     sodipodi:nodetypes="ccc" />
   <path
      class="line-5v"
-     d="m 906.72133,700.55467 h 74.015 l -4.56511,-394.84319 h 223.31828"
+     d="M 898.71021,677.09355 898.34897,318.8726 h 301.14053"
      marker-end="url(#arrow-5v)"
      id="path43"
-     sodipodi:nodetypes="cccc" />
+     sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="818"
-     y="724"
-     text-anchor="middle"
+     x="477.87601"
+     y="330"
+     text-anchor="start"
      id="text43"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:147.752;display:inline"
-     xml:space="preserve"><tspan
-       x="818"
-       y="724"
-       id="tspan8">Pin 18 source +5V path<tspan
-   y="724"
-   id="tspan9"> </tspan></tspan><tspan
-       x="818"
-       y="740.25"
-       id="tspan10">with detect branch</tspan></text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:147.752;display:inline"
+     xml:space="preserve"
+     transform="translate(-27.466676,1.1444448)"><tspan
+       x="477.87601"
+       y="330"
+       id="tspan11">Pin 18 source +5V path<tspan
+   y="330"
+   id="tspan12"> </tspan></tspan><tspan
+       x="477.87601"
+       y="346.25"
+       id="tspan13">with detect branch</tspan></text>
   <path
      class="line-hpd"
-     d="m 1217.1667,333.05553 h -50.0278 l 0.4611,216.41111"
+     d="m 1217.1667,405.15556 -145.0167,0 0.4611,125.42774"
      marker-end="url(#arrow-hpd)"
      id="path44"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="1030.75"
-     y="561.4278"
+     x="972.8111"
+     y="332.8389"
      id="text44"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pin 19 monitor HPD into gate</text>
   <path
      class="line-hpd"
-     d="M 1020,640 H 930 V 404.33879 l -532.47775,-0.57222"
+     d="m 1040.6,547.87219 -0.1611,-143.5334 -642.91665,-0.57222"
      marker-end="url(#arrow-hpd)"
      id="path45"
-     sodipodi:nodetypes="cccc" />
+     sodipodi:nodetypes="ccc" />
   <text
      class="small"
-     x="553.99994"
-     y="395.0499"
-     text-anchor="middle"
+     x="466.3895"
+     y="396"
+     text-anchor="start"
      id="text45"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:124.779;display:inline"
-     transform="translate(-38.338902,-12.588893)"
-     xml:space="preserve"><tspan
-       x="553.99994"
-       y="395.0499"
-       id="tspan11">controlled HPD back<tspan
-   y="395.0499"
-   id="tspan12"> </tspan></tspan><tspan
-       x="553.99994"
-       y="411.2999"
-       id="tspan13">to HDMI IN pin 19</tspan></text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:124.779;display:inline"
+     xml:space="preserve"
+     transform="translate(-7.4388915,20.600008)"><tspan
+       x="466.3895"
+       y="396"
+       id="tspan14">controlled HPD back<tspan
+   y="396"
+   id="tspan15"> </tspan></tspan><tspan
+       x="466.3895"
+       y="412.25"
+       id="tspan16">to HDMI IN pin 19</tspan></text>
   <path
      class="line-ddc"
-     d="M 690,830 V 770 H 465 v -88.58334"
+     d="M 690,830 V 753.40555 H 559.98892 v -89.72779"
      marker-end="url(#arrow-ddc)"
      id="path46"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="572.56665"
-     y="765.97223"
+     x="588.01666"
+     y="766.54443"
      id="text46"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pi I2C to mux</text>
   <path
      class="line-ctrl"
-     d="M 620,830 V 780 H 415 v -99.15556"
+     d="M 620,830 V 780 H 509.98892 l 0,-116.89446"
      marker-end="url(#arrow-ctrl)"
      id="path47"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="424.61667"
-     y="792.84998"
+     x="527.04449"
+     y="792.27777"
      id="text47"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">mux select</text>
   <path
@@ -530,21 +544,22 @@
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="845"
-     y="790"
+     x="831.26666"
+     y="791.71667"
      id="text48"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">source detect</text>
   <path
      class="line-ctrl"
-     d="m 1010,830 v -50 h 125 v -99.15556"
+     d="m 999.12777,830 v -50 h 92.38333 V 661.9611"
      marker-end="url(#arrow-ctrl)"
      id="path49"
      sodipodi:nodetypes="cccc" />
   <text
      class="small"
-     x="1116"
-     y="780"
-     id="text49">HPD control</text>
+     x="1011.8555"
+     y="793.16113"
+     id="text49"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">HPD control</text>
   <rect
      class="note"
      x="90"
