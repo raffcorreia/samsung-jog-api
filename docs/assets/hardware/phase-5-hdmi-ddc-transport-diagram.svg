@@ -24,7 +24,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="1.7475722"
      inkscape:cx="839.16418"
-     inkscape:cy="599.6891"
+     inkscape:cy="462.92794"
      inkscape:window-width="3440"
      inkscape:window-height="1329"
      inkscape:window-x="1792"
@@ -66,11 +66,26 @@
        refX="0"
        refY="8"
        orient="auto"
-       markerUnits="userSpaceOnUse">
+       markerUnits="userSpaceOnUse"
+       viewBox="0 0 20 16"
+       preserveAspectRatio="xMidYMid">
       <path
          d="M0,0 L20,8 L0,16 z"
          fill="#657a2d"
          id="path1" />
+    </marker>
+    <marker
+       id="arrow-ground"
+       markerWidth="20"
+       markerHeight="16"
+       refX="0"
+       refY="8"
+       orient="auto"
+       markerUnits="userSpaceOnUse">
+      <path
+         d="M0,0 L20,8 L0,16 z"
+         fill="#969696"
+         id="path1a" />
     </marker>
     <marker
        id="arrow-ddc"
@@ -251,7 +266,7 @@
      id="rect23" />
   <text
      class="label"
-     x="704.80566"
+     x="714.32129"
      y="491.11667"
      id="text24"
      style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">Custom Hardware</text>
@@ -263,20 +278,20 @@
      id="text25"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:174.485;display:inline"
      xml:space="preserve"
-     transform="translate(-6.8666691,-1.7166673)"><tspan
+     transform="translate(-0.52050781,-1.7166673)"><tspan
        x="800"
        y="510"
-       id="tspan2">Sideband transport only.<tspan
+       id="tspan1">Sideband transport only.<tspan
    y="510"
-   id="tspan3"> </tspan></tspan><tspan
+   id="tspan17"> </tspan></tspan><tspan
        x="800"
        y="526.24997"
-       id="tspan4">High-speed video remains<tspan
+       id="tspan18">High-speed video remains<tspan
    y="526.24997"
-   id="tspan5"> </tspan></tspan><tspan
+   id="tspan19"> </tspan></tspan><tspan
        x="800"
        y="542.49997"
-       id="tspan6">direct pass-through.</tspan></text>
+       id="tspan20">direct pass-through.</tspan></text>
   <rect
      class="logic"
      x="428"
@@ -379,7 +394,7 @@
      id="path36" />
   <text
      class="small"
-     x="659.21118"
+     x="676.86816"
      y="175.98889"
      text-anchor="start"
      id="text37"
@@ -391,17 +406,23 @@
      id="path37" />
   <text
      class="small"
-     x="684.00195"
+     x="701.65894"
      y="205.98889"
      text-anchor="start"
      id="text38"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pin 13 CEC optional pass-through</text>
   <path
      class="line-video"
-     d="M 380.57222,222.98885 1200,221.84441"
-     marker-end="url(#arrow-video)"
+     d="M 380.57222,259.03886 793.10097,258.56421 1200,257.89442"
+     marker-end="url(#arrow-ground)"
      id="path38"
-     sodipodi:nodetypes="cc" />
+     sodipodi:nodetypes="ccc"
+     style="fill:#808080;stroke:#969696;stroke-opacity:1;marker-end:url(#arrow-ground)" />
+  <path
+     d="M 798.27761,258.56421 V 448.07216"
+     marker-end="url(#arrow-ground)"
+     id="path38a"
+     style="fill:none;stroke:#969696;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow-ground)" />
   <text
      class="small"
      x="404"
@@ -410,13 +431,13 @@
      id="text39"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;white-space:pre;inline-size:199.741;display:inline"
      xml:space="preserve"
-     transform="translate(308.36965,-8.0111139)"><tspan
+     transform="translate(251.63769,28.038899)"><tspan
        x="404"
        y="244"
-       id="tspan7">Pin 17 ground reference</tspan></text>
+       id="tspan21">Pin 17 ground reference</tspan></text>
   <path
      class="line-ddc"
-     d="m 381.14444,270.63891 143.84448,0.57222 -1.87448,258.81773"
+     d="m 381.14444,220.28333 143.84448,0.57222 -1.87448,309.17331"
      marker-end="url(#arrow-ddc)"
      id="path39"
      sodipodi:nodetypes="ccc" />
@@ -426,26 +447,26 @@
      y="287.42221"
      id="text40"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:141.852;display:inline"
-     transform="translate(-5.1500018,-2.8611121)"
+     transform="translate(-5.1500018,-53.788908)"
      xml:space="preserve"><tspan
        x="455.12598"
        y="287.42221"
-       id="tspan8">Pins 15-16 source DDC<tspan
+       id="tspan22">Pins 15-16 source DDC<tspan
    y="287.42221"
-   id="tspan9"> </tspan></tspan><tspan
+   id="tspan23"> </tspan></tspan><tspan
        x="455.12598"
        y="303.67221"
-       id="tspan10">into mux</tspan></text>
+       id="tspan24">into mux</tspan></text>
   <path
      class="line-ddc"
-     d="m 559.97222,547.91108 -0.14456,-275.57217 640.17234,0"
+     d="M 559.97222,547.91108 559.82766,221.98333 H 1200"
      marker-end="url(#arrow-ddc)"
      id="path40"
      sodipodi:nodetypes="ccc" />
   <text
      class="small"
      x="987.98334"
-     y="285.17224"
+     y="234.24445"
      id="text41"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pins 15-16 monitor DDC from mux</text>
   <path
@@ -471,18 +492,34 @@
      transform="translate(-27.466676,1.1444448)"><tspan
        x="477.87601"
        y="330"
-       id="tspan11">Pin 18 source +5V path<tspan
+       id="tspan25">Pin 18 source +5V path<tspan
    y="330"
-   id="tspan12"> </tspan></tspan><tspan
+   id="tspan26"> </tspan></tspan><tspan
        x="477.87601"
        y="346.25"
-       id="tspan13">with detect branch</tspan></text>
+       id="tspan27">with detect branch</tspan></text>
   <path
      class="line-hpd"
-     d="m 1217.1667,405.15556 -145.0167,0 0.4611,125.42774"
+     d="M 1217.1667,405.15556 H 1072.15 l 0.4611,125.42774"
      marker-end="url(#arrow-hpd)"
      id="path44"
      sodipodi:nodetypes="ccc" />
+  <text
+     class="small"
+     x="1105.505"
+     y="398"
+     id="text44a"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:139.01"
+     transform="translate(50.927796,19.455562)"
+     xml:space="preserve"><tspan
+       x="1105.505"
+       y="398"
+       id="tspan28">Pin 19 monitor HPD<tspan
+   y="398"
+   id="tspan29"> </tspan></tspan><tspan
+       x="1105.505"
+       y="414.25"
+       id="tspan30">from HDMI OUT</tspan></text>
   <text
      class="small"
      x="972.8111"
@@ -506,12 +543,12 @@
      transform="translate(-7.4388915,20.600008)"><tspan
        x="466.3895"
        y="396"
-       id="tspan14">controlled HPD back<tspan
+       id="tspan31">Pin 19 HPD back to<tspan
    y="396"
-   id="tspan15"> </tspan></tspan><tspan
+   id="tspan32"> </tspan></tspan><tspan
        x="466.3895"
        y="412.25"
-       id="tspan16">to HDMI IN pin 19</tspan></text>
+       id="tspan33">HDMI IN</tspan></text>
   <path
      class="line-ddc"
      d="M 690,830 V 753.40555 H 559.98892 v -89.72779"
