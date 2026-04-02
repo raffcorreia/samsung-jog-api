@@ -179,9 +179,9 @@ For `KEY_ADC2`, the preferred topology is:
 2. input protection resistor on each observed line
 3. optional small RC filter only if noise proves problematic
 4. high-input-impedance rail-to-rail buffer stage
-5. external ADC readable by the Raspberry Pi
+5. external SPI ADC readable by the Raspberry Pi
 
-This keeps the monitor-side loading low, preserves analog visibility, and gives software the raw observations it needs to classify the directional states and later tune thresholds.
+This keeps the monitor-side loading low, preserves analog visibility, and gives software the raw observations it needs to classify the directional states and later tune thresholds. SPI is used instead of I2C to keep the Pi's I2C bus free for DDC/CI communication in Phase 5.
 
 ### Selected `KEY_ADC1` observation path
 
@@ -216,19 +216,21 @@ Phase 3 now locks both the component direction and the first exact part set for 
 `KEY_ADC2` should be observed with:
 
 - a rail-to-rail high-input-impedance analog buffer stage
-- an external ADC
-- a Raspberry Pi software path that reads raw ADC values and maps them into logical states
+- an external SPI ADC
+- a Raspberry Pi software path that reads raw ADC values over SPI and maps them into logical states
 
 Preferred component classes:
 
 - quad or dual rail-to-rail op-amp suitable for unity-gain buffering at `3.3V`
-- external I2C ADC so the Raspberry Pi does not need direct analog input hardware
+- external SPI ADC so the Raspberry Pi does not need direct analog input hardware
 
 Why this direction is selected:
 
 - the Raspberry Pi does not provide native analog inputs
 - `KEY_ADC2` is fundamentally multi-state analog and should stay observable as analog in the first implementation
 - using an external ADC keeps the software model clean while preserving state information
+- SPI is preferred over I2C to keep `SDA`/`SCL` free for DDC/CI monitor communication in Phase 5
+- polling over SPI at sufficient intervals is adequate for human-driven JOG activity — the Pi is not in a sleep-between-events context where interrupt-driven sampling would matter
 
 ### `KEY_ADC1` component direction
 
@@ -285,16 +287,16 @@ Reference examples to evaluate:
 
 Target characteristics:
 
-- I2C interface
-- at least 1 analog channel
+- SPI interface
+- 1 analog channel (only `KEY_ADC2` uses the ADC path)
 - input range compatible with `0V` to `3.3V`
 - enough sample rate for repeated human-driven `JOG` activity and later recording
-- optional `ALERT/RDY` support for interrupt-assisted observation
+- SOIC-8 or equivalent SMD package for JLCPCB assembly
 
 Reference examples to evaluate:
 
-- `ADS1114`
-- similar I2C ADCs with adequate resolution and software support
+- `MCP3201` — 1-channel 12-bit SPI ADC, SOIC-8, well-supported on Raspberry Pi
+- similar single-channel SPI ADCs with adequate resolution and software support
 
 ### Digital input path for `KEY_ADC1` and `KEY_LED`
 
@@ -397,14 +399,14 @@ The Phase 3 observation circuit uses these locked parts:
 | Ref | Part | Package | LCSC | Notes |
 |-----|------|---------|------|-------|
 | U1 | TLV9064IDR | SOIC-14 | C388176 | Quad rail-to-rail op-amp, buffers all three lines + spare |
-| U2 | ADS1115IDGSR | MSOP-10 | C37593 | 16-bit I2C ADC, pin-compatible substitute for ADS1114IDGST (stock) |
+| U2 | MCP3201-CI/SN | SOIC-8 | C511293 | 12-bit SPI ADC, single channel for KEY_ADC2 analog observation |
 | U3 | 74LVC1G17GW | SC-70-5 | C426705 | Schmitt buffer for KEY_ADC1 |
 | U4 | 74LVC1G17GW | SC-70-5 | C426705 | Schmitt buffer for KEY_LED |
 
 Rationale:
 
 - `TLV9064IDR` provides four low-voltage rail-to-rail op-amp channels so the two analog key buses and the LED line can all be buffered while leaving one spare channel
-- `ADS1115IDGSR` keeps `KEY_ADC2` observable as an analog signal through a Pi-friendly `I2C` ADC path. Substituted from `ADS1114IDGST` due to low LCSC stock — pin-compatible MSOP-10, same symbol and pinout, AIN1 tied to GND for single-ended measurement
+- `MCP3201-CI/SN` keeps `KEY_ADC2` observable as an analog signal through a Pi-friendly `SPI` ADC path. Single-channel 12-bit SOIC-8 — right-sized for this design (only one analog channel needed), frees `SDA`/`SCL` entirely for Phase 5 DDC/CI communication. Selected over `MCP3008` (8-channel, overkill) and `MCP3001` (critically low LCSC stock)
 - `74LVC1G17GW` provides a clean digital interpretation stage for buffered `KEY_ADC1` and `KEY_LED`
 
 ## Default Component Values
@@ -414,7 +416,6 @@ The locked passive values and LCSC part numbers for fabrication:
 | Ref | Value | Footprint | LCSC | Purpose |
 |-----|-------|-----------|------|---------|
 | R1, R2, R3 | 10 kΩ 1% | 0402 | C25744 | Series input protection |
-| R4, R5 | 4.7 kΩ 1% | 0402 | C25900 | I2C pull-ups |
 | R6, R7 | 0 Ω | 0402 | C17168 | Optional signal routing jumpers |
 | C1, C2, C3, C4 | 100 nF X5R | 0402 | C307331 | Local decoupling (one per IC) |
 | C5 | 1 µF X5R | 0402 | C52923 | Bulk decoupling on 3.3V rail |
@@ -422,16 +423,20 @@ The locked passive values and LCSC part numbers for fabrication:
 
 All passives are 0402. All LCSC numbers confirmed in-stock at time of order.
 
-## Interrupt-Assisted Observation Note
+R4 and R5 (I2C pull-ups) are removed. The SPI interface of the `MCP3201` does not require pull-up resistors.
 
-`ADS1114` is a better fit for the revised split architecture than the earlier multi-channel `ADS1115` direction.
+## SPI Polling Note
+
+The `MCP3201` uses SPI and has no interrupt or `ALERT/RDY` equivalent. All reads are Pi-initiated.
 
 Important behavior:
 
-- the ADC result is still read over `I2C`
-- `ALERT/RDY` does not carry the measured value
-- `ALERT/RDY` can still be used as an interrupt-assisted notification source for `KEY_ADC2`
-- `KEY_ADC1` and `KEY_LED` can now be surfaced directly as GPIO-level events after buffering and thresholding
+- the ADC result is read over SPI on demand — the Pi sends a conversion request and receives the result in the same transaction
+- `KEY_ADC2` is observed by polling: a background task reads the ADC at a fixed interval and classifies the result
+- `KEY_ADC1` and `KEY_LED` continue to be surfaced as GPIO-level events after buffering and thresholding — unaffected by the ADC interface change
+- polling at 10 ms intervals gives 100 samples per second, which is more than sufficient for human-driven JOG activity
+- the Pi runs a full software stack continuously and is not in a sleep-between-events context where interrupt-driven ADC sampling would provide a meaningful advantage
+- the primary reason for choosing SPI is to keep `SDA`/`SCL` free for Phase 5 DDC/CI communication
 
 ## Phase 3 Deliverable Set
 
@@ -455,6 +460,8 @@ Current Phase 3 approval decision:
 - approve software-side classification of `KEY_ADC2` analog ranges
 - approve digital threshold interpretation for `KEY_ADC1` after buffering
 - approve single-channel ADC direction for `KEY_ADC2` rather than multiplexed ADC observation of both key buses
+- approve SPI ADC (`MCP3201-CI/SN`) in place of I2C ADC (`ADS1115IDGSR`) to preserve `SDA`/`SCL` for Phase 5 DDC/CI communication
+- approve polling-based ADC observation over SPI in place of interrupt-assisted `ALERT/RDY` observation
 
 These decisions are sufficient to proceed into detailed circuit selection and later implementation work.
 
@@ -480,19 +487,30 @@ The earlier broader open items are now narrowed by the selected architecture:
 
 ## Fabrication Files
 
+### Rev A (ADS1115 / I2C — superseded)
+
 KiCad project: `hardware/kicad/phase-3-observation-reva/`
 
 | File | Purpose |
 |------|---------|
-| `phase-3-observation-reva.kicad_sch` | Schematic (topology frozen, all fields updated) |
-| `phase-3-observation-reva.kicad_pcb` | PCB (components placed, 3D models linked) |
-| `production/phase-3-observation-reva.zip` | Gerbers for JLCPCB fabrication |
-| `production/bom.csv` | JLCPCB-format BOM with LCSC part numbers |
-| `production/positions.csv` | JLCPCB-format CPL with corrected IC rotations |
+| `phase-3-observation-reva.kicad_sch` | Schematic (Rev A, ADS1115-based, I2C) |
+| `phase-3-observation-reva.kicad_pcb` | PCB (Rev A) |
+| `production/phase-3-observation-reva.zip` | Gerbers for JLCPCB fabrication (Rev A) |
+| `production/bom.csv` | JLCPCB-format BOM with LCSC part numbers (Rev A) |
+| `production/positions.csv` | JLCPCB-format CPL with corrected IC rotations (Rev A) |
 
-Generated with KiCad 10 + Fabrication Toolkit plugin. IC rotation corrections applied automatically (U1/U2 → 270°, U3/U4 → 180°).
+### Rev B (MCP3201 / SPI — current)
 
-J1, J2, J3 are THT pin headers — solder manually after board arrives. C6, C7, and C8 are populated.
+KiCad project: `hardware/kicad/phase-3-observation-revb/` — **schematic to be redrawn in KiCad**
+
+The `MCP3201-CI/SN` (SOIC-8) has a different package and pinout from the `ADS1115IDGSR` (MSOP-10) it replaces. The Rev B schematic cannot be produced by editing the Rev A file in place — it requires a new KiCad schematic.
+
+Key schematic changes from Rev A to Rev B:
+
+- `U2`: replace `ADS1115IDGSR` (MSOP-10, I2C) with `MCP3201-CI/SN` (SOIC-8, SPI)
+- remove `R4` and `R5` (I2C pull-ups — not needed for SPI)
+- replace `I2C_SDA`, `I2C_SCL`, `ADC_ALERT` net labels with `SPI_MISO`, `SPI_CLK`, `SPI_CS`
+- update `J2` host header: replace `SDA`, `SCL`, `ADC_ALERT` pins with `SPI_MISO`, `SPI_CLK`, `SPI_CS`
 
 ## Schematic Corrections (Post-Review)
 
@@ -532,11 +550,11 @@ C1 (100 nF decoupling) was moved from its original position near U1E to sit adja
 
 ## Current Status
 
-Phase 3 is complete. Fabrication files are ready for JLCPCB order.
+Phase 3 Rev B is in progress. ADC changed from I2C (`ADS1115IDGSR`) to SPI (`MCP3201-CI/SN`) to preserve `SDA`/`SCL` for Phase 5 DDC/CI communication.
 
 - architecture selected and locked: Candidate C hybrid
-- schematic corrected and reviewed (see Schematic Corrections above)
-- PCB components placed, 3D models linked
-- Gerbers, BOM, and CPL generated and validated against JLCPCB upload
-- remaining work: board arrives → bench verification per the verification plan above
-- copper routing and GND pour not done — this is an observation-only board with short signal paths; routing is deferred to physical bring-up if needed for a rev B
+- Rev A schematic corrected and reviewed (see Schematic Corrections above)
+- Rev B documentation and BOM updated
+- Rev B KiCad schematic: **pending** — requires new schematic in KiCad (different package and pinout, cannot be edited in place from Rev A)
+- Rev B PCB: pending schematic completion
+- Rev B Gerbers, BOM, and CPL: pending PCB completion
