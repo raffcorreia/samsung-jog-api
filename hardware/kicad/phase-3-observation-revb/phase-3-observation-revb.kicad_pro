@@ -473,7 +473,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "phase-3-observation-reva.kicad_pro",
+    "filename": "phase-3-observation-revb.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -633,8 +633,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "phase-3-observation-reva.kicad_sch",
-        "name": "phase-3-observation-reva",
+        "filename": "phase-3-observation-revb.kicad_sch",
+        "name": "phase-3-observation-revb",
         "uuid": "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
       }
     ],
