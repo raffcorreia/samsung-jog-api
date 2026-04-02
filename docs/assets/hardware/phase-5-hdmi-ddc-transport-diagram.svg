@@ -333,21 +333,21 @@
      y="588.83337"
      text-anchor="middle"
      id="text31"
-     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">HPD Buffer / Gate</text>
+     style="font-style:normal;font-variant:normal;font-weight:700;font-stretch:normal;font-size:20px;line-height:normal;font-family:Arial, sans-serif">HPD Sense Tap</text>
   <text
      class="body"
      x="1049.5721"
      y="614.83337"
      text-anchor="middle"
      id="text32"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">monitor HPD in,</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">Pin 19 direct</text>
   <text
      class="body"
      x="1049.5721"
      y="636.83337"
      text-anchor="middle"
      id="text33"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">controlled HPD out</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:normal;font-family:Arial, sans-serif">pass-through + sense</text>
   <rect
      class="logic"
      x="695"
@@ -380,7 +380,7 @@
      x="800"
      y="888"
      text-anchor="middle"
-     id="text36">I2C for DDC/CI, GPIO for mux select, HPD control,</text>
+     id="text36">I2C for DDC/CI, GPIO for mux select, HPD sense,</text>
   <text
      class="body"
      x="800"
@@ -500,55 +500,45 @@
        id="tspan27">with detect branch</tspan></text>
   <path
      class="line-hpd"
-     d="M 1217.1667,405.15556 H 1072.15 l 0.4611,125.42774"
+     d="M 1200,404.33879 H 397.52225"
      marker-end="url(#arrow-hpd)"
      id="path44"
-     sodipodi:nodetypes="ccc" />
+     sodipodi:nodetypes="cc" />
   <text
      class="small"
-     x="1105.505"
+     x="1036"
      y="398"
      id="text44a"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:139.01"
-     transform="translate(50.927796,19.455562)"
+     transform="translate(15.711162,20.027784)"
      xml:space="preserve"><tspan
-       x="1105.505"
+       x="1036"
        y="398"
-       id="tspan28">Pin 19 monitor HPD<tspan
+     id="tspan28">Pin 19 monitor HPD<tspan
    y="398"
    id="tspan29"> </tspan></tspan><tspan
-       x="1105.505"
+       x="1036"
        y="414.25"
        id="tspan30">from HDMI OUT</tspan></text>
   <text
      class="small"
-     x="972.8111"
-     y="332.8389"
+     x="705"
+     y="392"
      id="text44"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pin 19 monitor HPD into gate</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">Pin 19 HPD direct pass-through</text>
   <path
      class="line-hpd"
-     d="m 1040.6,547.87219 -0.1611,-143.5334 -642.91665,-0.57222"
+     d="M 1040.6,404.33879 V 547.87219"
      marker-end="url(#arrow-hpd)"
      id="path45"
-     sodipodi:nodetypes="ccc" />
+     sodipodi:nodetypes="cc" />
   <text
      class="small"
-     x="466.3895"
-     y="396"
+     x="1063"
+     y="472"
      text-anchor="start"
      id="text45"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif;text-align:center;text-anchor:middle;white-space:pre;inline-size:124.779;display:inline"
-     xml:space="preserve"
-     transform="translate(-7.4388915,20.600008)"><tspan
-       x="466.3895"
-       y="396"
-       id="tspan31">Pin 19 HPD back to<tspan
-   y="396"
-   id="tspan32"> </tspan></tspan><tspan
-       x="466.3895"
-       y="412.25"
-       id="tspan33">HDMI IN</tspan></text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">HPD sense tap</text>
   <path
      class="line-ddc"
      d="M 690,830 V 753.40555 H 559.98892 v -89.72779"
@@ -587,7 +577,7 @@
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">source detect</text>
   <path
      class="line-ctrl"
-     d="m 999.12777,830 v -50 h 92.38333 V 661.9611"
+     d="M 1091.5111,661.9611 V 780 H 999.12777 v 50"
      marker-end="url(#arrow-ctrl)"
      id="path49"
      sodipodi:nodetypes="cccc" />
@@ -596,7 +586,7 @@
      x="1011.8555"
      y="793.16113"
      id="text49"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">HPD control</text>
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:13px;line-height:normal;font-family:Arial, sans-serif">HPD sense</text>
   <rect
      class="note"
      x="90"
@@ -613,7 +603,7 @@
      class="body"
      x="115"
      y="912"
-     id="text51">Pins 1-12, pin 13, and pin 17</text>
+     id="text51">Pins 1-12, pin 13, pin 17, and pin 19</text>
   <rect
      class="note"
      x="1250"
@@ -630,7 +620,7 @@
      class="body"
      x="1275"
      y="912"
-     id="text53">Pins 15-16, pin 18, and pin 19</text>
+     id="text53">Pins 15-16 and pin 18</text>
   <text
      class="legend"
      x="350"

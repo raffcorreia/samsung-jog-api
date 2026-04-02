@@ -102,6 +102,12 @@ The approved Phase 5 direction is:
 - preserve ordinary source access to monitor `EDID`
 - plus careful `HPD` handling
 
+With the current preferred interpretation:
+
+- `pin 18` remains source-provided `+5V` and is treated as pass-through plus source-presence sensing
+- `pin 19` `HPD` is treated as a monitor-to-source signal and defaults to pass-through plus observation
+- active `HPD` conditioning or source-presence assist remains optional follow-up hardware, not a Phase 5 assumption
+
 This means the project now assumes a smart sideband intermediary rather than:
 
 - a passive `DDC` tap
@@ -115,6 +121,10 @@ The selected operating model is:
 1. when no external source is attached, the Pi may own monitor-side `DDC`
 2. during ordinary external-source use, the external source normally owns monitor-side `DDC`
 3. when the Pi needs a monitor transaction, it temporarily takes monitor-side `DDC`, performs a short query or command, and then returns ownership
+
+Important caveat:
+
+- item 1 is still a validation target rather than a guaranteed fact, because the monitor may not expose usable `HDMI`-side `DDC` when no external source is presenting source-side `pin 18` `+5V`
 
 This model assumes:
 
@@ -177,6 +187,8 @@ The project now has:
 
 - exact `DDC` switch or mux part selection
 - exact `HPD` electrical strategy
+- whether source-side `pin 18` pass-through is sufficient for all intended Pi-side `DDC` use cases
+- whether the monitor answers `HDMI`-side `DDC` with no external source attached and no source-side `pin 18` `+5V` present
 - whether the transport hardware is a separate board or part of the integrated controller board
 - real-world disruption testing with a normal external computer attached
 - detailed verification plan for takeover timing and recovery behavior

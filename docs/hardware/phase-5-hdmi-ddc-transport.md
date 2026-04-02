@@ -35,6 +35,12 @@ These lines matter because `DDC` is already used by the source and monitor for:
 - ordinary monitor-side `DDC/CI`
 - other source/display coordination that may occur after initial connect
 
+Practical direction notes for these lines:
+
+- `pin 18` is source-provided `+5V`, so the clean default is pass-through plus source-presence sensing rather than having the Pi permanently impersonate an `HDMI` source
+- `pin 19` `HPD` is a monitor-to-source signal, so the clean default is pass-through plus Pi-side observation unless later testing proves active `HPD` conditioning is required
+- the project must not assume the monitor will answer `HDMI`-side `DDC` normally when no source-side `+5V` is present on `pin 18`
+
 ## Why Passive Tapping Is Rejected
 
 A raw parallel connection between:
@@ -114,6 +120,12 @@ The selected Phase 5 direction is:
 - preserve ordinary source access to monitor `EDID` over the normal path
 - plus careful `HPD` handling
 
+Current implementation bias inside that direction:
+
+- keep `pin 18` as pass-through and use it for source-presence sensing
+- treat `pin 19` as direct monitor-to-source `HPD` pass-through with observation first
+- only add active `HPD` conditioning or source-presence assist circuitry if later validation shows it is required
+
 This is best described as a smart `HDMI` intermediary for the `DDC` and presence sideband signals, not as a passive tap and not as a full `HDMI` video proxy.
 
 ## Reference Diagram
@@ -174,6 +186,10 @@ This means the long-term hardware design is not just "add an `HDMI` connector to
 - Pi may query the monitor freely
 - Pi may issue supported `DDC/CI` commands
 
+Important caveat:
+
+- this remains a validation target, not a guaranteed assumption, because the `CJ791` may or may not expose usable `HDMI`-side `DDC` when no external source is presenting `pin 18` `+5V`
+
 ### State 2: External computer attached, normal operation
 
 - computer owns monitor-side `DDC`
@@ -233,6 +249,7 @@ Later implementation should verify:
 - external computer can still query the monitor's `EDID`
 - ordinary display bring-up works through the intermediary
 - Pi can take monitor-side `DDC` ownership and successfully complete short transactions
+- whether the monitor answers `HDMI`-side `DDC` when no external source is attached and no source-side `pin 18` `+5V` is present
 - takeover and release do not cause unacceptable display re-enumeration
 - `HPD` behavior remains stable during normal operation
 - the monitor's practical `HDMI` input remains usable for a real external source
