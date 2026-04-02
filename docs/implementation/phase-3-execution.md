@@ -149,17 +149,53 @@ Cons:
 
 - mixed implementation paths
 - slightly more board complexity than a fully digital approach
+- requires I2C or SPI bus, which may conflict with Phase 5 DDC/CI communication needs
+
+### Candidate D: Comparator-Based One-Hot Observation
+
+Observe `KEY_ADC2` through the existing op-amp buffer stage, then feed the buffered signal into a quad comparator with a resistor-ladder reference network. Each comparator threshold sits in the middle of one of the four voltage gaps between states. The four comparator outputs connect directly to four Raspberry Pi GPIO pins.
+
+The five states map to four GPIO pins because idle is the absence of any active state:
+
+| State | Voltage | GPIO |
+|-------|---------|------|
+| idle | 3.29V | all low |
+| left | 2.88V | one pin high |
+| right | 2.16V | one pin high |
+| down | 1.35V | one pin high |
+| up | 0.01V | one pin high |
+
+The four comparators naturally produce a thermometer code. True one-pin-per-state output requires a small additional logic stage (e.g. `74HC86` quad XOR or equivalent AND-with-invert decode between adjacent comparator outputs). Without the logic stage, the Pi reads four GPIO pins and decodes the thermometer pattern in software, which is a trivial lookup.
+
+This approach requires a rail-to-rail quad comparator, because the `KEY_ADC2` idle voltage of `3.29V` is at the rail. The `LM339` is not suitable here. The `TLV3404` or equivalent rail-to-rail comparator is required.
+
+Pros:
+
+- no ADC required — eliminates I2C and SPI bus dependency entirely
+- no CPU polling loop — Pi reacts to GPIO edge interrupts, zero software overhead between events
+- hardware classifies the state continuously with no software involvement
+- frees both `SDA`/`SCL` and SPI pins for Phase 5 DDC/CI use
+- large voltage gaps between states give ample threshold margin — thresholds are stable given the passive resistor ladder source
+- `KEY_ADC1` and `KEY_LED` paths are unaffected
+
+Cons:
+
+- thresholds are set in hardware (resistor values) rather than in software constants — requires resistor changes if thresholds need tuning
+- adds a resistor ladder and one IC (quad comparator); optionally a second small IC for one-hot decode
+- Candidate A was originally rejected partly on the grounds of hard-coding thresholds too early — that concern is substantially reduced now that the voltage gaps are measured and confirmed large
 
 ## Current Recommendation
 
-The current recommended direction is `Candidate C`.
+The current selected direction is `Candidate C`, but `Candidate D` should be strongly considered before committing to a Rev B board.
 
-Rationale:
+Rationale for reconsidering:
 
-- `KEY_ADC2` remains a true multi-state analog input and should stay observable as analog during the first hardware implementation
-- the latest powered measurements show that `KEY_ADC1` center collapses very close to ground and is strongly separable from idle
-- `KEY_LED` already looks suitable for high-or-low observation after a high-impedance probe stage
-- this keeps analog complexity only where it is justified and makes `KEY_ADC1` and `KEY_LED` easier to surface as GPIO-level events
+- Phase 5 DDC/CI communication requires the Pi's I2C bus — any ADC on that bus competes for the same pins
+- `KEY_ADC2` has only five states with voltage gaps of `410 mV` to `1340 mV` — the original concern about hard-coding thresholds too early no longer applies given these confirmed measurements
+- Candidate D eliminates ADC, SPI, and I2C dependencies from the observation path entirely, at the cost of four GPIO pins and one additional IC — both of which are acceptable given available GPIO headroom
+- the op-amp buffer stage already isolates the comparator and resistor ladder from the monitor signal, so the resistor ladder introduces no loading risk
+
+The Candidate C path (with SPI ADC) is documented in branch `phase-3-revb-spi-adc` as a fallback if Candidate D is not adopted.
 
 ## Selected Observation Architecture
 
