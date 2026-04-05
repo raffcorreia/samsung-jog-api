@@ -52,6 +52,26 @@ Confirmed useful result for future hardware extensions:
 
 - monitor volume control over `VCP 0x62` works and is a good candidate for a future physical volume knob on the control deck
 
+## LED-correlated command acceptance observations
+
+The front-panel `LED` appears to act as a practical acceptance cue for some monitor actions, even when the visible effect takes longer to complete.
+
+Observed behavior:
+
+- when volume is changed over `VCP 0x62`, the `LED` blinks when the monitor accepts and applies the new value
+- if volume changes are stepped slowly but still within the monitor's coalescing window, intermediate steps may not trigger a blink because the monitor has not yet committed the change
+- once the volume reaches `100`, the `LED` does not blink immediately; instead the blink arrives about `1-2s` later, which matches the same delay observed when the monitor commits ordinary volume changes after input activity stops
+- when the input is changed, the `LED` blinks first as an acceptance signal and the monitor then begins the actual source-transition process
+
+Current interpretation:
+
+- `LED` blink behavior is useful as an immediate local signal that a command was accepted
+- for volume control, the blink appears to correlate with delayed commit rather than with the instant a step request is sent
+- for input changes, the blink still appears to correlate more closely with command acceptance than with completion of the full visible workflow
+- this makes `LED` observation potentially useful for pacing repeated commands and detecting boundary conditions during interactive control flows
+
+These observations should be treated as behavioral findings from the current unit and should be expanded later with dated transcripts, input-specific notes, and timing measurements.
+
 Future investigation:
 
 - whether `DDC` power control or a `JOG`-driven power-off workflow can turn the monitor off while still preserving power to attached `USB` or `Thunderbolt` devices
