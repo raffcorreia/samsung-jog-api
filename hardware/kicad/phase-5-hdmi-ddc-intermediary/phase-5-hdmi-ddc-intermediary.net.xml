@@ -1,0 +1,3035 @@
+(export
+	(version "E")
+	(design
+		(source "/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-5-hdmi-ddc-intermediary/phase-5-hdmi-ddc-intermediary.kicad_sch")
+		(date "2026-04-03T10:56:49")
+		(tool "Eeschema 10.0.0")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title "Phase 5 HDMI DDC Intermediary")
+				(company "samsung-jog-api")
+				(rev "A")
+				(date)
+				(source "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(comment
+					(number "1")
+					(value "Attached Pi listener/slave DDC architecture with source disconnect and monitor +5V mux")
+				)
+				(comment
+					(number "2")
+					(value "JLC-oriented first-pass schematic using TCA4307, PCA9306, and TPS2113A")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "C1")
+			(value "100n")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Samsung Electro-Mechanics")
+				(field
+					(name "MPN") "CL10B104KA8NNNC")
+				(field
+					(name "JLCPCB Part") "C14663")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "C_Simple")
+				(description "Capacitor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Samsung Electro-Mechanics")
+			)
+			(property
+				(name "MPN")
+				(value "CL10B104KA8NNNC")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000341")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C2")
+			(value "100n")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Samsung Electro-Mechanics")
+				(field
+					(name "MPN") "CL10B104KA8NNNC")
+				(field
+					(name "JLCPCB Part") "C14663")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "C_Simple")
+				(description "Capacitor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Samsung Electro-Mechanics")
+			)
+			(property
+				(name "MPN")
+				(value "CL10B104KA8NNNC")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000344")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C3")
+			(value "100n")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Samsung Electro-Mechanics")
+				(field
+					(name "MPN") "CL10B104KA8NNNC")
+				(field
+					(name "JLCPCB Part") "C14663")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "C_Simple")
+				(description "Capacitor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Samsung Electro-Mechanics")
+			)
+			(property
+				(name "MPN")
+				(value "CL10B104KA8NNNC")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000347")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C4")
+			(value "100n")
+			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Samsung Electro-Mechanics")
+				(field
+					(name "MPN") "CL10B104KA8NNNC")
+				(field
+					(name "JLCPCB Part") "C14663")
+				(field
+					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "C_Simple")
+				(description "Capacitor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Samsung Electro-Mechanics")
+			)
+			(property
+				(name "MPN")
+				(value "CL10B104KA8NNNC")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C14663")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000350")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "HDMI_SOURCE")
+			(footprint "Connector_Video:HDMI_A_Amphenol_10029449-x01xLF_Horizontal")
+			(fields
+				(field
+					(name "Manufacturer") "Amphenol ICC")
+				(field
+					(name "MPN") "10029449-111RLF")
+				(field
+					(name "JLCPCB Part") "C427307")
+				(field
+					(name "Footprint") "Connector_Video:HDMI_A_Amphenol_10029449-x01xLF_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "HDMI_A_Simple")
+				(description "HDMI Type A receptacle symbol for sideband intermediary board")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Amphenol ICC")
+			)
+			(property
+				(name "MPN")
+				(value "10029449-111RLF")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C427307")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000201")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "SH")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J2")
+			(value "HDMI_MONITOR")
+			(footprint "Connector_Video:HDMI_A_Amphenol_10029449-x01xLF_Horizontal")
+			(fields
+				(field
+					(name "Manufacturer") "Amphenol ICC")
+				(field
+					(name "MPN") "10029449-111RLF")
+				(field
+					(name "JLCPCB Part") "C427307")
+				(field
+					(name "Footprint") "Connector_Video:HDMI_A_Amphenol_10029449-x01xLF_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "HDMI_A_Simple")
+				(description "HDMI Type A receptacle symbol for sideband intermediary board")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Amphenol ICC")
+			)
+			(property
+				(name "MPN")
+				(value "10029449-111RLF")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C427307")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000231")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "SH")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "16")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "19")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J3")
+			(value "PI_HOST_CTRL")
+			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical")
+			(fields
+				(field
+					(name "Manufacturer") "Generic")
+				(field
+					(name "Assembly") "Manual")
+				(field
+					(name "Footprint") "Connector_PinHeader_2.54mm:PinHeader_1x12_P2.54mm_Vertical")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "Conn_01x12_Simple")
+				(description "Generic 1x12 connector")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Generic")
+			)
+			(property
+				(name "Assembly")
+				(value "Manual")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000261")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "Q1")
+			(value "2N7002")
+			(footprint "Package_TO_SOT_SMD:SOT-23")
+			(fields
+				(field
+					(name "Manufacturer") "TECH PUBLIC")
+				(field
+					(name "MPN") "2N7002")
+				(field
+					(name "JLCPCB Part") "C28646312")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "NMOS_GSD")
+				(description "N-channel MOSFET")
+			)
+			(property
+				(name "Manufacturer")
+				(value "TECH PUBLIC")
+			)
+			(property
+				(name "MPN")
+				(value "2N7002")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C28646312")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000301")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R1")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000305")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R2")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000308")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R3")
+			(value "10k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "TyoHM")
+				(field
+					(name "MPN") "RMC_0603_10K_JN")
+				(field
+					(name "JLCPCB Part") "C5362358")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "TyoHM")
+			)
+			(property
+				(name "MPN")
+				(value "RMC_0603_10K_JN")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C5362358")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000311")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R4")
+			(value "4.7k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-074K7L")
+				(field
+					(name "JLCPCB Part") "C99782")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-074K7L")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C99782")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000314")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R5")
+			(value "4.7k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-074K7L")
+				(field
+					(name "JLCPCB Part") "C99782")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-074K7L")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C99782")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000317")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R6")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000320")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R7")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000323")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R8")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000326")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R9")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000329")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R10")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000332")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R11")
+			(value "100k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-07100KL")
+				(field
+					(name "JLCPCB Part") "C25803")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-07100KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C25803")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000335")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R12")
+			(value "1k")
+			(footprint "Resistor_SMD:R_0603_1608Metric")
+			(fields
+				(field
+					(name "Manufacturer") "Yageo")
+				(field
+					(name "MPN") "RC0603FR-071KL")
+				(field
+					(name "JLCPCB Part") "C22548")
+				(field
+					(name "Footprint") "Resistor_SMD:R_0603_1608Metric")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "R_Simple")
+				(description "Resistor")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Yageo")
+			)
+			(property
+				(name "MPN")
+				(value "RC0603FR-071KL")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C22548")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000338")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U1")
+			(value "TCA4307DGKR")
+			(footprint "Package_SO:MSOP-8_3x3mm_P0.65mm")
+			(fields
+				(field
+					(name "Manufacturer") "Texas Instruments")
+				(field
+					(name "MPN") "TCA4307DGKR")
+				(field
+					(name "JLCPCB Part") "C880333")
+				(field
+					(name "Footprint") "Package_SO:MSOP-8_3x3mm_P0.65mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "TCA4307DGKR")
+				(description "Hot-swappable I2C buffer with bus isolation and READY output")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "MPN")
+				(value "TCA4307DGKR")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C880333")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000274")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U2")
+			(value "PCA9306DCTR")
+			(footprint "Package_TO_SOT_SMD:SOT-23-8")
+			(fields
+				(field
+					(name "Manufacturer") "Texas Instruments")
+				(field
+					(name "MPN") "PCA9306DCTR")
+				(field
+					(name "JLCPCB Part") "C123752")
+				(field
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23-8")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "PCA9306")
+				(description "Dual bidirectional I2C voltage level translator")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "MPN")
+				(value "PCA9306DCTR")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C123752")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000283")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U3")
+			(value "TPS2113APWR")
+			(footprint "Package_SO:TSSOP-8_4.4x3mm_P0.65mm")
+			(fields
+				(field
+					(name "Manufacturer") "Texas Instruments")
+				(field
+					(name "MPN") "TPS2113APWR")
+				(field
+					(name "JLCPCB Part") "C130052")
+				(field
+					(name "Footprint") "Package_SO:TSSOP-8_4.4x3mm_P0.65mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Custom")
+				(part "TPS2113APWR")
+				(description "Automatic 2-input power mux with EN, VSNS, ILIM, and STAT")
+			)
+			(property
+				(name "Manufacturer")
+				(value "Texas Instruments")
+			)
+			(property
+				(name "MPN")
+				(value "TPS2113APWR")
+			)
+			(property
+				(name "JLCPCB Part")
+				(value "C130052")
+			)
+			(property
+				(name "Sheetname")
+				(value "")
+			)
+			(property
+				(name "Sheetfile")
+				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "55555555-0000-4000-8000-000000000292")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Custom")
+			(part "C_Simple")
+			(description "Capacitor")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "C")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Capacitor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "Conn_01x12_Simple")
+			(description "Generic 1x12 connector")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "Conn_01x12")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Generic 1x12 connector")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "HDMI_A_Simple")
+			(description "HDMI Type A receptacle symbol for sideband intermediary board")
+			(fields
+				(field
+					(name "Reference") "J")
+				(field
+					(name "Value") "HDMI_A")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "HDMI Type A receptacle symbol for sideband intermediary board")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "2")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "3")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "4")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "5")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "6")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "7")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "8")
+					(type "passive")
+				)
+				(pin
+					(num "9")
+					(name "9")
+					(type "passive")
+				)
+				(pin
+					(num "10")
+					(name "10")
+					(type "passive")
+				)
+				(pin
+					(num "11")
+					(name "11")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "12")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "13")
+					(type "passive")
+				)
+				(pin
+					(num "14")
+					(name "14")
+					(type "passive")
+				)
+				(pin
+					(num "15")
+					(name "15")
+					(type "passive")
+				)
+				(pin
+					(num "16")
+					(name "16")
+					(type "passive")
+				)
+				(pin
+					(num "17")
+					(name "17")
+					(type "passive")
+				)
+				(pin
+					(num "18")
+					(name "18")
+					(type "passive")
+				)
+				(pin
+					(num "19")
+					(name "19")
+					(type "passive")
+				)
+				(pin
+					(num "SH")
+					(name "SH")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "NMOS_GSD")
+			(description "N-channel MOSFET")
+			(fields
+				(field
+					(name "Reference") "Q")
+				(field
+					(name "Value") "2N7002")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "N-channel MOSFET")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "G")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "D")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "S")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "PCA9306")
+			(description "Dual bidirectional I2C voltage level translator")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "PCA9306")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Dual bidirectional I2C voltage level translator")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "VREF1")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "SCL1")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "SDA1")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "SDA2")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "SCL2")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "VREF2")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "EN")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "R_Simple")
+			(description "Resistor")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Resistor")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "~")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "~")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "TCA4307DGKR")
+			(description "Hot-swappable I2C buffer with bus isolation and READY output")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TCA4307DGKR")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Hot-swappable I2C buffer with bus isolation and READY output")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "EN")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "SCLOUT")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "SCLIN")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "READY")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "SDAIN")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "SDAOUT")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "VCC")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Custom")
+			(part "TPS2113APWR")
+			(description "Automatic 2-input power mux with EN, VSNS, ILIM, and STAT")
+			(fields
+				(field
+					(name "Reference") "U")
+				(field
+					(name "Value") "TPS2113APWR")
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description") "Automatic 2-input power mux with EN, VSNS, ILIM, and STAT")
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "IN1")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "OUT")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "IN2")
+					(type "passive")
+				)
+				(pin
+					(num "4")
+					(name "GND")
+					(type "passive")
+				)
+				(pin
+					(num "5")
+					(name "ILIM")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "VSNS")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "EN")
+					(type "passive")
+				)
+				(pin
+					(num "8")
+					(name "STAT")
+					(type "passive")
+				)
+			)
+		)
+	)
+	(libraries)
+	(nets
+		(net
+			(code "1")
+			(name "/+3V3_PI")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "R3")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "2")
+				(pinfunction "VREF1_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "2")
+			(name "/+5V_PI")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "R1")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R4")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "VCC_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "7")
+				(pinfunction "VREF2_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "EN_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "3")
+				(pinfunction "IN2_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "3")
+			(name "/CEC")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "13")
+				(pinfunction "13_13")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "4")
+			(name "/DDC_READY")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "R3")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "5")
+				(pinfunction "READY_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/GND")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C3")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "C4")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "17")
+				(pinfunction "17_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "SH")
+				(pinfunction "SH_SH")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "11")
+				(pinfunction "11_11")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "17")
+				(pinfunction "17_17")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "SH")
+				(pinfunction "SH_SH")
+				(pintype "passive")
+			)
+			(node
+				(ref "J3")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q1")
+				(pin "3")
+				(pinfunction "S_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R12")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R7")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "GND_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "1")
+				(pinfunction "GND_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "4")
+				(pinfunction "GND_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "6")
+			(name "/HDMI_5V_MON")
+			(class "Default")
+			(node
+				(ref "C4")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "OUT_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "7")
+			(name "/HDMI_5V_SRC")
+			(class "Default")
+			(node
+				(ref "C3")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "18")
+				(pinfunction "18_18")
+				(pintype "passive")
+			)
+			(node
+				(ref "R10")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "IN1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "8")
+			(name "/HPD_MON_SRC")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "19")
+				(pinfunction "19_19")
+				(pintype "passive")
+			)
+			(node
+				(ref "R8")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "9")
+			(name "/HPD_SENSE")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "2")
+				(pinfunction "2_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R8")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R9")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "10")
+			(name "/ILIM_SET")
+			(class "Default")
+			(node
+				(ref "R12")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "5")
+				(pinfunction "ILIM_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "11")
+			(name "/MON_5V_DISABLE")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "R11")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "7")
+				(pinfunction "EN_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "12")
+			(name "/PIN18_STAT")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "8")
+				(pinfunction "STAT_8")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "13")
+			(name "/PI_DDC_DISC_REQ")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "Q1")
+				(pin "1")
+				(pinfunction "G_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R2")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "14")
+			(name "/PI_SCL")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "3")
+				(pinfunction "SCL1_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "15")
+			(name "/PI_SDA")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "8")
+				(pinfunction "8_8")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "SDA1_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "16")
+			(name "/RESERVED_GPIO")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "17")
+			(name "/SCL_DDC")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "R4")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "2")
+				(pinfunction "SCLOUT_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "6")
+				(pinfunction "SCL2_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "18")
+			(name "/SCL_SRC")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "15")
+				(pinfunction "15_15")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "3")
+				(pinfunction "SCLIN_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "19")
+			(name "/SDA_DDC")
+			(class "Default")
+			(node
+				(ref "J2")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "R5")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "7")
+				(pinfunction "SDAOUT_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "5")
+				(pinfunction "SDA2_5")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "20")
+			(name "/SDA_SRC")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "16")
+				(pinfunction "16_16")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "6")
+				(pinfunction "SDAIN_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "21")
+			(name "/SRC_5V_SENSE")
+			(class "Default")
+			(node
+				(ref "J3")
+				(pin "5")
+				(pinfunction "5_5")
+				(pintype "passive")
+			)
+			(node
+				(ref "R6")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "R7")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "22")
+			(name "/TCA4307_EN")
+			(class "Default")
+			(node
+				(ref "Q1")
+				(pin "2")
+				(pinfunction "D_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "R1")
+				(pin "1")
+				(pinfunction "~_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "1")
+				(pinfunction "EN_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "23")
+			(name "/TMDS0_N")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "9")
+				(pinfunction "9_9")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "24")
+			(name "/TMDS0_P")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "7")
+				(pinfunction "7_7")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "25")
+			(name "/TMDS1_N")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "6")
+				(pinfunction "6_6")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "26")
+			(name "/TMDS1_P")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "4")
+				(pinfunction "4_4")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "27")
+			(name "/TMDS2_N")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "3")
+				(pinfunction "3_3")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "28")
+			(name "/TMDS2_P")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "1")
+				(pinfunction "1_1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "29")
+			(name "/TMDSCLK_N")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "12")
+				(pinfunction "12_12")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "30")
+			(name "/TMDSCLK_P")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "10")
+				(pinfunction "10_10")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "31")
+			(name "/UTILITY")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+			(node
+				(ref "J2")
+				(pin "14")
+				(pinfunction "14_14")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "32")
+			(name "/VSNS_SET")
+			(class "Default")
+			(node
+				(ref "R10")
+				(pin "2")
+				(pinfunction "~_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U3")
+				(pin "6")
+				(pinfunction "VSNS_6")
+				(pintype "passive")
+			)
+		)
+	)
+)
