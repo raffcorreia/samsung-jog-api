@@ -228,6 +228,7 @@ Define and validate how the final system preserves practical use of the monitor'
 - evaluation of shared or multiplexed `HDMI` / `DDC` access
 - impact on final controller-board interfaces
 - custom hardware needed beyond the core controller board, if any
+- deck-display selection tied to the final hardware connector and enclosure assumptions
 
 ### Tasks
 
@@ -236,6 +237,9 @@ Define and validate how the final system preserves practical use of the monitor'
 - evaluate candidate approaches for shared or multiplexed `HDMI` / `DDC` access
 - determine how the chosen transport approach affects connectors, harnessing, and board interfaces
 - identify any additional custom hardware required beyond the controller board itself
+- compare practical Raspberry Pi-compatible touch-display options from relevant vendors
+- select the deck display that best fits the project's size, mounting, interface, and integration goals
+- document the chosen display and preserve the comparison artifact in the repo
 - document the selected transport direction and its rationale
 - define how the chosen transport approach will be verified later in implementation
 
@@ -244,12 +248,15 @@ Define and validate how the final system preserves practical use of the monitor'
 - approved `HDMI` / `DDC` communication direction for the final system
 - documented rationale for the chosen transport approach
 - defined interface impact on the integrated hardware design
+- approved deck-display selection for the control deck
+- preserved display-comparison artifact for later reference
 - communication verification approach
 
 ### Exit criteria
 
 - the project has an approved direction for preserving practical `HDMI` use while maintaining `DDC` communication
 - the hardware plan no longer depends on permanent `HDMI` sacrifice as a final-system assumption
+- the project has an approved deck-display choice rather than only generic target characteristics
 
 ## Phase 6: Integrated Controller Board Design
 

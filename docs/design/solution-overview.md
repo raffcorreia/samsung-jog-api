@@ -153,9 +153,9 @@ This prevents the project from presenting fake higher-level controls before the 
 
 ### Display target
 
-The initial design target is `1024x600`.
+The current design target is the `Waveshare 7inch DSI LCD (E)` (`7"`, `1280x800`, capacitive touch, `DSI`).
 
-The UI should remain responsive for other screen sizes, but the layout and interaction density should be optimized for the deck display first.
+The UI should remain responsive for other screen sizes, but the layout and interaction density should be optimized for the selected deck display first.
 
 ### Screen model
 

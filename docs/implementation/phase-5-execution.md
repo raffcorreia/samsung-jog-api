@@ -41,6 +41,7 @@ In scope:
 - evaluation of how `DDC` can coexist with a normal external `HDMI` source
 - interface implications for the later integrated hardware design
 - identification of whether extra transport hardware is required beyond the core controller functions
+- deck-display selection for the control deck now that the `HDMI` transport direction and connector assumptions are defined
 
 Out of scope:
 
@@ -190,6 +191,38 @@ This means the final hardware plan may require:
 
 The exact packaging decision is still deferred.
 
+## Deck Display Selection
+
+Phase 5 also now records the deck-display selection, because the selected `HDMI/DDC` intermediary direction and the physical controller-board integration assumptions make the control-deck display choice part of the same practical hardware-definition work.
+
+Selection outcome:
+
+- vendor family selected: `Waveshare`
+- exact display selected: `7inch DSI LCD (E)`
+- product page: `https://www.waveshare.com/7inch-dsi-lcd-e.htm`
+- comparison artifact: [waveshare_selection_guide_comparison.xlsx](../hardware/display-selection/waveshare_selection_guide_comparison.xlsx)
+
+Why this was folded into Phase 5:
+
+- the project needed to move from generic display characteristics to an actual display choice
+- the chosen `HDMI` transport strategy clarified that the deck display should be a Pi-native local display, not something that competes with the monitor-side `HDMI` path
+- physical display size, connector style, and mounting assumptions now meaningfully affect the later integrated hardware and enclosure work
+
+Selection rationale:
+
+- we searched across multiple vendors for Raspberry Pi-compatible touch displays that could fit the control-deck role
+- `Waveshare` produced the strongest overall fit for this project based on practical Raspberry Pi compatibility, product breadth, and packaging options
+- `Waveshare` is also a known brand for this project and one we already have experience with, which reduces integration risk compared with an unfamiliar vendor
+- the `7inch DSI LCD (E)` was selected as the best fit from the Waveshare range captured in the comparison spreadsheet
+
+Recorded fit reasons for the chosen unit:
+
+- `DSI` keeps the deck display on a Pi-native local display path rather than consuming external video connectivity
+- `7"` is an appropriate control-deck size without pushing the enclosure into a much larger footprint
+- the selected part is a concrete `1280x800` panel, which is a better long-term target than leaving the project at a generic placeholder display size
+- the selected model is a practical fit for a touch-first control deck because Waveshare positions it as a Raspberry Pi-compatible `DSI` capacitive panel with `IPS` viewing angles and optical bonding
+- Waveshare's Raspberry Pi support history and documentation quality reduce bring-up risk for kiosk and touch use
+
 ## PCB Implementation Approach
 
 The current Phase 5 PCB-design approach is:
@@ -224,6 +257,8 @@ This means the PCB task is treated as explicit electrical layout work, not as a 
 - recorded the Phase 5 rule that `DDC` takeover is based on explicit ownership switching after observing `SCL` and `SDA` idle, not on Pi-side monitor emulation
 - recorded the PCB-design approach as manual placement plus manual routing with DRC-driven cleanup, not generic autorouting
 - documented the later interface impact on integrated hardware design
+- recorded the vendor-comparison outcome for the deck display and selected `Waveshare 7inch DSI LCD (E)` as the control-deck display
+- preserved the Waveshare display comparison spreadsheet in the repo for later hardware and enclosure reference
 
 ## Exit-Criteria Assessment
 
@@ -235,6 +270,7 @@ The project now has:
 - a documented rationale for the selected direction
 - a clear rejection of permanent `HDMI` sacrifice as the final-system assumption
 - a defined transport impact on later hardware design phases
+- an approved control-deck display selection rather than only generic target-display characteristics
 
 ## Open Items Deferred To Later Phases
 
