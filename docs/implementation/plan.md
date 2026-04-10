@@ -258,7 +258,52 @@ Define and validate how the final system preserves practical use of the monitor'
 - the hardware plan no longer depends on permanent `HDMI` sacrifice as a final-system assumption
 - the project has an approved deck-display choice rather than only generic target characteristics
 
-## Phase 6: Integrated Controller Board Design
+## Phase 6: Discrete-Component Protoboard Validation
+
+### Goal
+
+Build and validate a practical protoboard proof of concept that uses mostly discrete components and freely available Raspberry Pi `GPIO` so software production and test can begin before the final integrated board exists.
+
+### Scope
+
+- bench or protoboard implementation using mostly discrete components
+- `ADS1115` is the accepted analog-observation ADC for `KEY_ADC2` in this phase
+- `ADS1115 ALERT/RDY` may be used as an interrupt-style signal to the Raspberry Pi
+- no GPIO-minimization requirement; use as many Raspberry Pi `GPIO` lines as needed
+- monitor remains connected directly over `HDMI` without the final `HDMI/DDC` intermediary in the path
+- no multiplexer pressure for the protoboard if separate GPIO-controlled paths are simpler
+- validation of the core observation and analog-drive concepts
+- software-unblocking prototype sufficient for low-level control bring-up and testing
+
+### Tasks
+
+- build a protoboard version of the monitor-control concept using mostly discrete components that are easy to source and hand-wire
+- use `ADS1115` for `KEY_ADC2` analog observation
+- wire `ADS1115 ALERT/RDY` to a Raspberry Pi GPIO so the prototype can use interrupt-style ADC readiness or threshold signaling
+- keep `KEY_ADC1` and `KEY_LED` on direct GPIO or simple conditioning paths unless testing proves more analog handling is required
+- wire the monitor directly rather than routing it through the final `HDMI` intermediary hardware
+- allocate Raspberry Pi `GPIO` lines freely for validation convenience rather than optimizing pin usage yet
+- avoid mux-driven optimization if dedicated GPIO-controlled discrete paths are simpler for the prototype
+- validate that each required low-level `JOG` action can be generated reliably from the protoboard
+- validate that the observation path is good enough to support software development and testing even if it is not yet the final integrated implementation
+- document any timing, signal-integrity, or practical wiring issues discovered during the protoboard stage
+- record the protoboard wiring, parts used, and software assumptions clearly enough to reproduce the setup
+- define what must change before the concept can be migrated into the integrated board design with reduced GPIO usage and better integration
+
+### Deliverables
+
+- working mostly-discrete protoboard validation setup
+- documented protoboard wiring and component choices, including any allowed non-discrete helper parts such as `ADS1115`
+- validated low-level hardware concept sufficient to unblock software production and test
+- notes on what the later integrated board must improve, consolidate, or replace
+
+### Exit criteria
+
+- the project has a working protoboard implementation that proves the concept without depending on the final integrated board architecture
+- software bring-up and test no longer depend on waiting for the final integrated board
+- the remaining integrated-board work is primarily consolidation, manufacturability, connector/mechanical integration, and GPIO reduction rather than basic concept discovery
+
+## Phase 7: Integrated Controller Board Design
 
 ### Goal
 
@@ -312,7 +357,7 @@ Combine the approved observation and drive circuits into a manufacturable contro
 - all required pins and interfaces are defined
 - the board is documented well enough to prototype or manufacture
 
-## Phase 7: GPIO Assignment and Low-Level Control Prototype
+## Phase 8: GPIO Assignment and Low-Level Control Prototype
 
 ### Goal
 
@@ -344,7 +389,7 @@ Build and validate the first working hardware prototype from the approved integr
 - the system can reliably perform each low-level `JOG` action through the custom hardware
 - the integrated board design is proven well enough to support software bring-up
 
-## Phase 8: Local Platform Bring-Up
+## Phase 9: Local Platform Bring-Up
 
 ### Goal
 
@@ -379,7 +424,7 @@ Make the deck boot into its intended local runtime and behave like a dedicated a
 - the deck boots into the application without manual intervention
 - the kiosk runtime recovers from process failures
 
-## Phase 9: Local API
+## Phase 10: Local API
 
 ### Goal
 
@@ -411,7 +456,7 @@ Define and implement the local backend command surface that all UI and control f
 
 - the frontend can drive low-level control and receive live state from the backend
 
-## Phase 10: Low-Level JOG Console UI
+## Phase 11: Low-Level JOG Console UI
 
 ### Goal
 
@@ -446,7 +491,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions
 - no unvalidated high-level monitor feature UI is exposed yet
 
-## Phase 11: Recording and Replay Subsystem
+## Phase 12: Recording and Replay Subsystem
 
 ### Goal
 
@@ -484,7 +529,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 
 - sequences can be recorded, replayed, stopped, and validated reliably
 
-## Phase 12: DDC Capability Investigation
+## Phase 13: DDC Capability Investigation
 
 ### Goal
 
@@ -517,7 +562,7 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 
-## Phase 13: LED Feedback Characterization
+## Phase 14: LED Feedback Characterization
 
 ### Goal
 
@@ -547,7 +592,7 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 
 - the project knows when LED feedback can be trusted as part of sequence execution
 
-## Phase 14: State Investigation and Sequence Cleanup
+## Phase 15: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -579,7 +624,7 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 
 - important monitor workflows are represented by stable, reusable, named sequence files
 
-## Phase 15: Productized Monitor Features
+## Phase 16: Productized Monitor Features
 
 ### Goal
 
@@ -610,7 +655,7 @@ Turn validated monitor workflows into real user-facing features.
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
 
-## Phase 16: Dashboard Data-Source Spike
+## Phase 17: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -641,7 +686,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
 
-## Phase 17: Dashboard Widgets
+## Phase 18: Dashboard Widgets
 
 ### Goal
 
@@ -672,7 +717,7 @@ Implement the dashboard side of the product using the data-source decisions from
 
 - the dashboard is useful and stable without compromising the monitor-control surface
 
-## Phase 18: Stabilization
+## Phase 19: Stabilization
 
 ### Goal
 
@@ -722,20 +767,21 @@ Harden the system for regular use.
 - milestone 1: approved observation circuit design with schematic and BOM
 - milestone 2: approved analog drive circuit design with schematic and BOM
 - milestone 3: approved final-system `HDMI` / `DDC` communication direction
-- milestone 4: approved integrated controller board design with GPIO map, PCB layout, and manufacturing-ready documentation
-- milestone 5: confirmed electrical emulation of all `JOG` actions
-- milestone 6: confirmed `LED` behavior model for target workflows
-- milestone 7: confirmed `DDC` behavior model for target workflows
-- milestone 8: working Raspberry Pi kiosk host with supervised app startup
-- milestone 9: working recording and replay subsystem
-- milestone 10: working local API for primitive and scripted actions
-- milestone 11: working low-level `JOG` controller UI
-- milestone 12: productized monitor-control features
+- milestone 4: validated discrete-component protoboard implementation that unblocks software production and test
+- milestone 5: approved integrated controller board design with GPIO map, PCB layout, and manufacturing-ready documentation
+- milestone 6: confirmed electrical emulation of all `JOG` actions
+- milestone 7: confirmed `LED` behavior model for target workflows
+- milestone 8: confirmed `DDC` behavior model for target workflows
+- milestone 9: working Raspberry Pi kiosk host with supervised app startup
+- milestone 10: working recording and replay subsystem
+- milestone 11: working local API for primitive and scripted actions
+- milestone 12: working low-level `JOG` controller UI
+- milestone 13: productized monitor-control features
 
 ## Immediate Next Steps
 
 - begin Phase 4: design the analog drive circuit for `KEY_ADC1` and `KEY_ADC2`
 - define the Phase 4 analog drive circuit deliverables to the schematic-plus-BOM standard
-- decide whether the plan needs a separate hardware manufacturing or prototype-assembly phase after integrated board design
+- plan the new discrete-component protoboard validation phase before committing to the integrated board
 - define the Phase 5 `HDMI` / `DDC` communication deliverables clearly enough to feed the integrated controller-board design
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
