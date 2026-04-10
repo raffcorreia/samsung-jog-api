@@ -1,277 +1,121 @@
 # Phase 6 Protoboard Schematic
 
-## Purpose
+This note matches the KiCad schematic and names every active component explicitly.
 
-This document defines the reviewable schematic for `Phase 6: Discrete-Component Protoboard Validation`.
+## Interfaces
 
-It is a **build-oriented protoboard schematic**, not the final integrated controller-board schematic.
+### Monitor Harness `J1`
 
-## Design Intent
-
-The Phase 6 schematic is intentionally optimized for:
-
-- simple protoboard assembly
-- parts already on hand
-- fast software unblocking
-- direct signal visibility during debugging
-- generous Raspberry Pi `GPIO` usage
-
-It is intentionally **not** optimized for:
-
-- minimum part count
-- minimum GPIO count
-- final PCB layout
-- final production connector strategy
-
-## External Interfaces
-
-### Monitor JOG Harness
-
-| Monitor pin | Net |
+| Pin | Net |
 | --- | --- |
-| pin 1 | `MON_GND` |
-| pin 2 | `MON_KEY_ADC2` |
-| pin 3 | `MON_KEY_ADC1` |
-| pin 4 | `MON_KEY_LED` |
-| pin 5 | `NC` |
+| `1` | `GND` |
+| `2` | `MON_KEY_ADC2` |
+| `3` | `MON_KEY_ADC1` |
+| `4` | `MON_KEY_LED` |
 
-### Raspberry Pi Interface
+### Raspberry Pi Direct GPIO Wiring
 
-| Function | Net |
+There is no `J2` or `J3` header in this phase.
+
+| Pi Function | Raspberry Pi Pin |
 | --- | --- |
-| `3.3V` | `PI_3V3` |
-| `GND` | `PI_GND` |
-| `I2C SDA` | `PI_SDA` |
-| `I2C SCL` | `PI_SCL` |
-| ADC ready / alert input | `PI_ADC_ALERT` |
-| `KEY_ADC1` digital input | `PI_KEY1_IN` |
-| `KEY_LED` digital input | `PI_LED_IN` |
-| `CENTER` drive output | `PI_CENTER_EN` |
-| `UP` drive output | `PI_UP_EN` |
-| `DOWN` drive output | `PI_DOWN_EN` |
-| `LEFT` drive output | `PI_LEFT_EN` |
-| `RIGHT` drive output | `PI_RIGHT_EN` |
+| `logic / ADC rail` | `3.3V`, physical pin `1` |
+| `GND` | physical pin `6` |
+| `I2C SDA` | `GPIO2`, physical pin `3` |
+| `I2C SCL` | `GPIO3`, physical pin `5` |
+| `ADS1115 ALERT/RDY` | `GPIO17`, physical pin `11` |
+| `KEY_ADC1` input | `GPIO27`, physical pin `13` |
+| `KEY_LED` input | `GPIO22`, physical pin `15` |
+| `CENTER` drive | `GPIO5`, physical pin `29` |
+| `UP` drive | `GPIO6`, physical pin `31` |
+| `DOWN` drive | `GPIO13`, physical pin `33` |
+| `LEFT` drive | `GPIO19`, physical pin `35` |
+| `RIGHT` drive | `GPIO26`, physical pin `37` |
 
-Ground rule:
+## ADC Block
 
-- `PI_GND` and `MON_GND` are the same electrical ground in this phase
-
-## Block 1: `KEY_ADC2` Analog Observation
-
-### Intent
-
-Observe `MON_KEY_ADC2` as an analog signal through `ADS1115`, and use `ALERT/RDY` as an interrupt-style signal to the Raspberry Pi.
-
-### Connections
-
-| From | To | Notes |
+| Ref | Value | Connection |
 | --- | --- | --- |
-| `MON_KEY_ADC2` | `ADS_AIN0` | primary analog observation channel |
-| `PI_GND` | `ADS_AIN1` or `GND` reference | single-ended measurement basis |
-| `PI_3V3` | `ADS_VDD` | local `3.3V` supply |
-| `PI_GND` | `ADS_GND` | common ground |
-| `PI_SDA` | `ADS_SDA` | `I2C` data |
-| `PI_SCL` | `ADS_SCL` | `I2C` clock |
-| `ADS_ALERT_RDY` | `PI_ADC_ALERT` | interrupt-style GPIO signal |
+| `U1` | `ADS1115` | `AIN0 -> MON_KEY_ADC2`, `SDA -> GPIO2`, `SCL -> GPIO3`, `ALERT/RDY -> GPIO17`, `VDD -> 3.3V`, `GND -> GND` |
+| `C1` | `100 nF` | `3.3V` to `GND` near `U1` |
+| `C2` | `1 uF` | `3.3V` to `GND` near `U1` |
 
-### Support Parts
+`AIN1`, `AIN2`, and `AIN3` are unused in this phase. `ADDR` is strapped to `GND`.
 
-- `R_ADC_SDA_PULLUP = 4.7 kOhm` to `PI_3V3` if not already present on the breakout
-- `R_ADC_SCL_PULLUP = 4.7 kOhm` to `PI_3V3` if not already present on the breakout
-- `C_ADC_LOCAL = 100 nF` across `ADS_VDD` to `ADS_GND`
-- `C_ADC_BULK = 1 uF` across `ADS_VDD` to `ADS_GND`
+## Observation Channels
 
-### ASCII Schematic
+### `KEY_ADC1`
 
-```text
-MON_KEY_ADC2 -----------------------------> ADS1115 AIN0
-PI_GND -----------------------------------> ADS1115 GND
-PI_3V3 -----------------------------------> ADS1115 VDD
-PI_SDA -----------------------------------> ADS1115 SDA
-PI_SCL -----------------------------------> ADS1115 SCL
-ADS1115 ALERT/RDY ------------------------> PI_ADC_ALERT
-```
-
-## Block 2: `KEY_ADC1` Digital-Style Observation
-
-### Intent
-
-Treat `MON_KEY_ADC1` as a digital-style signal in this phase, using simple conditioning rather than the final observation front end.
-
-### Recommended Prototype Conditioning
-
-Use one `2N3904` as a simple protected buffer/inverter:
-
-- `Q_KEY1 = 2N3904`
-- `R_KEY1_BASE = 10 kOhm`
-- `R_KEY1_PULLUP = 10 kOhm`
-
-### Connections
-
-| From | To | Notes |
+| Ref | Value | Connection |
 | --- | --- | --- |
-| `MON_KEY_ADC1` | `R_KEY1_BASE` | base drive through resistor |
-| `R_KEY1_BASE` | `Q_KEY1 base` | transistor input |
-| `Q_KEY1 emitter` | `PI_GND` | low-side reference |
-| `Q_KEY1 collector` | `PI_KEY1_IN` | GPIO input node |
-| `PI_KEY1_IN` | `R_KEY1_PULLUP` to `PI_3V3` | collector pull-up |
+| `R1` | `10 kOhm` | `MON_KEY_ADC1 -> Q1 base` |
+| `Q1` | `2N3904` | base from `R1`, collector to `GPIO27`, emitter to `GND` |
+| `R2` | `10 kOhm` | `3.3V -> GPIO27` pull-up |
 
-### ASCII Schematic
+### `KEY_LED`
 
-```text
-MON_KEY_ADC1 -- R_KEY1_BASE(10k) --B Q_KEY1(2N3904)
-                                    C-----> PI_KEY1_IN ---- R_KEY1_PULLUP(10k) ----> PI_3V3
-                                    E-----> PI_GND
-```
-
-## Block 3: `KEY_LED` Digital Observation
-
-### Intent
-
-Treat `MON_KEY_LED` as a digital-style signal in this phase, again using simple conditioning.
-
-### Recommended Prototype Conditioning
-
-Use one more `2N3904` stage:
-
-- `Q_LED = 2N3904`
-- `R_LED_BASE = 10 kOhm`
-- `R_LED_PULLUP = 10 kOhm`
-
-### Connections
-
-| From | To | Notes |
+| Ref | Value | Connection |
 | --- | --- | --- |
-| `MON_KEY_LED` | `R_LED_BASE` | base drive through resistor |
-| `R_LED_BASE` | `Q_LED base` | transistor input |
-| `Q_LED emitter` | `PI_GND` | low-side reference |
-| `Q_LED collector` | `PI_LED_IN` | GPIO input node |
-| `PI_LED_IN` | `R_LED_PULLUP` to `PI_3V3` | collector pull-up |
+| `R3` | `10 kOhm` | `MON_KEY_LED -> Q2 base` |
+| `Q2` | `2N3904` | base from `R3`, collector to `GPIO22`, emitter to `GND` |
+| `R4` | `10 kOhm` | `3.3V -> GPIO22` pull-up |
 
-### ASCII Schematic
+## Drive Channels
 
-```text
-MON_KEY_LED -- R_LED_BASE(10k) --B Q_LED(2N3904)
-                                  C-----> PI_LED_IN ---- R_LED_PULLUP(10k) ----> PI_3V3
-                                  E-----> PI_GND
-```
+Each drive channel uses:
+- one GPIO net into a base resistor
+- one `100 kOhm` base pull-down to `GND`
+- one `2N3904` low-side transistor
+- one action resistor between the monitor key line and the transistor collector
 
-## Block 4: Discrete `JOG` Drive Channels
+### Center
 
-### Intent
-
-Each logical action gets its own resistor-to-ground leg and its own dedicated `2N3904` low-side switch.
-
-This phase does **not** use a mux.
-
-### Tested Target Resistor Values
-
-| Action | Monitor line | Resistor |
+| Ref | Value | Connection |
 | --- | --- | --- |
-| `LEFT` | `MON_KEY_ADC2` | `30 kOhm` |
-| `RIGHT` | `MON_KEY_ADC2` | `10 kOhm` |
-| `DOWN` | `MON_KEY_ADC2` | `3.3 kOhm` |
-| `UP` | `MON_KEY_ADC2` | `22 kOhm` |
-| `CENTER` | `MON_KEY_ADC1` | `22 kOhm` |
+| `R5` | `4.7 kOhm` | `GPIO5 -> Q3 base` |
+| `R15` | `100 kOhm` | `Q3 base -> GND` |
+| `Q3` | `2N3904` | emitter `-> GND`, collector `-> R10` |
+| `R10` | `22 kOhm` | `MON_KEY_ADC1 -> Q3 collector` |
 
-### Per-Channel Drive Pattern
+### Up
 
-For each action channel:
+| Ref | Value | Connection |
+| --- | --- | --- |
+| `R6` | `4.7 kOhm` | `GPIO6 -> Q4 base` |
+| `R16` | `100 kOhm` | `Q4 base -> GND` |
+| `Q4` | `2N3904` | emitter `-> GND`, collector `-> R11` |
+| `R11` | `22 kOhm` | `MON_KEY_ADC2 -> Q4 collector` |
 
-- `Qx = 2N3904`
-- `R_BASE_x = 4.7 kOhm` to `10 kOhm`
-- `R_BASE_PULLDOWN_x = 100 kOhm`
-- `R_ACTION_x = tested resistor leg`
+### Down
 
-### Wiring Pattern
+| Ref | Value | Connection |
+| --- | --- | --- |
+| `R7` | `4.7 kOhm` | `GPIO13 -> Q5 base` |
+| `R17` | `100 kOhm` | `Q5 base -> GND` |
+| `Q5` | `2N3904` | emitter `-> GND`, collector `-> R12` |
+| `R12` | `3.3 kOhm` | `MON_KEY_ADC2 -> Q5 collector` |
 
-```text
-PI_ACTION_EN -- R_BASE_x --B Qx(2N3904)
-                        |
-                        +-- R_BASE_PULLDOWN_x(100k) --> PI_GND
+### Left
 
-Qx emitter -------------------------------------------> PI_GND
-MON_KEY_ADCx -- R_ACTION_x -- collector Qx
-```
+| Ref | Value | Connection |
+| --- | --- | --- |
+| `R8` | `4.7 kOhm` | `GPIO19 -> Q6 base` |
+| `R18` | `100 kOhm` | `Q6 base -> GND` |
+| `Q6` | `2N3904` | emitter `-> GND`, collector `-> R13` |
+| `R13` | `30 kOhm` | `MON_KEY_ADC2 -> Q6 collector` |
 
-Important interpretation:
+### Right
 
-- when the GPIO is inactive, the transistor is off and the resistor leg is disconnected
-- when the GPIO is asserted, the transistor pulls the resistor leg to ground
-- this reproduces the required resistance-to-ground path without sourcing voltage onto the monitor line
+| Ref | Value | Connection |
+| --- | --- | --- |
+| `R9` | `4.7 kOhm` | `GPIO26 -> Q7 base` |
+| `R19` | `100 kOhm` | `Q7 base -> GND` |
+| `Q7` | `2N3904` | emitter `-> GND`, collector `-> R14` |
+| `R14` | `10 kOhm` | `MON_KEY_ADC2 -> Q7 collector` |
 
-## Drive Channel Table
+## Important Interpretation
 
-| Channel | GPIO | Monitor line | Resistor |
-| --- | --- | --- | --- |
-| `Q_CENTER` | `PI_CENTER_EN` | `MON_KEY_ADC1` | `22 kOhm` |
-| `Q_UP` | `PI_UP_EN` | `MON_KEY_ADC2` | `22 kOhm` |
-| `Q_DOWN` | `PI_DOWN_EN` | `MON_KEY_ADC2` | `3.3 kOhm` |
-| `Q_LEFT` | `PI_LEFT_EN` | `MON_KEY_ADC2` | `30 kOhm` |
-| `Q_RIGHT` | `PI_RIGHT_EN` | `MON_KEY_ADC2` | `10 kOhm` |
-
-## Full Protoboard View
-
-```text
-Monitor CN1001
---------------
-MON_GND -------------------------------+------------------------------- PI_GND
-MON_KEY_ADC2 ----+--------------------> ADS1115 AIN0
-                 |
-                 +-- 30k -- Q_LEFT collector
-                 +-- 10k -- Q_RIGHT collector
-                 +-- 3.3k - Q_DOWN collector
-                 +-- 22k -- Q_UP collector
-
-MON_KEY_ADC1 ----+-- 22k -- Q_CENTER collector
-                 |
-                 +-- 10k -- Q_KEY1 base
-
-MON_KEY_LED ----------- 10k ----------> Q_LED base
-
-ADS1115
--------
-PI_3V3 --------------------------------> VDD
-PI_GND --------------------------------> GND
-PI_SDA --------------------------------> SDA
-PI_SCL --------------------------------> SCL
-ADS_ALERT_RDY -------------------------> PI_ADC_ALERT
-
-Digital observation
--------------------
-Q_KEY1 collector ----------------------> PI_KEY1_IN with 10k pull-up to PI_3V3
-Q_LED collector -----------------------> PI_LED_IN  with 10k pull-up to PI_3V3
-
-Drive control
--------------
-PI_CENTER_EN -> base resistor -> Q_CENTER base
-PI_UP_EN     -> base resistor -> Q_UP base
-PI_DOWN_EN   -> base resistor -> Q_DOWN base
-PI_LEFT_EN   -> base resistor -> Q_LEFT base
-PI_RIGHT_EN  -> base resistor -> Q_RIGHT base
-
-All Q_* emitters ----------------------> PI_GND
-All Q_* bases have 100k pull-downs ----> PI_GND
-```
-
-## Recommended Bring-Up Order
-
-1. verify common ground and `3.3V`
-2. bring up `ADS1115` and confirm `KEY_ADC2` readings
-3. bring up `KEY_ADC1` and `KEY_LED` observation inputs
-4. wire one drive leg only and validate its effect
-5. add the remaining drive legs one by one
-6. only after individual channels work, start software-side action sequencing
-
-## Explicit Phase 6 Non-Goals
-
-This schematic does not yet solve:
-
-- GPIO minimization
-- final PCB footprint choices
-- final connectorization
-- final observation-buffer architecture
-- final production-safe packaging of the monitor harness
-- final `HDMI/DDC` intermediary path
-
-Those belong to the integrated-board phase after this prototype proves the concept.
+- The observation transistors `Q1` and `Q2` are simple inverting buffers into Pi GPIO.
+- The drive transistors `Q3-Q7` do not source voltage onto the monitor lines.
+- Each drive action connects a tested resistor leg to ground only when its GPIO is asserted.
+- `ADS1115`, `I2C`, and Pi-facing pull-ups all stay on `3.3V`.

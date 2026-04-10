@@ -47,11 +47,26 @@ Out of scope:
 - each driven action uses its own dedicated GPIO-controlled discrete transistor path
 - `2N3904` is the preferred switching transistor for the Phase 6 protoboard
 
+## Raspberry Pi Pin Map
+
+- `3.3V rail`: physical pin `1`
+- `GND`: physical pin `6`
+- `I2C SDA`: `GPIO2`, physical pin `3`
+- `I2C SCL`: `GPIO3`, physical pin `5`
+- `ADS1115 ALERT/RDY`: `GPIO17`, physical pin `11`
+- `KEY_ADC1` digital input: `GPIO27`, physical pin `13`
+- `KEY_LED` digital input: `GPIO22`, physical pin `15`
+- `CENTER` drive: `GPIO5`, physical pin `29`
+- `UP` drive: `GPIO6`, physical pin `31`
+- `DOWN` drive: `GPIO13`, physical pin `33`
+- `LEFT` drive: `GPIO19`, physical pin `35`
+- `RIGHT` drive: `GPIO26`, physical pin `37`
+
 ## Target Deliverables
 
 - reviewable protoboard schematic
 - reviewable protoboard BOM
-- documented GPIO placeholder map
+- documented GPIO pin map
 - documented wiring notes sufficient to reproduce the bench setup
 - a working prototype good enough to unblock software production and test
 
@@ -71,12 +86,12 @@ The Phase 6 protoboard schematic is split into three practical blocks:
    - default-off base pull-down on every channel
 
 3. Pi interface block
-   - `3.3V`
+   - `3.3V` protoboard logic and ADC supply
    - `GND`
-   - `I2C`
-   - `ALERT/RDY`
-   - five drive GPIO outputs
-   - two observation GPIO inputs
+   - `GPIO2/GPIO3` for `I2C`
+   - `GPIO17` for `ALERT/RDY`
+   - five dedicated drive GPIO outputs
+   - two dedicated observation GPIO inputs
 
 ## Exit Criteria
 
