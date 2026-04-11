@@ -99,3 +99,27 @@ The Phase 6 protoboard schematic is split into three practical blocks:
 - the observation path is good enough to support software development and testing
 - the prototype no longer depends on the final integrated board to start backend and UI bring-up
 - later hardware work is primarily consolidation and manufacturability, not concept discovery
+
+## Deliverables Completed
+
+- documented the Phase 6 protoboard schematic with explicit active-component and net mapping
+- documented the Phase 6 protoboard BOM for the discrete validation build
+- recorded the Raspberry Pi GPIO pin map for observation, drive, and `ADS1115` integration
+- fixed the prototype around a one-discrete-switch-per-action drive strategy using `2N3904`
+- fixed `ADS1115` as the accepted `KEY_ADC2` observation path with `ALERT/RDY` wired to a Pi GPIO
+- recorded the direct-monitor `HDMI` assumption so software bring-up does not wait on the later intermediary hardware
+
+## Exit-Criteria Assessment
+
+Phase 6 is complete at the protoboard-validation definition level.
+
+The final documented state now includes:
+
+- a reviewable protoboard schematic for the validation build
+- a reviewable protoboard BOM for the discrete prototype
+- a fixed Raspberry Pi pin map for the Phase 6 observation and drive paths
+- a documented hardware direction that is sufficient to unblock backend and UI bring-up before the integrated board exists
+
+Known limitation:
+
+- this execution record defines and locks the validation build, but bench assembly and hardware-in-loop proof still remain part of the later implementation path

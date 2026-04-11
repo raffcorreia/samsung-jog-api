@@ -1,5 +1,28 @@
 # Implementation Plan
 
+## Phase Index
+
+- [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
+- [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
+- [Phase 2: Hardware Validation](#phase-2-hardware-validation)
+- [Phase 3: Bus Observation Circuit Design](#phase-3-bus-observation-circuit-design)
+- [Phase 4: Analog Drive Circuit Design](#phase-4-analog-drive-circuit-design)
+- [Phase 5: HDMI and DDC Communication Design](#phase-5-hdmi-and-ddc-communication-design)
+- [Phase 6: Discrete-Component Protoboard Validation](#phase-6-discrete-component-protoboard-validation)
+- [Phase 7: Integrated Controller Board Design](#phase-7-integrated-controller-board-design)
+- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype)
+- [Phase 9: Local Platform Bring-Up](#phase-9-local-platform-bring-up)
+- [Phase 10: Local API](#phase-10-local-api)
+- [Phase 11: Low-Level JOG Console UI](#phase-11-low-level-jog-console-ui)
+- [Phase 12: Recording and Replay Subsystem](#phase-12-recording-and-replay-subsystem)
+- [Phase 13: DDC Capability Investigation](#phase-13-ddc-capability-investigation)
+- [Phase 14: LED Feedback Characterization](#phase-14-led-feedback-characterization)
+- [Phase 15: State Investigation and Sequence Cleanup](#phase-15-state-investigation-and-sequence-cleanup)
+- [Phase 16: Productized Monitor Features](#phase-16-productized-monitor-features)
+- [Phase 17: Dashboard Data-Source Spike](#phase-17-dashboard-data-source-spike)
+- [Phase 18: Dashboard Widgets](#phase-18-dashboard-widgets)
+- [Phase 19: Stabilization](#phase-19-stabilization)
+
 ## Summary
 
 This document describes the proposed implementation order for `samsung-jog-api`.
