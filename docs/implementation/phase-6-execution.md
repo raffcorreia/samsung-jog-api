@@ -16,6 +16,8 @@ It complements:
 
 Build and validate a practical protoboard proof of concept that uses mostly discrete components and freely available Raspberry Pi `GPIO` so software production and testing can begin before the final integrated board exists.
 
+This phase is intentionally a separate prototype circuit, not the final integrated hardware topology from Phases 3 and 4.
+
 ## Scope
 
 In scope:
@@ -27,6 +29,7 @@ In scope:
 - one-discrete-switch-per-action drive strategy using `2N3904`
 - generous GPIO use for simplicity
 - direct monitor `HDMI` connection with no Phase 5 intermediary dependency
+- intentionally simplified wiring that may differ from the final integrated board
 
 Out of scope:
 
@@ -98,6 +101,7 @@ The Phase 6 protoboard schematic is split into three practical blocks:
 - the protoboard can generate all required low-level `JOG` actions reliably
 - the observation path is good enough to support software development and testing
 - the prototype no longer depends on the final integrated board to start backend and UI bring-up
+- the prototype remains a proof of concept rather than the final integrated circuit design
 - later hardware work is primarily consolidation and manufacturability, not concept discovery
 
 ## Deliverables Completed

@@ -287,6 +287,8 @@ Define and validate how the final system preserves practical use of the monitor'
 
 Build and validate a practical protoboard proof of concept that uses mostly discrete components and freely available Raspberry Pi `GPIO` so software production and test can begin before the final integrated board exists.
 
+This phase is intentionally a separate prototype circuit, not the final integrated hardware topology that Phase 7 will design from the Phase 3 and Phase 4 results.
+
 ### Scope
 
 - bench or protoboard implementation using mostly discrete components
@@ -297,6 +299,7 @@ Build and validate a practical protoboard proof of concept that uses mostly disc
 - no multiplexer pressure for the protoboard if separate GPIO-controlled paths are simpler
 - validation of the core observation and analog-drive concepts
 - software-unblocking prototype sufficient for low-level control bring-up and testing
+- intentionally simplified wiring that may differ from the final integrated board
 
 ### Tasks
 
@@ -330,12 +333,13 @@ Build and validate a practical protoboard proof of concept that uses mostly disc
 
 ### Goal
 
-Combine the approved observation and drive circuits into a manufacturable controller-board design and define the full host integration.
+Combine the validated outputs of Phase 3 observation, Phase 4 drive, Phase 5 `HDMI` / `DDC`, and Phase 6 protoboard work into a manufacturable controller-board design, then define the full host integration.
 
 ### Scope
 
-- integrated controller schematic
-- GPIO allocation
+- integrated controller schematic that merges the approved observation and drive circuits
+- board-level use of the Phase 5 `HDMI` / `DDC` transport direction
+- GPIO allocation informed by the Phase 6 protoboard validation results
 - PCB design and mechanical constraints
 - connectors and harness strategy
 - display and host power connections as needed
@@ -344,9 +348,9 @@ Combine the approved observation and drive circuits into a manufacturable contro
 
 ### Tasks
 
-- combine the approved observation and drive circuits into one integrated schematic
-- incorporate the approved `HDMI` / `DDC` communication direction into the board interfaces and connector strategy
-- GPIO allocation
+- combine the Phase 3 observation circuit results and Phase 4 analog-drive circuit results into one integrated schematic
+- incorporate the Phase 5 `HDMI` / `DDC` communication direction into the board interfaces and connector strategy
+- use Phase 6 protoboard lessons to decide which GPIO paths stay discrete, which get consolidated, and what must change for the integrated board
 - define all required monitor-side, host-side, and display-side interfaces
 - assign GPIO usage after the approved hardware design is known
 - define which pins are input-only, output-only, or otherwise constrained
@@ -375,7 +379,7 @@ Combine the approved observation and drive circuits into a manufacturable contro
 
 ### Exit criteria
 
-- the observation and drive circuits are combined into one coherent controller-board design
+- the Phase 3, Phase 4, Phase 5, and Phase 6 results are represented in one coherent controller-board design
 - the approved `HDMI` / `DDC` communication direction is reflected in the integrated hardware design
 - all required pins and interfaces are defined
 - the board is documented well enough to prototype or manufacture
