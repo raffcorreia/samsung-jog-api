@@ -17,6 +17,7 @@ It complements:
 Build and validate a practical protoboard proof of concept that uses mostly discrete components and freely available Raspberry Pi `GPIO` so software production and testing can begin before the final integrated board exists.
 
 This phase is intentionally a separate prototype circuit, not the final integrated hardware topology from Phases 3 and 4.
+The Phase 6 hardware is for reference and proof-of-concept use only, not for reuse as the final integrated board.
 
 ## Scope
 
@@ -30,6 +31,7 @@ In scope:
 - generous GPIO use for simplicity
 - direct monitor `HDMI` connection with no Phase 5 intermediary dependency
 - intentionally simplified wiring that may differ from the final integrated board
+- no Phase 5 `HDMI` split, source arbitration, or custom `I2C` / `DDC` communication path
 
 Out of scope:
 
@@ -38,6 +40,7 @@ Out of scope:
 - final connector families
 - final `HDMI/DDC` intermediary hardware
 - final production-grade signal conditioning
+- final `HDMI` split or custom `I2C` / `DDC` transport hardware
 
 ## Locked Phase 6 Assumptions
 
@@ -102,6 +105,7 @@ The Phase 6 protoboard schematic is split into three practical blocks:
 - the observation path is good enough to support software development and testing
 - the prototype no longer depends on the final integrated board to start backend and UI bring-up
 - the prototype remains a proof of concept rather than the final integrated circuit design
+- the prototype hardware is reference-only and is not intended to be reused as the final integrated board
 - later hardware work is primarily consolidation and manufacturability, not concept discovery
 
 ## Deliverables Completed

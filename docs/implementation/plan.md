@@ -288,6 +288,7 @@ Define and validate how the final system preserves practical use of the monitor'
 Build and validate a practical protoboard proof of concept that uses mostly discrete components and freely available Raspberry Pi `GPIO` so software production and test can begin before the final integrated board exists.
 
 This phase is intentionally a separate prototype circuit, not the final integrated hardware topology that Phase 7 will design from the Phase 3 and Phase 4 results.
+The Phase 6 hardware is reference-only proof-of-concept hardware and is not intended to become the final integrated board.
 
 ### Scope
 
@@ -300,6 +301,7 @@ This phase is intentionally a separate prototype circuit, not the final integrat
 - validation of the core observation and analog-drive concepts
 - software-unblocking prototype sufficient for low-level control bring-up and testing
 - intentionally simplified wiring that may differ from the final integrated board
+- no Phase 5 `HDMI` split, source arbitration, or custom `I2C` / `DDC` transport prototype work
 
 ### Tasks
 
@@ -328,6 +330,7 @@ This phase is intentionally a separate prototype circuit, not the final integrat
 - the project has a working protoboard implementation that proves the concept without depending on the final integrated board architecture
 - software bring-up and test no longer depend on waiting for the final integrated board
 - the remaining integrated-board work is primarily consolidation, manufacturability, connector/mechanical integration, and GPIO reduction rather than basic concept discovery
+- Phase 6 hardware is treated as reference-only and is not carried forward as the final integrated design
 
 ## Phase 7: Integrated Controller Board Design
 
