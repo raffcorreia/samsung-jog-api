@@ -2,6 +2,7 @@
 
 ## Phase Index
 
+- [Host health gate (feature phases 10–19)](#host-health-gate-feature-phases-1019)
 - [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
 - [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
 - [Phase 2: Hardware Validation](#phase-2-hardware-validation)
@@ -41,6 +42,18 @@ The overall strategy is:
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
+## Host health gate (feature phases 10–19)
+
+Phases **10–19** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
+
+**Procedure (run on the deck host):**
+
+1. Run **`python3 scripts/pi-deck-host-health.py`** (default: **human-readable text**). The script reports Python runtime, CPU load, memory and swap, disk use on `/`, thermal zones, Raspberry Pi `vcgencmd` temperature/voltage/throttling when available, optional `systemd` status for `pi-deck` and `lightdm`, and a localhost check to `http://127.0.0.1:8756/health`. Optional **`--json`** exists only for tooling or archives — **do not use JSON as the primary documentation** in execution records.
+2. Paste the **full default (text) output** into that phase’s **Markdown execution record** under a heading such as `## Host health snapshot` (a fenced code block is fine), with the **date** and **host** clear from the output or a one-line note.
+3. Briefly **review** the snapshot: e.g. `get_throttled` flags should not show sustained under-voltage or active throttling under normal idle/deck workload; root filesystem use should remain in a safe band for the SD card. Exact numeric thresholds are project judgment — the point is **documented evidence** each phase.
+
+Phases **10–19** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
+
 ## Deferred integrated-board GPIO and software migration
 
 Phase 7 (integrated `KiCad` boards) may still be in layout or fabrication while software advances. Low-level work from Phase 8 onward is therefore validated first on the **Phase 6 discrete protoboard**, whose **GPIO map differs** from the final integrated assignment (see [Phase 6 Execution Record](./phase-6-execution.md) vs [Phase 7 Execution Record](./phase-7-execution.md)).
@@ -66,6 +79,8 @@ The implementation is expected to grow these testing layers over time:
 - integration tests for productized monitor workflows
 
 Detailed test design still needs its own document, but no phase should be treated as complete without the relevant tests for that phase.
+
+For **Phases 10–19**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in the phase execution record.
 
 ## Phase 0: Documentation and Evidence Capture
 
@@ -442,6 +457,8 @@ Complete: [Phase 8 Execution Record](./phase-8-execution.md) (2026-04-12). Bench
 
 ## Phase 9: Local Platform Bring-Up
 
+**Status: complete.** Record: [Phase 9 Execution Record](./phase-9-execution.md). Runbook: [Phase 9 platform bring-up](../runbooks/phase-9-platform-bring-up.md).
+
 ### Goal
 
 Make the deck boot into its intended local runtime and behave like a dedicated appliance.
@@ -457,7 +474,6 @@ Make the deck boot into its intended local runtime and behave like a dedicated a
 
 - provision the runtime on the prepared Raspberry Pi host
 - configure browser auto-start in kiosk mode
-- hide the cursor
 - ensure the display launches into the intended UI automatically
 - configure `systemd` service management
 - define crash recovery and restart behavior
@@ -474,6 +490,8 @@ Make the deck boot into its intended local runtime and behave like a dedicated a
 
 - the deck boots into the application without manual intervention
 - the kiosk runtime recovers from process failures
+
+**Deferred (not part of Phase 9 exit):** hide the mouse pointer on the kiosk display. Wayland (e.g. labwc) needs a compositor-specific or session-level approach; X11 can use `unclutter`. Tracked under Phase 11 as kiosk / touch UX polish alongside the first real UI.
 
 ## Phase 10: Local API
 
@@ -506,6 +524,7 @@ Define and implement the local backend command surface that all UI and control f
 ### Exit criteria
 
 - the frontend can drive low-level control and receive live state from the backend
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 11: Low-Level JOG Console UI
 
@@ -531,6 +550,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - make the UI usable on the `1024x600` target display
 - keep the same UI reachable on the LAN
 - add frontend tests for command feedback and websocket-driven UI state
+- hide or tame the kiosk pointer for touch-first use (deferred from Phase 9; Wayland vs X11)
 
 ### Deliverables
 
@@ -541,6 +561,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions
 - no unvalidated high-level monitor feature UI is exposed yet
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 12: Recording and Replay Subsystem
 
@@ -579,6 +600,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 ### Exit criteria
 
 - sequences can be recorded, replayed, stopped, and validated reliably
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 13: DDC Capability Investigation
 
@@ -612,6 +634,7 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 ### Exit criteria
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 14: LED Feedback Characterization
 
@@ -642,6 +665,7 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 ### Exit criteria
 
 - the project knows when LED feedback can be trusted as part of sequence execution
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 15: State Investigation and Sequence Cleanup
 
@@ -674,6 +698,7 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 ### Exit criteria
 
 - important monitor workflows are represented by stable, reusable, named sequence files
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 16: Productized Monitor Features
 
@@ -705,6 +730,7 @@ Turn validated monitor workflows into real user-facing features.
 ### Exit criteria
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 17: Dashboard Data-Source Spike
 
@@ -736,6 +762,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 ### Exit criteria
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 18: Dashboard Widgets
 
@@ -767,6 +794,7 @@ Implement the dashboard side of the product using the data-source decisions from
 ### Exit criteria
 
 - the dashboard is useful and stable without compromising the monitor-control surface
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Phase 19: Stabilization
 
@@ -800,6 +828,7 @@ Harden the system for regular use.
 ### Exit criteria
 
 - the system is stable enough for regular daily use
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
 ## Later Extensions
 
@@ -831,8 +860,6 @@ Harden the system for regular use.
 
 ## Immediate Next Steps
 
-- begin Phase 4: design the analog drive circuit for `KEY_ADC1` and `KEY_ADC2`
-- define the Phase 4 analog drive circuit deliverables to the schematic-plus-BOM standard
-- plan the new discrete-component protoboard validation phase before committing to the integrated board
-- define the Phase 5 `HDMI` / `DDC` communication deliverables clearly enough to feed the integrated controller-board design
+- begin Phase 10: define and implement the local REST/WebSocket API (`FastAPI` routes, validation, hardware orchestration)
+- keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
