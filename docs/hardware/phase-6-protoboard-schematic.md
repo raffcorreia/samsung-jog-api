@@ -48,7 +48,7 @@ There is no `J2` or `J3` header in this phase.
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `R1` | `10 kOhm` | `MON_KEY_ADC1 -> Q1 base` |
+| `R1` | `100 kOhm` | `MON_KEY_ADC1 -> Q1 base` |
 | `Q1` | `2N3904` | base from `R1`, collector (`C`) to `GPIO27`, emitter (`E`) to `GND` |
 | `R2` | `10 kOhm` | `3.3V -> GPIO27` pull-up |
 

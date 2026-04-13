@@ -2,13 +2,16 @@
 
 ## Parts
 
-| Ref | Qty | Part | Value / Use |
+Each row is grouped by identical part/value, so `Qty` is the total count for that part family.
+
+| Refs | Qty | Part | Value / Use |
 | --- | --- | --- | --- |
 | `U1` | `1` | `ADS1115` breakout | `KEY_ADC2` ADC, powered from `3.3V` |
 | `Q1-Q7` | `7` | `2N3904` | `Q1-Q2` observe, `Q3-Q7` drive |
 | `C1` | `1` | capacitor | `100 nF` |
 | `C2` | `1` | capacitor | `1 uF` |
-| `R1-R4` | `4` | resistor | `10 kOhm` |
+| `R1` | `1` | resistor | `100 kOhm` |
+| `R2-R4` | `3` | resistor | `10 kOhm` |
 | `R5-R9` | `5` | resistor | `4.7 kOhm` |
 | `R10-R11` | `2` | resistor | `22 kOhm` |
 | `R12` | `1` | resistor | `3.3 kOhm` |

@@ -494,7 +494,7 @@
 		(at 45.72 99.06 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005005")
 		(property "Reference" "R1" (at 43.18 101.60 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10k" (at 43.18 97.79 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "100k" (at 43.18 97.79 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "Datasheet" "~" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "Description" "KEY_ADC1 base resistor" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
