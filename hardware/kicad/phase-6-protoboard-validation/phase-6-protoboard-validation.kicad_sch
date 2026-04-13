@@ -1536,7 +1536,7 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 109.22) (xy 158.75 109.22)
+			(xy 151.13 110.49) (xy 158.75 110.49)
 		)
 		(stroke
 			(width 0)
@@ -1935,7 +1935,7 @@
 		(uuid "66666666-0000-4000-8000-000000003031")
 	)
 	(label "MON_KEY_ADC2"
-		(at 158.75 109.22 0)
+		(at 158.75 110.49 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2791,7 +2791,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 92.71 0)
+			(at 131.826 92.202 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2875,7 +2875,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 107.95 0)
+			(at 131.572 107.696 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2959,7 +2959,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 123.19 0)
+			(at 131.572 122.936 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3043,7 +3043,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 138.43 0)
+			(at 131.572 138.176 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3127,7 +3127,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 153.67 0)
+			(at 131.572 153.416 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3778,7 +3778,7 @@
 			)
 		)
 		(property "Value" "22k"
-			(at 143.51 92.71 0)
+			(at 146.304 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3838,7 +3838,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 146.05 109.22 90)
+		(at 146.05 110.49 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3848,7 +3848,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-00000000502d")
 		(property "Reference" "R11"
-			(at 143.51 111.76 0)
+			(at 143.51 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3859,7 +3859,7 @@
 			)
 		)
 		(property "Value" "22k"
-			(at 143.51 107.95 0)
+			(at 145.796 115.316 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3870,7 +3870,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 146.05 109.22 90)
+			(at 146.05 110.49 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3881,7 +3881,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 146.05 109.22 90)
+			(at 146.05 110.49 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3892,7 +3892,7 @@
 			)
 		)
 		(property "Description" "UP action resistor"
-			(at 146.05 109.22 90)
+			(at 146.05 110.49 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3940,7 +3940,7 @@
 			)
 		)
 		(property "Value" "3.3k"
-			(at 143.51 123.19 0)
+			(at 146.558 130.048 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4021,7 +4021,7 @@
 			)
 		)
 		(property "Value" "30k"
-			(at 143.51 138.43 0)
+			(at 146.05 144.526 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4102,7 +4102,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 143.51 153.67 0)
+			(at 146.05 160.274 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
