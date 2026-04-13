@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=pi-deck Kiosk
+Comment=Fullscreen Chromium pointed at local pi-deck
+# Path is rewritten by install script; default matches ~/samsung-jog-api clone
+Exec=@REPO_ROOT@/scripts/kiosk/pi-deck-chromium-kiosk.sh
+Terminal=false
+Categories=System;
+X-GNOME-Autostart-enabled=true

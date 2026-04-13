@@ -485,7 +485,7 @@ The design must include:
 - documentation of every host modification
 - repeatable host preparation
 - browser auto-start
-- cursor hiding
+- cursor hiding (appliance polish; may land with the first touch UI / compositor tuning rather than bare kiosk bring-up)
 - kiosk fullscreen behavior
 - crash recovery
 

@@ -134,6 +134,14 @@ Examples:
 - repeated sequence execution does not leave the system stuck
 - log retention and restart behavior operate as intended
 
+### 8. Deck host health snapshots
+
+Purpose:
+
+- capture CPU, memory, disk, thermals, Raspberry Pi throttling/voltage, and `pi-deck` service health on the real deck when closing feature phases (see [Host health gate](../implementation/plan.md#host-health-gate-feature-phases-1019))
+
+Tool: `scripts/pi-deck-host-health.py` — paste the **default text output** into the **Markdown** phase execution record (not JSON as the primary write-up; `--json` is optional for tooling or archives). Complements automated tests for resource and power regressions.
+
 ## Test environment model
 
 The project should assume more than one test environment.

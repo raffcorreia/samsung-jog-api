@@ -9,12 +9,20 @@ description = "pi-deck: Raspberry Pi control deck backend (CJ791 JOG project)"
 readme = "../README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "fastapi>=0.115",
     "gpiozero>=2.0",
     "smbus2>=0.4",
+    # Avoid uvicorn[standard] here: uvloop/httptools wheels are missing on some armhf images and
+    # fall back to long source builds on the Pi. The asyncio event loop is fine for this service.
+    "uvicorn>=0.32",
 ]
+
+[project.scripts]
+pi-deck = "pi_deck.__main__:main"
 
 [project.optional-dependencies]
 dev = [
+    "httpx>=0.27",
     "pytest>=8.0",
     "ruff>=0.6",
 ]

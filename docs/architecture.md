@@ -125,8 +125,8 @@ The repository is split so **documentation**, **KiCad hardware**, **host scripts
 | `frontend/` | Reserved for the React / TypeScript kiosk and LAN UI ([Code Guidelines](development/code-guidelines.md#frontend-guidelines)). Empty until that work starts. |
 | `docs/` | Requirements, design, implementation records, runbooks. |
 | `hardware/kicad/` | Schematics and boards (not Python). |
-| `scripts/` | Operational shell helpers, **bench / bring-up Python** (e.g. GPIO smoke tests — not part of the `pi_deck` installable surface). |
-| `config/` | Example configs for host preparation. |
+| `scripts/` | Operational shell helpers, **bench / bring-up Python** (e.g. GPIO smoke tests, [`pi-deck-host-health.py`](../../scripts/pi-deck-host-health.py) — not part of the `pi_deck` installable surface). |
+| `config/` | Example configs for host preparation and systemd unit templates (`config/systemd/`). |
 
 Application code for Phases 9–12 lands in **`backend/`** and **`frontend/`**; KiCad stays under **`hardware/`**.
 

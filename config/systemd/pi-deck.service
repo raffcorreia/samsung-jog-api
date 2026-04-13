@@ -1,0 +1,28 @@
+# Install: copy to /etc/systemd/system/pi-deck.service and replace @REPO_ROOT@ with the clone path,
+# or use scripts/host/install_pi_deck_systemd.sh which substitutes it automatically.
+#
+# Logs: journalctl -u pi-deck -f
+#       ~/.local/share/pi-deck/logs/pi-deck.log (daily rotation, ~93 files retention)
+
+[Unit]
+Description=pi-deck local HTTP server (CJ791 control deck)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=@SERVICE_USER@
+Group=@SERVICE_USER@
+WorkingDirectory=@REPO_ROOT@/backend
+# Explicit HOME avoids rare cases where User= is set but HOME is still root for the process.
+Environment=HOME=@SERVICE_HOME@
+# 0.0.0.0: listen on all interfaces so the same UI is reachable from the LAN (trusted network).
+Environment=PI_DECK_HOST=0.0.0.0
+Environment=PI_DECK_PORT=8756
+Environment=PI_DECK_LOG_DIR=@SERVICE_HOME@/.local/share/pi-deck/logs
+ExecStart=@REPO_ROOT@/backend/.venv/bin/pi-deck
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
