@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1rem;
-  padding: var(--pad);
+  padding: 0.65rem var(--pad);
   border-bottom: 1px solid var(--border);
   background: var(--surface);
   min-height: 3rem;

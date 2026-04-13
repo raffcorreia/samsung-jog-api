@@ -9,7 +9,7 @@ export function StatusStrip(props: {
 }) {
   const { status, wsConnected, wsError } = props;
   return (
-    <header className={styles.bar} role="status">
+    <header className={styles.bar} role="status" aria-label="Deck connection and hardware status">
       <div className={styles.title}>pi-deck</div>
       <div className={styles.meta}>
         {status ? (

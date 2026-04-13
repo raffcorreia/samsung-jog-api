@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 
+import { ConsoleHero } from "./components/ConsoleHero";
 import { JogPad } from "./components/JogPad";
 import { LiveLog } from "./components/LiveLog";
 import { StatusStrip } from "./components/StatusStrip";
@@ -16,9 +17,13 @@ export function App() {
 
   return (
     <div className={styles.app}>
+      <ConsoleHero />
       <StatusStrip status={deck.status} wsConnected={deck.wsConnected} wsError={deck.wsError} />
       <main className={styles.main}>
-        <JogPad disabled={busy} onLocalLog={deck.pushLogLine} />
+        <div className={styles.panel}>
+          <h2 className={styles.panelTitle}>Controls</h2>
+          <JogPad disabled={busy} onLocalLog={deck.pushLogLine} />
+        </div>
       </main>
       <LiveLog lines={deck.logLines} />
     </div>
