@@ -49,7 +49,7 @@ There is no `J2` or `J3` header in this phase.
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `R1` | `10 kOhm` | `MON_KEY_ADC1 -> Q1 base` |
-| `Q1` | `2N3904` | base from `R1`, collector to `GPIO27`, emitter to `GND` |
+| `Q1` | `2N3904` | base from `R1`, collector (`C`) to `GPIO27`, emitter (`E`) to `GND` |
 | `R2` | `10 kOhm` | `3.3V -> GPIO27` pull-up |
 
 ### `KEY_LED`
@@ -57,7 +57,7 @@ There is no `J2` or `J3` header in this phase.
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `R3` | `10 kOhm` | `MON_KEY_LED -> Q2 base` |
-| `Q2` | `2N3904` | base from `R3`, collector to `GPIO22`, emitter to `GND` |
+| `Q2` | `2N3904` | base from `R3`, collector (`C`) to `GPIO22`, emitter (`E`) to `GND` |
 | `R4` | `10 kOhm` | `3.3V -> GPIO22` pull-up |
 
 ## Drive Channels
@@ -115,7 +115,7 @@ Each drive channel uses:
 
 ## Important Interpretation
 
-- The observation transistors `Q1` and `Q2` are simple inverting buffers into Pi GPIO.
+- The observation transistors `Q1` and `Q2` are simple inverting open-collector buffers into Pi GPIO: `C` goes to the GPIO input and `E` goes to `GND`.
 - The drive transistors `Q3-Q7` do not source voltage onto the monitor lines.
 - Each drive action connects a tested resistor leg to ground only when its GPIO is asserted.
 - `ADS1115`, `I2C`, and Pi-facing pull-ups all stay on `3.3V`.

@@ -82,25 +82,221 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Phase6:Q_NPN_BCE"
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "Q" (at 5.08 5.08 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "Q_NPN_BCE" (at 5.08 -5.08 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "~" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "NPN transistor, base/collector/emitter" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(symbol "Q_NPN_BCE_0_1"
-				(circle (center 0 0) (radius 3.81) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy -3.81 0) (xy -1.27 0)) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy 1.27 1.27) (xy -1.27 0) (xy 1.27 -2.54)) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy 1.27 1.27) (xy 3.81 3.81)) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy 1.27 -2.54) (xy 3.81 -5.08)) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy 2.032 -3.302) (xy 3.81 -5.08) (xy 1.524 -4.826)) (stroke (width 0.254) (type default)) (fill (type outline)))
+		(symbol "Phase6:2N3904"
+			(pin_names
+				(offset 0)
+				(hide yes)
 			)
-			(symbol "Q_NPN_BCE_1_1"
-				(pin passive line (at -7.62 0 0) (length 3.81) (name "B" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 7.62 -5.08 180) (length 3.81) (name "C" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 7.62 5.08 180) (length 3.81) (name "E" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "Q"
+				(at 5.08 1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "2N3904"
+				(at 5.08 -1.27 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+				(at 5.08 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.onsemi.com/pub/Collateral/2N3903-D.PDF"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "0.2A Ic, 40V Vce, Small Signal NPN Transistor, TO-92"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "NPN Transistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TO?92*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "2N3904_0_1"
+				(polyline
+					(pts
+						(xy -2.54 0) (xy 0.635 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 1.905) (xy 0.635 -1.905)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.27 0)
+					(radius 2.8194)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "2N3904_1_1"
+				(polyline
+					(pts
+						(xy 0.635 0.635) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
 			(embedded_fonts no)
 		)
@@ -307,7 +503,7 @@
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R1") (unit 1))))
 	)
 	(symbol
-		(lib_id "Phase6:Q_NPN_BCE")
+		(lib_id "Phase6:2N3904")
 		(at 58.42 99.06 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005006")
 		(property "Reference" "Q1" (at 63.50 104.14 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -347,7 +543,7 @@
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R3") (unit 1))))
 	)
 	(symbol
-		(lib_id "Phase6:Q_NPN_BCE")
+		(lib_id "Phase6:2N3904")
 		(at 58.42 149.86 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005009")
 		(property "Reference" "Q2" (at 63.50 154.94 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -373,7 +569,7 @@
 		(pin "2" (uuid "66666666-0000-4000-8000-000000005102"))
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R4") (unit 1))))
 	)
-	(symbol (lib_id "Phase6:Q_NPN_BCE") (at 133.35 99.06 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol (lib_id "Phase6:2N3904") (at 133.35 99.06 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005011")
 		(property "Reference" "Q3" (at 138.43 104.14 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "2N3904" (at 138.43 92.71 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -383,7 +579,7 @@
 		(pin "1" (uuid "66666666-0000-4000-8000-000000005111")) (pin "2" (uuid "66666666-0000-4000-8000-000000005112")) (pin "3" (uuid "66666666-0000-4000-8000-000000005113"))
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q3") (unit 1))))
 	)
-	(symbol (lib_id "Phase6:Q_NPN_BCE") (at 133.35 114.30 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol (lib_id "Phase6:2N3904") (at 133.35 114.30 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005012")
 		(property "Reference" "Q4" (at 138.43 119.38 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "2N3904" (at 138.43 107.95 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -393,7 +589,7 @@
 		(pin "1" (uuid "66666666-0000-4000-8000-000000005121")) (pin "2" (uuid "66666666-0000-4000-8000-000000005122")) (pin "3" (uuid "66666666-0000-4000-8000-000000005123"))
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q4") (unit 1))))
 	)
-	(symbol (lib_id "Phase6:Q_NPN_BCE") (at 133.35 129.54 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol (lib_id "Phase6:2N3904") (at 133.35 129.54 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005013")
 		(property "Reference" "Q5" (at 138.43 134.62 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "2N3904" (at 138.43 123.19 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -403,7 +599,7 @@
 		(pin "1" (uuid "66666666-0000-4000-8000-000000005131")) (pin "2" (uuid "66666666-0000-4000-8000-000000005132")) (pin "3" (uuid "66666666-0000-4000-8000-000000005133"))
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q5") (unit 1))))
 	)
-	(symbol (lib_id "Phase6:Q_NPN_BCE") (at 133.35 144.78 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol (lib_id "Phase6:2N3904") (at 133.35 144.78 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005014")
 		(property "Reference" "Q6" (at 138.43 149.86 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "2N3904" (at 138.43 138.43 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
@@ -413,7 +609,7 @@
 		(pin "1" (uuid "66666666-0000-4000-8000-000000005141")) (pin "2" (uuid "66666666-0000-4000-8000-000000005142")) (pin "3" (uuid "66666666-0000-4000-8000-000000005143"))
 		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q6") (unit 1))))
 	)
-	(symbol (lib_id "Phase6:Q_NPN_BCE") (at 133.35 160.02 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol (lib_id "Phase6:2N3904") (at 133.35 160.02 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
 		(uuid "66666666-0000-4000-8000-000000005015")
 		(property "Reference" "Q7" (at 138.43 165.10 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
 		(property "Value" "2N3904" (at 138.43 153.67 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
