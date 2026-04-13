@@ -50,6 +50,7 @@ Out of scope:
 - `KEY_ADC2` is observed through `ADS1115`
 - `ADS1115 ALERT/RDY` is wired to a Raspberry Pi GPIO and used as an interrupt-style signal
 - `KEY_ADC1` and `KEY_LED` are treated as digital-style observation lines in this phase
+- `KEY_ADC1` is the center / enter action only; it should not produce sideways navigation on the monitor
 - each driven action uses its own dedicated GPIO-controlled discrete transistor path
 - `2N3904` is the preferred switching transistor for the Phase 6 protoboard
 
@@ -99,6 +100,24 @@ The Phase 6 protoboard schematic is split into three practical blocks:
    - five dedicated drive GPIO outputs
    - two dedicated observation GPIO inputs
 
+## Bench Observation
+
+During Phase 6 bench testing, a `KEY_ADC1` observation resistor below about `120 kOhm` caused the monitor OSD to misbehave when the `KEY1` action was active.
+
+Observed symptoms:
+
+- the OSD became visibly corrupted while open
+- the menu appeared to wander into unrelated configuration areas such as gamma settings
+- sometimes the user could back out and exit
+- other times the monitor appeared to restart the current connection or briefly flash
+
+Interpretation:
+
+- this is not expected `KEY_ADC1` behavior
+- `KEY1` should map only to the center / enter action
+- sideways navigation implies the bus is being loaded or perturbed enough to create false key decoding
+- `100 kOhm` was better than `10 kOhm`, but the practical bench threshold remained close to `120 kOhm` in this prototype
+
 ## Exit Criteria
 
 - the protoboard can generate all required low-level `JOG` actions reliably
@@ -131,3 +150,4 @@ The final documented state now includes:
 Known limitation:
 
 - this execution record defines and locks the validation build, but bench assembly and hardware-in-loop proof still remain part of the later implementation path
+- the `KEY_ADC1` observation path appears sensitive to resistor value in the POC, and values below roughly `120 kOhm` can corrupt OSD behavior instead of producing a clean center-only input
