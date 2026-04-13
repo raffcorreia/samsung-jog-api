@@ -19,6 +19,7 @@ Environment=HOME=@SERVICE_HOME@
 # 0.0.0.0: listen on all interfaces so the same UI is reachable from the LAN (trusted network).
 Environment=PI_DECK_HOST=0.0.0.0
 Environment=PI_DECK_PORT=8756
+Environment=PI_DECK_HARDWARE=auto
 Environment=PI_DECK_LOG_DIR=@SERVICE_HOME@/.local/share/pi-deck/logs
 ExecStart=@REPO_ROOT@/backend/.venv/bin/pi-deck
 Restart=on-failure

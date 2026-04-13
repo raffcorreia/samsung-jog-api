@@ -24,7 +24,8 @@ Current state of the repository:
 - completed: `Phase 6: Discrete-Component Protoboard Validation`
 - completed: `Phase 8: GPIO Assignment and Low-Level Control Prototype` — [execution record](docs/implementation/phase-8-execution.md)
 - completed: `Phase 9: Local Platform Bring-Up` — [execution record](docs/implementation/phase-9-execution.md), [runbook](docs/runbooks/phase-9-platform-bring-up.md) (`systemd` unit `config/systemd/pi-deck.service`, kiosk scripts under `scripts/kiosk/`)
-- current phase: `Phase 10: Local API` (see [Implementation Plan](docs/implementation/plan.md))
+- completed: `Phase 10: Local API` — [execution record](docs/implementation/phase-10-execution.md) (REST `/api/v1`, WebSocket `/ws/events`)
+- current phase: `Phase 11: Low-Level JOG Console UI` (see [Implementation Plan](docs/implementation/plan.md))
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

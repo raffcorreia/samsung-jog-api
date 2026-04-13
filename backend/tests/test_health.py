@@ -4,7 +4,9 @@ from pi_deck.api.app import create_app
 
 
 def test_health() -> None:
-    client = TestClient(create_app())
-    r = client.get("/health")
-    assert r.status_code == 200
-    assert r.json() == {"status": "ok"}
+    with TestClient(create_app()) as client:
+        r = client.get("/health")
+        assert r.status_code == 200
+        data = r.json()
+        assert data["status"] == "ok"
+        assert "version" in data

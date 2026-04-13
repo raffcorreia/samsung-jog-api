@@ -860,6 +860,6 @@ Harden the system for regular use.
 
 ## Immediate Next Steps
 
-- begin Phase 10: define and implement the local REST/WebSocket API (`FastAPI` routes, validation, hardware orchestration)
+- begin Phase 11: low-level `JOG` console UI (touch-first; calls Phase 10 REST + WebSocket)
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
