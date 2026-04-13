@@ -225,7 +225,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": "G"
+      "sch_revision": "A"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -473,7 +473,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "phase-4-analog-drive.kicad_pro",
+    "filename": "phase-6-protoboard-validation.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -633,8 +633,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "phase-4-analog-drive.kicad_sch",
-        "name": "phase-4-analog-drive",
+        "filename": "phase-6-protoboard-validation.kicad_sch",
+        "name": "phase-6-protoboard-validation",
         "uuid": "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
       }
     ],
@@ -644,7 +644,7 @@
   "sheets": [
     [
       "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd",
-      "phase-4-analog-drive"
+      "phase-6-protoboard-validation"
     ]
   ],
   "text_variables": {},

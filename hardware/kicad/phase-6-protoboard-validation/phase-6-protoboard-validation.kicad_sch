@@ -12,76 +12,6 @@
 		(comment 2 "ADS1115 observes KEY_ADC2 with ALERT/RDY to Raspberry Pi")
 	)
 	(lib_symbols
-		(symbol "Phase6:Conn_01x04"
-			(pin_names (offset 1.016) (hide yes))
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "J" (at 0 6.35 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "Conn_01x04" (at 0 -8.89 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "Generic connector, single row, 01x04" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(symbol "Conn_01x04_1_1"
-				(rectangle (start -1.27 5.08) (end 1.27 -5.08) (stroke (width 0.254) (type default)) (fill (type background)))
-				(pin passive line (at -5.08 3.81 0) (length 3.81) (name "Pin_1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 1.27 0) (length 3.81) (name "Pin_2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 -1.27 0) (length 3.81) (name "Pin_3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 -3.81 0) (length 3.81) (name "Pin_4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Phase6:Conn_01x07"
-			(pin_names (offset 1.016) (hide yes))
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "J" (at 0 10.16 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "Conn_01x07" (at 0 -17.78 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "Generic connector, single row, 01x07" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(symbol "Conn_01x07_1_1"
-				(rectangle (start -1.27 8.89) (end 1.27 -8.89) (stroke (width 0.254) (type default)) (fill (type background)))
-				(pin passive line (at -5.08 7.62 0) (length 3.81) (name "Pin_1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 5.08 0) (length 3.81) (name "Pin_2" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 2.54 0) (length 3.81) (name "Pin_3" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 0 0) (length 3.81) (name "Pin_4" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 -2.54 0) (length 3.81) (name "Pin_5" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 -5.08 0) (length 3.81) (name "Pin_6" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -5.08 -7.62 0) (length 3.81) (name "Pin_7" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Phase6:R"
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "R" (at 2.032 1.016 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "R" (at 2.032 -1.016 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "~" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "Resistor" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(symbol "R_0_1"
-				(rectangle (start -1.016 -2.54) (end 1.016 2.54) (stroke (width 0.254) (type default)) (fill (type background)))
-			)
-			(symbol "R_1_1"
-				(pin passive line (at 0 5.08 270) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 0 -5.08 90) (length 2.54) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Phase6:C"
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "C" (at 2.032 1.016 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "C" (at 2.032 -1.016 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "~" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "Capacitor" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(symbol "C_0_1"
-				(polyline (pts (xy -2.032 -0.762) (xy 2.032 -0.762)) (stroke (width 0.254) (type default)) (fill (type none)))
-				(polyline (pts (xy -2.032 0.762) (xy 2.032 0.762)) (stroke (width 0.254) (type default)) (fill (type none)))
-			)
-			(symbol "C_1_1"
-				(pin passive line (at 0 3.81 270) (length 3.048) (name "~" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 0 -3.81 90) (length 3.048) (name "~" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Phase6:2N3904"
 			(pin_names
 				(offset 0)
@@ -301,493 +231,4339 @@
 			(embedded_fonts no)
 		)
 		(symbol "Phase6:ADS1115"
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "U" (at 0 12.7 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Value" "ADS1115" (at 0 -15.24 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "16-bit I2C ADC" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "ADS1115"
+				(at 0 -15.24 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "16-bit I2C ADC"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(symbol "ADS1115_1_1"
-				(rectangle (start -7.62 10.16) (end 7.62 -10.16) (stroke (width 0.254) (type default)) (fill (type background)))
-				(pin passive line (at -12.7 7.62 0) (length 5.08) (name "AIN0" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -12.7 5.08 0) (length 5.08) (name "AIN1" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -12.7 2.54 0) (length 5.08) (name "AIN2" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -12.7 0 0) (length 5.08) (name "AIN3" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at -12.7 -2.54 0) (length 5.08) (name "ADDR" (effects (font (size 1.27 1.27)))) (number "5" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 0 15.24 270) (length 5.08) (name "GND" (effects (font (size 1.27 1.27)))) (number "6" (effects (font (size 1.27 1.27)))))
-				(pin bidirectional line (at 12.7 5.08 180) (length 5.08) (name "SDA" (effects (font (size 1.27 1.27)))) (number "7" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 12.7 2.54 180) (length 5.08) (name "SCL" (effects (font (size 1.27 1.27)))) (number "8" (effects (font (size 1.27 1.27)))))
-				(pin output line (at 12.7 0 180) (length 5.08) (name "ALERT/RDY" (effects (font (size 1.27 1.27)))) (number "9" (effects (font (size 1.27 1.27)))))
-				(pin passive line (at 0 -15.24 90) (length 5.08) (name "VDD" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
+				(rectangle
+					(start -7.62 10.16)
+					(end 7.62 -10.16)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -12.7 7.62 0)
+					(length 5.08)
+					(name "AIN0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -12.7 5.08 0)
+					(length 5.08)
+					(name "AIN1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -12.7 2.54 0)
+					(length 5.08)
+					(name "AIN2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -12.7 0 0)
+					(length 5.08)
+					(name "AIN3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -12.7 -2.54 0)
+					(length 5.08)
+					(name "ADDR"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 15.24 270)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 12.7 5.08 180)
+					(length 5.08)
+					(name "SDA"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 12.7 2.54 180)
+					(length 5.08)
+					(name "SCL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 12.7 0 180)
+					(length 5.08)
+					(name "ALERT/RDY"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -15.24 90)
+					(length 5.08)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Phase6:C"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 2.032 1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "C"
+				(at 2.032 -1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 3.048)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 3.048)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Phase6:Conn_01x04"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x04"
+				(at 0 -8.89 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x04"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x04_1_1"
+				(rectangle
+					(start -1.27 5.08)
+					(end 1.27 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 3.81 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 1.27 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -1.27 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -3.81 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Phase6:Conn_01x07"
+			(pin_names
+				(offset 1.016)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at 0 10.16 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x07"
+				(at 0 -17.78 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x07"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Conn_01x07_1_1"
+				(rectangle
+					(start -1.27 8.89)
+					(end 1.27 -8.89)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin passive line
+					(at -5.08 7.62 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 5.08 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 2.54 0)
+					(length 3.81)
+					(name "Pin_3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -5.08 0)
+					(length 3.81)
+					(name "Pin_6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -7.62 0)
+					(length 3.81)
+					(name "Pin_7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Phase6:R"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 2.032 -1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 5.08 270)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
 			(embedded_fonts no)
 		)
 		(symbol "power:PWR_FLAG"
 			(power global)
-			(pin_numbers (hide yes))
-			(pin_names (offset 0) (hide yes))
-			(exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes)
-			(property "Reference" "#FLG" (at 0 1.905 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Value" "PWR_FLAG" (at 0 3.81 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-			(property "Footprint" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Datasheet" "" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
-			(property "Description" "Special symbol for telling ERC where power comes from" (at 0 0 0) (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27))))
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
 			(symbol "PWR_FLAG_0_0"
-				(pin power_out line (at 0 0 90) (length 0) (name "" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
 			(symbol "PWR_FLAG_0_1"
-				(polyline (pts (xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)) (stroke (width 0) (type default)) (fill (type none)))
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 			)
 			(embedded_fonts no)
 		)
 	)
-	(no_connect (at 76.20 36.83) (uuid "66666666-0000-4000-8000-000000001001"))
-	(no_connect (at 76.20 39.37) (uuid "66666666-0000-4000-8000-000000001002"))
-	(no_connect (at 76.20 41.91) (uuid "66666666-0000-4000-8000-000000001003"))
-	(junction (at 50.80 99.06) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001101"))
-	(junction (at 66.04 93.98) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001102"))
-	(junction (at 66.04 104.14) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001103"))
-	(junction (at 50.80 149.86) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001104"))
-	(junction (at 66.04 144.78) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001105"))
-	(junction (at 66.04 154.94) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001106"))
-	(junction (at 125.73 99.06) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001107"))
-	(junction (at 140.97 93.98) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001108"))
-	(junction (at 140.97 104.14) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001109"))
-	(junction (at 125.73 114.30) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001110"))
-	(junction (at 140.97 109.22) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001111"))
-	(junction (at 140.97 119.38) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001112"))
-	(junction (at 125.73 129.54) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001113"))
-	(junction (at 140.97 124.46) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001114"))
-	(junction (at 140.97 134.62) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001115"))
-	(junction (at 125.73 144.78) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001116"))
-	(junction (at 140.97 139.70) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001117"))
-	(junction (at 140.97 149.86) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001118"))
-	(junction (at 125.73 160.02) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001119"))
-	(junction (at 140.97 154.94) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001120"))
-	(junction (at 140.97 165.10) (diameter 0) (color 0 0 0 0) (uuid "66666666-0000-4000-8000-000000001121"))
-	(wire (pts (xy 25.40 49.53) (xy 38.10 49.53)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002001"))
-	(wire (pts (xy 25.40 46.99) (xy 38.10 46.99)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002002"))
-	(wire (pts (xy 25.40 44.45) (xy 38.10 44.45)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002003"))
-	(wire (pts (xy 25.40 41.91) (xy 38.10 41.91)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002004"))
-	(wire (pts (xy 76.20 34.29) (xy 68.58 34.29)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002005"))
-	(wire (pts (xy 76.20 44.45) (xy 68.58 44.45)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002006"))
-	(wire (pts (xy 88.90 26.67) (xy 88.90 22.86)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002007"))
-	(wire (pts (xy 88.90 57.15) (xy 88.90 60.96)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002008"))
-	(wire (pts (xy 101.60 36.83) (xy 109.22 36.83)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002009"))
-	(wire (pts (xy 101.60 39.37) (xy 109.22 39.37)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002010"))
-	(wire (pts (xy 101.60 41.91) (xy 109.22 41.91)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002011"))
-	(wire (pts (xy 68.58 30.48) (xy 68.58 38.10)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002012"))
-	(wire (pts (xy 76.20 30.48) (xy 76.20 38.10)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002013"))
-	(wire (pts (xy 40.64 99.06) (xy 33.02 99.06)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002019"))
-	(wire (pts (xy 66.04 83.82) (xy 73.66 83.82)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002020"))
-	(wire (pts (xy 66.04 93.98) (xy 73.66 93.98)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002021"))
-	(wire (pts (xy 66.04 104.14) (xy 73.66 104.14)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002022"))
-	(wire (pts (xy 40.64 149.86) (xy 33.02 149.86)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002023"))
-	(wire (pts (xy 66.04 134.62) (xy 73.66 134.62)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002024"))
-	(wire (pts (xy 66.04 144.78) (xy 73.66 144.78)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002025"))
-	(wire (pts (xy 66.04 154.94) (xy 73.66 154.94)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002026"))
-	(wire (pts (xy 115.57 99.06) (xy 109.22 99.06)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002027"))
-	(wire (pts (xy 151.13 93.98) (xy 158.75 93.98)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002028"))
-	(wire (pts (xy 140.97 104.14) (xy 148.59 104.14)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002029"))
-	(wire (pts (xy 115.57 114.30) (xy 109.22 114.30)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002030"))
-	(wire (pts (xy 151.13 109.22) (xy 158.75 109.22)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002031"))
-	(wire (pts (xy 140.97 119.38) (xy 148.59 119.38)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002032"))
-	(wire (pts (xy 115.57 129.54) (xy 109.22 129.54)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002033"))
-	(wire (pts (xy 151.13 124.46) (xy 158.75 124.46)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002034"))
-	(wire (pts (xy 140.97 134.62) (xy 148.59 134.62)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002035"))
-	(wire (pts (xy 115.57 144.78) (xy 109.22 144.78)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002036"))
-	(wire (pts (xy 151.13 139.70) (xy 158.75 139.70)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002037"))
-	(wire (pts (xy 140.97 149.86) (xy 148.59 149.86)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002038"))
-	(wire (pts (xy 115.57 160.02) (xy 109.22 160.02)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002039"))
-	(wire (pts (xy 151.13 154.94) (xy 158.75 154.94)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002040"))
-	(wire (pts (xy 140.97 165.10) (xy 148.59 165.10)) (stroke (width 0) (type default)) (uuid "66666666-0000-4000-8000-000000002041"))
-	(label "GND" (at 38.10 49.53 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003001"))
-	(label "MON_KEY_ADC2" (at 38.10 46.99 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003002"))
-	(label "MON_KEY_ADC1" (at 38.10 44.45 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003003"))
-	(label "MON_KEY_LED" (at 38.10 41.91 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003004"))
-	(label "MON_KEY_ADC2" (at 68.58 34.29 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003005"))
-	(label "GND" (at 68.58 44.45 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003006"))
-	(label "GND" (at 88.90 22.86 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003007"))
-	(label "VGPIO_3V3" (at 88.90 60.96 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003008"))
-	(label "GPIO2_SDA" (at 109.22 36.83 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003009"))
-	(label "GPIO3_SCL" (at 109.22 39.37 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003010"))
-	(label "GPIO17" (at 109.22 41.91 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003011"))
-	(label "VGPIO_3V3" (at 68.58 38.10 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003015"))
-	(label "GND" (at 68.58 30.48 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003016"))
-	(label "VGPIO_3V3" (at 76.20 38.10 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003017"))
-	(label "GND" (at 76.20 30.48 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003018"))
-	(label "MON_KEY_ADC1" (at 33.02 99.06 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003019"))
-	(label "VGPIO_3V3" (at 73.66 83.82 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003020"))
-	(label "GPIO27" (at 73.66 93.98 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003021"))
-	(label "GND" (at 73.66 104.14 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003022"))
-	(label "MON_KEY_LED" (at 33.02 149.86 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003023"))
-	(label "VGPIO_3V3" (at 73.66 134.62 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003024"))
-	(label "GPIO22" (at 73.66 144.78 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003025"))
-	(label "GND" (at 73.66 154.94 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003026"))
-	(label "GPIO5" (at 109.22 99.06 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003027"))
-	(label "MON_KEY_ADC1" (at 158.75 93.98 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003028"))
-	(label "GND" (at 148.59 104.14 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003029"))
-	(label "GND" (at 125.73 109.22 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003030"))
-	(label "GPIO6" (at 109.22 114.30 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003031"))
-	(label "MON_KEY_ADC2" (at 158.75 109.22 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003032"))
-	(label "GND" (at 148.59 119.38 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003033"))
-	(label "GND" (at 125.73 124.46 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003034"))
-	(label "GPIO13" (at 109.22 129.54 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003035"))
-	(label "MON_KEY_ADC2" (at 158.75 124.46 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003036"))
-	(label "GND" (at 148.59 134.62 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003037"))
-	(label "GND" (at 125.73 139.70 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003038"))
-	(label "GPIO19" (at 109.22 144.78 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003039"))
-	(label "MON_KEY_ADC2" (at 158.75 139.70 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003040"))
-	(label "GND" (at 148.59 149.86 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003041"))
-	(label "GND" (at 125.73 154.94 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003042"))
-	(label "GPIO26" (at 109.22 160.02 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003043"))
-	(label "MON_KEY_ADC2" (at 158.75 154.94 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003044"))
-	(label "GND" (at 148.59 165.10 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003045"))
-	(label "GND" (at 125.73 170.18 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "66666666-0000-4000-8000-000000003046"))
-	(text "Monitor Harness" (exclude_from_sim no) (at 22.86 34.29 0) (effects (font (size 1.8 1.8))) (uuid "66666666-0000-4000-8000-000000004001"))
-	(text "ADS1115 + Power" (exclude_from_sim no) (at 81.28 13.97 0) (effects (font (size 1.8 1.8))) (uuid "66666666-0000-4000-8000-000000004002"))
-	(text "Observation Inputs" (exclude_from_sim no) (at 43.18 71.12 0) (effects (font (size 1.8 1.8))) (uuid "66666666-0000-4000-8000-000000004003"))
-	(text "Drive Channels" (exclude_from_sim no) (at 120.65 71.12 0) (effects (font (size 1.8 1.8))) (uuid "66666666-0000-4000-8000-000000004004"))
-	(text "RPi direct wiring: 3V3->VGPIO_3V3, GND->GND" (exclude_from_sim no) (at 111.76 190.50 0) (effects (font (size 1.3 1.3))) (uuid "66666666-0000-4000-8000-000000004005"))
-	(text "GPIO2=SDA  GPIO3=SCL  GPIO17=ALERT  GPIO27=KEY_ADC1  GPIO22=KEY_LED" (exclude_from_sim no) (at 111.76 195.58 0) (effects (font (size 1.3 1.3))) (uuid "66666666-0000-4000-8000-000000004006"))
-	(text "GPIO5=CENTER  GPIO6=UP  GPIO13=DOWN  GPIO19=LEFT  GPIO26=RIGHT" (exclude_from_sim no) (at 111.76 200.66 0) (effects (font (size 1.3 1.3))) (uuid "66666666-0000-4000-8000-000000004007"))
+	(text "Monitor Harness"
+		(exclude_from_sim no)
+		(at 22.86 34.29 0)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004001")
+	)
+	(text "ADS1115 + Power"
+		(exclude_from_sim no)
+		(at 81.28 13.97 0)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004002")
+	)
+	(text "Observation Inputs"
+		(exclude_from_sim no)
+		(at 43.18 71.12 0)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004003")
+	)
+	(text "Drive Channels"
+		(exclude_from_sim no)
+		(at 120.65 71.12 0)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004004")
+	)
+	(text "RPi direct wiring: 3V3->VGPIO_3V3, GND->GND"
+		(exclude_from_sim no)
+		(at 111.76 190.5 0)
+		(effects
+			(font
+				(size 1.3 1.3)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004005")
+	)
+	(text "GPIO2=SDA  GPIO3=SCL  GPIO17=ALERT  GPIO27=KEY_ADC1  GPIO22=KEY_LED"
+		(exclude_from_sim no)
+		(at 111.76 195.58 0)
+		(effects
+			(font
+				(size 1.3 1.3)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004006")
+	)
+	(text "GPIO5=CENTER  GPIO6=UP  GPIO13=DOWN  GPIO19=LEFT  GPIO26=RIGHT"
+		(exclude_from_sim no)
+		(at 111.76 200.66 0)
+		(effects
+			(font
+				(size 1.3 1.3)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004007")
+	)
+	(junction
+		(at 53.34 27.94)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "706c9efc-0d22-4c41-a9d4-596e361f5954")
+	)
+	(junction
+		(at 66.04 27.94)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8c68099e-f281-4cf3-b637-eacacc947343")
+	)
+	(no_connect
+		(at 91.44 36.83)
+		(uuid "66666666-0000-4000-8000-000000001001")
+	)
+	(no_connect
+		(at 91.44 39.37)
+		(uuid "66666666-0000-4000-8000-000000001002")
+	)
+	(no_connect
+		(at 91.44 41.91)
+		(uuid "66666666-0000-4000-8000-000000001003")
+	)
+	(wire
+		(pts
+			(xy 66.04 27.94) (xy 66.04 31.75)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "019298d2-93db-44a7-9598-5531a98a3668")
+	)
+	(wire
+		(pts
+			(xy 77.47 44.45) (xy 91.44 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5cac8286-475a-4781-bb13-025e9539ef2a")
+	)
+	(wire
+		(pts
+			(xy 25.4 49.53) (xy 38.1 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002001")
+	)
+	(wire
+		(pts
+			(xy 25.4 46.99) (xy 38.1 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002002")
+	)
+	(wire
+		(pts
+			(xy 25.4 44.45) (xy 38.1 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002003")
+	)
+	(wire
+		(pts
+			(xy 25.4 41.91) (xy 38.1 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002004")
+	)
+	(wire
+		(pts
+			(xy 91.44 34.29) (xy 77.47 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002005")
+	)
+	(wire
+		(pts
+			(xy 104.14 26.67) (xy 104.14 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002007")
+	)
+	(wire
+		(pts
+			(xy 104.14 57.15) (xy 104.14 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002008")
+	)
+	(wire
+		(pts
+			(xy 116.84 36.83) (xy 124.46 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002009")
+	)
+	(wire
+		(pts
+			(xy 116.84 39.37) (xy 124.46 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002010")
+	)
+	(wire
+		(pts
+			(xy 116.84 41.91) (xy 124.46 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002011")
+	)
+	(wire
+		(pts
+			(xy 66.04 20.32) (xy 66.04 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002012")
+	)
+	(wire
+		(pts
+			(xy 53.34 20.32) (xy 53.34 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002013")
+	)
+	(wire
+		(pts
+			(xy 40.64 99.06) (xy 33.02 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002019")
+	)
+	(wire
+		(pts
+			(xy 66.04 83.82) (xy 73.66 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002020")
+	)
+	(wire
+		(pts
+			(xy 66.04 93.98) (xy 73.66 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002021")
+	)
+	(wire
+		(pts
+			(xy 66.04 104.14) (xy 73.66 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002022")
+	)
+	(wire
+		(pts
+			(xy 40.64 149.86) (xy 33.02 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002023")
+	)
+	(wire
+		(pts
+			(xy 66.04 134.62) (xy 73.66 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002024")
+	)
+	(wire
+		(pts
+			(xy 66.04 144.78) (xy 73.66 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002025")
+	)
+	(wire
+		(pts
+			(xy 66.04 154.94) (xy 73.66 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002026")
+	)
+	(wire
+		(pts
+			(xy 115.57 99.06) (xy 109.22 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002027")
+	)
+	(wire
+		(pts
+			(xy 151.13 93.98) (xy 158.75 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002028")
+	)
+	(wire
+		(pts
+			(xy 140.97 104.14) (xy 148.59 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002029")
+	)
+	(wire
+		(pts
+			(xy 115.57 114.3) (xy 109.22 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002030")
+	)
+	(wire
+		(pts
+			(xy 151.13 109.22) (xy 158.75 109.22)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002031")
+	)
+	(wire
+		(pts
+			(xy 140.97 119.38) (xy 148.59 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002032")
+	)
+	(wire
+		(pts
+			(xy 115.57 129.54) (xy 109.22 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002033")
+	)
+	(wire
+		(pts
+			(xy 151.13 124.46) (xy 158.75 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002034")
+	)
+	(wire
+		(pts
+			(xy 140.97 134.62) (xy 148.59 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002035")
+	)
+	(wire
+		(pts
+			(xy 115.57 144.78) (xy 109.22 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002036")
+	)
+	(wire
+		(pts
+			(xy 151.13 139.7) (xy 158.75 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002037")
+	)
+	(wire
+		(pts
+			(xy 140.97 149.86) (xy 148.59 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002038")
+	)
+	(wire
+		(pts
+			(xy 115.57 160.02) (xy 109.22 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002039")
+	)
+	(wire
+		(pts
+			(xy 151.13 154.94) (xy 158.75 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002040")
+	)
+	(wire
+		(pts
+			(xy 140.97 165.1) (xy 148.59 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000002041")
+	)
+	(wire
+		(pts
+			(xy 53.34 31.75) (xy 53.34 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d459525-af44-4366-94e1-c8fb7e3fa1d4")
+	)
+	(label "GND"
+		(at 38.1 49.53 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003001")
+	)
+	(label "MON_KEY_ADC2"
+		(at 38.1 46.99 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003002")
+	)
+	(label "MON_KEY_ADC1"
+		(at 38.1 44.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003003")
+	)
+	(label "MON_KEY_LED"
+		(at 38.1 41.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003004")
+	)
+	(label "MON_KEY_ADC2"
+		(at 77.47 34.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003005")
+	)
+	(label "GND"
+		(at 77.47 44.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003006")
+	)
+	(label "GND"
+		(at 104.14 22.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003007")
+	)
+	(label "VGPIO_3V3"
+		(at 104.14 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003008")
+	)
+	(label "GPIO2_SDA"
+		(at 124.46 36.83 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003009")
+	)
+	(label "GPIO3_SCL"
+		(at 124.46 39.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003010")
+	)
+	(label "GPIO17"
+		(at 124.46 41.91 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003011")
+	)
+	(label "VGPIO_3V3"
+		(at 66.04 31.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003015")
+	)
+	(label "GND"
+		(at 66.04 20.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003016")
+	)
+	(label "VGPIO_3V3"
+		(at 53.34 31.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003017")
+	)
+	(label "GND"
+		(at 53.34 20.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003018")
+	)
+	(label "MON_KEY_ADC1"
+		(at 33.02 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003019")
+	)
+	(label "VGPIO_3V3"
+		(at 73.66 83.82 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003020")
+	)
+	(label "GPIO27"
+		(at 73.66 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003021")
+	)
+	(label "GND"
+		(at 73.66 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003022")
+	)
+	(label "MON_KEY_LED"
+		(at 33.02 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003023")
+	)
+	(label "VGPIO_3V3"
+		(at 73.66 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003024")
+	)
+	(label "GPIO22"
+		(at 73.66 144.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003025")
+	)
+	(label "GND"
+		(at 73.66 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003026")
+	)
+	(label "GPIO5"
+		(at 109.22 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003027")
+	)
+	(label "MON_KEY_ADC1"
+		(at 158.75 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003028")
+	)
+	(label "GND"
+		(at 148.59 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003029")
+	)
+	(label "GND"
+		(at 125.73 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003030")
+	)
+	(label "GPIO6"
+		(at 109.22 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003031")
+	)
+	(label "MON_KEY_ADC2"
+		(at 158.75 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003032")
+	)
+	(label "GND"
+		(at 148.59 119.38 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003033")
+	)
+	(label "GND"
+		(at 125.73 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003034")
+	)
+	(label "GPIO13"
+		(at 109.22 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003035")
+	)
+	(label "MON_KEY_ADC2"
+		(at 158.75 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003036")
+	)
+	(label "GND"
+		(at 148.59 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003037")
+	)
+	(label "GND"
+		(at 125.73 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003038")
+	)
+	(label "GPIO19"
+		(at 109.22 144.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003039")
+	)
+	(label "MON_KEY_ADC2"
+		(at 158.75 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003040")
+	)
+	(label "GND"
+		(at 148.59 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003041")
+	)
+	(label "GND"
+		(at 125.73 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003042")
+	)
+	(label "GPIO26"
+		(at 109.22 160.02 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003043")
+	)
+	(label "MON_KEY_ADC2"
+		(at 158.75 154.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003044")
+	)
+	(label "GND"
+		(at 148.59 165.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003045")
+	)
+	(label "GND"
+		(at 125.73 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-000000003046")
+	)
 	(symbol
 		(lib_id "Phase6:Conn_01x04")
 		(at 30.48 45.72 0)
-		(unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005001")
-		(property "Reference" "J1" (at 30.48 53.34 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "MONITOR_JOG" (at 30.48 35.56 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" (at 30.48 45.72 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "" (at 30.48 45.72 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "Monitor-side JOG harness breakout" (at 30.48 45.72 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005011"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005012"))
-		(pin "3" (uuid "66666666-0000-4000-8000-000000005013"))
-		(pin "4" (uuid "66666666-0000-4000-8000-000000005014"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "J1") (unit 1))))
+		(property "Reference" "J1"
+			(at 30.48 53.34 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MONITOR_JOG"
+			(at 30.48 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+			(at 30.48 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Monitor-side JOG harness breakout"
+			(at 30.48 45.72 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005011")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005012")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005013")
+		)
+		(pin "4"
+			(uuid "66666666-0000-4000-8000-000000005014")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:ADS1115")
-		(at 88.90 41.91 0)
-		(unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 104.14 41.91 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005002")
-		(property "Reference" "U1" (at 91.44 54.61 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "ADS1115" (at 88.90 22.86 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "" (at 88.90 41.91 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "" (at 88.90 41.91 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "ADS1115 breakout/module placeholder" (at 88.90 41.91 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005021"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005022"))
-		(pin "3" (uuid "66666666-0000-4000-8000-000000005023"))
-		(pin "4" (uuid "66666666-0000-4000-8000-000000005024"))
-		(pin "5" (uuid "66666666-0000-4000-8000-000000005025"))
-		(pin "6" (uuid "66666666-0000-4000-8000-000000005026"))
-		(pin "7" (uuid "66666666-0000-4000-8000-000000005027"))
-		(pin "8" (uuid "66666666-0000-4000-8000-000000005028"))
-		(pin "9" (uuid "66666666-0000-4000-8000-000000005029"))
-		(pin "10" (uuid "66666666-0000-4000-8000-000000005030"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "U1") (unit 1))))
+		(property "Reference" "U1"
+			(at 106.68 54.61 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "ADS1115"
+			(at 104.14 22.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 104.14 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 104.14 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "ADS1115 breakout/module placeholder"
+			(at 104.14 41.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005021")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005022")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005023")
+		)
+		(pin "4"
+			(uuid "66666666-0000-4000-8000-000000005024")
+		)
+		(pin "5"
+			(uuid "66666666-0000-4000-8000-000000005025")
+		)
+		(pin "6"
+			(uuid "66666666-0000-4000-8000-000000005026")
+		)
+		(pin "7"
+			(uuid "66666666-0000-4000-8000-000000005027")
+		)
+		(pin "8"
+			(uuid "66666666-0000-4000-8000-000000005028")
+		)
+		(pin "9"
+			(uuid "66666666-0000-4000-8000-000000005029")
+		)
+		(pin "10"
+			(uuid "66666666-0000-4000-8000-000000005030")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 45.72 99.06 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 45.72 99.06 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005005")
-		(property "Reference" "R1" (at 43.18 101.60 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 43.18 97.79 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_ADC1 base resistor" (at 45.72 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005051"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005052"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R1") (unit 1))))
+		(property "Reference" "R1"
+			(at 43.18 101.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 43.18 97.79 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 45.72 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 45.72 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_ADC1 base resistor"
+			(at 45.72 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005051")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005052")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:2N3904")
-		(at 58.42 99.06 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 58.42 99.06 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005006")
-		(property "Reference" "Q1" (at 63.50 104.14 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 63.50 92.71 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 58.42 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 58.42 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_ADC1 input conditioner" (at 58.42 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005061"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005062"))
-		(pin "3" (uuid "66666666-0000-4000-8000-000000005063"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q1") (unit 1))))
+		(property "Reference" "Q1"
+			(at 63.5 104.14 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 63.5 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 58.42 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 58.42 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_ADC1 input conditioner"
+			(at 58.42 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005061")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005062")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005063")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 66.04 88.90 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 66.04 88.9 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005007")
-		(property "Reference" "R2" (at 68.58 90.17 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10k" (at 68.58 87.63 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 66.04 88.90 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 66.04 88.90 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_ADC1 pull-up" (at 66.04 88.90 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005071"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005072"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R2") (unit 1))))
+		(property "Reference" "R2"
+			(at 68.58 90.17 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 68.58 87.63 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 66.04 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_ADC1 pull-up"
+			(at 66.04 88.9 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005071")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005072")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 45.72 149.86 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 45.72 149.86 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005008")
-		(property "Reference" "R3" (at 43.18 152.40 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10k" (at 43.18 148.59 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 45.72 149.86 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 45.72 149.86 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_LED base resistor" (at 45.72 149.86 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005081"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005082"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R3") (unit 1))))
+		(property "Reference" "R3"
+			(at 43.18 152.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 43.18 148.59 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 45.72 149.86 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 45.72 149.86 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_LED base resistor"
+			(at 45.72 149.86 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005081")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005082")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R3")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:2N3904")
-		(at 58.42 149.86 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 58.42 149.86 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005009")
-		(property "Reference" "Q2" (at 63.50 154.94 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 63.50 143.51 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 58.42 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 58.42 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_LED input conditioner" (at 58.42 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005091"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005092"))
-		(pin "3" (uuid "66666666-0000-4000-8000-000000005093"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q2") (unit 1))))
+		(property "Reference" "Q2"
+			(at 63.5 154.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 63.5 143.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 58.42 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 58.42 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_LED input conditioner"
+			(at 58.42 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005091")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005092")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005093")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q2")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 66.04 139.70 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+		(at 66.04 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005010")
-		(property "Reference" "R4" (at 68.58 140.97 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10k" (at 68.58 138.43 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 66.04 139.70 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 66.04 139.70 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "KEY_LED pull-up" (at 66.04 139.70 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005101"))
-		(pin "2" (uuid "66666666-0000-4000-8000-000000005102"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R4") (unit 1))))
+		(property "Reference" "R4"
+			(at 68.58 140.97 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 68.58 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 66.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "KEY_LED pull-up"
+			(at 66.04 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005101")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005102")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:2N3904") (at 133.35 99.06 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005011")
-		(property "Reference" "Q3" (at 138.43 104.14 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 138.43 92.71 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 133.35 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 133.35 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "CENTER drive transistor" (at 133.35 99.06 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005111")) (pin "2" (uuid "66666666-0000-4000-8000-000000005112")) (pin "3" (uuid "66666666-0000-4000-8000-000000005113"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q3") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:2N3904") (at 133.35 114.30 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005012")
-		(property "Reference" "Q4" (at 138.43 119.38 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 138.43 107.95 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 133.35 114.30 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 133.35 114.30 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "UP drive transistor" (at 133.35 114.30 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005121")) (pin "2" (uuid "66666666-0000-4000-8000-000000005122")) (pin "3" (uuid "66666666-0000-4000-8000-000000005123"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q4") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:2N3904") (at 133.35 129.54 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005013")
-		(property "Reference" "Q5" (at 138.43 134.62 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 138.43 123.19 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 133.35 129.54 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 133.35 129.54 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "DOWN drive transistor" (at 133.35 129.54 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005131")) (pin "2" (uuid "66666666-0000-4000-8000-000000005132")) (pin "3" (uuid "66666666-0000-4000-8000-000000005133"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q5") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:2N3904") (at 133.35 144.78 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005014")
-		(property "Reference" "Q6" (at 138.43 149.86 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 138.43 138.43 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 133.35 144.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 133.35 144.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "LEFT drive transistor" (at 133.35 144.78 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005141")) (pin "2" (uuid "66666666-0000-4000-8000-000000005142")) (pin "3" (uuid "66666666-0000-4000-8000-000000005143"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q6") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:2N3904") (at 133.35 160.02 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:2N3904")
+		(at 133.35 99.06 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005015")
-		(property "Reference" "Q7" (at 138.43 165.10 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "2N3904" (at 138.43 153.67 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline" (at 133.35 160.02 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 133.35 160.02 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "RIGHT drive transistor" (at 133.35 160.02 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005151")) (pin "2" (uuid "66666666-0000-4000-8000-000000005152")) (pin "3" (uuid "66666666-0000-4000-8000-000000005153"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "Q7") (unit 1))))
+		(property "Reference" "Q3"
+			(at 138.43 104.14 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 138.43 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 133.35 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 133.35 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "CENTER drive transistor"
+			(at 133.35 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005111")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005112")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005113")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q3")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:C") (at 68.58 34.29 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:2N3904")
+		(at 133.35 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005016")
-		(property "Reference" "C1" (at 71.12 35.56 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100n" (at 71.12 33.02 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" (at 68.58 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 68.58 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "ADS1115 local decoupling" (at 68.58 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005161")) (pin "2" (uuid "66666666-0000-4000-8000-000000005162"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "C1") (unit 1))))
+		(property "Reference" "Q4"
+			(at 138.43 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 138.43 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 133.35 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 133.35 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "UP drive transistor"
+			(at 133.35 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005121")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005122")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005123")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q4")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:C") (at 76.20 34.29 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:2N3904")
+		(at 133.35 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005017")
-		(property "Reference" "C2" (at 78.74 35.56 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "1u" (at 78.74 33.02 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm" (at 76.20 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 76.20 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "ADS1115 bulk decoupling" (at 76.20 34.29 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005171")) (pin "2" (uuid "66666666-0000-4000-8000-000000005172"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "C2") (unit 1))))
+		(property "Reference" "Q5"
+			(at 138.43 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 138.43 123.19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 133.35 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 133.35 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "DOWN drive transistor"
+			(at 133.35 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005131")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005132")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005133")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q5")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 120.65 99.06 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:2N3904")
+		(at 133.35 144.78 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005018")
-		(property "Reference" "R5" (at 118.11 101.60 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "4.7k" (at 118.11 97.79 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 120.65 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 120.65 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "CENTER base resistor" (at 120.65 99.06 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005181")) (pin "2" (uuid "66666666-0000-4000-8000-000000005182"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R5") (unit 1))))
+		(property "Reference" "Q6"
+			(at 138.43 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 138.43 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 133.35 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 133.35 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "LEFT drive transistor"
+			(at 133.35 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005141")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005142")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005143")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q6")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 120.65 114.30 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:2N3904")
+		(at 133.35 160.02 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005019")
-		(property "Reference" "R6" (at 118.11 116.84 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "4.7k" (at 118.11 113.03 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 120.65 114.30 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 120.65 114.30 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "UP base resistor" (at 120.65 114.30 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005191")) (pin "2" (uuid "66666666-0000-4000-8000-000000005192"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R6") (unit 1))))
+		(property "Reference" "Q7"
+			(at 138.43 165.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N3904"
+			(at 138.43 153.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 133.35 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 133.35 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RIGHT drive transistor"
+			(at 133.35 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005151")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005152")
+		)
+		(pin "3"
+			(uuid "66666666-0000-4000-8000-000000005153")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "Q7")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 120.65 129.54 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:C")
+		(at 66.04 24.13 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000501a")
+		(property "Reference" "C1"
+			(at 68.58 25.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 68.58 22.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+			(at 66.04 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 66.04 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "ADS1115 local decoupling"
+			(at 66.04 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005161")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005162")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:C")
+		(at 53.34 24.13 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000501b")
+		(property "Reference" "C2"
+			(at 55.88 25.4 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1u"
+			(at 55.88 22.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
+			(at 53.34 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 53.34 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "ADS1115 bulk decoupling"
+			(at 53.34 24.13 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005171")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005172")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 120.65 99.06 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000501c")
+		(property "Reference" "R5"
+			(at 118.11 101.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 118.11 97.79 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 120.65 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "CENTER base resistor"
+			(at 120.65 99.06 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005181")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005182")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 120.65 114.3 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000501d")
+		(property "Reference" "R6"
+			(at 118.11 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 118.11 113.03 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 120.65 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "UP base resistor"
+			(at 120.65 114.3 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005191")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005192")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 120.65 129.54 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005020")
-		(property "Reference" "R7" (at 118.11 132.08 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "4.7k" (at 118.11 128.27 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 120.65 129.54 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 120.65 129.54 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "DOWN base resistor" (at 120.65 129.54 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005201")) (pin "2" (uuid "66666666-0000-4000-8000-000000005202"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R7") (unit 1))))
+		(property "Reference" "R7"
+			(at 118.11 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 118.11 128.27 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 120.65 129.54 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 129.54 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "DOWN base resistor"
+			(at 120.65 129.54 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005201")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005202")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 120.65 144.78 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005021")
-		(property "Reference" "R8" (at 118.11 147.32 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "4.7k" (at 118.11 143.51 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 120.65 144.78 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 120.65 144.78 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "LEFT base resistor" (at 120.65 144.78 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005211")) (pin "2" (uuid "66666666-0000-4000-8000-000000005212"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R8") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 120.65 144.78 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502a")
+		(property "Reference" "R8"
+			(at 118.11 147.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 118.11 143.51 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 120.65 144.78 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 144.78 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "LEFT base resistor"
+			(at 120.65 144.78 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005211")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005212")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R8")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 120.65 160.02 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005022")
-		(property "Reference" "R9" (at 118.11 162.56 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "4.7k" (at 118.11 158.75 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 120.65 160.02 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 120.65 160.02 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "RIGHT base resistor" (at 120.65 160.02 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005221")) (pin "2" (uuid "66666666-0000-4000-8000-000000005222"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R9") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 120.65 160.02 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502b")
+		(property "Reference" "R9"
+			(at 118.11 162.56 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "4.7k"
+			(at 118.11 158.75 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 120.65 160.02 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 160.02 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RIGHT base resistor"
+			(at 120.65 160.02 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005221")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005222")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R9")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 146.05 93.98 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005023")
-		(property "Reference" "R10" (at 143.51 96.52 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "22k" (at 143.51 92.71 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.05 93.98 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 146.05 93.98 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "CENTER action resistor" (at 146.05 93.98 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005231")) (pin "2" (uuid "66666666-0000-4000-8000-000000005232"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R10") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 146.05 93.98 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502c")
+		(property "Reference" "R10"
+			(at 143.51 96.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22k"
+			(at 143.51 92.71 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.05 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "CENTER action resistor"
+			(at 146.05 93.98 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005231")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005232")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R10")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 146.05 109.22 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005024")
-		(property "Reference" "R11" (at 143.51 111.76 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "22k" (at 143.51 107.95 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.05 109.22 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 146.05 109.22 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "UP action resistor" (at 146.05 109.22 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005241")) (pin "2" (uuid "66666666-0000-4000-8000-000000005242"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R11") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 146.05 109.22 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502d")
+		(property "Reference" "R11"
+			(at 143.51 111.76 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22k"
+			(at 143.51 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.05 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "UP action resistor"
+			(at 146.05 109.22 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005241")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005242")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R11")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 146.05 124.46 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005025")
-		(property "Reference" "R12" (at 143.51 127.00 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "3.3k" (at 143.51 123.19 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.05 124.46 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 146.05 124.46 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "DOWN action resistor" (at 146.05 124.46 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005251")) (pin "2" (uuid "66666666-0000-4000-8000-000000005252"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R12") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 146.05 124.46 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502e")
+		(property "Reference" "R12"
+			(at 143.51 127 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "3.3k"
+			(at 143.51 123.19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.05 124.46 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 124.46 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "DOWN action resistor"
+			(at 146.05 124.46 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005251")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005252")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R12")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 146.05 139.70 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005026")
-		(property "Reference" "R13" (at 143.51 142.24 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "30k" (at 143.51 138.43 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.05 139.70 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 146.05 139.70 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "LEFT action resistor" (at 146.05 139.70 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005261")) (pin "2" (uuid "66666666-0000-4000-8000-000000005262"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R13") (unit 1))))
+	(symbol
+		(lib_id "Phase6:R")
+		(at 146.05 139.7 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-00000000502f")
+		(property "Reference" "R13"
+			(at 143.51 142.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "30k"
+			(at 143.51 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.05 139.7 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 139.7 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "LEFT action resistor"
+			(at 146.05 139.7 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005261")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005262")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 146.05 154.94 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005027")
-		(property "Reference" "R14" (at 143.51 157.48 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "10k" (at 143.51 153.67 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 146.05 154.94 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 146.05 154.94 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "RIGHT action resistor" (at 146.05 154.94 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005271")) (pin "2" (uuid "66666666-0000-4000-8000-000000005272"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R14") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:R") (at 125.73 104.14 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005028")
-		(property "Reference" "R15" (at 128.27 105.41 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 128.27 102.87 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 125.73 104.14 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 125.73 104.14 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "CENTER base pulldown" (at 125.73 104.14 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005281")) (pin "2" (uuid "66666666-0000-4000-8000-000000005282"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R15") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:R") (at 125.73 119.38 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005029")
-		(property "Reference" "R16" (at 128.27 120.65 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 128.27 118.11 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 125.73 119.38 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 125.73 119.38 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "UP base pulldown" (at 125.73 119.38 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005291")) (pin "2" (uuid "66666666-0000-4000-8000-000000005292"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R16") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:R") (at 125.73 134.62 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
-		(uuid "66666666-0000-4000-8000-000000005030")
-		(property "Reference" "R17" (at 128.27 135.89 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 128.27 133.35 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 125.73 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 125.73 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "DOWN base pulldown" (at 125.73 134.62 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005301")) (pin "2" (uuid "66666666-0000-4000-8000-000000005302"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R17") (unit 1))))
-	)
-	(symbol (lib_id "Phase6:R") (at 125.73 149.86 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 146.05 154.94 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005031")
-		(property "Reference" "R18" (at 128.27 151.13 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 128.27 148.59 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 125.73 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 125.73 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "LEFT base pulldown" (at 125.73 149.86 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005311")) (pin "2" (uuid "66666666-0000-4000-8000-000000005312"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R18") (unit 1))))
+		(property "Reference" "R14"
+			(at 143.51 157.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 143.51 153.67 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 146.05 154.94 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 146.05 154.94 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RIGHT action resistor"
+			(at 146.05 154.94 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005271")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005272")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
 	)
-	(symbol (lib_id "Phase6:R") (at 125.73 165.10 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 125.73 104.14 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000005032")
-		(property "Reference" "R19" (at 128.27 166.37 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Value" "100k" (at 128.27 163.83 0) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify left)))
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" (at 125.73 165.10 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Datasheet" "~" (at 125.73 165.10 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(property "Description" "RIGHT base pulldown" (at 125.73 165.10 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
-		(pin "1" (uuid "66666666-0000-4000-8000-000000005321")) (pin "2" (uuid "66666666-0000-4000-8000-000000005322"))
-		(instances (project "phase-6-protoboard-validation" (path "/" (reference "R19") (unit 1))))
+		(property "Reference" "R15"
+			(at 128.27 105.41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 128.27 102.87 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 125.73 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 125.73 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "CENTER base pulldown"
+			(at 125.73 104.14 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005281")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005282")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 125.73 119.38 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-000000005033")
+		(property "Reference" "R16"
+			(at 128.27 120.65 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 128.27 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 125.73 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 125.73 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "UP base pulldown"
+			(at 125.73 119.38 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005291")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005292")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 125.73 134.62 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-000000005034")
+		(property "Reference" "R17"
+			(at 128.27 135.89 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 128.27 133.35 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 125.73 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 125.73 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "DOWN base pulldown"
+			(at 125.73 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005301")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005302")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 125.73 149.86 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-000000005035")
+		(property "Reference" "R18"
+			(at 128.27 151.13 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 128.27 148.59 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 125.73 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 125.73 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "LEFT base pulldown"
+			(at 125.73 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005311")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005312")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Phase6:R")
+		(at 125.73 165.1 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66666666-0000-4000-8000-000000005036")
+		(property "Reference" "R19"
+			(at 128.27 166.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 128.27 163.83 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
+			(at 125.73 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 125.73 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "RIGHT base pulldown"
+			(at 125.73 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "66666666-0000-4000-8000-000000005321")
+		)
+		(pin "2"
+			(uuid "66666666-0000-4000-8000-000000005322")
+		)
+		(instances
+			(project "phase-6-protoboard-validation"
+				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+					(reference "R19")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(sheet_instances
 		(path "/"
