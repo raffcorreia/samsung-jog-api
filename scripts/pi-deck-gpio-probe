@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Wrapper: run the bench script with backend/src on PYTHONPATH (no pip install required).
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export PYTHONPATH="${ROOT}/backend/src${PYTHONPATH:+:${PYTHONPATH}}"
+exec python3 "${ROOT}/scripts/pi_deck_gpio_probe.py" "$@"

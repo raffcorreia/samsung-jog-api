@@ -40,7 +40,8 @@ Top-level packages inside **`pi_deck`** (each is a real directory with an `__ini
 | `hardware` | GPIO, `JOG`, `LED`, `DDC` adapters — **only** layer that touches signals |
 | `storage` | Recordings, settings, local files |
 | `models` | Domain types and validation models |
-| `cli` | Console tools (e.g. bench probe); **not** loaded by the web app unless explicitly invoked |
+
+Bring-up and one-off **bench scripts** (not importable API) live under the repository **`scripts/`** directory, next to operational shell helpers.
 
 ### Lifecycle across implementation phases
 

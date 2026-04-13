@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pi-deck"
+version = "0.1.0"
+description = "pi-deck: Raspberry Pi control deck backend (CJ791 JOG project)"
+readme = "../README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "gpiozero>=2.0",
+    "smbus2>=0.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pi_deck"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/pi_deck"]
+
+[tool.hatch.build]
+dev-mode-dirs = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]

@@ -436,9 +436,9 @@ Build and validate low-level hardware control on a working prototype. **Current 
 
 ### Execution record
 
-Complete: [Phase 8 Execution Record](./phase-8-execution.md) (2026-04-12). Bench validation confirmed jog behavior via the Phase 6 hardware path (including manual transistor-level actuation before the Pi was wired). Precise timing capture, ADS1115 baselines, and Pi-driven `sjog-phase8-probe` runs are documented as immediate follow-on software work.
+Complete: [Phase 8 Execution Record](./phase-8-execution.md) (2026-04-12). Bench validation confirmed jog behavior via the Phase 6 hardware path (including manual transistor-level actuation before the Pi was wired). Precise timing capture, ADS1115 baselines, and Pi-driven GPIO bench script runs are documented as immediate follow-on software work.
 
-**How to run the probe:** [Phase 8 bench probe runbook](../runbooks/phase8-probe.md).
+**How to run the bench script:** [GPIO bench probe (protoboard)](../runbooks/gpio-bench-probe.md).
 
 ## Phase 9: Local Platform Bring-Up
 

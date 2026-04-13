@@ -39,7 +39,7 @@ Validation was performed by **manually actuating the drive transistors** (bench 
 
 ## Digital inputs — question 8 rephrased
 
-The earlier question was: *when the Pi reads `KEY_ADC1` and `KEY_LED` with `sjog-phase8-probe read-ins`, do the gpiozero “active” readings match what you see electrically (idle vs pressed)?*
+The earlier question was: *when the Pi reads `KEY_ADC1` and `KEY_LED` with the GPIO bench script (`read-ins`), do the gpiozero “active” readings match what you see electrically (idle vs pressed)?*
 
 **Answer:** Not exercised yet — the **Pi was not connected** to these lines at validation time, and **no software defaults were changed** (see below). This check is an **immediate next step** once the Pi is wired to the protoboard.
 
@@ -55,27 +55,27 @@ The earlier question was: *when the Pi reads `KEY_ADC1` and `KEY_LED` with `sjog
 | Idle vs active mV | **Not measured yet** — to be captured under software-controlled sampling |
 | ALERT/RDY (GPIO17) | **Wired**; **intended to be used** — module `ads_alert_observe` + CLI `read-alert` provided for bring-up |
 
-## `sjog-phase8-probe` (what it is for)
+## GPIO bench script (bring-up)
 
-Low-level **smoke tests** on real GPIO and I²C (Pi + Phase 6 harness). **How to install and run it** (entry points, prerequisites, subcommands, troubleshooting) is defined in the project as a runbook: **[Phase 8 bench probe — execution definition](../runbooks/phase8-probe.md)**.
+Low-level **smoke tests** on real GPIO and I²C (Pi + protoboard harness). **How to run it** is in **[GPIO bench probe (protoboard)](../runbooks/gpio-bench-probe.md)** (`scripts/pi_deck_gpio_probe.py`).
 
 **Status at Phase 8 closure:** **Not run on-device yet** — operator focused on **manual transistor-level** proof; **Pi-attached runs** are the next software milestone.
 
 ## Code modules (repository)
 
-- **Pins / actions**: `pi_deck.hardware.phase6_pins` — `Phase6Pins`, `JogAction`
-- **Drive outputs**: `pi_deck.hardware.jog_drive` — `Phase6JogDrive` (active-high; **only one direction at a time** — enforced by `release_all` before `hold` / `pulse`)
+- **Pins / actions**: `pi_deck.hardware.protoboard_pins` — `ProtoboardPins`, `JogAction`
+- **Drive outputs**: `pi_deck.hardware.jog_drive` — `JogDrive` (active-high; **only one direction at a time** — enforced by `release_all` before `hold` / `pulse`)
 - **Digital observation**: `jog_observe` (`KEY_ADC1`), `led_observe` (`KEY_LED`)
 - **ADS1115 ALERT**: `ads_alert_observe` (`GPIO17`)
 - **Analog observation**: `ads1115` — `Ads1115.read_single_ended_mv`
-- **Bench CLI**: `sjog-phase8-probe` → `pi_deck.cli.phase8_probe` (see above)
+- **Bench script**: `scripts/pi_deck_gpio_probe.py` (wrapper: `scripts/pi-deck-gpio-probe`) — see runbook above
 
 ## Bench validation checklist
 
 - [x] Each logical jog **direction** is interpreted correctly by the monitor **via the analog drive path** (manual bench actuation)
 - [x] **Repeat / hold** behavior observed (~**1 s** to repeat, approximate)
 - [x] **Mutual exclusion** between directions documented (release before next; no combined drive)
-- [ ] **Pi-driven** `sjog-phase8-probe` / GPIO — **pending** (next implementation step)
+- [ ] **Pi-driven** GPIO bench script / GPIO — **pending** (next implementation step)
 - [ ] **Precise** ms timing table — **deferred** to software-instrumented capture
 - [ ] **ADS1115** mV baselines — **deferred** to logged sampling
 - [ ] **Regression tests** in CI — **deferred** (hardware-dependent; mocks later)
@@ -85,12 +85,12 @@ Low-level **smoke tests** on real GPIO and I²C (Pi + Phase 6 harness). **How to
 **Phase 8 is complete** as of **2026-04-12** with this scope:
 
 - **Met:** Phase 6 protoboard matches schematics; HDMI direct; **all five directions** validated at the monitor using the **custom hardware path**; **repeat delay** and **mutual-exclusion** operating rules captured; **AIN0** wiring called out; **ALERT** wired and software hooks started.
-- **Explicitly out of scope for this closure:** Sub-millisecond **timing tables**, **ADS1115** voltage baselines, and **Pi-attached** GPIO/I²C verification — tracked as **immediate follow-on work** (software development and on-Pi `sjog-phase8-probe` runs).
+- **Explicitly out of scope for this closure:** Sub-millisecond **timing tables**, **ADS1115** voltage baselines, and **Pi-attached** GPIO/I²C verification — tracked as **immediate follow-on work** (software development and on-Pi bench script runs).
 
 This matches the intent to **move on to software development** while keeping the record honest about what was proven on the bench versus what remains to be exercised from the Pi.
 
 ## Follow-on work (Phase 9+ software; not required to re-open Phase 8)
 
 1. Connect the **Raspberry Pi** to the Phase 6 harness per the pin map.
-2. Run **`sjog-phase8-probe`** (`pulse`, `read-ins`, `read-alert`, `read-ads`) and adjust **digital polarity / pull** only if the schematic’s conditioning disagrees with gpiozero defaults.
+2. Run **`./scripts/pi-deck-gpio-probe`** (`pulse`, `read-ins`, `read-alert`, `read-ads`) and adjust **digital polarity / pull** only if the schematic’s conditioning disagrees with gpiozero defaults.
 3. Implement **application-level** drive and observation (mutual exclusion, optional **ALERT**-driven sampling) and add **instrumented timing** when recording tooling exists.

@@ -33,7 +33,7 @@ Current state of the repository:
 - repository now includes completed Phase 6 protoboard validation documentation, schematic, BOM, and execution record
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
-- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TS UI — placeholder); Phase 6 hardware helpers live under `backend/src/pi_deck/hardware/`. Bench CLI: `scripts/sjog-phase8-probe` or `pip install -e backend/` → `sjog-phase8-probe` — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md)
+- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TS UI — placeholder); protoboard GPIO helpers live under `backend/src/pi_deck/hardware/`. Bring-up script: `scripts/pi-deck-gpio-probe` (see [runbook](docs/runbooks/gpio-bench-probe.md)) — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md)
 
 ## Why this project exists
 
@@ -90,7 +90,7 @@ Reference and reverse-engineering notes:
 Operational docs:
 
 - [Prepare Raspberry Pi](docs/runbooks/prepare-raspberry-pi.md)
-- [Phase 8 bench probe (`sjog-phase8-probe`)](docs/runbooks/phase8-probe.md) — how to run the GPIO/I²C smoke tool on the Pi
+- [GPIO bench probe (protoboard)](docs/runbooks/gpio-bench-probe.md) — GPIO/I²C bring-up script on the Pi
 - [Phase 2 Execution Record](docs/implementation/phase-2-execution.md)
 - [Phase 3 Execution Record](docs/implementation/phase-3-execution.md)
 - [Phase 4 Execution Record](docs/implementation/phase-4-execution.md)
