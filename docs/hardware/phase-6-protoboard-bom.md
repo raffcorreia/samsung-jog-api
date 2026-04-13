@@ -10,14 +10,12 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `Q1-Q7` | `7` | `2N3904` | `Q1-Q2` observe, `Q3-Q7` drive |
 | `C1` | `1` | capacitor | `100 nF` |
 | `C2` | `1` | capacitor | `1 uF` |
-| `R1` | `1` | resistor | `100 kOhm` |
-| `R2-R4` | `3` | resistor | `10 kOhm` |
+| `R1, R15-R19` | `6` | resistor | `100 kOhm` |
+| `R2-R4, R14` | `4` | resistor | `10 kOhm` |
 | `R5-R9` | `5` | resistor | `4.7 kOhm` |
 | `R10-R11` | `2` | resistor | `22 kOhm` |
 | `R12` | `1` | resistor | `3.3 kOhm` |
 | `R13` | `1` | resistor | `30 kOhm` |
-| `R14` | `1` | resistor | `10 kOhm` |
-| `R15-R19` | `5` | resistor | `100 kOhm` |
 | `J1` | `1` | `1x4` header | monitor harness |
 
 ## Raspberry Pi Wiring
