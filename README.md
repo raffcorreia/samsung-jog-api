@@ -22,7 +22,9 @@ Current state of the repository:
 - completed: `Phase 4: Analog Drive Circuit Design` (design docs, KiCad schematic/PCB, BOM, and concept schematic)
 - completed: `Phase 5: HDMI and DDC Communication Design`
 - completed: `Phase 6: Discrete-Component Protoboard Validation`
-- current phase: `Phase 7: Integrated Controller Board Design`
+- completed: `Phase 8: GPIO Assignment and Low-Level Control Prototype` — [execution record](docs/implementation/phase-8-execution.md)
+- current phase: `Phase 9: Local Platform Bring-Up` (see [Implementation Plan](docs/implementation/plan.md))
+- in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
 - repository now includes a Phase 3 execution record for bus-observation hardware design
@@ -31,7 +33,7 @@ Current state of the repository:
 - repository now includes completed Phase 6 protoboard validation documentation, schematic, BOM, and execution record
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
-- no production code yet
+- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TS UI — placeholder); Phase 6 hardware helpers live under `backend/src/pi_deck/hardware/`. Bench CLI: `scripts/sjog-phase8-probe` or `pip install -e backend/` → `sjog-phase8-probe` — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md)
 
 ## Why this project exists
 
@@ -88,11 +90,13 @@ Reference and reverse-engineering notes:
 Operational docs:
 
 - [Prepare Raspberry Pi](docs/runbooks/prepare-raspberry-pi.md)
+- [Phase 8 bench probe (`sjog-phase8-probe`)](docs/runbooks/phase8-probe.md) — how to run the GPIO/I²C smoke tool on the Pi
 - [Phase 2 Execution Record](docs/implementation/phase-2-execution.md)
 - [Phase 3 Execution Record](docs/implementation/phase-3-execution.md)
 - [Phase 4 Execution Record](docs/implementation/phase-4-execution.md)
 - [Phase 5 Execution Record](docs/implementation/phase-5-execution.md)
 - [Phase 6 Execution Record](docs/implementation/phase-6-execution.md)
+- [Phase 8 Execution Record](docs/implementation/phase-8-execution.md)
 
 ## Start here
 

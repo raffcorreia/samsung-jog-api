@@ -10,7 +10,7 @@
 - [Phase 5: HDMI and DDC Communication Design](#phase-5-hdmi-and-ddc-communication-design)
 - [Phase 6: Discrete-Component Protoboard Validation](#phase-6-discrete-component-protoboard-validation)
 - [Phase 7: Integrated Controller Board Design](#phase-7-integrated-controller-board-design)
-- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype)
+- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype) — **complete**
 - [Phase 9: Local Platform Bring-Up](#phase-9-local-platform-bring-up)
 - [Phase 10: Local API](#phase-10-local-api)
 - [Phase 11: Low-Level JOG Console UI](#phase-11-low-level-jog-console-ui)
@@ -22,6 +22,7 @@
 - [Phase 17: Dashboard Data-Source Spike](#phase-17-dashboard-data-source-spike)
 - [Phase 18: Dashboard Widgets](#phase-18-dashboard-widgets)
 - [Phase 19: Stabilization](#phase-19-stabilization)
+- [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
 
 ## Summary
 
@@ -39,6 +40,18 @@ The overall strategy is:
 8. finish dashboard and stabilization work
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
+
+## Deferred integrated-board GPIO and software migration
+
+Phase 7 (integrated `KiCad` boards) may still be in layout or fabrication while software advances. Low-level work from Phase 8 onward is therefore validated first on the **Phase 6 discrete protoboard**, whose **GPIO map differs** from the final integrated assignment (see [Phase 6 Execution Record](./phase-6-execution.md) vs [Phase 7 Execution Record](./phase-7-execution.md)).
+
+When Phase 7 hardware is ready, the plan will **insert an additional phase** at a **TBD slot** (for example after intermediate milestones — numbering is chosen at insertion time so the surrounding order stays coherent). That phase will cover:
+
+- remapping GPIO and host configuration from the Phase 6 baseline to the Phase 7 pinout
+- adapting and re-validating software, tests, and automation that assumed Phase 6 pins
+- updating operational docs and runbooks that reference specific BCM GPIO numbers or physical pins
+
+Until that migration phase runs, treat the **Phase 6 GPIO map** as the authoritative software bring-up reference for hardware-facing code.
 
 ## Testing Strategy
 
@@ -389,9 +402,11 @@ Combine the validated outputs of Phase 3 observation, Phase 4 drive, Phase 5 `HD
 
 ## Phase 8: GPIO Assignment and Low-Level Control Prototype
 
+**Status: complete.** Record: [Phase 8 Execution Record](./phase-8-execution.md).
+
 ### Goal
 
-Build and validate the first working hardware prototype from the approved integrated controller-board design.
+Build and validate low-level hardware control on a working prototype. **Current approach:** use the **Phase 6 protoboard** and its documented GPIO map first; the **integrated Phase 7 boards** are tracked separately and will trigger a [deferred migration phase](#deferred-integrated-board-gpio-and-software-migration) when they exist.
 
 ### Scope
 
@@ -401,7 +416,7 @@ Build and validate the first working hardware prototype from the approved integr
 
 ### Tasks
 
-- build a bench prototype or first manufactured hardware prototype
+- build or reuse the Phase 6 bench prototype (or first integrated hardware when available)
 - verify that each low-level `JOG` action is correctly interpreted by the monitor
 - measure press, hold, repeat, and release timing
 - record any timing sensitivity or debounce-like behavior
@@ -416,8 +431,14 @@ Build and validate the first working hardware prototype from the approved integr
 
 ### Exit criteria
 
-- the system can reliably perform each low-level `JOG` action through the custom hardware
-- the integrated board design is proven well enough to support software bring-up
+- the system can reliably perform each low-level `JOG` action through the custom hardware used for bring-up (Phase 6 protoboard until the deferred integrated-board migration runs)
+- the observation and drive paths behave consistently enough to support later platform and API work
+
+### Execution record
+
+Complete: [Phase 8 Execution Record](./phase-8-execution.md) (2026-04-12). Bench validation confirmed jog behavior via the Phase 6 hardware path (including manual transistor-level actuation before the Pi was wired). Precise timing capture, ADS1115 baselines, and Pi-driven `sjog-phase8-probe` runs are documented as immediate follow-on software work.
+
+**How to run the probe:** [Phase 8 bench probe runbook](../runbooks/phase8-probe.md).
 
 ## Phase 9: Local Platform Bring-Up
 

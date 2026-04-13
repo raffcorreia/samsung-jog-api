@@ -29,6 +29,27 @@ The goal is not to create a heavy style manual. The goal is to keep implementati
 
 ## Backend guidelines
 
+The Python import package is **`pi_deck`** (directory `backend/src/pi_deck/`; PyPI / `pip` name **`pi-deck`** in `backend/pyproject.toml`). Repository layout: see [Architecture — Repository layout](../architecture.md#repository-layout).
+
+Top-level packages inside **`pi_deck`** (each is a real directory with an `__init__.py`):
+
+| Package | Role |
+|---------|------|
+| `api` | FastAPI routes, HTTP/WebSocket boundary |
+| `services` | Workflows, arbitration, sequences |
+| `hardware` | GPIO, `JOG`, `LED`, `DDC` adapters — **only** layer that touches signals |
+| `storage` | Recordings, settings, local files |
+| `models` | Domain types and validation models |
+| `cli` | Console tools (e.g. bench probe); **not** loaded by the web app unless explicitly invoked |
+
+### Lifecycle across implementation phases
+
+This matches the system model in [Solution Overview](../design/solution-overview.md): *UI → API → monitor-control services → **hardware interface** (+ DDC) → monitor*.
+
+- **Phases 9+ (platform, API, UI, recording):** the **`hardware/`** tree is **not** throwaway scaffolding. It is the **custom hardware interface** layer: `jog_drive`, `jog_observe`, `led_observe`, later `ddc`, etc. **`services`** and **`api`** (Phases 10–12) **import and orchestrate** this layer; they do not replace it each phase.
+- **Phase 9 (kiosk, `systemd`, logging)** mostly configures **how the host runs** the eventual backend process. It does **not** imply rewriting or discarding the hardware modules—only **starting** the same package under supervision when the API exists.
+- **What may change later:** GPIO numbers and possibly concrete classes when moving from **Phase 6** wiring to **Phase 7** boards ([deferred migration](../implementation/plan.md#deferred-integrated-board-gpio-and-software-migration))—that is **remapping and adaptation**, not deleting the backend and starting over.
+
 ### Language and framework
 
 - use `Python`

@@ -115,9 +115,25 @@ That is much more robust than using only blind button presses, and much more cap
 - use `DDC/CI` and front-panel `LED` state for feedback and status, and `DDC/CI` for supported direct controls
 - keep the design understandable enough that other Samsung owners can adapt it
 
+## Repository layout
+
+The repository is split so **documentation**, **KiCad hardware**, **host scripts**, and **application code** stay separate.
+
+| Path | Purpose |
+|------|---------|
+| `backend/` | Python package **`pi_deck`** (`backend/pyproject.toml`, distribution name `pi-deck`). Source: `backend/src/pi_deck/`. Layers: `api`, `services`, `hardware`, `storage`, `models`, plus `cli` for console entry points. Matches the system model *UI → API → services → hardware (+ DDC)* in [Solution Overview](design/solution-overview.md). |
+| `frontend/` | Reserved for the React / TypeScript kiosk and LAN UI ([Code Guidelines](development/code-guidelines.md#frontend-guidelines)). Empty until that work starts. |
+| `docs/` | Requirements, design, implementation records, runbooks. |
+| `hardware/kicad/` | Schematics and boards (not Python). |
+| `scripts/` | Operational shell helpers (host prep, bench wrappers). |
+| `config/` | Example configs for host preparation. |
+
+Application code for Phases 9–12 lands in **`backend/`** and **`frontend/`**; KiCad stays under **`hardware/`**.
+
 ## Related documents
 
 - [Requirements](requirements.md)
 - [Solution Overview](design/solution-overview.md)
+- [Code Guidelines](development/code-guidelines.md)
 - [CJ791 JOG Board Notes](hardware/cj791-jog-board.md)
 - [CJ791 DDC and VCP Behavior](ddc/cj791-vcp-behavior.md)
