@@ -7624,7 +7624,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "MC74HC4066ADTR2G"
+		(property "Value" "MC74HC4066ADR2G"
 			(at 354.1400 48.26 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7635,7 +7635,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:TSSOP-14_4.4x5mm_P0.65mm"
+		(property "Footprint" "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm"
 			(at 361.7600 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -7679,8 +7679,20 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "MC74HC4066ADTR2G"
+		(property "MPN" "MC74HC4066ADR2G"
 			(at 368.0000 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "LCSC" "C233612"
+			(at 368.0000 81.28 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)

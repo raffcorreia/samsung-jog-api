@@ -734,7 +734,6 @@
 	(wire (pts (xy 142.24 107.62) (xy 149.86 107.62)) (stroke (width 0) (type default)) (uuid "55555555-0000-4000-8000-000000000438"))
 
 	(wire (pts (xy 35.56 222.25) (xy 50.8 222.25)) (stroke (width 0) (type default)) (uuid "b2dd0001-0222-4000-8000-000000000001"))
-	(wire (pts (xy 35.56 224.79) (xy 50.8 224.79)) (stroke (width 0) (type default)) (uuid "b2dd0001-0224-4000-8000-000000000001"))
 	(wire (pts (xy 35.56 219.71) (xy 50.8 219.71)) (stroke (width 0) (type default)) (uuid "55555555-0000-4000-8000-000000000466"))
 	(wire (pts (xy 35.56 217.17) (xy 50.8 217.17)) (stroke (width 0) (type default)) (uuid "55555555-0000-4000-8000-000000000467"))
 	(wire (pts (xy 35.56 214.63) (xy 50.8 214.63)) (stroke (width 0) (type default)) (uuid "55555555-0000-4000-8000-000000000468"))
@@ -854,7 +853,7 @@
 	(label "GND" (at 165.1 198.12 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "55555555-0000-4000-8000-000000000591"))
 
 	(label "GND" (at 50.8 222.25 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "b2dd0001-0222-4000-8000-000000000002"))
-	(no_connect (at 50.8 224.79) (uuid "b2dd0001-0224-4000-8000-000000000002"))
+	(no_connect (at 35.56 224.79) (uuid "b2dd0001-0224-4000-8000-000000000002"))
 	(label "+5V_PI" (at 50.8 219.71 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "55555555-0000-4000-8000-000000000575"))
 	(label "+3V3_PI" (at 50.8 217.17 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "55555555-0000-4000-8000-000000000576"))
 	(label "GND" (at 50.8 214.63 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "55555555-0000-4000-8000-000000000577"))

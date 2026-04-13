@@ -152,29 +152,33 @@ All resistors and capacitors on both boards use **0603** metric footprints:
 
 ## Board 1 — Component List
 
-| RefDes | Value | Function | JLCPCB Part |
-|---|---|---|---|
-| U1 | TLV9064IDR | Quad op-amp observation buffer | C388176 |
-| U2 | ADS1115IDGSR | 16-bit I2C ADC for KEY_ADC2 | C37593 |
-| U3 | 74LVC1G17GW | Schmitt buffer KEY_ADC1 → GPIO | C426705 |
-| U4 | 74LVC1G17GW | Schmitt buffer KEY_LED → GPIO | C426705 |
-| U5 | MC74HC4066ADTR2G | Quad analog switch, KEY_ADC2 drive | C233537 |
-| U6 | 74LVC1G66LT05ARCQ | Single analog switch, KEY_ADC1 center | C46553572 |
-| J1 | JST PH 4-pin | Monitor harness CN1001 | C157929 (B4B-PH-K-S) |
-| J2 | IDC 2×20 | Pi 40-pin GPIO header | Manual THT |
-| J3 | IDC 2×7 | Inter-board to Board 2 | Manual THT |
-| R1, R2, R3 | 10k 1% | Sense protection resistors | C25744 |
-| R4, R5 | 4.7k 1% | I2C pull-ups | C25900 |
-| R6, R7 | 0 (DNP) | Optional buffer-to-ADC jumpers | C17168 |
-| R8 | 30k | KEY_ADC2 LEFT | C2889371 |
-| R9 | 10k | KEY_ADC2 RIGHT | C5362358 |
-| R10 | 3.3k | KEY_ADC2 DOWN | C3017726 |
-| R11 | 22k | KEY_ADC2 UP | C4223986 |
-| R12 | 22k | KEY_ADC1 CENTER | C4223986 |
-| R13–R17 | 100k | Enable default-off pull-downs | C25803 |
-| C1 | 1u | Bulk +3V3 decoupling | C15849 |
-| C2–C7 | 100n | Per-IC local decoupling | C14663 |
-| C8, C9, C10 | 1n | Sense line RC filters | C1588 |
+| RefDes | Value | Function | JLCPCB Part | Type |
+|---|---|---|---|---|
+| U1 | TLV9064IDR | Quad op-amp observation buffer | C388176 | Extended |
+| U2 | ADS1015IDGSR | 12-bit 4-channel I2C ADC for KEY_ADC2 | C193969 | Extended |
+| U3 | 74LVC1G17GW | Schmitt buffer KEY_ADC1 → GPIO | C426705 | Extended |
+| U4 | 74LVC1G17GW | Schmitt buffer KEY_LED → GPIO | C426705 | Extended |
+| U5 | MC74HC4066ADR2G | Quad analog switch, KEY_ADC2 drive | C233612 | Extended |
+| U6 | 74LVC1G66LT05ARCQ | Single analog switch, KEY_ADC1 center | C46553572 | Extended |
+| J1 | JST PH 4-pin | Monitor harness CN1001 | C157929 (B4B-PH-K-S) | — |
+| J2 | IDC 2×20 | Pi 40-pin GPIO header | Manual THT | — |
+| J3 | IDC 2×7 | Inter-board to Board 2 | Manual THT | — |
+| R1, R2, R3 | 10k 1% 0603 | Sense protection resistors | C25804 | Basic |
+| R4, R5 | 4.7k 1% 0603 | I2C pull-ups | C23162 | Basic |
+| R6, R7 | 0 (DNP) 0603 | Optional buffer-to-ADC jumpers | C21189 | Basic |
+| R8 | 30k 1% 0603 | KEY_ADC2 LEFT | C22984 | Basic |
+| R9 | 10k 1% 0603 | KEY_ADC2 RIGHT | C25804 | Basic |
+| R10 | 3.3k 1% 0603 | KEY_ADC2 DOWN | C22978 | Basic |
+| R11 | 22k 1% 0603 | KEY_ADC2 UP | C31850 | Basic |
+| R12 | 22k 1% 0603 | KEY_ADC1 CENTER | C31850 | Basic |
+| R13–R17 | 100k 1% 0603 | Enable default-off pull-downs | C25803 | Basic |
+| C1 | 1u 0603 | Bulk +3V3 decoupling | C15849 | Basic |
+| C2–C7 | 100n 0603 | Per-IC local decoupling | C14663 | Basic |
+| C8, C9, C10 | 1n 0603 | Sense line RC filters | C1588 | Basic |
+
+> **U5 note**: Original choice MC74HC4066ADTR2G (C233537, TSSOP-14) was out of stock. Replaced with MC74HC4066ADR2G (C233612, SOIC-14). Schematic footprint updated to `Package_SO:SOIC-14_3.9x8.7mm_P1.27mm`.
+>
+> **U6 note**: C46553572 confirmed as SOT-23-5 at JLCPCB. Schematic footprint `Package_TO_SOT_SMD:SOT-23-5` is correct.
 
 ## Board 2 — Changes from Phase 5
 
@@ -202,8 +206,7 @@ Board 2 target: approximately **50 × 35 mm**. Dominated by two horizontal HDMI 
 
 - Complete PCB layout for both boards in KiCad GUI (component placement, copper routing, ground pours)
 - Run KiCad GUI DRC on both boards before submitting to `JLCPCB`
-- Verify `30k` resistor `R8` stock at `JLCPCB` before ordering (flagged low-stock in Phase 4)
-- Validate `U5` (`MC74HC4066`) on-resistance with the exact resistor values on the assembled board
+- Validate `U5` (`MC74HC4066`) on-resistance contribution at 3.3V supply against the resistance divider values to confirm JOG classification accuracy
 - Define and document board mounting hole positions and mechanical constraints
 - Define inter-board cable length based on final physical enclosure layout
 
