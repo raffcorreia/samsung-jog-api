@@ -25,7 +25,8 @@ Current state of the repository:
 - completed: `Phase 8: GPIO Assignment and Low-Level Control Prototype` — [execution record](docs/implementation/phase-8-execution.md)
 - completed: `Phase 9: Local Platform Bring-Up` — [execution record](docs/implementation/phase-9-execution.md), [runbook](docs/runbooks/phase-9-platform-bring-up.md) (`systemd` unit `config/systemd/pi-deck.service`, kiosk scripts under `scripts/kiosk/`)
 - completed: `Phase 10: Local API` — [execution record](docs/implementation/phase-10-execution.md) (REST `/api/v1`, WebSocket `/ws/events`)
-- current phase: `Phase 11: Low-Level JOG Console UI` (see [Implementation Plan](docs/implementation/plan.md))
+- completed: `Phase 11: Low-Level JOG Console UI` — [execution record](docs/implementation/phase-11-execution.md) (React JOG console in [`frontend/`](frontend/))
+- current phase: `Phase 12: Recording and Replay Subsystem` (see [Implementation Plan](docs/implementation/plan.md))
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
@@ -35,7 +36,7 @@ Current state of the repository:
 - repository now includes completed Phase 6 protoboard validation documentation, schematic, BOM, and execution record
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
-- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TS UI — placeholder); protoboard GPIO helpers live under `backend/src/pi_deck/hardware/`. Bring-up script: `scripts/pi-deck-gpio-probe` (see [runbook](docs/runbooks/gpio-bench-probe.md)) — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md). Host metrics / Pi baseline: `scripts/pi-deck-host-health.py` (see [Phase 9 execution](docs/implementation/phase-9-execution.md) and [Host health gate](docs/implementation/plan.md#host-health-gate-feature-phases-1019)).
+- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TypeScript UI; `npm run build` copies assets into `backend/src/pi_deck/static/`); protoboard GPIO helpers live under `backend/src/pi_deck/hardware/`. Bring-up script: `scripts/pi-deck-gpio-probe` (see [runbook](docs/runbooks/gpio-bench-probe.md)) — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md). Host metrics / Pi baseline: `scripts/pi-deck-host-health.py` (see [Phase 9 execution](docs/implementation/phase-9-execution.md) and [Host health gate](docs/implementation/plan.md#host-health-gate-feature-phases-1019)).
 
 ## Why this project exists
 

@@ -39,9 +39,11 @@ fi
 
 wait_for_health
 
-# Hide idle cursor on X11 (Wayland: rely on kiosk fullscreen; optional: wlrctl if available)
+# Hide idle cursor on X11; on Wayland try compositor helpers when present (Phase 11 touch polish).
 if [[ -z "${WAYLAND_DISPLAY:-}" ]] && command -v unclutter >/dev/null 2>&1; then
   unclutter -idle 0 -root &
+elif [[ -n "${WAYLAND_DISPLAY:-}" ]] && command -v wlrctl >/dev/null 2>&1; then
+  wlrctl pointer hide 2>/dev/null || true
 fi
 
 CHROME_ARGS=(

@@ -528,6 +528,8 @@ Define and implement the local backend command surface that all UI and control f
 
 ## Phase 11: Low-Level JOG Console UI
 
+**Status: complete.** Record: [Phase 11 Execution Record](./phase-11-execution.md).
+
 ### Goal
 
 Build the first usable controller UI for direct monitor interaction.
