@@ -51,7 +51,18 @@ fi
 sudo systemctl restart pi-deck'
 
 echo "Verifying (localhost on Pi) ..."
-ssh -o BatchMode=yes "${PI_TARGET}" \
-  "sleep 3; curl -sS --connect-timeout 8 http://127.0.0.1:8756/health; echo; curl -sS --connect-timeout 8 http://127.0.0.1:8756/api/v1/status | head -c 400; echo"
+ssh -o BatchMode=yes "${PI_TARGET}" 'set -e
+for i in 1 2 3 4 5 6 7 8 9 10; do
+  if curl -sfS --connect-timeout 4 http://127.0.0.1:8756/health >/dev/null 2>&1; then
+    curl -sS --connect-timeout 8 http://127.0.0.1:8756/health
+    echo
+    curl -sS --connect-timeout 8 http://127.0.0.1:8756/api/v1/status | head -c 400
+    echo
+    exit 0
+  fi
+  sleep 1
+done
+echo "health check failed after restart" >&2
+exit 1'
 
 echo "Done."

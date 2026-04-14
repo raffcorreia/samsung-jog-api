@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { JogPad } from "./components/JogPad";
 import { useDeckEvents } from "./hooks/useDeckEvents";
 import { DeckShell } from "./widgets/DeckShell";
@@ -11,10 +9,6 @@ import styles from "./App.module.css";
 
 export function App() {
   const deck = useDeckEvents();
-  const busy = useMemo(
-    () => deck.status?.control_state === "commanding",
-    [deck.status?.control_state],
-  );
 
   return (
     <DeckShell>
@@ -25,7 +19,12 @@ export function App() {
       />
       <div className={styles.deckBody}>
         <JogWidget>
-          <JogPad deckBusy={busy} onLocalLog={deck.pushLogLine} />
+          <JogPad
+            peerHeldActionCounts={deck.peerHeldActionCounts}
+            onLocalLog={deck.pushLogLine}
+            restHoldDownOk={deck.restHoldDownOk}
+            restHoldUpOk={deck.restHoldUpOk}
+          />
         </JogWidget>
         <LiveLogWidget lines={deck.logLines} />
       </div>

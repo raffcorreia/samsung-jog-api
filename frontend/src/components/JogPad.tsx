@@ -58,27 +58,42 @@ function readJogAction(ev: PointerEvent<Element>): JogAction | null {
 type PtrState = {
   action: JogAction;
   holdToken: string | null;
-  /** True after jog/down returned ok and the segment refcount was incremented. */
+  /** True after jog/down returned ok and local display refcount was incremented. */
   holdEstablished: boolean;
   downPromise: Promise<void>;
   releaseInFlight: boolean;
 };
 
+function mergeHeld(
+  local: Record<JogAction, number>,
+  peer: Record<JogAction, number>,
+  action: JogAction,
+): number {
+  return Math.max(0, (local[action] ?? 0) + (peer[action] ?? 0));
+}
+
 export function JogPad(props: {
-  deckBusy: boolean;
+  peerHeldActionCounts: Record<JogAction, number>;
   onLocalLog: (line: string) => void;
+  restHoldDownOk: (token: string, action: JogAction) => void;
+  restHoldUpOk: (token: string) => void;
 }) {
-  const { deckBusy, onLocalLog } = props;
-  const [actionCounts, setActionCounts] = useState<Record<JogAction, number>>({});
-  const [localPointerCount, setLocalPointerCount] = useState(0);
-  const localPointerCountRef = useRef(0);
+  const { peerHeldActionCounts, onLocalLog, restHoldDownOk, restHoldUpOk } = props;
+  /** This pointer's holds — always paired with REST so UI releases even if a WS frame is missed. */
+  const [localHeldCounts, setLocalHeldCounts] = useState<Record<JogAction, number>>({});
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
 
-  const bumpAction = useCallback((action: JogAction, delta: 1 | -1) => {
-    setActionCounts((prev) => {
+  const bumpLocal = useCallback((action: JogAction, delta: 1 | -1) => {
+    setLocalHeldCounts((prev) => {
       const n = Math.max(0, (prev[action] ?? 0) + delta);
-      return { ...prev, [action]: n };
+      const next: Record<JogAction, number> = { ...prev };
+      if (n === 0) {
+        delete next[action];
+      } else {
+        next[action] = n;
+      }
+      return next;
     });
   }, []);
 
@@ -104,23 +119,22 @@ export function JogPad(props: {
         const token = rec.holdToken;
         try {
           const r = await jogUp(token);
-          bumpAction(rec.action, -1);
-          if (!r.ok) {
+          if (r.ok) {
+            bumpLocal(rec.action, -1);
+            restHoldUpOk(token);
+          } else {
             onLocalLog(`http jog/up — ${r.body.reason}: ${r.body.message}`);
           }
         } catch (e) {
-          bumpAction(rec.action, -1);
           const msg = e instanceof Error ? e.message : String(e);
           onLocalLog(`jog up failed — ${msg}`);
         }
       } finally {
         ptrMapRef.current.delete(pointerId);
-        localPointerCountRef.current = Math.max(0, localPointerCountRef.current - 1);
-        setLocalPointerCount(localPointerCountRef.current);
         rec.releaseInFlight = false;
       }
     },
-    [bumpAction, onLocalLog],
+    [bumpLocal, onLocalLog, restHoldUpOk],
   );
 
   const onSurfacePointerDown = (ev: PointerEvent<HTMLDivElement>) => {
@@ -129,9 +143,6 @@ export function JogPad(props: {
     }
     const action = readJogAction(ev);
     if (!action) {
-      return;
-    }
-    if (deckBusy && localPointerCountRef.current === 0) {
       return;
     }
     ev.preventDefault();
@@ -159,15 +170,14 @@ export function JogPad(props: {
       releaseInFlight: false,
     };
     ptrMapRef.current.set(ev.pointerId, rec);
-    localPointerCountRef.current += 1;
-    setLocalPointerCount(localPointerCountRef.current);
 
     void jogDown(action)
       .then((r) => {
         if (r.ok) {
           rec.holdToken = r.hold_token;
           rec.holdEstablished = true;
-          bumpAction(action, 1);
+          bumpLocal(action, 1);
+          restHoldDownOk(r.hold_token, action);
         } else {
           onLocalLog(`http jog/down — ${r.body.reason}: ${r.body.message}`);
         }
@@ -206,14 +216,11 @@ export function JogPad(props: {
     void releasePointer(ev.pointerId);
   };
 
-  const padLocked = deckBusy && localPointerCount === 0;
-
   return (
     <div className={styles.shell} data-testid="jog-pad" data-touch-policy="none">
       <div
         ref={surfaceRef}
         className={styles.surface}
-        data-pad-locked={padLocked ? "true" : undefined}
         onPointerDown={onSurfacePointerDown}
         onPointerUp={onSurfacePointerUp}
         onPointerCancel={onSurfacePointerCancel}
@@ -230,50 +237,49 @@ export function JogPad(props: {
             d={sectorPath("up")}
             data-jog-action="up"
             role="button"
-            tabIndex={padLocked ? -1 : 0}
+            tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.up}`}
-            aria-pressed={(actionCounts.up ?? 0) > 0}
-            data-pressed={(actionCounts.up ?? 0) > 0 ? "true" : undefined}
+            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "up") > 0}
+            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "up") > 0 ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segRight}`}
             d={sectorPath("right")}
             data-jog-action="right"
             role="button"
-            tabIndex={padLocked ? -1 : 0}
+            tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.right}`}
-            aria-pressed={(actionCounts.right ?? 0) > 0}
-            data-pressed={(actionCounts.right ?? 0) > 0 ? "true" : undefined}
+            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "right") > 0}
+            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "right") > 0 ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segDown}`}
             d={sectorPath("down")}
             data-jog-action="down"
             role="button"
-            tabIndex={padLocked ? -1 : 0}
+            tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.down}`}
-            aria-pressed={(actionCounts.down ?? 0) > 0}
-            data-pressed={(actionCounts.down ?? 0) > 0 ? "true" : undefined}
+            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "down") > 0}
+            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "down") > 0 ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segLeft}`}
             d={sectorPath("left")}
             data-jog-action="left"
             role="button"
-            tabIndex={padLocked ? -1 : 0}
+            tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.left}`}
-            aria-pressed={(actionCounts.left ?? 0) > 0}
-            data-pressed={(actionCounts.left ?? 0) > 0 ? "true" : undefined}
+            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "left") > 0}
+            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "left") > 0 ? "true" : undefined}
           />
         </svg>
         <button
           type="button"
           className={styles.centerBtn}
-          disabled={padLocked}
           data-jog-action="center"
           aria-label={`Jog ${SEGMENT_LABELS.center}`}
-          aria-pressed={(actionCounts.center ?? 0) > 0}
-          data-pressed={(actionCounts.center ?? 0) > 0 ? "true" : undefined}
+          aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "center") > 0}
+          data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "center") > 0 ? "true" : undefined}
         >
           <svg className={styles.powerIcon} viewBox="0 0 24 24" aria-hidden>
             <path

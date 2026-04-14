@@ -8,18 +8,35 @@ import {
 } from "react";
 
 import { fetchStatus, websocketEventsUrl } from "../api/client";
+import { bumpHeldCount } from "./deckHoldPeerSync";
 import { formatWsEventLine } from "../log/formatWsEvent";
-import type { StatusPayload, WsEventV1 } from "../types";
+import type { JogAction, StatusPayload, WsEventV1 } from "../types";
 
 const MAX_LOG = 220;
 
 export interface DeckEventsState {
   status: StatusPayload | null;
+  /** Holds from other viewers / race-ahead WS (not deduped against local REST here). */
+  peerHeldActionCounts: Record<JogAction, number>;
   wsConnected: boolean;
   wsError: string | null;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
   refreshStatus: () => Promise<void>;
+  /** Call after REST ``jog/down`` succeeds — pairs tokens with this UI for WS dedup. */
+  restHoldDownOk: (token: string, action: JogAction) => void;
+  /** Call after REST ``jog/up`` succeeds — updates local REST mirror (see JogPad). */
+  restHoldUpOk: (token: string) => void;
+}
+
+function isJogAction(s: unknown): s is JogAction {
+  return (
+    s === "up" ||
+    s === "down" ||
+    s === "left" ||
+    s === "right" ||
+    s === "center"
+  );
 }
 
 function parseWs(raw: string): WsEventV1 | null {
@@ -36,12 +53,36 @@ function parseWs(raw: string): WsEventV1 | null {
 
 export function useDeckEvents(): DeckEventsState {
   const [status, setStatus] = useState<StatusPayload | null>(null);
+  const [peerHeldActionCounts, setPeerHeldActionCounts] = useState<Record<JogAction, number>>({});
   const [wsConnected, setWsConnected] = useState(false);
   const [wsError, setWsError] = useState<string | null>(null);
   const [logLines, setLogLines] = useState<string[]>([]);
   const sockRef = useRef<WebSocket | null>(null);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopped = useRef(false);
+
+  /** REST-issued tokens for *this* browser — skip matching WS hold_started so we don't double-count with JogPad local REST refcounts. */
+  const myHoldTokensRef = useRef(new Set<string>());
+  /**
+   * If ``hold_started`` arrives before REST returns, we bump peer once; when REST later
+   * confirms, we undo that bump (same token).
+   */
+  const peerPreRestTokensRef = useRef(new Map<string, JogAction>());
+
+  const restHoldDownOk = useCallback((token: string, action: JogAction) => {
+    myHoldTokensRef.current.add(token);
+    const pre = peerPreRestTokensRef.current.get(token);
+    if (pre !== undefined) {
+      peerPreRestTokensRef.current.delete(token);
+      if (pre === action) {
+        setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
+      }
+    }
+  }, []);
+
+  const restHoldUpOk = useCallback((token: string) => {
+    myHoldTokensRef.current.delete(token);
+  }, []);
 
   /** Append one line; keep synchronous for local tap feedback (Pi / kiosk). */
   const pushLogLine = useCallback((line: string) => {
@@ -116,6 +157,38 @@ export function useDeckEvents(): DeckEventsState {
             if (st) {
               setStatus(st);
             }
+            setPeerHeldActionCounts({});
+            peerPreRestTokensRef.current.clear();
+            /* Keep myHoldTokensRef — REST-issued tokens still valid; only peer mirror resets. */
+          }
+          if (parsed.category === "command" && parsed.type === "hold_started") {
+            const token = String(parsed.data.hold_token ?? "");
+            const action = parsed.data.action;
+            if (!token || !isJogAction(action)) {
+              return;
+            }
+            if (myHoldTokensRef.current.has(token)) {
+              return;
+            }
+            peerPreRestTokensRef.current.set(token, action);
+            setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, 1));
+          }
+          if (parsed.category === "command" && parsed.type === "accepted") {
+            const holdToken = parsed.data.hold_token;
+            if (holdToken === "pulse") {
+              /* timed pulse — not a directional hold */
+            } else {
+              const token = String(holdToken ?? "");
+              const action = parsed.data.action;
+              if (!token || !isJogAction(action)) {
+                return;
+              }
+              peerPreRestTokensRef.current.delete(token);
+              if (myHoldTokensRef.current.has(token)) {
+                return;
+              }
+              setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
+            }
           }
           if (parsed.category === "control" && parsed.type === "state") {
             setStatus((prev) =>
@@ -176,12 +249,25 @@ export function useDeckEvents(): DeckEventsState {
   return useMemo(
     () => ({
       status,
+      peerHeldActionCounts,
       wsConnected,
       wsError,
       logLines,
       pushLogLine,
       refreshStatus,
+      restHoldDownOk,
+      restHoldUpOk,
     }),
-    [status, wsConnected, wsError, logLines, pushLogLine, refreshStatus],
+    [
+      status,
+      peerHeldActionCounts,
+      wsConnected,
+      wsError,
+      logLines,
+      pushLogLine,
+      refreshStatus,
+      restHoldDownOk,
+      restHoldUpOk,
+    ],
   );
 }
