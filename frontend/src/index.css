@@ -1,19 +1,24 @@
 :root {
   color-scheme: dark;
-  --bg: #0a0e14;
+  /* 7" DSI kiosk: 1280×800 — layout is single-screen; widgets use fixed geometry */
+  --deck-viewport-w: 1280px;
+  --deck-viewport-h: 800px;
+  /* Reserved height for the log band (px). Muscle memory: does not grow with log text. */
+  --deck-log-height: 200px;
+  --bg: #0c0f14;
   --surface: #121820;
-  --surface-elevated: #161d28;
-  --border: #2d3848;
-  --border-bright: #3d4f66;
-  --text: #f0f4f8;
-  --muted: #9aa7b8;
+  --surface-elevated: #1a222c;
+  --border: #3d4a5c;
+  --border-bright: #55667a;
+  --text: #e8eef4;
+  --muted: #9aa8b8;
   --accent: #6cb6ff;
   --accent-dim: #4493f8;
   --danger: #ff7b72;
   --success: #56d364;
-  --pad: clamp(10px, 2.2vw, 18px);
-  --radius: 14px;
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --pad: clamp(10px, 1.6vw, 16px);
+  --radius: 12px;
+  --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
   font-family:
     "Segoe UI",
     system-ui,
@@ -21,8 +26,7 @@
     sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  background: radial-gradient(ellipse 140% 90% at 50% -15%, #1a2435 0%, var(--bg) 55%);
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -45,7 +49,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Single-screen layout: no document rubber-banding; only the log panel scrolls. */
+/* Single-screen appliance: only the log panel scrolls. */
 #root {
   height: 100%;
   min-height: 100dvh;

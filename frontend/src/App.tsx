@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 
-import { ConsoleHero } from "./components/ConsoleHero";
 import { JogPad } from "./components/JogPad";
-import { LiveLog } from "./components/LiveLog";
-import { StatusStrip } from "./components/StatusStrip";
 import { useDeckEvents } from "./hooks/useDeckEvents";
+import { DeckShell } from "./widgets/DeckShell";
+import { JogWidget } from "./widgets/JogWidget";
+import { LiveLogWidget } from "./widgets/LiveLogWidget";
+import { StatusBarWidget } from "./widgets/StatusBarWidget";
 
 import styles from "./App.module.css";
 
@@ -16,16 +17,18 @@ export function App() {
   );
 
   return (
-    <div className={styles.app}>
-      <ConsoleHero />
-      <StatusStrip status={deck.status} wsConnected={deck.wsConnected} wsError={deck.wsError} />
-      <main className={styles.main}>
-        <div className={styles.panel}>
-          <h2 className={styles.panelTitle}>Controls</h2>
-          <JogPad disabled={busy} onLocalLog={deck.pushLogLine} />
-        </div>
-      </main>
-      <LiveLog lines={deck.logLines} />
-    </div>
+    <DeckShell>
+      <StatusBarWidget
+        status={deck.status}
+        wsConnected={deck.wsConnected}
+        wsError={deck.wsError}
+      />
+      <div className={styles.deckBody}>
+        <JogWidget>
+          <JogPad deckBusy={busy} onLocalLog={deck.pushLogLine} />
+        </JogWidget>
+        <LiveLogWidget lines={deck.logLines} />
+      </div>
+    </DeckShell>
   );
 }

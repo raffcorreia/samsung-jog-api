@@ -5,75 +5,143 @@
   align-items: center;
   justify-content: center;
   padding: var(--pad);
-  gap: 0.75rem;
   min-height: 0;
-  /* Kiosk/touch: do not let the browser treat drags as page scroll while using the D-pad. */
   touch-action: none;
 }
 
-.grid {
-  width: min(96vw, 720px);
+/* Single round control — contrast vs deck BG; no nested “product” frames */
+.surface {
+  position: relative;
+  width: min(70vmin, 440px);
+  max-width: 100%;
   aspect-ratio: 1;
-  max-height: min(58dvh, 520px);
-  display: grid;
-  grid-template-columns: 1fr 1.35fr 1fr;
-  grid-template-rows: 1fr 1.35fr 1fr;
-  gap: clamp(6px, 1.4vw, 12px);
-}
-
-.spacer {
-  min-height: 0;
-}
-
-.btn {
-  border-radius: var(--radius, 14px);
-  border: 2px solid var(--border-bright, #3d4f66);
-  background: linear-gradient(180deg, #1e2836 0%, #131a24 100%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 42%,
+    #4a5566 0%,
+    #3a4452 38%,
+    #2a323e 72%,
+    #1e252f 100%
+  );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 2px 8px rgba(0, 0, 0, 0.35);
-  font-weight: 700;
-  font-size: clamp(0.95rem, 3.5vw, 1.25rem);
-  min-height: 64px;
-  min-width: 64px;
+    inset 0 3px 14px rgba(0, 0, 0, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 6px 22px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.12s ease;
+}
+
+.surface[data-pad-locked="true"] {
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.ringSvg {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.ringSeg {
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 1.25;
+  fill: #6a7a8c;
+  cursor: pointer;
   touch-action: none;
   -webkit-touch-callout: none;
   user-select: none;
-  cursor: pointer;
-  /* Promote each control to its own layer so Pi / kiosk Chromium repaints taps quickly. */
-  backface-visibility: hidden;
-  transform: translateZ(0);
+  outline: none;
   transition:
-    transform 0.08s ease,
-    border-color 0.12s ease,
-    background 0.12s ease,
-    box-shadow 0.12s ease;
+    filter 0.1s ease,
+    fill 0.1s ease;
 }
 
-.btn:active,
-.btn[aria-pressed="true"] {
-  transform: translateZ(0) scale(0.98);
-  border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
-  background: linear-gradient(180deg, #1a4a72 0%, #0f2033 100%);
+.ringSeg:focus-visible {
+  filter: brightness(1.12);
+  stroke: color-mix(in srgb, var(--accent) 55%, rgba(0, 0, 0, 0.5));
+}
+
+@media (hover: hover) {
+  .ringSeg:hover {
+    filter: brightness(1.1);
+    fill: #7d8fa3;
+  }
+}
+
+.ringSeg[aria-pressed="true"],
+.ringSeg[data-pressed="true"] {
+  filter: brightness(0.82) saturate(1.15);
+  fill: #8ea3b8;
+  stroke: color-mix(in srgb, var(--accent) 45%, rgba(0, 0, 0, 0.5));
+  stroke-width: 2;
+}
+
+.centerBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 36%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  background: radial-gradient(
+    circle at 38% 32%,
+    #5a6574 0%,
+    #3d4654 45%,
+    #2a323c 100%
+  );
   box-shadow:
-    inset 0 2px 8px rgba(0, 0, 0, 0.4),
-    0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+    inset 0 2px 8px rgba(0, 0, 0, 0.45),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 10px rgba(0, 0, 0, 0.35);
+  color: rgba(235, 240, 246, 0.88);
+  transition:
+    transform 0.07s ease,
+    filter 0.1s ease,
+    box-shadow 0.1s ease;
 }
 
-.btn:disabled {
+.centerBtn:focus-visible {
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.45),
+    0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+@media (hover: hover) {
+  .centerBtn:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+}
+
+.centerBtn:active:not(:disabled),
+.centerBtn[aria-pressed="true"],
+.centerBtn[data-pressed="true"] {
+  transform: translate(-50%, -50%) scale(0.96);
+  filter: brightness(0.88);
+  box-shadow:
+    inset 0 5px 14px rgba(0, 0, 0, 0.65),
+    0 0 0 2px color-mix(in srgb, var(--accent) 50%, transparent);
+  color: rgba(250, 252, 255, 0.98);
+}
+
+.centerBtn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
-.center {
-  font-size: clamp(1.05rem, 4vw, 1.45rem);
-}
-
-.hint {
-  margin: 0;
-  text-align: center;
-  color: var(--muted);
-  font-size: clamp(0.75rem, 2.2vw, 0.9rem);
-  max-width: 40rem;
-  line-height: 1.4;
+.powerIcon {
+  width: 46%;
+  height: 46%;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
 }

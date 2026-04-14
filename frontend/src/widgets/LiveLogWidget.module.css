@@ -1,0 +1,18 @@
+/* Fixed height: log content scrolls inside — never steals space from the JOG region. */
+.widget {
+  flex: 0 0 var(--deck-log-height, 200px);
+  height: var(--deck-log-height, 200px);
+  min-height: var(--deck-log-height, 200px);
+  max-height: var(--deck-log-height, 200px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.widget > :global(section) {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

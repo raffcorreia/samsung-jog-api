@@ -9,13 +9,13 @@ import { JogPad } from "./JogPad";
  */
 describe("JogPad touch / kiosk contract", () => {
   it("exposes a single jog surface with explicit touch policy metadata", () => {
-    render(<JogPad onLocalLog={() => {}} />);
+    render(<JogPad deckBusy={false} onLocalLog={() => {}} />);
     const pad = screen.getByTestId("jog-pad");
     expect(pad).toHaveAttribute("data-touch-policy", "none");
   });
 
-  it("renders five primary jog buttons", () => {
-    render(<JogPad onLocalLog={() => {}} />);
-    expect(screen.getAllByRole("button")).toHaveLength(5);
+  it("renders five primary jog hit targets (center button + four ring segments)", () => {
+    render(<JogPad deckBusy={false} onLocalLog={() => {}} />);
+    expect(screen.getAllByLabelText(/^Jog /)).toHaveLength(5);
   });
 });

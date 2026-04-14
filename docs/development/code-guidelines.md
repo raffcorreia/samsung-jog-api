@@ -125,7 +125,7 @@ Responsibilities:
 ### Frontend design rules
 
 - keep one UI for kiosk and LAN browser access
-- optimize layout first for `1024x600`, while remaining responsive
+- optimize layout first for the **1280×800** deck display, while remaining responsive
 - keep primary control actions visually dominant
 - treat monitor control as the primary interaction surface
 - keep dashboard widgets secondary in layout weight

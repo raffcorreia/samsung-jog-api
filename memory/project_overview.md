@@ -6,6 +6,8 @@ type: project
 
 Hardware + software project to build a Raspberry Pi 2B-based control deck for a Samsung LC34J791WTNXZA (CJ791) ultrawide monitor. The monitor's only input mechanism is a physical JOG (joystick) on the rear. The goal is to electrically emulate the JOG via resistance-to-ground states on KEY_ADC1/KEY_ADC2 lines, observe KEY_LED feedback, maintain DDC/CI communication, and expose control through a local REST API + WebSocket with a React/TypeScript kiosk UI on a Waveshare 7" DSI display.
 
+**Deck UI:** Single-screen kiosk layout (**1280×800** target). Widgets use **fixed layout bands** so panels do not reflow when the log grows (log scrolls internally). Optional widget visibility is user-driven later — not implicit layout shift. Identity (“pi-deck”) stays in the **status bar**, not duplicated as nested marketing chrome around each control.
+
 **Phase structure (20 phases, 0–19). Phases 0–6 design-complete. Phase 8 complete (see `docs/implementation/phase-8-execution.md`). Phase 7 KiCad/layout in progress. Current focus: Phase 9+. Phases 10–19 not started.**
 
 **Hardware vs software sequencing:** Phase 8+ low-level software is brought up on the **Phase 6 GPIO map** first. When Phase 7 boards are fabricated, an **extra migration phase** will be inserted (slot TBD) to remap GPIO and retest software against the **Phase 7 pinout** — see `docs/implementation/plan.md` (“Deferred integrated-board GPIO and software migration”).

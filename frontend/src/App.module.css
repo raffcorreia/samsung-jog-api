@@ -1,41 +1,10 @@
-.app {
+.deckBody {
   flex: 1 1 auto;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: grid;
+  /* JOG keeps a stable share of the viewport; log is a fixed band — no mutual reflow. */
+  grid-template-rows: minmax(0, 1fr) var(--deck-log-height, 200px);
   width: 100%;
-  overflow: hidden;
-}
-
-.main {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
   padding: 0 var(--pad);
-}
-
-.panel {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  margin: 0.5rem 0 0.35rem;
-  padding: 0.85rem 0 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius, 14px);
-  background: linear-gradient(165deg, var(--surface-elevated, #161d28) 0%, var(--surface, #121820) 100%);
-  box-shadow: var(--shadow, 0 8px 32px rgba(0, 0, 0, 0.45));
-}
-
-.panelTitle {
-  margin: 0 0 0.25rem;
-  padding: 0 0.75rem;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  font-weight: 650;
+  gap: 0;
 }

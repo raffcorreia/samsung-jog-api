@@ -16,6 +16,10 @@ const { statusPayload } = vi.hoisted(() => ({
 vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
+  jogDown: vi.fn(() =>
+    Promise.resolve({ ok: true, hold_token: "00000000-0000-4000-8000-000000000001" }),
+  ),
+  jogUp: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
 }));
 

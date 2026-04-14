@@ -1,0 +1,11 @@
+/**
+ * Stable widget ids for layout persistence / show-hide (future).
+ * Components set `data-widget={DECK_WIDGETS.jog}` on their root.
+ */
+export const DECK_WIDGETS = {
+  status: "deck-status",
+  jog: "deck-jog",
+  log: "deck-log",
+} as const;
+
+export type DeckWidgetId = (typeof DECK_WIDGETS)[keyof typeof DECK_WIDGETS];

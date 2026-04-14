@@ -1,19 +1,21 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-height: 0;
+  height: 100%;
   border-top: 1px solid var(--border);
-  background: linear-gradient(180deg, #070a0f 0%, #0c1018 100%);
+  background: linear-gradient(180deg, #141a22 0%, #0e1319 100%);
   touch-action: auto;
   overscroll-behavior: contain;
 }
 
 .head {
-  padding: 0.35rem var(--pad);
-  font-size: 0.75rem;
+  flex-shrink: 0;
+  padding: 0.32rem var(--pad);
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   color: var(--muted);
   border-bottom: 1px solid var(--border);
 }
@@ -26,13 +28,12 @@
   line-height: 1.35;
   overflow: auto;
   flex: 1 1 auto;
-  max-height: min(32vh, 220px);
+  min-height: 0;
   touch-action: pan-y;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   white-space: pre-wrap;
   word-break: break-word;
-  /* One text node instead of hundreds of row divs — much cheaper on Pi Chromium. */
   contain: paint;
 }
 

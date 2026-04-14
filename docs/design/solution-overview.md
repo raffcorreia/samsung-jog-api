@@ -30,7 +30,7 @@ The design is intentionally built around the monitor behavior that has already b
 This design phase is explicitly targeting the following implementation platform:
 
 - Raspberry Pi `2 B v1.1`
-- `1024x600` capacitive touch display
+- `1280×800` capacitive touch display (7" DSI deck panel)
 - Raspberry Pi OS Lite or equivalent terminal-only base image
 - Chromium kiosk runtime
 - `systemd` process supervision
@@ -156,6 +156,12 @@ This prevents the project from presenting fake higher-level controls before the 
 The current design target is the `Waveshare 7inch DSI LCD (E)` (`7"`, `1280x800`, capacitive touch, `DSI`).
 
 The UI should remain responsive for other screen sizes, but the layout and interaction density should be optimized for the selected deck display first.
+
+### Deck shell and widget geometry
+
+The deck is a **single-screen appliance**, not a marketing site, portal, or landing page: content stays **contained in the viewport** with no gratuitous page chrome.
+
+Monitor control, logs, and future widgets are **deck widgets** (each has a stable `data-widget` id for future layout). **Geometry is fixed by default:** reserved regions do not grow or shrink because another widget’s content changed — that would break muscle memory. The live log scrolls **inside** its band; it does not steal space from the JOG surface. **Optional show/hide** of a widget is an explicit user (or settings) action, not an implicit side effect of log volume.
 
 ### Screen model
 

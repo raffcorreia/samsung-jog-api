@@ -31,13 +31,28 @@ class CommandRejectedReason(str, Enum):
     CONCURRENT_COMMAND = "concurrent_command"
     HARDWARE_ERROR = "hardware_error"
     INVALID_DURATION = "invalid_duration"
+    ACTIVE_HOLDS = "active_holds"
+    UNKNOWN_HOLD_TOKEN = "unknown_hold_token"
+    HOLD_LIMIT = "hold_limit"
 
 
 class JogPressIn(BaseModel):
-    """Low-level jog press or hold as a single timed assertion."""
+    """Legacy: one timed assertion (duration known up front). Prefer :class:`JogDownIn` + release."""
 
     action: Literal["up", "down", "left", "right", "center"]
     duration_ms: int = Field(ge=1, le=60_000)
+
+
+class JogDownIn(BaseModel):
+    """Start asserting a jog direction until matching ``POST /jog/up`` with ``hold_token``."""
+
+    action: Literal["up", "down", "left", "right", "center"]
+
+
+class JogUpIn(BaseModel):
+    """Release the hold identified by ``hold_token`` from the corresponding ``/jog/down``."""
+
+    hold_token: str = Field(min_length=8)
 
 
 class OperatingModeIn(BaseModel):
@@ -81,12 +96,21 @@ class WsEventV1(BaseModel):
     data: dict[str, Any] = Field(default_factory=dict)
 
 
-def ws_command_accepted(*, action: str, duration_ms: int) -> WsEventV1:
+def ws_command_accepted(*, action: str, duration_ms: int, hold_token: str) -> WsEventV1:
     return WsEventV1(
         category="command",
         type="accepted",
         ts=utc_iso(),
-        data={"action": action, "duration_ms": duration_ms},
+        data={"action": action, "duration_ms": duration_ms, "hold_token": hold_token},
+    )
+
+
+def ws_command_hold_started(*, action: str, hold_token: str) -> WsEventV1:
+    return WsEventV1(
+        category="command",
+        type="hold_started",
+        ts=utc_iso(),
+        data={"action": action, "hold_token": hold_token},
     )
 
 

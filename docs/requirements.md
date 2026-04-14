@@ -196,7 +196,7 @@ The system must be organized into these logical layers:
 ### Usability
 
 - The UI must be touch-friendly.
-- The initial UI design target is a `1024x600` display while remaining responsive for other screen sizes used through the host URL.
+- The initial UI design target is the **7" DSI capacitive touch display at `1280×800`** while remaining responsive for other screen sizes used through the host URL.
 - The UI must adapt to the target screen size and orientation used by the control deck.
 - The UI should make the active operating mode clear to the user.
 

@@ -22,7 +22,10 @@ class DeckHardwareFacade(Protocol):
         """``live`` or ``mock``."""
 
     def pulse(self, action: JogAction, duration_s: float) -> None:
-        """Assert ``action`` for ``duration_s`` seconds, then release all lines."""
+        """Assert ``action`` for ``duration_s`` seconds, then release all lines (exclusive)."""
+
+    def set_jog_line(self, action: JogAction, active: bool) -> None:
+        """Drive one jog line high/low without clearing other lines (multicommand)."""
 
     def adc1_physical_idle(self) -> bool:
         """True when conditioned KEY_ADC1 suggests no external activity on that bus."""
@@ -50,6 +53,9 @@ class LiveDeckHardware:
     def pulse(self, action: JogAction, duration_s: float) -> None:
         self._drive.pulse(action, duration_s)
 
+    def set_jog_line(self, action: JogAction, active: bool) -> None:
+        self._drive.set_line(action, active)
+
     def adc1_physical_idle(self) -> bool:
         return not self._adc1.is_active
 
@@ -68,6 +74,7 @@ class MockDeckHardware:
     def __init__(self) -> None:
         self._adc1_active = False
         self._led_active = False
+        self._lines_on: set[JogAction] = set()
 
     @property
     def kind(self) -> str:
@@ -75,6 +82,13 @@ class MockDeckHardware:
 
     def pulse(self, action: JogAction, duration_s: float) -> None:
         logger.debug("mock pulse %s %.4fs", action.value, duration_s)
+
+    def set_jog_line(self, action: JogAction, active: bool) -> None:
+        if active:
+            self._lines_on.add(action)
+        else:
+            self._lines_on.discard(action)
+        logger.debug("mock set_jog_line %s %s", action.value, active)
 
     def adc1_physical_idle(self) -> bool:
         return not self._adc1_active

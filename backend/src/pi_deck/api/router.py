@@ -9,7 +9,9 @@ from pi_deck.api.deps import get_deck
 from pi_deck.models.schemas import (
     CommandRejectedOut,
     CommandRejectedReason,
+    JogDownIn,
     JogPressIn,
+    JogUpIn,
     OperatingModeIn,
     StatusOut,
     ws_status_connected,
@@ -26,6 +28,9 @@ def _rejection_message(reason: CommandRejectedReason) -> str:
         CommandRejectedReason.CONCURRENT_COMMAND: "Another jog command is already running",
         CommandRejectedReason.HARDWARE_ERROR: "Hardware error while executing jog command",
         CommandRejectedReason.INVALID_DURATION: "Invalid duration for jog command",
+        CommandRejectedReason.ACTIVE_HOLDS: "Active jog holds must be released before timed pulse",
+        CommandRejectedReason.UNKNOWN_HOLD_TOKEN: "Unknown or expired hold_token",
+        CommandRejectedReason.HOLD_LIMIT: "Too many simultaneous jog holds",
     }[reason]
 
 
@@ -58,6 +63,41 @@ async def api_jog_press(
             message=_rejection_message(result),
         ).model_dump(mode="json"),
     )
+
+
+@api_v1.post("/jog/down")
+async def api_jog_down(
+    body: JogDownIn,
+    deck: DeckControlService = Depends(get_deck),
+) -> JSONResponse:
+    err, hold_token = await deck.jog_down(body.action)
+    if err is None and hold_token is not None:
+        return JSONResponse({"ok": True, "hold_token": hold_token})
+    assert err is not None
+    return JSONResponse(
+        status_code=409,
+        content=CommandRejectedOut(
+            reason=err,
+            message=_rejection_message(err),
+        ).model_dump(mode="json"),
+    )
+
+
+@api_v1.post("/jog/up")
+async def api_jog_up(
+    body: JogUpIn,
+    deck: DeckControlService = Depends(get_deck),
+) -> JSONResponse:
+    err, duration_ms = await deck.jog_up(body.hold_token)
+    if err is not None:
+        return JSONResponse(
+            status_code=409,
+            content=CommandRejectedOut(
+                reason=err,
+                message=_rejection_message(err),
+            ).model_dump(mode="json"),
+        )
+    return JSONResponse({"ok": True, "duration_ms": duration_ms})
 
 
 async def websocket_events(ws: WebSocket) -> None:

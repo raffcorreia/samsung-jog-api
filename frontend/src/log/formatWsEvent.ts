@@ -8,6 +8,10 @@ export function formatWsEventLine(ev: WsEventV1): string {
     const cs = st?.control_state ?? "?";
     return `connected — hardware=${hw} control=${cs}`;
   }
+  if (ev.category === "command" && ev.type === "hold_started") {
+    const action = String(ev.data.action ?? "?");
+    return `hold — ${action}`;
+  }
   if (ev.category === "command" && ev.type === "accepted") {
     const action = String(ev.data.action ?? "?");
     const ms = Number(ev.data.duration_ms ?? 0);

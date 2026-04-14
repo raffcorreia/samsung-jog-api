@@ -13,7 +13,7 @@ Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — 
 - **Frontend:** React + TypeScript + Vite under `frontend/`, production build emitted to `backend/src/pi_deck/static/` (served by FastAPI with the Phase 10 API).
 - **Controls:** `up`, `down`, `left`, `right`, `center` with **press-and-hold** mapped to a single `POST /api/v1/jog/press` using measured duration (`duration_ms`).
 - **Feedback:** HTTP **409** bodies from the jog endpoint are surfaced in the **live log**; websocket envelopes (`command`, `control`, `bus`) are formatted into the same log stream.
-- **Layout:** Touch-oriented D-pad + status strip, optimized for **1024×600** landscape; same bundle is used for kiosk and LAN (relative API/WebSocket URLs).
+- **Layout:** Deck shell (full viewport, no “landing page” chrome), touch-oriented JOG + status strip, optimized for **1280×800** (7" DSI); same bundle is used for kiosk and LAN (relative API/WebSocket URLs).
 - **Tests:** Vitest tests for REST jog client behavior, websocket log formatting, and App-level websocket → log integration (`frontend/`).
 - **Kiosk:** [scripts/kiosk/pi-deck-chromium-kiosk.sh](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) (JOG UI, `/health` gate, `--disable-features=Translate`) + [pi-deck-kiosk.desktop](../../scripts/kiosk/pi-deck-kiosk.desktop) installed by [install_pi_deck_kiosk_autostart.sh](../../scripts/host/install_pi_deck_kiosk_autostart.sh). Pointer: `unclutter` on X11; optional `wlrctl pointer hide` on Wayland when installed.
 - **Policy:** `PI_DECK_HARDWARE=live` in [systemd template](../../config/systemd/pi-deck.service); no silent `auto` → mock fallback — GPIO init failures are visible in `journalctl`.

@@ -552,7 +552,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - support press and hold interactions
 - expose error feedback when a command is rejected
 - show live log output
-- make the UI usable on the `1024x600` target display
+- make the UI usable on the `1280×800` deck display
 - keep the same UI reachable on the LAN
 - add frontend tests for command feedback and websocket-driven UI state
 - hide or tame the kiosk pointer for touch-first use (deferred from Phase 9; Wayland vs X11)
@@ -790,7 +790,7 @@ Implement the dashboard side of the product using the data-source decisions from
 - implement backend data providers where needed
 - keep widgets architecturally separate from one another
 - ensure widgets do not interfere with monitor control
-- keep the layout responsive while optimizing for `1024x600`
+- keep the layout responsive while optimizing for `1280×800`
 - add frontend and backend tests for implemented widget behavior where practical
 
 ### Deliverables

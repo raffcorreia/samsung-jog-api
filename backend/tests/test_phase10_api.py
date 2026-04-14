@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import uuid
 
 import pytest
 from fastapi.testclient import TestClient
@@ -100,6 +101,68 @@ def test_concurrent_jog_rejects_second_command() -> None:
         assert r2 == CommandRejectedReason.CONCURRENT_COMMAND
         await t
         assert await deck.jog_press("left", 10) is None
+
+    asyncio.run(body())
+
+
+def test_jog_down_up_roundtrip(client: TestClient) -> None:
+    r = client.post("/api/v1/jog/down", json={"action": "right"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "hold_token" in body
+    token = body["hold_token"]
+    r2 = client.post("/api/v1/jog/up", json={"hold_token": token})
+    assert r2.status_code == 200
+    up_body = r2.json()
+    assert up_body["ok"] is True
+    assert "duration_ms" in up_body
+    assert up_body["duration_ms"] >= 0
+
+
+def test_jog_up_duplicate_token_returns_unknown(client: TestClient) -> None:
+    """Second jog/up with the same token after a successful release is rejected."""
+    r = client.post("/api/v1/jog/down", json={"action": "up"})
+    assert r.status_code == 200
+    token = r.json()["hold_token"]
+    assert client.post("/api/v1/jog/up", json={"hold_token": token}).status_code == 200
+    r2 = client.post("/api/v1/jog/up", json={"hold_token": token})
+    assert r2.status_code == 409
+    assert r2.json()["reason"] == "unknown_hold_token"
+
+
+def test_jog_up_without_prior_hold_returns_unknown(client: TestClient) -> None:
+    fake = str(uuid.uuid4())
+    r = client.post("/api/v1/jog/up", json={"hold_token": fake})
+    assert r.status_code == 409
+    assert r.json()["reason"] == "unknown_hold_token"
+
+
+def test_two_simultaneous_holds_same_deck(client: TestClient) -> None:
+    """Multitouch: two directions can be held at once with independent tokens."""
+    a = client.post("/api/v1/jog/down", json={"action": "up"})
+    b = client.post("/api/v1/jog/down", json={"action": "left"})
+    assert a.status_code == 200
+    assert b.status_code == 200
+    ta = a.json()["hold_token"]
+    tb = b.json()["hold_token"]
+    assert ta != tb
+    assert client.post("/api/v1/jog/up", json={"hold_token": ta}).status_code == 200
+    assert client.post("/api/v1/jog/up", json={"hold_token": tb}).status_code == 200
+
+
+def test_concurrent_hold_allows_second_down() -> None:
+    deck = DeckControlService(MockDeckHardware(), WsHub(), "test")
+
+    async def body() -> None:
+        err1, t1 = await deck.jog_down("up")
+        err2, t2 = await deck.jog_down("left")
+        assert err1 is None and t1 is not None
+        assert err2 is None and t2 is not None
+        assert t1 != t2
+        e1, _ms1 = await deck.jog_up(t1)
+        e2, _ms2 = await deck.jog_up(t2)
+        assert e1 is None and e2 is None
 
     asyncio.run(body())
 

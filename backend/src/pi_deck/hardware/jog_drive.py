@@ -24,7 +24,16 @@ class JogDrive:
         for out in self._outs.values():
             out.off()
 
+    def set_line(self, action: JogAction, active: bool) -> None:
+        """Turn one drive line on or off without affecting other lines (multitouch / multicommand)."""
+        out = self._outs[action]
+        if active:
+            out.on()
+        else:
+            out.off()
+
     def hold(self, action: JogAction) -> None:
+        """Exclusive single-direction assert (legacy pulse path)."""
         self.release_all()
         self._outs[action].on()
 
