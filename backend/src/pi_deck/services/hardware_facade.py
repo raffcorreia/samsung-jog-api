@@ -86,11 +86,22 @@ class MockDeckHardware:
         pass
 
 
+def _gpiozero_pin_factory_for_live() -> None:
+    """Use RPi.GPIO for gpiozero outputs (JogDrive). Native sysfs often fails export on older Pis.
+
+    KEY_ADC1 / KEY_LED observation uses direct ``RPi.GPIO`` polling (no edge IRQs). Override with
+    ``GPIOZERO_PIN_FACTORY`` if needed (e.g. ``lgpio`` on Pi 4+ Bookworm).
+    """
+    import os
+
+    os.environ.setdefault("GPIOZERO_PIN_FACTORY", "rpigpio")
+
+
 def build_hardware() -> DeckHardwareFacade:
     """Select hardware from ``PI_DECK_HARDWARE``: ``mock`` | ``live``.
 
     Default when unset is ``mock`` (safe for dev machines without GPIO). Production systemd units
-    should set ``PI_DECK_HARDWARE=live`` so GPIO failures fail fast instead of silently using mock.
+    should set ``PI_DECK_HARDWARE=live`` for real GPIO.
     """
     import os
 
@@ -98,5 +109,6 @@ def build_hardware() -> DeckHardwareFacade:
     if mode == "mock":
         return MockDeckHardware()
     if mode == "live":
+        _gpiozero_pin_factory_for_live()
         return LiveDeckHardware()
     raise ValueError(f"PI_DECK_HARDWARE must be 'mock' or 'live', got {mode!r}")

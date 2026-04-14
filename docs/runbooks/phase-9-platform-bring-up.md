@@ -55,7 +55,7 @@ Environment overrides (optional):
 | `PI_DECK_HOST` | `0.0.0.0` | Bind address (`0.0.0.0` = LAN + localhost; use `127.0.0.1` only if you refuse non-local connections) |
 | `PI_DECK_PORT` | `8756` | Listen port |
 | `PI_DECK_LOG_DIR` | `~/.local/share/pi-deck/logs` | Directory for `pi-deck.log` |
-| `PI_DECK_HARDWARE` | `mock` (default in `config/systemd/pi-deck.service`) | **`live`** only after GPIO init works on this Pi. If `live` fails during startup, **`pi-deck` never listens on 8756**, **`/health` never succeeds**, and the [kiosk script](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) **exits without launching Chromium** (it waits up to ~120s for `/health`). Use `sudo systemctl edit pi-deck` to set `Environment=PI_DECK_HARDWARE=live` when ready. |
+| `PI_DECK_HARDWARE` | `live` (template default) | **`mock`** only for dev without wiring. On startup, `pi-deck` selects gpiozero’s **`rpigpio`** (`RPi.GPIO`) factory unless **`GPIOZERO_PIN_FACTORY`** is already set — the **native** sysfs backend often fails on older Pis (`OSError` on export). If **`live`** still fails during startup, **`pi-deck` never listens on 8756** and the [kiosk script](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) **never opens Chromium** (waits for `/health`). Install deps: `pip install -e .` in `backend/` (pulls **`RPi.GPIO`** on Linux). On Pi 4+ Bookworm you may prefer `Environment=GPIOZERO_PIN_FACTORY=lgpio` after `apt install python3-lgpio` / venv `pip install lgpio`. |
 
 Edit the unit with `sudo systemctl edit pi-deck` to add `Environment=` lines, then `sudo systemctl daemon-reload && sudo systemctl restart pi-deck`.
 
