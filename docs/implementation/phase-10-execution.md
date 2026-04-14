@@ -86,7 +86,7 @@ hostname: pi-deck
   ok: True  body: '{"status":"ok","version":"0.1.0"}'
 ```
 
-**Review:** `get_throttled` is **`0x0`**. Root filesystem use is **~8.8%**. The `/health` response includes **`version`** alongside **`status`** for Phase 10.
+**Review:** `get_throttled` is **`0x0`**. Root filesystem use is **~8.8%**. RAM available **0.57 GiB** of 0.90 GiB. The `/health` response includes **`version`** alongside **`status`** for Phase 10.
 
 ## Follow-on (Phase 11)
 
