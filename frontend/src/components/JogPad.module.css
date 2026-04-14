@@ -40,6 +40,9 @@
   -webkit-touch-callout: none;
   user-select: none;
   cursor: pointer;
+  /* Promote each control to its own layer so Pi / kiosk Chromium repaints taps quickly. */
+  backface-visibility: hidden;
+  transform: translateZ(0);
   transition:
     transform 0.08s ease,
     border-color 0.12s ease,
@@ -49,7 +52,7 @@
 
 .btn:active,
 .btn[aria-pressed="true"] {
-  transform: scale(0.98);
+  transform: translateZ(0) scale(0.98);
   border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
   background: linear-gradient(180deg, #1a4a72 0%, #0f2033 100%);
   box-shadow:

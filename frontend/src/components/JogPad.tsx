@@ -32,6 +32,8 @@ export function JogPad(props: {
         return;
       }
       const durationMs = clampDuration(performance.now() - started);
+      /* Instant feedback on slow links / Pi: server + WS lines arrive later. */
+      onLocalLog(`local — tap ${action} (${durationMs}ms)`);
       try {
         const result = await jogPress(action, durationMs);
         if (!result.ok) {
