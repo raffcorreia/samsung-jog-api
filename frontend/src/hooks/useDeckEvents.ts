@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { fetchStatus, websocketEventsUrl } from "../api/client";
 import { formatWsEventLine } from "../log/formatWsEvent";
@@ -36,6 +43,7 @@ export function useDeckEvents(): DeckEventsState {
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopped = useRef(false);
 
+  /** Append one line; keep synchronous for local tap feedback (Pi / kiosk). */
   const pushLogLine = useCallback((line: string) => {
     const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
     setLogLines((prev) => {
@@ -100,37 +108,40 @@ export function useDeckEvents(): DeckEventsState {
         if (!parsed) {
           return;
         }
-        pushLogLine(formatWsEventLine(parsed));
-        if (parsed.category === "control" && parsed.type === "connected") {
-          const st = parsed.data.status as StatusPayload | undefined;
-          if (st) {
-            setStatus(st);
+        /* Defer server-driven log + status so Pi Chromium can paint local taps first. */
+        startTransition(() => {
+          pushLogLine(formatWsEventLine(parsed));
+          if (parsed.category === "control" && parsed.type === "connected") {
+            const st = parsed.data.status as StatusPayload | undefined;
+            if (st) {
+              setStatus(st);
+            }
           }
-        }
-        if (parsed.category === "control" && parsed.type === "state") {
-          setStatus((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  control_state: parsed.data.control_state as StatusPayload["control_state"],
-                  operating_mode: parsed.data.operating_mode as StatusPayload["operating_mode"],
-                }
-              : prev,
-          );
-        }
-        if (parsed.category === "bus" && parsed.type === "snapshot") {
-          setStatus((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  signals: {
-                    key_adc1_active: Boolean(parsed.data.key_adc1_active),
-                    key_led_active: Boolean(parsed.data.key_led_active),
-                  },
-                }
-              : prev,
-          );
-        }
+          if (parsed.category === "control" && parsed.type === "state") {
+            setStatus((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    control_state: parsed.data.control_state as StatusPayload["control_state"],
+                    operating_mode: parsed.data.operating_mode as StatusPayload["operating_mode"],
+                  }
+                : prev,
+            );
+          }
+          if (parsed.category === "bus" && parsed.type === "snapshot") {
+            setStatus((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    signals: {
+                      key_adc1_active: Boolean(parsed.data.key_adc1_active),
+                      key_led_active: Boolean(parsed.data.key_led_active),
+                    },
+                  }
+                : prev,
+            );
+          }
+        });
       };
 
       ws.onerror = () => {

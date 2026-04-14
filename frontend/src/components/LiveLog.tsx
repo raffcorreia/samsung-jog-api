@@ -3,25 +3,26 @@ import { useEffect, useRef } from "react";
 import styles from "./LiveLog.module.css";
 
 export function LiveLog(props: { lines: readonly string[] }) {
-  const endRef = useRef<HTMLDivElement | null>(null);
+  const preRef = useRef<HTMLPreElement | null>(null);
+  const { lines } = props;
+  const body = lines.join("\n");
   useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "end" });
-  }, [props.lines.length]);
+    const el = preRef.current;
+    if (!el || lines.length === 0) {
+      return;
+    }
+    el.scrollTop = el.scrollHeight;
+  }, [lines.length, body]);
 
   return (
     <section className={styles.wrap} aria-label="Live log">
       <div className={styles.head}>Live log</div>
-      <pre className={styles.pre} role="log">
-        {props.lines.length === 0 ? (
+      <pre ref={preRef} className={styles.pre} role="log">
+        {lines.length === 0 ? (
           <span className={styles.placeholder}>Waiting for events…</span>
         ) : (
-          props.lines.map((line, i) => (
-            <div key={`${i}-${line.slice(0, 24)}`} className={styles.line}>
-              {line}
-            </div>
-          ))
+          body
         )}
-        <div ref={endRef} />
       </pre>
     </section>
   );
