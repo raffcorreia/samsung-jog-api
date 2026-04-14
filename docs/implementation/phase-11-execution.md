@@ -1,12 +1,14 @@
 # Phase 11 Execution Record
 
-**Status:** complete (repository).
+**Status:** **in progress.** UI, API usage, and tests are in the repository; **live GPIO on the deck host** (prototype → appliance) is **still open** — see [Deck host live hardware](#deck-host-live-hardware) below.
 
-**Date:** 2026-04-13
+**Date:** 2026-04-13 (updated 2026-04-14)
 
 ## Summary
 
-Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — Phase 11](plan.md#phase-11-low-level-jog-console-ui) and [Solution Overview — First usable controller](../design/solution-overview.md):
+Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — Phase 11](plan.md#phase-11-low-level-jog-console-ui) and [Solution Overview — First usable controller](../design/solution-overview.md). The plan explicitly treats **this phase** as the place to **finish** moving off pure prototype hand-waving: Phase 6 / Phase 8 proved the circuit and scripts on a bench; **Phase 11 must make `PI_DECK_HARDWARE=live` work on the kiosk Raspberry Pi** so taps in the UI become real `JOG` pulses.
+
+**Done in repo:**
 
 - **Frontend:** React + TypeScript + Vite under `frontend/`, production build emitted to `backend/src/pi_deck/static/` (served by FastAPI with the Phase 10 API).
 - **Controls:** `up`, `down`, `left`, `right`, `center` with **press-and-hold** mapped to a single `POST /api/v1/jog/press` using measured duration (`duration_ms`).
@@ -14,6 +16,15 @@ Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — 
 - **Layout:** Touch-oriented D-pad + status strip, optimized for **1024×600** landscape; same bundle is used for kiosk and LAN (relative API/WebSocket URLs).
 - **Tests:** Vitest tests for REST jog client behavior, websocket log formatting, and App-level websocket → log integration (`frontend/`).
 - **Kiosk:** [scripts/kiosk/pi-deck-chromium-kiosk.sh](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) (JOG UI, `/health` gate, `--disable-features=Translate`) + [pi-deck-kiosk.desktop](../../scripts/kiosk/pi-deck-kiosk.desktop) installed by [install_pi_deck_kiosk_autostart.sh](../../scripts/host/install_pi_deck_kiosk_autostart.sh). Pointer: `unclutter` on X11; optional `wlrctl pointer hide` on Wayland when installed.
+- **Policy:** `PI_DECK_HARDWARE=live` in [systemd template](../../config/systemd/pi-deck.service); no silent `auto` → mock fallback — GPIO init failures are visible in `journalctl`.
+
+## Deck host live hardware
+
+**Scope:** Phase 11 **includes** fixing gpiozero / Linux GPIO bring-up on the **deck host** (`pi-deck` service) so `LiveDeckHardware` constructs without error and `hardware.pulse` drives the Phase 6–style lines. This is not deferred to a separate “prototype” phase — the prototype validated the **design**; this phase validates the **appliance**.
+
+**As of 2026-04-14**, with `Environment=PI_DECK_HARDWARE=live`, startup can still fail during `DigitalInputDevice` / sysfs export (`OSError: [Errno 22] Invalid argument` with the native pin factory). **Exit for Phase 11** requires resolving that on the real host (typical levers: `GPIOZERO_PIN_FACTORY`, `lgpio` / `RPi.GPIO`, `gpio` group, BCM vs wiring, see [GPIO bench probe](../runbooks/gpio-bench-probe.md) and Phase 10 notes).
+
+**When fixed, paste here:** `GET /api/v1/status` from the Pi showing `"hardware":"live"`, plus a one-line note (e.g. pin factory used). Replace or supplement the host health snapshot below if `/health` was down during the failure window.
 
 ## Operational entry points
 

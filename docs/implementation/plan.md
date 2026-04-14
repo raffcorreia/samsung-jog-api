@@ -528,11 +528,13 @@ Define and implement the local backend command surface that all UI and control f
 
 ## Phase 11: Low-Level JOG Console UI
 
-**Status: complete.** Record: [Phase 11 Execution Record](./phase-11-execution.md).
+**Status: in progress.** Record: [Phase 11 Execution Record](./phase-11-execution.md). **Repository:** React UI, kiosk polish, and tests are implemented. **Remaining:** reliable **live GPIO** on the **Raspberry Pi deck host** so the first usable controller is real end-to-end, not only against mock hardware.
+
+Phase 6 / Phase 8 work validated the **protoboard concept** and scripts on a bench; **this phase** is where that stack must run on the **kiosk appliance** with `PI_DECK_HARDWARE=live` (pin factory, permissions, [Phase 6 execution](./phase-6-execution.md) pin map / `pi_deck.hardware`).
 
 ### Goal
 
-Build the first usable controller UI for direct monitor interaction.
+Build the first usable controller UI for direct monitor interaction **and** close prototype→deck gaps so low-level `JOG` reaches hardware from the production host.
 
 ### Scope
 
@@ -540,6 +542,7 @@ Build the first usable controller UI for direct monitor interaction.
 - visible command success/failure
 - live log view
 - touch-first layout
+- **deck host:** `LiveDeckHardware` initializes successfully (`pi-deck` stays up with `PI_DECK_HARDWARE=live`); gpiozero/GPIO issues seen on the appliance are **in scope for this phase** (not “some other future phase”)
 
 At this stage, this raw `JOG` controller should be the only monitor-control UI exposed.
 
@@ -553,15 +556,16 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - keep the same UI reachable on the LAN
 - add frontend tests for command feedback and websocket-driven UI state
 - hide or tame the kiosk pointer for touch-first use (deferred from Phase 9; Wayland vs X11)
+- **resolve live hardware bring-up on the deck:** e.g. pin factory (`GPIOZERO_PIN_FACTORY` / `lgpio` vs native), group membership, BCM wiring vs [protoboard map](../../backend/src/pi_deck/hardware/protoboard_pins.py), until `GET /api/v1/status` reports `hardware: "live"` with a stable `pi-deck.service`
 
 ### Deliverables
 
 - first usable controller UI
-- touch-driven low-level monitor control from the deck and LAN
+- touch-driven low-level monitor control from the deck and LAN **with physical JOG actuation on the Phase 6–style wiring attached to that deck**
 
 ### Exit criteria
 
-- a user can directly control the monitor through the deck UI using low-level `JOG` actions
+- a user can directly control the monitor through the deck UI using low-level `JOG` actions **on the deck host with live hardware** (not mock-only)
 - no unvalidated high-level monitor feature UI is exposed yet
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
 
