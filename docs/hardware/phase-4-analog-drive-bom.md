@@ -29,8 +29,8 @@ This markdown BOM is the review-friendly version; the CSV is the fabrication-ori
 | `R1` | 1 | `30 kOhm` | `C2889371` | `KEY_ADC2_LEFT` tested commercial value; exact JLC match is currently low stock, so verify before ordering |
 | `R2` | 1 | `10 kOhm` | `C5362358` | `KEY_ADC2_RIGHT` tested commercial value |
 | `R3` | 1 | `3.3 kOhm` | `C3017726` | `KEY_ADC2_DOWN` tested commercial value |
-| `R4` | 1 | `22 kOhm` | `C4223986` | `KEY_ADC2_UP` tested commercial value |
-| `R6` | 1 | `22 kOhm` | `C4223986` | `KEY_ADC1_CENTER` tested commercial value |
+| `R4` | 1 | `22 Ohm` | — | `KEY_ADC2_UP` tested commercial value; LCSC part number to be confirmed for 22 Ohm 0402 |
+| `R6` | 1 | `22 Ohm` | — | `KEY_ADC1_CENTER` tested commercial value; LCSC part number to be confirmed for 22 Ohm 0402 |
 | `R7-R11` | 5 | `100 kOhm`, `1%` | `C25803` | default-off bias for all five control nets |
 | `C1-C2` | 2 | `100 nF`, `X7R` | `C14663` | local decoupling at `U1` and `U2` |
 | `C3` | 1 | `1 uF`, `X5R/X7R` | `C15849` | local bulk decoupling on `3.3V` |

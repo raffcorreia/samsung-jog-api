@@ -119,7 +119,7 @@ These measurements were taken with the joystick board disconnected and resistanc
 | `Idle` | `3.3V` to `GND` |
 | `Down` | `3.3 kOhm` to `GND` |
 | `Right` | `9 kOhm` to `GND` |
-| `Up` | `22.6 kOhm` to `GND` |
+| `Up` | `22.6 Ohm` to `GND` |
 | `Left` | `32.8 kOhm` to `GND` |
 
 ### `KEY_ADC1` center channel
@@ -127,7 +127,7 @@ These measurements were taken with the joystick board disconnected and resistanc
 | State | Measurement |
 | --- | --- |
 | `Idle` | `3.3V` to `GND` |
-| `Center` | `23 kOhm` to `GND` |
+| `Center` | `23 Ohm` to `GND` |
 
 ## Latest powered key-state measurements
 
@@ -140,7 +140,7 @@ The latest powered and connected measurement set adds the observed bus voltage f
 | `Idle` | `3.29V` | | |
 | `Left` | `2.88V` | `32.8 kOhm` | `30 kOhm` |
 | `Right` | `2.16V` | `9 kOhm` | `10 kOhm` |
-| `Up` | `0.01V` | `22.8 kOhm` | `22 kOhm` |
+| `Up` | `0.01V` | `22.8 Ohm` | `22 Ohm` |
 | `Down` | `1.35V` | `3.3 kOhm` | `3.3 kOhm` |
 
 ### `KEY_ADC1` powered behavior
@@ -148,7 +148,7 @@ The latest powered and connected measurement set adds the observed bus voltage f
 | State | Voltage to `GND` | Resistance to `GND` | Commercially Available |
 | --- | --- | --- | --- |
 | `Idle` | `3.29V` | | |
-| `Center` | `0.01V` | `22.71 kOhm` | `22 kOhm` |
+| `Center` | `0.01V` | `22.71 Ohm` | `22 Ohm` |
 
 ## Interpretation
 

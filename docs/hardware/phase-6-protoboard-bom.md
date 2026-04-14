@@ -13,7 +13,7 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `R1, R15-R19` | `6` | resistor | `100 kOhm` |
 | `R2-R4, R14` | `4` | resistor | `10 kOhm` |
 | `R5-R9` | `5` | resistor | `4.7 kOhm` |
-| `R10-R11` | `2` | resistor | `22 kOhm` |
+| `R10-R11` | `2` | resistor | `22 Ohm` |
 | `R12` | `1` | resistor | `3.3 kOhm` |
 | `R13` | `1` | resistor | `30 kOhm` |
 | `J1` | `1` | `1x4` header | monitor harness |

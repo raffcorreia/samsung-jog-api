@@ -75,7 +75,7 @@ Each drive channel uses:
 | `R5` | `4.7 kOhm` | `GPIO5 -> Q3 base` |
 | `R15` | `100 kOhm` | `Q3 base -> GND` |
 | `Q3` | `2N3904` | emitter `-> GND`, collector `-> R10` |
-| `R10` | `22 kOhm` | `MON_KEY_ADC1 -> Q3 collector` |
+| `R10` | `22 Ohm` | `MON_KEY_ADC1 -> Q3 collector` |
 
 ### Up
 
@@ -84,7 +84,7 @@ Each drive channel uses:
 | `R6` | `4.7 kOhm` | `GPIO6 -> Q4 base` |
 | `R16` | `100 kOhm` | `Q4 base -> GND` |
 | `Q4` | `2N3904` | emitter `-> GND`, collector `-> R11` |
-| `R11` | `22 kOhm` | `MON_KEY_ADC2 -> Q4 collector` |
+| `R11` | `22 Ohm` | `MON_KEY_ADC2 -> Q4 collector` |
 
 ### Down
 
