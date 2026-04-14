@@ -17,24 +17,38 @@ set -euo pipefail
 PORT="${PI_DECK_PORT:-8756}"
 URL="${PI_DECK_URL:-http://127.0.0.1:${PORT}/}"
 
+# Autostart often runs without WAYLAND_DISPLAY set even on Wayland sessions; Chromium needs it for --ozone-platform=wayland.
+_uid="$(id -u)"
+_rt="${XDG_RUNTIME_DIR:-/run/user/${_uid}}"
+if [[ -z "${WAYLAND_DISPLAY:-}" && -S "${_rt}/wayland-0" ]]; then
+  export WAYLAND_DISPLAY=wayland-0
+fi
+if [[ -z "${XDG_RUNTIME_DIR:-}" && -d "/run/user/${_uid}" ]]; then
+  export XDG_RUNTIME_DIR="/run/user/${_uid}"
+fi
+
 wait_for_health() {
-  local i
-  for i in $(seq 1 120); do
+  local i max_attempts
+  max_attempts="${PI_DECK_HEALTH_WAIT_SECONDS:-600}"
+  for i in $(seq 1 "${max_attempts}"); do
     if command -v curl >/dev/null 2>&1; then
-      curl -sf "http://127.0.0.1:${PORT}/health" >/dev/null && return 0
+      curl -sf --connect-timeout 2 "http://127.0.0.1:${PORT}/health" >/dev/null && return 0
     else
       python3 - "$PORT" <<'PY' && return 0
 import sys, urllib.request
 port = sys.argv[1]
 try:
-    urllib.request.urlopen(f"http://127.0.0.1:{port}/health", timeout=1).read()
+    urllib.request.urlopen(f"http://127.0.0.1:{port}/health", timeout=2).read()
 except OSError:
     raise SystemExit(1)
 PY
     fi
+    if (( i % 60 == 0 )); then
+      echo "pi-deck-chromium-kiosk: still waiting for /health on port ${PORT} (${i}s)..." >&2
+    fi
     sleep 1
   done
-  echo "pi-deck-chromium-kiosk: backend did not become ready on port ${PORT}" >&2
+  echo "pi-deck-chromium-kiosk: backend did not become ready on port ${PORT} after ${max_attempts}s" >&2
   exit 1
 }
 
@@ -49,8 +63,8 @@ fi
 
 wait_for_health
 
-# Hide idle cursor on X11; on Wayland try compositor helpers when present (Phase 11 touch polish).
-if [[ -z "${WAYLAND_DISPLAY:-}" ]] && command -v unclutter >/dev/null 2>&1; then
+# Hide idle cursor on X11 only (not Wayland — unclutter needs X11 DISPLAY).
+if [[ -z "${WAYLAND_DISPLAY:-}" && -n "${DISPLAY:-}" ]] && command -v unclutter >/dev/null 2>&1; then
   unclutter -idle 0 -root &
 elif [[ -n "${WAYLAND_DISPLAY:-}" ]] && command -v wlrctl >/dev/null 2>&1; then
   wlrctl pointer hide 2>/dev/null || true
