@@ -87,27 +87,16 @@ class MockDeckHardware:
 
 
 def build_hardware() -> DeckHardwareFacade:
-    """Select hardware from ``PI_DECK_HARDWARE``: ``mock`` | ``live`` | ``auto`` (default).
+    """Select hardware from ``PI_DECK_HARDWARE``: ``mock`` | ``live``.
 
-    ``auto`` tries :class:`LiveDeckHardware` and falls back to :class:`MockDeckHardware` if GPIO
-    cannot be opened (no wiring, permissions, or unsupported pin export), so the API still runs.
+    Default when unset is ``mock`` (safe for dev machines without GPIO). Production systemd units
+    should set ``PI_DECK_HARDWARE=live`` so GPIO failures fail fast instead of silently using mock.
     """
     import os
 
-    mode = (os.environ.get("PI_DECK_HARDWARE") or "auto").strip().lower()
+    mode = (os.environ.get("PI_DECK_HARDWARE") or "mock").strip().lower()
     if mode == "mock":
         return MockDeckHardware()
     if mode == "live":
         return LiveDeckHardware()
-    if mode == "auto":
-        try:
-            return LiveDeckHardware()
-        except Exception as e:
-            # gpiozero may surface GPIO failures as types other than OSError depending on backend.
-            logger.error(
-                "PI_DECK_HARDWARE=auto: could not open GPIO (%s: %s); using mock hardware",
-                type(e).__name__,
-                e,
-            )
-            return MockDeckHardware()
-    raise ValueError(f"PI_DECK_HARDWARE must be 'live', 'mock', or 'auto', got {mode!r}")
+    raise ValueError(f"PI_DECK_HARDWARE must be 'mock' or 'live', got {mode!r}")

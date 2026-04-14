@@ -104,16 +104,16 @@ def test_concurrent_jog_rejects_second_command() -> None:
     asyncio.run(body())
 
 
-def test_build_hardware_auto_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_build_hardware_live_propagates_gpio_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     from pi_deck.services import hardware_facade as hf
 
     def boom() -> None:
         raise RuntimeError("simulated gpio failure")
 
     monkeypatch.setattr(hf, "LiveDeckHardware", lambda *a, **k: boom())
-    monkeypatch.setenv("PI_DECK_HARDWARE", "auto")
-    hw = hf.build_hardware()
-    assert hw.kind == "mock"
+    monkeypatch.setenv("PI_DECK_HARDWARE", "live")
+    with pytest.raises(RuntimeError, match="simulated gpio failure"):
+        hf.build_hardware()
 
 
 def test_bus_busy_409_shape(client: TestClient) -> None:

@@ -14,16 +14,16 @@ Phase 10 defines and implements the **local backend API** used by all UI and con
   - `POST /api/v1/jog/press` — body `{ "action": "up"|"down"|"left"|"right"|"center", "duration_ms": <1..60000> }`; success `{ "ok": true }`, conflict **`409`** with `{ "error": "command_rejected", "reason": "<enum>", "message": "..." }`.
 - **`GET /health`** — `{ "status": "ok", "version": "<semver>" }` (host health script and kiosk wait logic remain compatible).
 - **WebSocket `/ws/events`** — first message is a versioned envelope (`v`, `category`, `type`, `ts`, `data`) with `category: control`, `type: connected`, and full status under `data.status`. Further events include command accepted/rejected, control state, and bus snapshots (see `pi_deck.models.schemas`).
-- **Hardware selection** — `PI_DECK_HARDWARE` = `mock` | `live` | **`auto`** (default). **`auto`** tries real GPIO (`LiveDeckHardware`) and falls back to **`mock`** if GPIO cannot be opened, with an **ERROR** log so the service still listens (useful when the protoboard is disconnected or pin export fails). Use **`live`** to fail fast when GPIO must be mandatory.
+- **Hardware selection** — `PI_DECK_HARDWARE` = **`mock`** | **`live`**. Default when unset is **`mock`** (safe for dev). **`live`** uses real GPIO (`LiveDeckHardware`) and **fails at startup** if GPIO cannot be opened — no silent fallback. Production **`pi-deck.service`** sets **`PI_DECK_HARDWARE=live`**.
 - **Orchestration** — `DeckControlService` in `pi_deck.services.deck_control` serializes jog commands; **center** refuses when KEY_ADC1 observation reports activity (`bus_busy`). Directional actions rely on app-level serialization until a dedicated KEY_ADC2 observe path exists.
-- **Tests** — `backend/tests/test_phase10_api.py` (validation, websocket envelope, concurrent rejection, `409` bodies, `auto` fallback).
+- **Tests** — `backend/tests/test_phase10_api.py` (validation, websocket envelope, concurrent rejection, `409` bodies, `live` propagates GPIO init failure).
 
 ## Operational entry points
 
 | Item | Role |
 |------|------|
 | `pi_deck.api.app:create_app` | FastAPI app, lifespan, routes, static UI |
-| `config/systemd/pi-deck.service` | Optional `Environment=PI_DECK_HARDWARE=auto` (template) |
+| `config/systemd/pi-deck.service` | `Environment=PI_DECK_HARDWARE=live` (template) |
 | `backend/tests/conftest.py` | Defaults `PI_DECK_HARDWARE=mock` for pytest |
 
 ## Exit criteria (from plan)
@@ -91,4 +91,4 @@ hostname: pi-deck
 ## Follow-on (Phase 11)
 
 - Low-level JOG console UI calling `POST /api/v1/jog/press` and subscribing to `/ws/events`.
-- Optional: install `RPi.GPIO` or `lgpio` on the Pi so gpiozero uses a stable pin factory instead of the experimental native fallback (see journal warnings when `PI_DECK_HARDWARE=auto` attempts live hardware).
+- Optional: install `RPi.GPIO` or `lgpio` on the Pi so gpiozero uses a stable pin factory instead of the experimental native fallback (see journal warnings on GPIO init when `PI_DECK_HARDWARE=live`).
