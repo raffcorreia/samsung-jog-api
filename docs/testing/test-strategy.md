@@ -153,7 +153,7 @@ Purpose:
 
 - capture CPU, memory, disk, thermals, Raspberry Pi throttling/voltage, and `pi-deck` service health on the real deck when closing feature phases (see [Host health gate](../implementation/plan.md#host-health-gate-feature-phases-1019))
 
-Tool: `scripts/pi-deck-host-health.py` — paste the **default text output** into the **Markdown** phase execution record (not JSON as the primary write-up; `--json` is optional for tooling or archives). Complements automated tests for resource and power regressions.
+Tool: `scripts/pi-deck-host-health.py` — paste the **default text output** into the **Markdown** phase execution record (not JSON as the primary write-up; `--json` is optional for tooling or archives). Complements automated tests for resource and power regressions. For how that snapshot relates to **JOG kiosk / LAN UI** behavior, see [JOG UI performance](ui-performance.md).
 
 ## Test environment model
 
