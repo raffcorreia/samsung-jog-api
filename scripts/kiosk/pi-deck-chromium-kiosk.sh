@@ -80,6 +80,8 @@ CHROME_ARGS=(
   --check-for-update-interval=31536000
   --no-first-run
   --no-default-browser-check
+  # Localhost appliance: avoid stale index / hashed bundles after deploy (disk cache is aggressive).
+  --disable-http-cache
   # Appliance UX: no translate bar on first load; kiosk is a known single origin.
   --disable-features=Translate
   "${URL}"

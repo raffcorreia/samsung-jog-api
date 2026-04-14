@@ -32,27 +32,25 @@ class CommandRejectedReason(str, Enum):
     HARDWARE_ERROR = "hardware_error"
     INVALID_DURATION = "invalid_duration"
     ACTIVE_HOLDS = "active_holds"
-    UNKNOWN_HOLD_TOKEN = "unknown_hold_token"
-    HOLD_LIMIT = "hold_limit"
 
 
 class JogPressIn(BaseModel):
-    """Legacy: one timed assertion (duration known up front). Prefer :class:`JogDownIn` + release."""
+    """Legacy: one timed assertion (duration known up front). Prefer hold + release."""
 
     action: Literal["up", "down", "left", "right", "center"]
     duration_ms: int = Field(ge=1, le=60_000)
 
 
-class JogDownIn(BaseModel):
-    """Start asserting a jog direction until matching ``POST /jog/up`` with ``hold_token``."""
+class JogHoldIn(BaseModel):
+    """Assert a jog direction until ``POST /jog/release`` with the same ``action``."""
 
     action: Literal["up", "down", "left", "right", "center"]
 
 
-class JogUpIn(BaseModel):
-    """Release the hold identified by ``hold_token`` from the corresponding ``/jog/down``."""
+class JogReleaseIn(BaseModel):
+    """Release the hold for ``action`` (idempotent if nothing held)."""
 
-    hold_token: str = Field(min_length=8)
+    action: Literal["up", "down", "left", "right", "center"]
 
 
 class OperatingModeIn(BaseModel):
@@ -96,21 +94,30 @@ class WsEventV1(BaseModel):
     data: dict[str, Any] = Field(default_factory=dict)
 
 
-def ws_command_accepted(*, action: str, duration_ms: int, hold_token: str) -> WsEventV1:
+def ws_command_held(*, action: str) -> WsEventV1:
     return WsEventV1(
         category="command",
-        type="accepted",
+        type="held",
         ts=utc_iso(),
-        data={"action": action, "duration_ms": duration_ms, "hold_token": hold_token},
+        data={"action": action},
     )
 
 
-def ws_command_hold_started(*, action: str, hold_token: str) -> WsEventV1:
+def ws_command_released(*, action: str, duration_ms: int) -> WsEventV1:
     return WsEventV1(
         category="command",
-        type="hold_started",
+        type="released",
         ts=utc_iso(),
-        data={"action": action, "hold_token": hold_token},
+        data={"action": action, "duration_ms": duration_ms},
+    )
+
+
+def ws_command_pulse(*, action: str, duration_ms: int) -> WsEventV1:
+    return WsEventV1(
+        category="command",
+        type="pulse",
+        ts=utc_iso(),
+        data={"action": action, "duration_ms": duration_ms},
     )
 
 

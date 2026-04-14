@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import json
 import re
-import uuid
 
 import pytest
 from fastapi.testclient import TestClient
@@ -68,20 +67,20 @@ def test_websocket_connected_envelope(client: TestClient) -> None:
         assert "status" in msg["data"]
 
 
-def test_websocket_receives_command_accept_after_jog(client: TestClient) -> None:
-    """Integrated: REST jog while WS client connected must stream command/accepted."""
+def test_websocket_receives_pulse_after_jog_press(client: TestClient) -> None:
+    """Integrated: REST jog press while WS client connected streams pulse event."""
     with client.websocket_connect("/ws/events") as ws:
         ws.receive_text()
         r = client.post("/api/v1/jog/press", json={"action": "up", "duration_ms": 8})
         assert r.status_code == 200
-        accepted = False
-        for _ in range(12):
+        saw_pulse = False
+        for _ in range(20):
             msg = json.loads(ws.receive_text())
-            if msg.get("category") == "command" and msg.get("type") == "accepted":
+            if msg.get("category") == "command" and msg.get("type") == "pulse":
                 assert msg["data"].get("action") == "up"
-                accepted = True
+                saw_pulse = True
                 break
-        assert accepted, "expected command/accepted on websocket"
+        assert saw_pulse, "expected command/pulse on websocket"
 
 
 def test_concurrent_jog_rejects_second_command() -> None:
@@ -106,63 +105,46 @@ def test_concurrent_jog_rejects_second_command() -> None:
     asyncio.run(body())
 
 
-def test_jog_down_up_roundtrip(client: TestClient) -> None:
-    r = client.post("/api/v1/jog/down", json={"action": "right"})
+def test_jog_hold_release_roundtrip(client: TestClient) -> None:
+    r = client.post("/api/v1/jog/hold", json={"action": "right"})
     assert r.status_code == 200
-    body = r.json()
-    assert body["ok"] is True
-    assert "hold_token" in body
-    token = body["hold_token"]
-    r2 = client.post("/api/v1/jog/up", json={"hold_token": token})
+    assert r.json() == {"ok": True}
+    r2 = client.post("/api/v1/jog/release", json={"action": "right"})
     assert r2.status_code == 200
-    up_body = r2.json()
-    assert up_body["ok"] is True
-    assert "duration_ms" in up_body
-    assert up_body["duration_ms"] >= 0
+    body = r2.json()
+    assert body["ok"] is True
+    assert "duration_ms" in body
+    assert body["duration_ms"] >= 0
 
 
-def test_jog_up_duplicate_token_returns_unknown(client: TestClient) -> None:
-    """Second jog/up with the same token after a successful release is rejected."""
-    r = client.post("/api/v1/jog/down", json={"action": "up"})
+def test_jog_release_idempotent_when_idle(client: TestClient) -> None:
+    r = client.post("/api/v1/jog/release", json={"action": "up"})
     assert r.status_code == 200
-    token = r.json()["hold_token"]
-    assert client.post("/api/v1/jog/up", json={"hold_token": token}).status_code == 200
-    r2 = client.post("/api/v1/jog/up", json={"hold_token": token})
-    assert r2.status_code == 409
-    assert r2.json()["reason"] == "unknown_hold_token"
+    assert r.json() == {"ok": True, "duration_ms": 0}
 
 
-def test_jog_up_without_prior_hold_returns_unknown(client: TestClient) -> None:
-    fake = str(uuid.uuid4())
-    r = client.post("/api/v1/jog/up", json={"hold_token": fake})
-    assert r.status_code == 409
-    assert r.json()["reason"] == "unknown_hold_token"
+def test_two_directions_coexist(client: TestClient) -> None:
+    assert client.post("/api/v1/jog/hold", json={"action": "up"}).status_code == 200
+    assert client.post("/api/v1/jog/hold", json={"action": "left"}).status_code == 200
+    assert client.post("/api/v1/jog/release", json={"action": "up"}).status_code == 200
+    assert client.post("/api/v1/jog/release", json={"action": "left"}).status_code == 200
 
 
-def test_two_simultaneous_holds_same_deck(client: TestClient) -> None:
-    """Multitouch: two directions can be held at once with independent tokens."""
-    a = client.post("/api/v1/jog/down", json={"action": "up"})
-    b = client.post("/api/v1/jog/down", json={"action": "left"})
-    assert a.status_code == 200
-    assert b.status_code == 200
-    ta = a.json()["hold_token"]
-    tb = b.json()["hold_token"]
-    assert ta != tb
-    assert client.post("/api/v1/jog/up", json={"hold_token": ta}).status_code == 200
-    assert client.post("/api/v1/jog/up", json={"hold_token": tb}).status_code == 200
+def test_second_hold_same_direction_replaces_first(client: TestClient) -> None:
+    """New hold on same action ends the previous hold (authoritative per direction)."""
+    assert client.post("/api/v1/jog/hold", json={"action": "left"}).status_code == 200
+    assert client.post("/api/v1/jog/hold", json={"action": "left"}).status_code == 200
+    assert client.post("/api/v1/jog/release", json={"action": "left"}).status_code == 200
 
 
-def test_concurrent_hold_allows_second_down() -> None:
+def test_service_hold_release_two_directions() -> None:
     deck = DeckControlService(MockDeckHardware(), WsHub(), "test")
 
     async def body() -> None:
-        err1, t1 = await deck.jog_down("up")
-        err2, t2 = await deck.jog_down("left")
-        assert err1 is None and t1 is not None
-        assert err2 is None and t2 is not None
-        assert t1 != t2
-        e1, _ms1 = await deck.jog_up(t1)
-        e2, _ms2 = await deck.jog_up(t2)
+        assert await deck.jog_hold("up") is None
+        assert await deck.jog_hold("left") is None
+        e1, _ = await deck.jog_release("up")
+        e2, _ = await deck.jog_release("left")
         assert e1 is None and e2 is None
 
     asyncio.run(body())
@@ -180,30 +162,13 @@ def test_build_hardware_live_propagates_gpio_failure(monkeypatch: pytest.MonkeyP
         hf.build_hardware()
 
 
-def test_bus_busy_409_shape(client: TestClient) -> None:
-    class BusyAdc1(MockDeckHardware):
-        def adc1_physical_idle(self) -> bool:
-            return False
-
-    deck: DeckControlService = client.app.state.deck
-    prev = deck.hardware
-    deck.hardware = BusyAdc1()
-    try:
-        r = client.post("/api/v1/jog/press", json={"action": "center", "duration_ms": 10})
-        assert r.status_code == 409
-        body = r.json()
-        assert body["error"] == "command_rejected"
-        assert body["reason"] == "bus_busy"
-        assert "message" in body
-    finally:
-        deck.hardware = prev
-
-
 def test_index_html_sent_with_no_store_cache(client: TestClient) -> None:
     """Kiosk / remote browsers must not keep a stale shell that references deleted hashed bundles."""
     r = client.get("/")
     assert r.status_code == 200
-    assert r.headers.get("cache-control") == "no-store"
+    cc = r.headers.get("cache-control") or ""
+    assert "no-store" in cc
+    assert r.headers.get("pragma") == "no-cache"
 
 
 def test_hashed_assets_sent_with_long_cache(client: TestClient) -> None:

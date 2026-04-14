@@ -16,17 +16,16 @@ const MAX_LOG = 220;
 
 export interface DeckEventsState {
   status: StatusPayload | null;
-  /** Holds from other viewers / race-ahead WS (not deduped against local REST here). */
   peerHeldActionCounts: Record<JogAction, number>;
   wsConnected: boolean;
   wsError: string | null;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
   refreshStatus: () => Promise<void>;
-  /** Call after REST ``jog/down`` succeeds — pairs tokens with this UI for WS dedup. */
-  restHoldDownOk: (token: string, action: JogAction) => void;
-  /** Call after REST ``jog/up`` succeeds — updates local REST mirror (see JogPad). */
-  restHoldUpOk: (token: string) => void;
+  /** After REST ``jog/hold`` succeeds — skip duplicate peer ``held`` for this action. */
+  restHoldOk: (action: JogAction) => void;
+  /** After REST ``jog/release`` succeeds — skip echo ``released`` for this action. */
+  restReleaseOk: (action: JogAction) => void;
 }
 
 function isJogAction(s: unknown): s is JogAction {
@@ -61,30 +60,22 @@ export function useDeckEvents(): DeckEventsState {
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopped = useRef(false);
 
-  /** REST-issued tokens for *this* browser — skip matching WS hold_started so we don't double-count with JogPad local REST refcounts. */
-  const myHoldTokensRef = useRef(new Set<string>());
-  /**
-   * If ``hold_started`` arrives before REST returns, we bump peer once; when REST later
-   * confirms, we undo that bump (same token).
-   */
-  const peerPreRestTokensRef = useRef(new Map<string, JogAction>());
+  /** Directions we established via REST hold in this browser (skip duplicate WS ``held``). */
+  const myLocalHeldRef = useRef(new Set<JogAction>());
+  /** Skip next ``released`` WS — our REST release already updated local state. */
+  const skipReleasedEchoRef = useRef(new Set<JogAction>());
 
-  const restHoldDownOk = useCallback((token: string, action: JogAction) => {
-    myHoldTokensRef.current.add(token);
-    const pre = peerPreRestTokensRef.current.get(token);
-    if (pre !== undefined) {
-      peerPreRestTokensRef.current.delete(token);
-      if (pre === action) {
-        setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
-      }
-    }
+  const restHoldOk = useCallback((action: JogAction) => {
+    myLocalHeldRef.current.add(action);
+    /* Undo the peer +1 from our own ``held`` websocket echo so local+peer does not double-count. */
+    setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
   }, []);
 
-  const restHoldUpOk = useCallback((token: string) => {
-    myHoldTokensRef.current.delete(token);
+  const restReleaseOk = useCallback((action: JogAction) => {
+    myLocalHeldRef.current.delete(action);
+    skipReleasedEchoRef.current.add(action);
   }, []);
 
-  /** Append one line; keep synchronous for local tap feedback (Pi / kiosk). */
   const pushLogLine = useCallback((line: string) => {
     const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
     setLogLines((prev) => {
@@ -149,7 +140,6 @@ export function useDeckEvents(): DeckEventsState {
         if (!parsed) {
           return;
         }
-        /* Defer server-driven log + status so Pi Chromium can paint local taps first. */
         startTransition(() => {
           pushLogLine(formatWsEventLine(parsed));
           if (parsed.category === "control" && parsed.type === "connected") {
@@ -158,37 +148,29 @@ export function useDeckEvents(): DeckEventsState {
               setStatus(st);
             }
             setPeerHeldActionCounts({});
-            peerPreRestTokensRef.current.clear();
-            /* Keep myHoldTokensRef — REST-issued tokens still valid; only peer mirror resets. */
+            myLocalHeldRef.current.clear();
+            skipReleasedEchoRef.current.clear();
           }
-          if (parsed.category === "command" && parsed.type === "hold_started") {
-            const token = String(parsed.data.hold_token ?? "");
+          if (parsed.category === "command" && parsed.type === "held") {
             const action = parsed.data.action;
-            if (!token || !isJogAction(action)) {
+            if (!isJogAction(action)) {
               return;
             }
-            if (myHoldTokensRef.current.has(token)) {
+            if (myLocalHeldRef.current.has(action)) {
               return;
             }
-            peerPreRestTokensRef.current.set(token, action);
             setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, 1));
           }
-          if (parsed.category === "command" && parsed.type === "accepted") {
-            const holdToken = parsed.data.hold_token;
-            if (holdToken === "pulse") {
-              /* timed pulse — not a directional hold */
-            } else {
-              const token = String(holdToken ?? "");
-              const action = parsed.data.action;
-              if (!token || !isJogAction(action)) {
-                return;
-              }
-              peerPreRestTokensRef.current.delete(token);
-              if (myHoldTokensRef.current.has(token)) {
-                return;
-              }
-              setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
+          if (parsed.category === "command" && parsed.type === "released") {
+            const action = parsed.data.action;
+            if (!isJogAction(action)) {
+              return;
             }
+            if (skipReleasedEchoRef.current.has(action)) {
+              skipReleasedEchoRef.current.delete(action);
+              return;
+            }
+            setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
           }
           if (parsed.category === "control" && parsed.type === "state") {
             setStatus((prev) =>
@@ -255,8 +237,8 @@ export function useDeckEvents(): DeckEventsState {
       logLines,
       pushLogLine,
       refreshStatus,
-      restHoldDownOk,
-      restHoldUpOk,
+      restHoldOk,
+      restReleaseOk,
     }),
     [
       status,
@@ -266,8 +248,8 @@ export function useDeckEvents(): DeckEventsState {
       logLines,
       pushLogLine,
       refreshStatus,
-      restHoldDownOk,
-      restHoldUpOk,
+      restHoldOk,
+      restReleaseOk,
     ],
   );
 }

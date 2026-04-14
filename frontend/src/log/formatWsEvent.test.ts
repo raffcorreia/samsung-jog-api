@@ -17,15 +17,15 @@ describe("formatWsEventLine", () => {
     expect(formatWsEventLine(ev)).toContain("hardware=mock");
   });
 
-  it("formats command accepted", () => {
+  it("formats released", () => {
     const ev: WsEventV1 = {
       v: 1,
       category: "command",
-      type: "accepted",
+      type: "released",
       ts: "2026-01-01T00:00:00Z",
       data: { action: "up", duration_ms: 120 },
     };
-    expect(formatWsEventLine(ev)).toBe("command ok — up 120ms");
+    expect(formatWsEventLine(ev)).toBe("release — up 120ms");
   });
 
   it("formats command rejected", () => {

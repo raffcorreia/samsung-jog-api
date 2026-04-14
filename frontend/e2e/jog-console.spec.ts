@@ -21,6 +21,6 @@ test.describe("JOG console (integrated: pi-deck + static build, mock hardware or
   test("pointer tap Up yields command acceptance in log", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Up" }).click();
-    await expect(page.getByRole("log")).toContainText(/command ok|accepted|up/i, { timeout: 15_000 });
+    await expect(page.getByRole("log")).toContainText(/hold|release|up/i, { timeout: 15_000 });
   });
 });

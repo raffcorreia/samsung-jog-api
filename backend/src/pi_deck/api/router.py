@@ -9,9 +9,9 @@ from pi_deck.api.deps import get_deck
 from pi_deck.models.schemas import (
     CommandRejectedOut,
     CommandRejectedReason,
-    JogDownIn,
+    JogHoldIn,
     JogPressIn,
-    JogUpIn,
+    JogReleaseIn,
     OperatingModeIn,
     StatusOut,
     ws_status_connected,
@@ -29,8 +29,6 @@ def _rejection_message(reason: CommandRejectedReason) -> str:
         CommandRejectedReason.HARDWARE_ERROR: "Hardware error while executing jog command",
         CommandRejectedReason.INVALID_DURATION: "Invalid duration for jog command",
         CommandRejectedReason.ACTIVE_HOLDS: "Active jog holds must be released before timed pulse",
-        CommandRejectedReason.UNKNOWN_HOLD_TOKEN: "Unknown or expired hold_token",
-        CommandRejectedReason.HOLD_LIMIT: "Too many simultaneous jog holds",
     }[reason]
 
 
@@ -65,15 +63,14 @@ async def api_jog_press(
     )
 
 
-@api_v1.post("/jog/down")
-async def api_jog_down(
-    body: JogDownIn,
+@api_v1.post("/jog/hold")
+async def api_jog_hold(
+    body: JogHoldIn,
     deck: DeckControlService = Depends(get_deck),
 ) -> JSONResponse:
-    err, hold_token = await deck.jog_down(body.action)
-    if err is None and hold_token is not None:
-        return JSONResponse({"ok": True, "hold_token": hold_token})
-    assert err is not None
+    err = await deck.jog_hold(body.action)
+    if err is None:
+        return JSONResponse({"ok": True})
     return JSONResponse(
         status_code=409,
         content=CommandRejectedOut(
@@ -83,12 +80,12 @@ async def api_jog_down(
     )
 
 
-@api_v1.post("/jog/up")
-async def api_jog_up(
-    body: JogUpIn,
+@api_v1.post("/jog/release")
+async def api_jog_release(
+    body: JogReleaseIn,
     deck: DeckControlService = Depends(get_deck),
 ) -> JSONResponse:
-    err, duration_ms = await deck.jog_up(body.hold_token)
+    err, duration_ms = await deck.jog_release(body.action)
     if err is not None:
         return JSONResponse(
             status_code=409,

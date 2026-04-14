@@ -16,10 +16,8 @@ const { statusPayload } = vi.hoisted(() => ({
 vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
-  jogDown: vi.fn(() =>
-    Promise.resolve({ ok: true, hold_token: "00000000-0000-4000-8000-000000000001" }),
-  ),
-  jogUp: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
+  jogHold: vi.fn(() => Promise.resolve({ ok: true })),
+  releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
 }));
 
@@ -59,13 +57,13 @@ describe("App", () => {
         data: JSON.stringify({
           v: 1,
           category: "command",
-          type: "accepted",
+          type: "released",
           ts: "2026-01-01T00:00:00Z",
           data: { action: "up", duration_ms: 80 },
         }),
       } as MessageEvent);
     });
 
-    expect(screen.getByRole("log")).toHaveTextContent("command ok — up 80ms");
+    expect(screen.getByRole("log")).toHaveTextContent("release — up 80ms");
   });
 });

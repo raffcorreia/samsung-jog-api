@@ -13,8 +13,8 @@ describe("JogPad touch / kiosk contract", () => {
       <JogPad
         peerHeldActionCounts={{}}
         onLocalLog={() => {}}
-        restHoldDownOk={() => {}}
-        restHoldUpOk={() => {}}
+        restHoldOk={() => {}}
+        restReleaseOk={() => {}}
       />,
     );
     const pad = screen.getByTestId("jog-pad");
@@ -26,8 +26,8 @@ describe("JogPad touch / kiosk contract", () => {
       <JogPad
         peerHeldActionCounts={{}}
         onLocalLog={() => {}}
-        restHoldDownOk={() => {}}
-        restHoldUpOk={() => {}}
+        restHoldOk={() => {}}
+        restReleaseOk={() => {}}
       />,
     );
     expect(screen.getAllByLabelText(/^Jog /)).toHaveLength(5);

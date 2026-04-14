@@ -32,6 +32,11 @@ rsync -avz --delete \
 echo "Rsync backend/pyproject.toml → ${PI_TARGET}:~/samsung-jog-api/backend/"
 rsync -avz "${REPO_ROOT}/backend/pyproject.toml" "${PI_TARGET}:~/samsung-jog-api/backend/"
 
+echo "Rsync kiosk launcher → ${PI_TARGET}:~/samsung-jog-api/scripts/kiosk/"
+ssh -o BatchMode=yes "${PI_TARGET}" 'mkdir -p ~/samsung-jog-api/scripts/kiosk'
+rsync -avz "${REPO_ROOT}/scripts/kiosk/pi-deck-chromium-kiosk.sh" "${PI_TARGET}:~/samsung-jog-api/scripts/kiosk/"
+ssh -o BatchMode=yes "${PI_TARGET}" 'chmod +x ~/samsung-jog-api/scripts/kiosk/pi-deck-chromium-kiosk.sh'
+
 echo "Editable install + systemd (live GPIO) on ${PI_TARGET} ..."
 ssh -o BatchMode=yes "${PI_TARGET}" 'set -e
 cd ~/samsung-jog-api/backend

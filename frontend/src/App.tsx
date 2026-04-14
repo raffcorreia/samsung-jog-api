@@ -22,8 +22,8 @@ export function App() {
           <JogPad
             peerHeldActionCounts={deck.peerHeldActionCounts}
             onLocalLog={deck.pushLogLine}
-            restHoldDownOk={deck.restHoldDownOk}
-            restHoldUpOk={deck.restHoldUpOk}
+            restHoldOk={deck.restHoldOk}
+            restReleaseOk={deck.restReleaseOk}
           />
         </JogWidget>
         <LiveLogWidget lines={deck.logLines} />

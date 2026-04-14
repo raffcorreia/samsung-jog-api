@@ -5,7 +5,7 @@ import {
   type PointerEvent,
 } from "react";
 
-import { jogDown, jogUp } from "../api/client";
+import { jogHold, releaseJog } from "../api/client";
 import type { JogAction } from "../types";
 
 import { annulusSectorPath } from "./jogGeometry";
@@ -57,8 +57,6 @@ function readJogAction(ev: PointerEvent<Element>): JogAction | null {
 
 type PtrState = {
   action: JogAction;
-  holdToken: string | null;
-  /** True after jog/down returned ok and local display refcount was incremented. */
   holdEstablished: boolean;
   downPromise: Promise<void>;
   releaseInFlight: boolean;
@@ -75,11 +73,10 @@ function mergeHeld(
 export function JogPad(props: {
   peerHeldActionCounts: Record<JogAction, number>;
   onLocalLog: (line: string) => void;
-  restHoldDownOk: (token: string, action: JogAction) => void;
-  restHoldUpOk: (token: string) => void;
+  restHoldOk: (action: JogAction) => void;
+  restReleaseOk: (action: JogAction) => void;
 }) {
-  const { peerHeldActionCounts, onLocalLog, restHoldDownOk, restHoldUpOk } = props;
-  /** This pointer's holds — always paired with REST so UI releases even if a WS frame is missed. */
+  const { peerHeldActionCounts, onLocalLog, restHoldOk, restReleaseOk } = props;
   const [localHeldCounts, setLocalHeldCounts] = useState<Record<JogAction, number>>({});
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
@@ -113,28 +110,28 @@ export function JogPad(props: {
         } catch {
           /* ignore */
         }
-        if (!rec.holdEstablished || !rec.holdToken) {
+        if (!rec.holdEstablished) {
           return;
         }
-        const token = rec.holdToken;
+        const action = rec.action;
         try {
-          const r = await jogUp(token);
+          const r = await releaseJog(action);
           if (r.ok) {
-            bumpLocal(rec.action, -1);
-            restHoldUpOk(token);
+            bumpLocal(action, -1);
+            restReleaseOk(action);
           } else {
-            onLocalLog(`http jog/up — ${r.body.reason}: ${r.body.message}`);
+            onLocalLog(`http jog/release — ${r.body.reason}: ${r.body.message}`);
           }
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
-          onLocalLog(`jog up failed — ${msg}`);
+          onLocalLog(`jog release failed — ${msg}`);
         }
       } finally {
         ptrMapRef.current.delete(pointerId);
         rec.releaseInFlight = false;
       }
     },
-    [bumpLocal, onLocalLog, restHoldUpOk],
+    [bumpLocal, onLocalLog, restReleaseOk],
   );
 
   const onSurfacePointerDown = (ev: PointerEvent<HTMLDivElement>) => {
@@ -164,27 +161,25 @@ export function JogPad(props: {
 
     const rec: PtrState = {
       action,
-      holdToken: null,
       holdEstablished: false,
       downPromise,
       releaseInFlight: false,
     };
     ptrMapRef.current.set(ev.pointerId, rec);
 
-    void jogDown(action)
+    void jogHold(action)
       .then((r) => {
         if (r.ok) {
-          rec.holdToken = r.hold_token;
           rec.holdEstablished = true;
           bumpLocal(action, 1);
-          restHoldDownOk(r.hold_token, action);
+          restHoldOk(action);
         } else {
-          onLocalLog(`http jog/down — ${r.body.reason}: ${r.body.message}`);
+          onLocalLog(`http jog/hold — ${r.body.reason}: ${r.body.message}`);
         }
       })
       .catch((e: unknown) => {
         const msg = e instanceof Error ? e.message : String(e);
-        onLocalLog(`jog down failed — ${msg}`);
+        onLocalLog(`jog hold failed — ${msg}`);
       })
       .finally(() => {
         resolveDown();

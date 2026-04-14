@@ -32,7 +32,10 @@ class _StaticCacheControlMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         path = request.url.path
         if path == "/" or path.endswith(".html"):
-            response.headers["Cache-Control"] = "no-store"
+            # Kiosk browsers may still reuse a cached shell without Pragma/Expires.
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
         elif "/assets/" in path:
             response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
         return response
