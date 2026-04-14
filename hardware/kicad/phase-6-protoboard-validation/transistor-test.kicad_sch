@@ -1147,6 +1147,16 @@
 	)
 	(wire
 		(pts
+			(xy 135.89 91.44) (xy 135.89 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "00ab3062-478a-4111-a306-c3e15624eacb")
+	)
+	(wire
+		(pts
 			(xy 125.73 113.03) (xy 125.73 109.22)
 		)
 		(stroke
@@ -1157,37 +1167,7 @@
 	)
 	(wire
 		(pts
-			(xy 139.7 107.95) (xy 139.7 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2f886011-a3a6-43e9-890a-51c487839c38")
-	)
-	(wire
-		(pts
-			(xy 138.43 90.17) (xy 138.43 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4d457c4f-1d64-42dd-8977-2bcfe94dc37c")
-	)
-	(wire
-		(pts
-			(xy 140.97 107.95) (xy 139.7 107.95)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6461a6db-50ca-4f51-b1d6-5c1b9f30d40e")
-	)
-	(wire
-		(pts
-			(xy 158.75 107.95) (xy 158.75 104.14)
+			(xy 158.75 91.44) (xy 158.75 87.63)
 		)
 		(stroke
 			(width 0)
@@ -1197,13 +1177,23 @@
 	)
 	(wire
 		(pts
-			(xy 151.13 107.95) (xy 158.75 107.95)
+			(xy 151.13 91.44) (xy 158.75 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "66666666-0000-4000-8000-000000002028")
+	)
+	(wire
+		(pts
+			(xy 135.89 106.68) (xy 135.89 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6caaed22-5b53-4771-a8f9-b788f8af4a56")
 	)
 	(wire
 		(pts
@@ -1217,16 +1207,6 @@
 	)
 	(wire
 		(pts
-			(xy 157.48 90.17) (xy 138.43 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b0f43bf1-d50a-46f2-999d-be1bbfba88d3")
-	)
-	(wire
-		(pts
 			(xy 121.92 99.06) (xy 125.73 99.06)
 		)
 		(stroke
@@ -1237,7 +1217,7 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 93.98) (xy 135.89 93.98)
+			(xy 135.89 106.68) (xy 157.48 106.68)
 		)
 		(stroke
 			(width 0)
@@ -1257,7 +1237,7 @@
 	)
 	(wire
 		(pts
-			(xy 139.7 104.14) (xy 135.89 104.14)
+			(xy 135.89 91.44) (xy 140.97 91.44)
 		)
 		(stroke
 			(width 0)
@@ -1266,7 +1246,7 @@
 		(uuid "eab137cf-8e9d-473e-9619-53ae4709b181")
 	)
 	(label ""
-		(at 152.4 107.95 0)
+		(at 152.4 91.44 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1276,7 +1256,7 @@
 		)
 		(uuid "5bd582ab-e6d3-4058-8cad-5728744c5842")
 		(property "R10_P2" ""
-			(at 152.4 109.22 0)
+			(at 152.4 92.71 0)
 			(show_name yes)
 			(do_not_autoplace no)
 			(effects
@@ -1299,7 +1279,7 @@
 		(uuid "66666666-0000-4000-8000-000000003027")
 	)
 	(label "GND"
-		(at 157.48 90.17 0)
+		(at 157.48 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1320,7 +1300,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 158.75 104.14 0)
+		(at 158.75 87.63 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1331,7 +1311,7 @@
 		(fields_autoplaced yes)
 		(uuid "3e7d19e2-e5b6-4a1e-a7c3-8fc4dd2df74c")
 		(property "Reference" "#PWR01"
-			(at 158.75 107.95 0)
+			(at 158.75 91.44 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1342,7 +1322,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 158.75 99.06 0)
+			(at 158.75 82.55 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1352,7 +1332,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 158.75 104.14 0)
+			(at 158.75 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1363,7 +1343,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 158.75 104.14 0)
+			(at 158.75 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1374,7 +1354,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 158.75 104.14 0)
+			(at 158.75 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1406,10 +1386,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "4bd400ad-c821-43f4-b20f-30b799e32508")
 		(property "Reference" "Q1"
-			(at 138.43 97.7899 0)
+			(at 127 88.646 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1420,7 +1399,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 138.43 100.3299 0)
+			(at 124.206 90.932 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1595,7 +1574,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 146.05 107.95 90)
+		(at 146.05 91.44 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1605,7 +1584,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-00000000502c")
 		(property "Reference" "R10"
-			(at 148.082 105.918 90)
+			(at 148.082 89.408 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1616,7 +1595,7 @@
 			)
 		)
 		(property "Value" "22"
-			(at 148.082 110.236 90)
+			(at 148.082 93.726 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1627,7 +1606,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 146.05 107.95 90)
+			(at 146.05 91.44 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1638,7 +1617,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 146.05 107.95 90)
+			(at 146.05 91.44 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1649,7 +1628,7 @@
 			)
 		)
 		(property "Description" "CENTER action resistor"
-			(at 146.05 107.95 90)
+			(at 146.05 91.44 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
