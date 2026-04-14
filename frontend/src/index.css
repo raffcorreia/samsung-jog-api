@@ -19,17 +19,29 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
-  min-height: 100%;
-  touch-action: manipulation;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: pan-y;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Single-screen layout: no document rubber-banding; only the log panel scrolls. */
 #root {
-  min-height: 100vh;
+  height: 100%;
   min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 button {

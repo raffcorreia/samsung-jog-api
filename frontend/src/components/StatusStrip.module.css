@@ -7,6 +7,8 @@
   border-bottom: 1px solid var(--border);
   background: var(--surface);
   min-height: 3rem;
+  flex-shrink: 0;
+  touch-action: manipulation;
 }
 
 .title {

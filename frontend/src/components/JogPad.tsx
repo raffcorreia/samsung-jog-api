@@ -97,7 +97,7 @@ export function JogPad(props: {
   );
 
   return (
-    <div className={styles.shell}>
+    <div className={styles.shell} data-testid="jog-pad" data-touch-policy="none">
       <div className={styles.grid}>
         <div className={styles.spacer} />
         <Btn action="up" label="Up" className={`${styles.btn} ${styles.up}`} />
