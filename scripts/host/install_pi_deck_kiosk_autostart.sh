@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Install XDG autostart entry for Chromium kiosk (graphical session required).
+# Install XDG autostart entry for Chromium kiosk → pi-deck **JOG console** (Phase 11 UI).
+# Graphical session required.
 #
 # Usage:
 #   ./scripts/host/install_pi_deck_kiosk_autostart.sh [REPO_ROOT]
@@ -26,4 +27,4 @@ chmod +x "${KIOSK_SCRIPT}"
 mkdir -p "${AUTOSTART_DIR}"
 sed "s|@REPO_ROOT@|${REPO_ROOT}|g" "${DESKTOP_SRC}" >"${AUTOSTART_DST}"
 echo "Wrote ${AUTOSTART_DST}"
-echo "Log out and back in (or reboot) to start the kiosk after the desktop loads."
+echo "Log out and back in (or reboot) for Chromium to open fullscreen on the JOG console."

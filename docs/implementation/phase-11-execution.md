@@ -13,7 +13,7 @@ Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — 
 - **Feedback:** HTTP **409** bodies from the jog endpoint are surfaced in the **live log**; websocket envelopes (`command`, `control`, `bus`) are formatted into the same log stream.
 - **Layout:** Touch-oriented D-pad + status strip, optimized for **1024×600** landscape; same bundle is used for kiosk and LAN (relative API/WebSocket URLs).
 - **Tests:** Vitest tests for REST jog client behavior, websocket log formatting, and App-level websocket → log integration (`frontend/`).
-- **Kiosk:** [scripts/kiosk/pi-deck-chromium-kiosk.sh](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) — optional `wlrctl pointer hide` on Wayland when available; X11 still uses `unclutter` when installed.
+- **Kiosk:** [scripts/kiosk/pi-deck-chromium-kiosk.sh](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) (JOG UI, `/health` gate, `--disable-features=Translate`) + [pi-deck-kiosk.desktop](../../scripts/kiosk/pi-deck-kiosk.desktop) installed by [install_pi_deck_kiosk_autostart.sh](../../scripts/host/install_pi_deck_kiosk_autostart.sh). Pointer: `unclutter` on X11; optional `wlrctl pointer hide` on Wayland when installed.
 
 ## Operational entry points
 

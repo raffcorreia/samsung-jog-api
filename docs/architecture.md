@@ -122,7 +122,7 @@ The repository is split so **documentation**, **KiCad hardware**, **host scripts
 | Path | Purpose |
 |------|---------|
 | `backend/` | Python package **`pi_deck`** (`backend/pyproject.toml`, distribution name `pi-deck`). Source: `backend/src/pi_deck/`. Layers: `api`, `services`, `hardware`, `storage`, `models`. Matches the system model *UI → API → services → hardware (+ DDC)* in [Solution Overview](design/solution-overview.md). |
-| `frontend/` | Reserved for the React / TypeScript kiosk and LAN UI ([Code Guidelines](development/code-guidelines.md#frontend-guidelines)). Empty until that work starts. |
+| `frontend/` | React / TypeScript **JOG console** (kiosk + LAN); `npm run build` emits into `backend/src/pi_deck/static/` ([Code Guidelines](development/code-guidelines.md#frontend-guidelines)). |
 | `docs/` | Requirements, design, implementation records, runbooks. |
 | `hardware/kicad/` | Schematics and boards (not Python). |
 | `scripts/` | Operational shell helpers, **bench / bring-up Python** (e.g. GPIO smoke tests, [`pi-deck-host-health.py`](../../scripts/pi-deck-host-health.py) — not part of the `pi_deck` installable surface). |

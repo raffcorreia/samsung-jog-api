@@ -4,9 +4,9 @@
 
 Bring the control-deck host to the [Solution Overview — Host platform design](../design/solution-overview.md) baseline:
 
-- `systemd`-supervised `pi-deck` HTTP server (placeholder static UI until the React app exists)
+- `systemd`-supervised `pi-deck` HTTP server (serves the React **JOG console** from `pi_deck/static`; build via `frontend/npm run build`)
 - daily rotated file logs with long retention
-- Chromium kiosk pointed at `http://127.0.0.1:8756/` (after a graphical session exists)
+- Chromium kiosk pointed at `http://127.0.0.1:8756/` — the **JOG console** UI (after a graphical session exists)
 - documented recovery: `Restart=on-failure` on the service; kiosk restarts with session login
 
 ## Prerequisites
@@ -78,9 +78,11 @@ chmod +x scripts/host/install_pi_deck_kiosk_autostart.sh
 ./scripts/host/install_pi_deck_kiosk_autostart.sh
 ```
 
-Log out and back in, or reboot, to verify Chromium loads the placeholder UI.
+Log out and back in, or reboot, to verify Chromium loads the **JOG console** (hero, controls, live log).
 
-The kiosk script waits for `/health` before launching the browser. On X11 it can run `unclutter` when available; **Wayland (e.g. labwc) does not hide the pointer yet** — that is deferred to Phase 11 kiosk/touch polish per the [implementation plan](../implementation/plan.md#phase-9-local-platform-bring-up).
+The kiosk script (`scripts/kiosk/pi-deck-chromium-kiosk.sh`) waits for `/health` before launching. **Pointer hiding:** on X11 it runs `unclutter` when installed; on **Wayland** it runs `wlrctl pointer hide` when that tool is available ([Phase 11](../implementation/phase-11-execution.md) polish). If the pointer still shows, install `wlrctl` or use X11 — see the [implementation plan](../implementation/plan.md#phase-9-local-platform-bring-up) history.
+
+After changing the React UI, rebuild `frontend/` and restart `pi-deck` (or rsync `backend/src/pi_deck/static/`); refresh the kiosk session if Chromium cached an old bundle.
 
 ## 3. Recovery checks
 

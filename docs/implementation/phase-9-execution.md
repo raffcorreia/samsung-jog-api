@@ -8,10 +8,10 @@
 
 Phase 9 delivers a supervised local runtime aligned with [Solution Overview — Host platform design](../design/solution-overview.md):
 
-- **`pi-deck` process:** FastAPI serves `/health`, static placeholder UI at `/`, default bind `127.0.0.1:8756` (LAN uses `PI_DECK_HOST=0.0.0.0` on the appliance), launched via `python -m pi_deck` / console script `pi-deck`.
+- **`pi-deck` process:** FastAPI serves `/health`, static UI at `/` (Phase 11+ **JOG console** built from `frontend/` into `pi_deck/static`), default bind on the appliance is `0.0.0.0:8756` via `PI_DECK_HOST` in the unit; launched via `pi-deck` console script.
 - **`systemd`:** `config/systemd/pi-deck.service` template (`@REPO_ROOT@`) installed by `scripts/host/install_pi_deck_systemd.sh` (creates venv, editable install, enables service).
 - **Logging:** `pi_deck.logging_setup` uses `TimedRotatingFileHandler` (midnight rotation, 93 backups) plus stderr for `journalctl`; default directory `~/.local/share/pi-deck/logs`.
-- **Kiosk:** `scripts/kiosk/pi-deck-chromium-kiosk.sh` waits for `/health`, optional `unclutter` on X11, Wayland uses `--ozone-platform=wayland`; autostart via `scripts/host/install_pi_deck_kiosk_autostart.sh`.
+- **Kiosk:** `scripts/kiosk/pi-deck-chromium-kiosk.sh` opens fullscreen to the JOG UI, waits for `/health`, optional pointer hide (`unclutter` / `wlrctl`), Wayland uses `--ozone-platform=wayland`; `pi-deck-kiosk.desktop` autostart via `scripts/host/install_pi_deck_kiosk_autostart.sh`.
 - **Desktop stack (optional on headless images):** `scripts/host/phase9_install_desktop_stack.sh` installs `lightdm`, `rpd-wayland-core`, `chromium`, sets `graphical.target`, runs `raspi-config nonint do_boot_behaviour B4` with `USER` set to the deck account.
 
 ## Operational entry points

@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
-# Launch Chromium in kiosk mode pointed at the local pi-deck server.
-# Intended for ~/.config/autostart via pi-deck-kiosk.desktop (graphical session).
+# Launch Chromium in kiosk mode to the pi-deck **JOG console** (Phase 11+ UI).
+#
+# The backend serves the React bundle from pi_deck/static at GET / (same UI as on the LAN).
+# This script waits for GET /health, optionally hides the idle pointer (X11: unclutter;
+# Wayland: wlrctl when installed), then starts Chromium fullscreen.
+#
+# Used by ~/.config/autostart via pi-deck-kiosk.desktop (see install_pi_deck_kiosk_autostart.sh).
+#
+# Environment (optional):
+#   PI_DECK_PORT   Listen port (default 8756). Must match pi-deck.service.
+#   PI_DECK_URL    Full URL to open (default http://127.0.0.1:${PI_DECK_PORT}/).
+#                  Override only if you proxy or split HTTP vs WS (normally unnecessary).
 
 set -euo pipefail
 
@@ -56,6 +66,8 @@ CHROME_ARGS=(
   --check-for-update-interval=31536000
   --no-first-run
   --no-default-browser-check
+  # Appliance UX: no translate bar on first load; kiosk is a known single origin.
+  --disable-features=Translate
   "${URL}"
 )
 

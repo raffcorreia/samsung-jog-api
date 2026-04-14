@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=pi-deck Kiosk
-Comment=Fullscreen Chromium pointed at local pi-deck
+Name=pi-deck JOG console (kiosk)
+Comment=Fullscreen Chromium → local pi-deck JOG UI (http://127.0.0.1:8756/) — same bundle as LAN
 # Path is rewritten by install script; default matches ~/samsung-jog-api clone
 Exec=@REPO_ROOT@/scripts/kiosk/pi-deck-chromium-kiosk.sh
 Terminal=false
