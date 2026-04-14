@@ -1,16 +1,27 @@
 :root {
   color-scheme: dark;
-  --bg: #0d1117;
-  --surface: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #58a6ff;
-  --danger: #f85149;
-  --success: #3fb950;
-  --pad: clamp(8px, 2vw, 16px);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: radial-gradient(120% 80% at 50% -10%, #1a2332 0%, var(--bg) 45%);
+  --bg: #0a0e14;
+  --surface: #121820;
+  --surface-elevated: #161d28;
+  --border: #2d3848;
+  --border-bright: #3d4f66;
+  --text: #f0f4f8;
+  --muted: #9aa7b8;
+  --accent: #6cb6ff;
+  --accent-dim: #4493f8;
+  --danger: #ff7b72;
+  --success: #56d364;
+  --pad: clamp(10px, 2.2vw, 18px);
+  --radius: 14px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: radial-gradient(ellipse 140% 90% at 50% -15%, #1a2435 0%, var(--bg) 55%);
   background-color: var(--bg);
   color: var(--text);
 }

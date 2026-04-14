@@ -18,7 +18,7 @@ export default defineConfig({
     proxy: {
       "/api": { target: "http://127.0.0.1:8756", changeOrigin: true },
       "/health": { target: "http://127.0.0.1:8756", changeOrigin: true },
-      "/ws": { target: "ws://127.0.0.1:8756", ws: true },
+      "/ws/events": { target: "ws://127.0.0.1:8756", ws: true, changeOrigin: true },
     },
   },
 });

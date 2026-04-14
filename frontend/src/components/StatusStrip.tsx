@@ -33,7 +33,7 @@ export function StatusStrip(props: {
           <span className={styles.muted}>loading status…</span>
         )}
       </div>
-      <div className={styles.ws} data-live={wsConnected}>
+      <div className={styles.ws} data-live={wsConnected} data-testid="ws-status">
         ws {wsConnected ? "live" : "off"}
         {wsError ? <span className={styles.err}> ({wsError})</span> : null}
       </div>

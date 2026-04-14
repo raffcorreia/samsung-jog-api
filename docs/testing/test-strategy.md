@@ -55,6 +55,19 @@ Examples:
 - recording tools appear in advanced/settings
 - mode-specific controls change correctly between `DDC` and `Blind`
 
+#### Playwright integrated E2E (`frontend/`)
+
+End-to-end tests run **Chromium** against the built SPA served by **`pi-deck`** on port 8756 (same origin for REST and `/ws/events`, no dev proxy). `npm run test:e2e` runs `vite build` first so `backend/src/pi_deck/static/` matches the UI under test, then starts mock-hardware `pi-deck` if needed. This catches REST + WebSocket + UI integration that Vitest/jsdom cannot.
+
+To hit a **running deck** instead (e.g. Raspberry Pi on the LAN):
+
+```bash
+cd frontend
+E2E_BASE_URL=http://10.0.0.11:8756 npm run test:e2e
+```
+
+When `E2E_BASE_URL` is set, Playwright does not start local servers—ensure `websockets` is installed on the Pi and `pi-deck` is running.
+
 ### 3. Sequence validation tests
 
 Purpose:

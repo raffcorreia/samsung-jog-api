@@ -4,7 +4,7 @@
   flex: 0 1 auto;
   min-height: 0;
   border-top: 1px solid var(--border);
-  background: #0a0d12;
+  background: linear-gradient(180deg, #070a0f 0%, #0c1018 100%);
   touch-action: auto;
   overscroll-behavior: contain;
 }

@@ -1,7 +1,7 @@
 .hero {
-  padding: 0.75rem var(--pad) 0.5rem;
+  padding: 0.85rem var(--pad) 0.55rem;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #111620 0%, var(--surface) 100%);
+  background: linear-gradient(180deg, #141c28 0%, var(--surface, #121820) 100%);
   flex-shrink: 0;
   touch-action: manipulation;
 }

@@ -66,6 +66,22 @@ def test_websocket_connected_envelope(client: TestClient) -> None:
         assert "status" in msg["data"]
 
 
+def test_websocket_receives_command_accept_after_jog(client: TestClient) -> None:
+    """Integrated: REST jog while WS client connected must stream command/accepted."""
+    with client.websocket_connect("/ws/events") as ws:
+        ws.receive_text()
+        r = client.post("/api/v1/jog/press", json={"action": "up", "duration_ms": 8})
+        assert r.status_code == 200
+        accepted = False
+        for _ in range(12):
+            msg = json.loads(ws.receive_text())
+            if msg.get("category") == "command" and msg.get("type") == "accepted":
+                assert msg["data"].get("action") == "up"
+                accepted = True
+                break
+        assert accepted, "expected command/accepted on websocket"
+
+
 def test_concurrent_jog_rejects_second_command() -> None:
     """While a slow pulse runs, a second jog_press must return CONCURRENT_COMMAND."""
 

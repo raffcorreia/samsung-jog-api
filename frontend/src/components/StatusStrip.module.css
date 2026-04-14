@@ -3,9 +3,9 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 1rem;
-  padding: 0.65rem var(--pad);
+  padding: 0.7rem var(--pad);
   border-bottom: 1px solid var(--border);
-  background: var(--surface);
+  background: linear-gradient(90deg, var(--surface, #121820) 0%, #151c26 50%, var(--surface, #121820) 100%);
   min-height: 3rem;
   flex-shrink: 0;
   touch-action: manipulation;
@@ -58,6 +58,7 @@
 
 .ws[data-live="true"] {
   color: var(--success);
+  font-weight: 600;
 }
 
 .err {
