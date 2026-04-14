@@ -19,7 +19,9 @@ Environment=HOME=@SERVICE_HOME@
 # 0.0.0.0: listen on all interfaces so the same UI is reachable from the LAN (trusted network).
 Environment=PI_DECK_HOST=0.0.0.0
 Environment=PI_DECK_PORT=8756
-Environment=PI_DECK_HARDWARE=live
+# Default mock so the service and kiosk (/health) always come up; use `systemctl edit pi-deck` to
+# set Environment=PI_DECK_HARDWARE=live when GPIO on this host is verified (see phase-11-execution).
+Environment=PI_DECK_HARDWARE=mock
 Environment=PI_DECK_LOG_DIR=@SERVICE_HOME@/.local/share/pi-deck/logs
 ExecStart=@REPO_ROOT@/backend/.venv/bin/pi-deck
 Restart=on-failure

@@ -55,6 +55,7 @@ Environment overrides (optional):
 | `PI_DECK_HOST` | `0.0.0.0` | Bind address (`0.0.0.0` = LAN + localhost; use `127.0.0.1` only if you refuse non-local connections) |
 | `PI_DECK_PORT` | `8756` | Listen port |
 | `PI_DECK_LOG_DIR` | `~/.local/share/pi-deck/logs` | Directory for `pi-deck.log` |
+| `PI_DECK_HARDWARE` | `mock` (default in `config/systemd/pi-deck.service`) | **`live`** only after GPIO init works on this Pi. If `live` fails during startup, **`pi-deck` never listens on 8756**, **`/health` never succeeds**, and the [kiosk script](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) **exits without launching Chromium** (it waits up to ~120s for `/health`). Use `sudo systemctl edit pi-deck` to set `Environment=PI_DECK_HARDWARE=live` when ready. |
 
 Edit the unit with `sudo systemctl edit pi-deck` to add `Environment=` lines, then `sudo systemctl daemon-reload && sudo systemctl restart pi-deck`.
 
