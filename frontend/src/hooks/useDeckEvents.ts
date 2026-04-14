@@ -5,8 +5,10 @@ import {
   useMemo,
   useRef,
   useState,
+  type RefObject,
 } from "react";
 
+import type { JogPadHandle } from "../components/JogPad";
 import { fetchStatus, websocketEventsUrl } from "../api/client";
 import { bumpHeldCount } from "./deckHoldPeerSync";
 import { formatWsEventLine } from "../log/formatWsEvent";
@@ -50,7 +52,7 @@ function parseWs(raw: string): WsEventV1 | null {
   return null;
 }
 
-export function useDeckEvents(): DeckEventsState {
+export function useDeckEvents(jogPadRef?: RefObject<JogPadHandle | null>): DeckEventsState {
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [peerHeldActionCounts, setPeerHeldActionCounts] = useState<Record<JogAction, number>>({});
   const [wsConnected, setWsConnected] = useState(false);
@@ -169,6 +171,11 @@ export function useDeckEvents(): DeckEventsState {
             if (skipReleasedEchoRef.current.has(action)) {
               skipReleasedEchoRef.current.delete(action);
               return;
+            }
+            /* Another client replaced our hold (or server watchdog): drop local +1 and ref so the next ``held`` is not skipped as "our echo". */
+            if (myLocalHeldRef.current.has(action)) {
+              myLocalHeldRef.current.delete(action);
+              jogPadRef?.current?.serverHoldEndedByPeer(action);
             }
             setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
           }

@@ -1,5 +1,7 @@
 import {
+  forwardRef,
   useCallback,
+  useImperativeHandle,
   useRef,
   useState,
   type PointerEvent,
@@ -70,12 +72,17 @@ function mergeHeld(
   return Math.max(0, (local[action] ?? 0) + (peer[action] ?? 0));
 }
 
-export function JogPad(props: {
+/** Imperative sync when the server ends our hold (another client replaced it, watchdog, etc.). */
+export interface JogPadHandle {
+  serverHoldEndedByPeer(action: JogAction): void;
+}
+
+export const JogPad = forwardRef<JogPadHandle, {
   peerHeldActionCounts: Record<JogAction, number>;
   onLocalLog: (line: string) => void;
   restHoldOk: (action: JogAction) => void;
   restReleaseOk: (action: JogAction) => void;
-}) {
+}>(function JogPad(props, ref) {
   const { peerHeldActionCounts, onLocalLog, restHoldOk, restReleaseOk } = props;
   const [localHeldCounts, setLocalHeldCounts] = useState<Record<JogAction, number>>({});
   const surfaceRef = useRef<HTMLDivElement | null>(null);
@@ -93,6 +100,21 @@ export function JogPad(props: {
       return next;
     });
   }, []);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      serverHoldEndedByPeer(action: JogAction) {
+        bumpLocal(action, -1);
+        for (const rec of ptrMapRef.current.values()) {
+          if (rec.action === action && rec.holdEstablished) {
+            rec.holdEstablished = false;
+          }
+        }
+      },
+    }),
+    [bumpLocal],
+  );
 
   const releasePointer = useCallback(
     async (pointerId: number) => {
@@ -290,4 +312,4 @@ export function JogPad(props: {
       </div>
     </div>
   );
-}
+});
