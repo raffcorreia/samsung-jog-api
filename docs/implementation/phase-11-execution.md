@@ -85,3 +85,37 @@ hostname: pi-deck
 ```
 
 **Review:** `get_throttled` is **`0x0`**. Root filesystem use is **~8.8%**. `/health` returns **`status`** and **`version`**.
+
+## JOG UI performance baseline
+
+Subjective “slow kiosk” or “fast on PC, slow on Pi HDMI” reports need a **fixed procedure** so regressions are comparable.
+
+**Canonical snapshot tool (same as [Host health gate](plan.md#host-health-gate-feature-phases-1019)):** run on the deck host:
+
+```bash
+python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py
+```
+
+Use the **default text output** (not `--json`) when pasting into execution records.
+
+**Before comparing UI builds**, deploy the built static bundle and restart `pi-deck` so the kiosk is not on stale hashed assets:
+
+```bash
+# From dev machine, repo root (see scripts/host/deploy_pi_deck_ui.sh)
+./scripts/host/deploy_pi_deck_ui.sh
+```
+
+Then re-run `pi-deck-host-health.py` on the Pi.
+
+**How to read the snapshot for UI work**
+
+| Section | Meaning for JOG UI |
+|--------|---------------------|
+| `[pi-deck HTTP]` | Loopback `GET /health` on the Pi. If this is fast but the **on-screen** UI still lags, the bottleneck is likely **Chromium / React paint** on the device, not FastAPI alone. |
+| `[raspberry_pi]` → `get_throttled` | Non‑zero flags (under-voltage, throttle) can cause **uneven** frame times and missed taps. |
+| `[cpu]` load | High load while idle may indicate background work competing with the browser. |
+| `[systemd]` | `pi-deck.service` must be **active**; otherwise the UI cannot load or update. |
+
+**Kiosk vs LAN browser:** Controlling the deck from **another PC** (`http://10.0.0.11:8756`) adds **network RTT** on every REST/WebSocket round-trip compared to touching the **Pi touchscreen** directly. When filing issues, state **which client** was used.
+
+**Related:** [Test strategy — deck host snapshots](../testing/test-strategy.md#8-deck-host-health-snapshots) points to this section for **JOG kiosk / LAN** interpretation.
