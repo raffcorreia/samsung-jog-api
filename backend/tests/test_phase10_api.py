@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import uuid
 
 import pytest
@@ -196,3 +197,22 @@ def test_bus_busy_409_shape(client: TestClient) -> None:
         assert "message" in body
     finally:
         deck.hardware = prev
+
+
+def test_index_html_sent_with_no_store_cache(client: TestClient) -> None:
+    """Kiosk / remote browsers must not keep a stale shell that references deleted hashed bundles."""
+    r = client.get("/")
+    assert r.status_code == 200
+    assert r.headers.get("cache-control") == "no-store"
+
+
+def test_hashed_assets_sent_with_long_cache(client: TestClient) -> None:
+    r = client.get("/")
+    assert r.status_code == 200
+    m = re.search(r'src="(/assets/[^"]+)"', r.text)
+    assert m is not None
+    r2 = client.get(m.group(1))
+    assert r2.status_code == 200
+    cc = r2.headers.get("cache-control") or ""
+    assert "immutable" in cc
+    assert "max-age=" in cc

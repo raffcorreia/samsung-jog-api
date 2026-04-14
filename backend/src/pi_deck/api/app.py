@@ -9,6 +9,8 @@ from pathlib import Path
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
 
 from pi_deck import __version__
 from pi_deck.api.router import api_v1, websocket_events
@@ -21,6 +23,19 @@ logger = logging.getLogger(__name__)
 
 def _static_dir() -> Path:
     return Path(__file__).resolve().parent.parent / "static"
+
+
+class _StaticCacheControlMiddleware(BaseHTTPMiddleware):
+    """Avoid stale index.html in kiosk / remote browsers (hashed assets change each build)."""
+
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        path = request.url.path
+        if path == "/" or path.endswith(".html"):
+            response.headers["Cache-Control"] = "no-store"
+        elif "/assets/" in path:
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        return response
 
 
 @asynccontextmanager
@@ -45,6 +60,7 @@ def create_app() -> FastAPI:
         docs_url=None,
         redoc_url=None,
     )
+    app.add_middleware(_StaticCacheControlMiddleware)
 
     @app.get("/health")
     def health() -> JSONResponse:
