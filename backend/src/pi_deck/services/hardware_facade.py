@@ -27,9 +27,6 @@ class DeckHardwareFacade(Protocol):
     def set_jog_line(self, action: JogAction, active: bool) -> None:
         """Drive one jog line high/low without clearing other lines (multicommand)."""
 
-    def adc1_physical_idle(self) -> bool:
-        """True when conditioned KEY_ADC1 suggests no external activity on that bus."""
-
     def read_signals(self) -> tuple[bool, bool]:
         """Return ``(key_adc1_active, key_led_active)`` for status and websocket snapshots."""
 
@@ -55,9 +52,6 @@ class LiveDeckHardware:
 
     def set_jog_line(self, action: JogAction, active: bool) -> None:
         self._drive.set_line(action, active)
-
-    def adc1_physical_idle(self) -> bool:
-        return not self._adc1.is_active
 
     def read_signals(self) -> tuple[bool, bool]:
         return (self._adc1.is_active, self._led.is_active)
@@ -89,9 +83,6 @@ class MockDeckHardware:
         else:
             self._lines_on.discard(action)
         logger.debug("mock set_jog_line %s %s", action.value, active)
-
-    def adc1_physical_idle(self) -> bool:
-        return not self._adc1_active
 
     def read_signals(self) -> tuple[bool, bool]:
         return (self._adc1_active, self._led_active)

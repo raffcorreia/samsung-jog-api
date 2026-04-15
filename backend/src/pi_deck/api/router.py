@@ -24,7 +24,6 @@ api_v1 = APIRouter(prefix="/api/v1")
 
 def _rejection_message(reason: CommandRejectedReason) -> str:
     return {
-        CommandRejectedReason.BUS_BUSY: "Monitor jog bus reports activity; command refused",
         CommandRejectedReason.CONCURRENT_COMMAND: "Another jog command is already running",
         CommandRejectedReason.HARDWARE_ERROR: "Hardware error while executing jog command",
         CommandRejectedReason.INVALID_DURATION: "Invalid duration for jog command",

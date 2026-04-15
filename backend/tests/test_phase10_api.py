@@ -150,6 +150,23 @@ def test_service_hold_release_two_directions() -> None:
     asyncio.run(body())
 
 
+def test_watchdog_auto_releases_hold_after_timeout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Unreleased hold must be auto-released by the watchdog after _MAX_HOLD_S seconds."""
+    import pi_deck.services.deck_control as dc_module
+
+    monkeypatch.setattr(dc_module, "_MAX_HOLD_S", 0.05)
+    deck = DeckControlService(MockDeckHardware(), WsHub(), "test")
+
+    async def body() -> None:
+        err = await deck.jog_hold("up")
+        assert err is None
+        assert len(deck._hold) == 1
+        await asyncio.sleep(0.15)  # outlast the 50 ms watchdog
+        assert len(deck._hold) == 0
+
+    asyncio.run(body())
+
+
 def test_build_hardware_live_propagates_gpio_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     from pi_deck.services import hardware_facade as hf
 

@@ -36,7 +36,7 @@ _ACTION_MAP: dict[str, JogAction] = {
 }
 _STR_FOR_ACTION: dict[JogAction, str] = {v: k for k, v in _ACTION_MAP.items()}
 
-_MAX_HOLD_S = 60.0
+_MAX_HOLD_S = 20.0
 
 
 @dataclass
@@ -130,7 +130,7 @@ class DeckControlService:
         try:
             await asyncio.to_thread(self.hardware.set_jog_line, jog, True)
         except Exception:
-            logger.exception("set_jog_line on failed")
+            logger.exception("set_jog_line failed")
             msg = "Hardware failure while asserting jog line"
             await self._emit(
                 ws_command_rejected(reason=CommandRejectedReason.HARDWARE_ERROR, message=msg),

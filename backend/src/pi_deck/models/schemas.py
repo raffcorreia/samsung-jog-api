@@ -27,7 +27,6 @@ class ControlState(str, Enum):
 class CommandRejectedReason(str, Enum):
     """Stable machine-readable reasons for HTTP 409 / websocket rejection events."""
 
-    BUS_BUSY = "bus_busy"
     CONCURRENT_COMMAND = "concurrent_command"
     HARDWARE_ERROR = "hardware_error"
     INVALID_DURATION = "invalid_duration"
