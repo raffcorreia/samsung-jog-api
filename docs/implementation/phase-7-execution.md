@@ -50,6 +50,8 @@ Phase 6 is reference only. Its discrete-transistor protoboard was the proof of c
 
 The Pi is powered by its own 3A micro-USB supply. Boards 1 and 2 draw from the Pi's GPIO rails. No external supply or onboard regulation is added to either board.
 
+Consider adding a board-level power-enable / power-off control for the custom controller hardware, so a dedicated GPIO can disable the board completely when low if the design needs a hard off state.
+
 ### Power Budget
 
 | Consumer | Current |
@@ -209,6 +211,7 @@ Board 2 target: approximately **50 × 35 mm**. Dominated by two horizontal HDMI 
 - Validate `U5` (`MC74HC4066`) on-resistance contribution at 3.3V supply against the resistance divider values to confirm JOG classification accuracy
 - Define and document board mounting hole positions and mechanical constraints
 - Define inter-board cable length based on final physical enclosure layout
+- Decide whether the custom board should include a GPIO-controlled global power switch so the entire board can be forced off when an enable pin is low
 
 ## Exit-Criteria Assessment
 
