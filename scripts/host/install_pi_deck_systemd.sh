@@ -17,7 +17,7 @@ UNIT_DST="/etc/systemd/system/pi-deck.service"
 SERVICE_USER="${PI_DECK_SERVICE_USER:-${SUDO_USER:-$USER}}"
 if [[ "${SERVICE_USER}" == "root" ]]; then
   echo "Refusing to install pi-deck as root: set PI_DECK_SERVICE_USER to the deck login" \
-    "(e.g. export PI_DECK_SERVICE_USER=rafael) or run with sudo from that account." >&2
+    "(e.g. export PI_DECK_SERVICE_USER=deck-user) or run with sudo from that account." >&2
   exit 1
 fi
 SERVICE_HOME="$(getent passwd "${SERVICE_USER}" | cut -d: -f6)"

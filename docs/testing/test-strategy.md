@@ -63,7 +63,7 @@ To hit a **running deck** instead (e.g. Raspberry Pi on the LAN):
 
 ```bash
 cd frontend
-E2E_BASE_URL=http://10.0.0.11:8756 npm run test:e2e
+E2E_BASE_URL=http://<deck-host-ip>:8756 npm run test:e2e
 ```
 
 When `E2E_BASE_URL` is set, Playwright does not start local servers—ensure `websockets` is installed on the Pi and `pi-deck` is running.

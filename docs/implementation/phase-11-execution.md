@@ -20,7 +20,7 @@ Phase 11 delivered the **low-level JOG console UI** per [Implementation Plan —
 
 ## Deck host live hardware (verified)
 
-**Deck host:** `pi-deck` (e.g. `10.0.0.11` on the project LAN).
+**Deck host:** the project deck host (reachable on the project LAN).
 
 **Verification:**
 
@@ -56,7 +56,7 @@ These keep documentation and baselines useful; none of them re-opens the phase.
 
 ## Host health snapshot
 
-Recorded on the deck host **`pi-deck`** (`10.0.0.11`):
+Recorded on the deck host:
 
 ```bash
 python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py
@@ -139,6 +139,6 @@ Then re-run `pi-deck-host-health.py` on the Pi.
 | `[cpu]` load | High load while idle may indicate background work competing with the browser. |
 | `[systemd]` | `pi-deck.service` must be **active**; otherwise the UI cannot load or update. |
 
-**Kiosk vs LAN browser:** Controlling the deck from **another PC** (`http://10.0.0.11:8756`) adds **network RTT** on every REST/WebSocket round-trip compared to touching the **Pi touchscreen** directly. When filing issues, state **which client** was used.
+**Kiosk vs LAN browser:** Controlling the deck from **another PC** on the LAN adds **network RTT** on every REST/WebSocket round-trip compared to touching the **Pi touchscreen** directly. When filing issues, state **which client** was used.
 
 **Related:** [Test strategy — deck host snapshots](../testing/test-strategy.md#8-deck-host-health-snapshots) points to this section for **JOG kiosk / LAN** interpretation.

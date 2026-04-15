@@ -4,19 +4,25 @@
 # Run from your dev machine (SSH key to the Pi required).
 #
 # Usage:
-#   ./scripts/host/deploy_pi_deck_ui.sh
-#   PI_TARGET=rafael@192.168.1.50 ./scripts/host/deploy_pi_deck_ui.sh
+#   PI_TARGET=user@pi-hostname ./scripts/host/deploy_pi_deck_ui.sh
 #
 # Environment:
-#   PI_TARGET    SSH destination (default: rafael@10.0.0.11)
+#   PI_TARGET    SSH destination — required (e.g. user@pi-hostname or user@192.168.x.x)
 #
 # The repo on the Pi is expected at ~/samsung-jog-api (login user’s home).
+#
+# Note: scripts/deploy.sh is the canonical full deploy; this script is kept for
+# partial (UI-only) deploys during active frontend development.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-PI_TARGET="${PI_TARGET:-rafael@10.0.0.11}"
+
+if [ -z "${PI_TARGET:-}" ]; then
+    echo "ERROR: PI_TARGET is not set. Example: PI_TARGET=user@pi-hostname ./scripts/host/deploy_pi_deck_ui.sh" >&2
+    exit 1
+fi
 
 echo "Building frontend → ${REPO_ROOT}/backend/src/pi_deck/static ..."
 (cd "${REPO_ROOT}/frontend" && npm run build)
