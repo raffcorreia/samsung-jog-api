@@ -102,9 +102,13 @@ The Phase 6 protoboard schematic is split into three practical blocks:
 
 ## Bench Observation
 
-During Phase 6 bench testing, a `KEY_ADC1` observation resistor below about `120 kOhm` caused the monitor OSD to misbehave when the `KEY1` action was active.
+### Observation base resistors — increased from `10 kOhm` to `100 kOhm`
 
-Observed symptoms:
+The initial protoboard used `10 kOhm` resistors for `R1` (`MON_KEY_ADC1 → Q1 base`) and `R3` (`MON_KEY_LED → Q2 base`). During bench testing the `10 kOhm` value on `R1` caused the monitor OSD to misbehave whenever the `KEY1` action was active. Both `R1` and `R3` were increased to `100 kOhm` to keep the observation path consistently high-impedance across all monitored lines. The schematic and BOM already reflect these corrected values.
+
+The root cause is the transistor-based observation topology: the base resistor directly sets how much current is drawn from the monitor bus while the key line is active. A `10 kOhm` base resistor presents enough loading to disturb the resistor-ladder decoding on `KEY_ADC1`.
+
+Observed symptoms with `10 kOhm`:
 
 - the OSD became visibly corrupted while open
 - the menu appeared to wander into unrelated configuration areas such as gamma settings
@@ -117,6 +121,8 @@ Interpretation:
 - `KEY1` should map only to the center / enter action
 - sideways navigation implies the bus is being loaded or perturbed enough to create false key decoding
 - `100 kOhm` was better than `10 kOhm`, but the practical bench threshold remained close to `120 kOhm` in this prototype
+
+Note: this sensitivity is specific to the Phase 6 transistor-based observation path. Phase 3 uses a high-impedance op-amp buffer (`TLV9064`) as the first stage, with `10 kOhm` parts serving only as series input protection resistors. The op-amp input impedance is in the megaohm range, so bus loading in Phase 3 is negligible regardless of the protection resistor value.
 
 ## Exit Criteria
 

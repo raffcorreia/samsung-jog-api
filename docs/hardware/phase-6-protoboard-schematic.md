@@ -56,7 +56,7 @@ There is no `J2` or `J3` header in this phase.
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `R3` | `10 kOhm` | `MON_KEY_LED -> Q2 base` |
+| `R3` | `100 kOhm` | `MON_KEY_LED -> Q2 base` |
 | `Q2` | `2N3904` | base from `R3`, collector (`C`) to `GPIO22`, emitter (`E`) to `GND` |
 | `R4` | `10 kOhm` | `3.3V -> GPIO22` pull-up |
 
