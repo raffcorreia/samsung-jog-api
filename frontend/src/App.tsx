@@ -1,4 +1,5 @@
 import { JogPad } from "./components/JogPad";
+import { VersionBadge } from "./components/VersionBadge";
 import { useDeckEvents } from "./hooks/useDeckEvents";
 import { DeckShell } from "./widgets/DeckShell";
 import { JogWidget } from "./widgets/JogWidget";
@@ -11,6 +12,7 @@ export function App() {
 
   return (
     <DeckShell>
+      {deck.status && <VersionBadge version={deck.status.version} />}
       <div className={styles.deckBody}>
         <JogWidget>
           <JogPad

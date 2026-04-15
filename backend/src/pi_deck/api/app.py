@@ -18,6 +18,23 @@ from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.hardware_facade import build_hardware
 from pi_deck.services.ws_hub import WsHub
 
+# Path written by scripts/deploy.sh on each deployment.
+_DEPLOY_COUNTER_FILE = Path.home() / ".pi-deck-deploy"
+
+
+def _read_deploy_counter() -> int:
+    """Return the persistent deploy counter, or 0 if absent / unreadable."""
+    try:
+        return int(_DEPLOY_COUNTER_FILE.read_text().strip())
+    except Exception:
+        return 0
+
+
+def _build_version() -> str:
+    """Return ``__version__`` decorated with the deploy counter when present."""
+    n = _read_deploy_counter()
+    return f"{__version__}+r{n}" if n > 0 else __version__
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,11 +62,12 @@ class _StaticCacheControlMiddleware(BaseHTTPMiddleware):
 async def lifespan(app: FastAPI):
     hub = WsHub()
     hw = build_hardware()
-    deck = DeckControlService(hardware=hw, ws_hub=hub, version=__version__)
+    version = _build_version()
+    deck = DeckControlService(hardware=hw, ws_hub=hub, version=version)
     app.state.ws_hub = hub
     app.state.deck = deck
     app.state.hw = hw
-    logger.info("pi-deck hardware mode: %s", hw.kind)
+    logger.info("pi-deck hardware mode: %s  version: %s", hw.kind, version)
     yield
     hw.close()
 
