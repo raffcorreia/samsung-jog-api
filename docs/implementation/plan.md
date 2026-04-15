@@ -528,9 +528,9 @@ Define and implement the local backend command surface that all UI and control f
 
 ## Phase 11: Low-Level JOG Console UI
 
-**Status: in progress.** Record: [Phase 11 Execution Record](./phase-11-execution.md). **Repository:** React UI, kiosk polish, and tests are implemented. **Remaining:** reliable **live GPIO** on the **Raspberry Pi deck host** so the first usable controller is real end-to-end, not only against mock hardware.
+**Status: completed.** Record: [Phase 11 Execution Record](./phase-11-execution.md). **Repository:** React UI, kiosk polish, automated tests, and **live hardware on the deck Raspberry Pi** — `PI_DECK_HARDWARE=live`, `GET /api/v1/status` reports `hardware: live`, and the JOG console drives the monitor end-to-end from the appliance (verified on the project deck host).
 
-Phase 6 / Phase 8 work validated the **protoboard concept** and scripts on a bench; **this phase** is where that stack must run on the **kiosk appliance** with `PI_DECK_HARDWARE=live` (pin factory, permissions, [Phase 6 execution](./phase-6-execution.md) pin map / `pi_deck.hardware`).
+Phase 6 / Phase 8 work validated the **protoboard concept** and scripts on a bench; this phase closed the gap to the **kiosk appliance** with the same stack under `PI_DECK_HARDWARE=live` (pin factory, permissions, [Phase 6 execution](./phase-6-execution.md) pin map / `pi_deck.hardware`).
 
 ### Goal
 
@@ -556,7 +556,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 - keep the same UI reachable on the LAN
 - add frontend tests for command feedback and websocket-driven UI state
 - hide or tame the kiosk pointer for touch-first use (deferred from Phase 9; Wayland vs X11)
-- **resolve live hardware bring-up on the deck:** e.g. pin factory (`GPIOZERO_PIN_FACTORY` / `lgpio` vs native), group membership, BCM wiring vs [protoboard map](../../backend/src/pi_deck/hardware/protoboard_pins.py), until `GET /api/v1/status` reports `hardware: "live"` with a stable `pi-deck.service`
+- **live hardware bring-up on the deck** (pin factory `GPIOZERO_PIN_FACTORY` if needed, group membership, BCM wiring vs [protoboard map](../../backend/src/pi_deck/hardware/protoboard_pins.py)) — **done** on the reference appliance; see Phase 11 execution record
 
 ### Deliverables
 

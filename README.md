@@ -25,8 +25,8 @@ Current state of the repository:
 - completed: `Phase 8: GPIO Assignment and Low-Level Control Prototype` — [execution record](docs/implementation/phase-8-execution.md)
 - completed: `Phase 9: Local Platform Bring-Up` — [execution record](docs/implementation/phase-9-execution.md), [runbook](docs/runbooks/phase-9-platform-bring-up.md) (`systemd` unit `config/systemd/pi-deck.service`, kiosk scripts under `scripts/kiosk/`)
 - completed: `Phase 10: Local API` — [execution record](docs/implementation/phase-10-execution.md) (REST `/api/v1`, WebSocket `/ws/events`)
-- in progress: `Phase 11: Low-Level JOG Console UI` — [execution record](docs/implementation/phase-11-execution.md) (React JOG console in [`frontend/`](frontend/); **live GPIO bring-up on the deck host** is part of this phase — prototype validation was Phase 6/8)
-- current phase: `Phase 11` until live hardware on the appliance is verified; then `Phase 12: Recording and Replay Subsystem` (see [Implementation Plan](docs/implementation/plan.md))
+- completed: `Phase 11: Low-Level JOG Console UI` — [execution record](docs/implementation/phase-11-execution.md) (React JOG console in [`frontend/`](frontend/); **live GPIO on the deck host** verified — UI drives real JOG on the appliance)
+- current phase: `Phase 12: Recording and Replay Subsystem` (see [Implementation Plan](docs/implementation/plan.md))
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

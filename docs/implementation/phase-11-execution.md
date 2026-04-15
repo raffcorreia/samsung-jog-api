@@ -1,12 +1,12 @@
 # Phase 11 Execution Record
 
-**Status:** **in progress.** UI, API usage, and tests are in the repository; **live GPIO on the deck host** (prototype → appliance) is **still open** — see [Deck host live hardware](#deck-host-live-hardware) below.
+**Status:** **completed.**
 
-**Date:** 2026-04-13 (updated 2026-04-14)
+**Date:** 2026-04-13 (live hardware verified 2026-04-14)
 
 ## Summary
 
-Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — Phase 11](plan.md#phase-11-low-level-jog-console-ui) and [Solution Overview — First usable controller](../design/solution-overview.md). The plan explicitly treats **this phase** as the place to **finish** moving off pure prototype hand-waving: Phase 6 / Phase 8 proved the circuit and scripts on a bench; **Phase 11 must make `PI_DECK_HARDWARE=live` work on the kiosk Raspberry Pi** so taps in the UI become real `JOG` pulses.
+Phase 11 delivered the **low-level JOG console UI** per [Implementation Plan — Phase 11](plan.md#phase-11-low-level-jog-console-ui) and [Solution Overview — First usable controller](../design/solution-overview.md). Phase 6 / Phase 8 proved the circuit on a bench; this phase required **`PI_DECK_HARDWARE=live` on the kiosk Raspberry Pi** so taps in the UI become real `JOG` pulses on the monitor. **That end-to-end path is verified** on the project deck host: the service runs with live hardware, status reports `hardware: live`, and **physical monitor control works from the deck UI** (and the same UI over the LAN).
 
 **Done in repo:**
 
@@ -14,17 +14,21 @@ Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — 
 - **Controls:** `up`, `down`, `left`, `right`, `center` with **press-and-hold** mapped to a single `POST /api/v1/jog/press` using measured duration (`duration_ms`).
 - **Feedback:** HTTP **409** bodies from the jog endpoint are surfaced in the **live log**; websocket envelopes (`command`, `control`, `bus`) are formatted into the same log stream.
 - **Layout:** Deck shell (full viewport, no “landing page” chrome), touch-oriented JOG + status strip, optimized for **1280×800** (7" DSI); same bundle is used for kiosk and LAN (relative API/WebSocket URLs).
-- **Tests:** Vitest tests for REST jog client behavior, websocket log formatting, and App-level websocket → log integration (`frontend/`).
+- **Tests:** Vitest tests for REST jog client behavior, websocket log formatting, and App-level websocket → log integration (`frontend/`); Playwright e2e exercises the integrated stack.
 - **Kiosk:** [scripts/kiosk/pi-deck-chromium-kiosk.sh](../../scripts/kiosk/pi-deck-chromium-kiosk.sh) (JOG UI, `/health` gate, `--disable-features=Translate`) + [pi-deck-kiosk.desktop](../../scripts/kiosk/pi-deck-kiosk.desktop) installed by [install_pi_deck_kiosk_autostart.sh](../../scripts/host/install_pi_deck_kiosk_autostart.sh). Pointer: `unclutter` on X11; optional `wlrctl pointer hide` on Wayland when installed.
 - **Policy:** `PI_DECK_HARDWARE=live` in [systemd template](../../config/systemd/pi-deck.service); no silent `auto` → mock fallback — GPIO init failures are visible in `journalctl`.
 
-## Deck host live hardware
+## Deck host live hardware (verified)
 
-**Scope:** Phase 11 **includes** fixing gpiozero / Linux GPIO bring-up on the **deck host** (`pi-deck` service) so `LiveDeckHardware` constructs without error and `hardware.pulse` drives the Phase 6–style lines. This is not deferred to a separate “prototype” phase — the prototype validated the **design**; this phase validates the **appliance**.
+**Deck host:** `pi-deck` (e.g. `10.0.0.11` on the project LAN).
 
-**As of 2026-04-14**, with `Environment=PI_DECK_HARDWARE=live`, startup can still fail during `DigitalInputDevice` / sysfs export (`OSError: [Errno 22] Invalid argument` with the native pin factory). **Exit for Phase 11** requires resolving that on the real host (typical levers: `GPIOZERO_PIN_FACTORY`, `lgpio` / `RPi.GPIO`, `gpio` group, BCM vs wiring, see [GPIO bench probe](../runbooks/gpio-bench-probe.md) and Phase 10 notes).
+**Verification:**
 
-**When fixed, paste here:** `GET /api/v1/status` from the Pi showing `"hardware":"live"`, plus a one-line note (e.g. pin factory used). Replace or supplement the host health snapshot below if `/health` was down during the failure window.
+- `pi-deck.service` is active with **`Environment=PI_DECK_HARDWARE=live`** (or equivalent override).
+- `GET http://127.0.0.1:8756/api/v1/status` (or via LAN) reports **`"hardware":"live"`** alongside operating mode / control state.
+- **Observable:** JOG actions from the touchscreen (or LAN browser) produce the expected **physical** front-panel behavior on the Samsung CJ791 — not mock-only responses.
+
+**Bring-up reference:** If another board or OS image shows gpiozero/sysfs issues during `DigitalInputDevice` export, use [GPIO bench probe](../runbooks/gpio-bench-probe.md), `GPIOZERO_PIN_FACTORY`, `lgpio` / `RPi.GPIO`, `gpio` group membership, and BCM vs [protoboard map](../../backend/src/pi_deck/hardware/protoboard_pins.py) wiring — the same levers documented during Phase 10 / early Phase 11 bring-up.
 
 ## Operational entry points
 
@@ -37,10 +41,18 @@ Phase 11 delivers the **low-level JOG console UI** per [Implementation Plan — 
 
 | Criterion | Evidence |
 |-----------|----------|
-| User can control the monitor via low-level JOG from the deck UI | JOG console issues timed `jog/press` calls; hold = one request with elapsed duration. |
+| User can control the monitor via low-level JOG from the deck UI | Verified on appliance: timed `jog/press` / hold path drives real hardware. |
 | No unvalidated high-level monitor feature UI | Only the low-level JOG console is implemented. |
-| Frontend tests for command feedback and websocket-driven state | Vitest suite under `frontend/src/`. |
-| Host health gate | Snapshot below (deck host). |
+| Frontend tests for command feedback and websocket-driven state | Vitest (+ e2e) under `frontend/`. |
+| Host health gate | Snapshot below (deck host); refresh after major OS/kernel upgrades if you rely on the numbers for regression tracking. |
+
+## Optional housekeeping (not blocking Phase 11)
+
+These keep documentation and baselines useful; none of them re-opens the phase.
+
+- **Refresh** `python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py` on the Pi after **kernel / firmware / power** changes and paste a new dated block below if the baseline matters for comparisons.
+- **Record non-default overrides** somewhere durable (execution record footnote, local notes, or a `systemd` drop-in comment): e.g. `GPIOZERO_PIN_FACTORY` if not the default on that image.
+- **Phase 12** is next per [Implementation Plan — Phase 12](plan.md#phase-12-recording-and-replay-subsystem).
 
 ## Host health snapshot
 
