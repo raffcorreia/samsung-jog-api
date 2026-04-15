@@ -197,6 +197,12 @@ PI_TARGET=user@pi-hostname ./scripts/deploy.sh
 
 The script builds the frontend, rsyncs all code, increments the deploy counter, reinstalls the Python package, restarts `pi-deck`, and reloads Chromium. Every deployment must go through this script so the version counter stays accurate and the kiosk always reflects the latest code.
 
+The frontend build is skipped automatically when no files under `frontend/src` or `frontend/public` have changed since the last deploy. To force a full rebuild:
+
+```bash
+FORCE_BUILD=1 PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+```
+
 `PI_TARGET` must be set as an environment variable — it is never hardcoded. Do not commit IP addresses, usernames, or hostnames.
 
 ## When in doubt
