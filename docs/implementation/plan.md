@@ -611,6 +611,8 @@ Establish a single, agent-authorizable deploy script that pushes the latest code
 
 ## Phase 13: Full-Screen UI Layout with Placeholders
 
+**Status:** completed. See [Phase 13 Execution Record](./phase-13-execution.md).
+
 ### Goal
 
 Build the target UI shell at `1280×800` with correct proportions, real functional widgets where they exist today, and static placeholder panels for everything that is not yet wired to real data.
@@ -1049,7 +1051,6 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- close Phase 12: confirm version badge visible in kiosk UI, paste host health snapshot into execution record
-- begin Phase 13: full-screen UI layout with placeholders
+- begin Phase 14: log architecture refactor
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

@@ -1,14 +1,16 @@
 ---
 name: Project Overview — samsung-jog-api-2
-description: High-level goal, phase structure, current status, and Phase 7 architecture decisions
+description: High-level goal, phase structure, current status, Phase 7 architecture decisions, and Phase 13 UI state
 type: project
 ---
 
 Hardware + software project to build a Raspberry Pi 2B-based control deck for a Samsung LC34J791WTNXZA (CJ791) ultrawide monitor. The monitor's only input mechanism is a physical JOG (joystick) on the rear. The goal is to electrically emulate the JOG via resistance-to-ground states on KEY_ADC1/KEY_ADC2 lines, observe KEY_LED feedback, maintain DDC/CI communication, and expose control through a local REST API + WebSocket with a React/TypeScript kiosk UI on a Waveshare 7" DSI display.
 
-**Deck UI:** Single-screen kiosk layout (**1280×800** target). Widgets use **fixed layout bands** so panels do not reflow when the log grows (log scrolls internally). Optional widget visibility is user-driven later — not implicit layout shift. Identity (“pi-deck”) stays in the **status bar**, not duplicated as nested marketing chrome around each control.
+**Deck UI:** Phase 13 complete. Single-screen kiosk layout (**1280×800** target). Widgets use **fixed layout bands** so panels do not reflow when the log grows (log scrolls internally). Final Phase 13 geometry: top bar `48px`, left JOG column `350px`, bottom log band `200px`. Optional widget visibility is user-driven later — not implicit layout shift. Identity (“pi-deck”) stays in the status/version area, not duplicated as nested marketing chrome around each control.
 
-**Phase structure (20 phases, 0–19). Phases 0–6 design-complete. Phase 8 complete (see `docs/implementation/phase-8-execution.md`). Phase 7 KiCad/layout in progress. Current focus: Phase 9+. Phases 10–19 not started.**
+**Phase structure (20 phases, 0–19). Phases 0–6, 8–13 complete. Phase 7 KiCad/layout in progress. Current focus: Phase 14 (Log Architecture Refactor). Phases 15–19 not started.**
+
+**Phase 13 UI state:** Full-screen deck shell is implemented and deployed (`0.1.0+r20`). The real JogPad remains the priority control and lives in the fixed left column. The clock uses `DSEG7 Classic` seven-segment font, enlarged and vertically centered without increasing the `48px` top bar. Settings cog is top-right. LED is an 8mm-style gray default indicator and should turn blue only for future blink/feedback events, not for steady backend `key_led_active`. Record control exists as a visual/logging stub in the upper-right of the JOG column. Calendar, notes, settings, and OSD popup are realistic stubs/placeholders for later phases.
 
 **Hardware vs software sequencing:** Phase 8+ low-level software is brought up on the **Phase 6 GPIO map** first. When Phase 7 boards are fabricated, an **extra migration phase** will be inserted (slot TBD) to remap GPIO and retest software against the **Phase 7 pinout** — see `docs/implementation/plan.md` (“Deferred integrated-board GPIO and software migration”).
 
