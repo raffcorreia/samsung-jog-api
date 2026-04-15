@@ -23,9 +23,33 @@ fi
 
 # ---------------------------------------------------------------------------
 # 1. Build frontend → backend/src/pi_deck/static/
+#    Skipped when no frontend source files changed since the last build.
+#    Pass FORCE_BUILD=1 to always rebuild.
 # ---------------------------------------------------------------------------
-echo "==> Building frontend ..."
-(cd "${REPO_ROOT}/frontend" && npm run build)
+_build_marker="${REPO_ROOT}/frontend/node_modules/.deploy-build-stamp"
+_needs_build=1
+
+if [ "${FORCE_BUILD:-0}" != "1" ] && [ -f "$_build_marker" ]; then
+    # Any tracked change under frontend/src or frontend/public since the stamp?
+    _changed=$(git -C "${REPO_ROOT}" diff --name-only HEAD \
+        -- frontend/src frontend/public 2>/dev/null)
+    _untracked=$(git -C "${REPO_ROOT}" ls-files --others --exclude-standard \
+        frontend/src frontend/public 2>/dev/null)
+    # Any file newer than the stamp (catches uncommitted edits)?
+    _newer=$(find "${REPO_ROOT}/frontend/src" "${REPO_ROOT}/frontend/public" \
+        -newer "$_build_marker" 2>/dev/null | head -1)
+    if [ -z "$_changed" ] && [ -z "$_untracked" ] && [ -z "$_newer" ]; then
+        _needs_build=0
+    fi
+fi
+
+if [ "$_needs_build" -eq 1 ]; then
+    echo "==> Building frontend ..."
+    (cd "${REPO_ROOT}/frontend" && npm run build)
+    touch "$_build_marker"
+else
+    echo "==> Frontend unchanged — skipping build."
+fi
 
 # ---------------------------------------------------------------------------
 # 2. Sync code to Pi (no git pull on Pi; dev machine is the source of truth)
