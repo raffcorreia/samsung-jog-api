@@ -16,6 +16,7 @@ from pi_deck import __version__
 from pi_deck.api.router import api_v1, websocket_events
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.hardware_facade import build_hardware
+from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
 # Path written by scripts/deploy.sh on each deployment.
@@ -61,10 +62,12 @@ class _StaticCacheControlMiddleware(BaseHTTPMiddleware):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     hub = WsHub()
+    live_log = LiveLogService(hub)
     hw = build_hardware()
     version = _build_version()
-    deck = DeckControlService(hardware=hw, ws_hub=hub, version=version)
+    deck = DeckControlService(hardware=hw, ws_hub=hub, live_log=live_log, version=version)
     app.state.ws_hub = hub
+    app.state.live_log = live_log
     app.state.deck = deck
     app.state.hw = hw
     logger.info("pi-deck hardware mode: %s  version: %s", hw.kind, version)

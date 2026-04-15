@@ -653,6 +653,8 @@ Build the target UI shell at `1280×800` with correct proportions, real function
 
 ## Phase 14: Log Architecture Refactor
 
+**Status:** completed. See [Phase 14 Execution Record](./phase-14-execution.md).
+
 ### Goal
 
 Move log ownership from the browser to the backend so logs are durable across sessions, available to all connected clients simultaneously, and not lost on refresh or reconnect.
@@ -1051,6 +1053,6 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- begin Phase 14: log architecture refactor
+- begin Phase 15: observation bus and hardware interface
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

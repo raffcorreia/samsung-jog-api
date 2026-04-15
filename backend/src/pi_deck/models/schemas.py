@@ -56,6 +56,14 @@ class OperatingModeIn(BaseModel):
     mode: OperatingMode
 
 
+class LogIn(BaseModel):
+    """UI-originated event to append to the backend-owned live log."""
+
+    level: Literal["debug", "info", "warning", "error"] = "info"
+    source: str = Field(min_length=1, max_length=40)
+    message: str = Field(min_length=1, max_length=240)
+
+
 class SignalSnapshot(BaseModel):
     """Observed front-panel / bus signals (best-effort; depends on hardware wiring)."""
 
@@ -153,4 +161,19 @@ def ws_status_connected(*, status: StatusOut) -> WsEventV1:
         type="connected",
         ts=utc_iso(),
         data={"status": status.model_dump(mode="json")},
+    )
+
+
+def ws_log_entry(
+    *,
+    level: Literal["debug", "info", "warning", "error"],
+    source: str,
+    message: str,
+    ts: str | None = None,
+) -> WsEventV1:
+    return WsEventV1(
+        category="log",
+        type="entry",
+        ts=ts or utc_iso(),
+        data={"level": level, "source": source, "message": message},
     )

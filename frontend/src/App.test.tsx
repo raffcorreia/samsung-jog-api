@@ -16,6 +16,7 @@ const { statusPayload } = vi.hoisted(() => ({
 vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
+  postLogEntry: vi.fn(() => Promise.resolve()),
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
@@ -26,7 +27,7 @@ describe("App", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows status from REST and appends websocket command lines to the log", async () => {
+  it("shows status from REST and renders backend log entries", async () => {
     const instances: { onmessage: ((ev: MessageEvent) => void) | null }[] = [];
 
     class MockSocket {
@@ -62,11 +63,19 @@ describe("App", () => {
           data: { action: "up", duration_ms: 80 },
         }),
       } as MessageEvent);
+      ws.onmessage?.({
+        data: JSON.stringify({
+          v: 1,
+          category: "log",
+          type: "entry",
+          ts: "2026-01-01T00:00:00Z",
+          data: { level: "info", source: "command", message: "release - up 80ms" },
+        }),
+      } as MessageEvent);
     });
 
-    /* Log lines are flushed on requestAnimationFrame (batching for Pi performance). */
     await waitFor(() => {
-      expect(screen.getByRole("log")).toHaveTextContent("release — up 80ms");
+      expect(screen.getByRole("log")).toHaveTextContent("release - up 80ms");
     });
   });
 });

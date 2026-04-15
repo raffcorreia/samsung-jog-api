@@ -13,6 +13,7 @@ from pi_deck.api.app import create_app
 from pi_deck.models.schemas import CommandRejectedReason
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.hardware_facade import MockDeckHardware
+from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
 
@@ -92,7 +93,8 @@ def test_concurrent_jog_rejects_second_command() -> None:
 
             time.sleep(0.2)
 
-    deck = DeckControlService(SlowMock(), WsHub(), "test")
+    hub = WsHub()
+    deck = DeckControlService(SlowMock(), hub, LiveLogService(hub), "test")
 
     async def body() -> None:
         t = asyncio.create_task(deck.jog_press("up", 200))
@@ -138,7 +140,8 @@ def test_second_hold_same_direction_replaces_first(client: TestClient) -> None:
 
 
 def test_service_hold_release_two_directions() -> None:
-    deck = DeckControlService(MockDeckHardware(), WsHub(), "test")
+    hub = WsHub()
+    deck = DeckControlService(MockDeckHardware(), hub, LiveLogService(hub), "test")
 
     async def body() -> None:
         assert await deck.jog_hold("up") is None
@@ -155,7 +158,8 @@ def test_watchdog_auto_releases_hold_after_timeout(monkeypatch: pytest.MonkeyPat
     import pi_deck.services.deck_control as dc_module
 
     monkeypatch.setattr(dc_module, "_MAX_HOLD_S", 0.05)
-    deck = DeckControlService(MockDeckHardware(), WsHub(), "test")
+    hub = WsHub()
+    deck = DeckControlService(MockDeckHardware(), hub, LiveLogService(hub), "test")
 
     async def body() -> None:
         err = await deck.jog_hold("up")

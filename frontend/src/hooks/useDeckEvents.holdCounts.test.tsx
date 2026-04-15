@@ -14,6 +14,7 @@ vi.mock("../api/client", () => ({
     }),
   ),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
+  postLogEntry: vi.fn(() => Promise.resolve()),
 }));
 
 describe("useDeckEvents holdCounts (WS-only)", () => {

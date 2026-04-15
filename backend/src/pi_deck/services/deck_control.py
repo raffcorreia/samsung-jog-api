@@ -23,6 +23,7 @@ from pi_deck.models.schemas import (
     ws_control_state,
 )
 from pi_deck.services.hardware_facade import DeckHardwareFacade
+from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
 logger = logging.getLogger(__name__)
@@ -47,10 +48,11 @@ class HoldRecord:
 
 @dataclass
 class DeckControlService:
-    """Jog orchestration: one authoritative hold per direction; new hold replaces prior on same line."""
+    """Jog orchestration with one authoritative hold per direction."""
 
     hardware: DeckHardwareFacade
     ws_hub: WsHub
+    live_log: LiveLogService
     version: str
     _operating_mode: OperatingMode = OperatingMode.JOG
     _control_state: ControlState = ControlState.IDLE
@@ -102,11 +104,14 @@ class DeckControlService:
         if want != self._control_state:
             self._control_state = want
             await self._emit(
-                ws_control_state(control_state=self._control_state, operating_mode=self._operating_mode),
+                ws_control_state(
+                    control_state=self._control_state,
+                    operating_mode=self._operating_mode,
+                ),
             )
 
     async def jog_hold(self, action: str) -> CommandRejectedReason | None:
-        """Assert ``action``; replaces any existing hold on the same direction (GPIO unchanged if already held)."""
+        """Assert ``action``; same-direction replacement avoids a GPIO glitch."""
         jog = _ACTION_MAP.get(action)
         if jog is None:
             return CommandRejectedReason.HARDWARE_ERROR
@@ -123,7 +128,11 @@ class DeckControlService:
             self._schedule_watchdog(jog)
             await self._emit(ws_command_held(action=action))
             adc1, led = self.hardware.read_signals()
-            await self._emit(ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)))
+            await self._emit(
+                ws_bus_snapshot(
+                    signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
+                ),
+            )
             await self._emit_control_if_needed()
             return None
 
@@ -142,7 +151,11 @@ class DeckControlService:
         self._schedule_watchdog(jog)
         await self._emit_control_if_needed()
         adc1, led = self.hardware.read_signals()
-        await self._emit(ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)))
+        await self._emit(
+            ws_bus_snapshot(
+                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
+            ),
+        )
         return None
 
     async def jog_release(self, action: str) -> tuple[CommandRejectedReason | None, int]:
@@ -168,7 +181,11 @@ class DeckControlService:
 
         await self._emit(ws_command_released(action=action, duration_ms=duration_ms))
         adc1, led = self.hardware.read_signals()
-        await self._emit(ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)))
+        await self._emit(
+            ws_bus_snapshot(
+                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
+            ),
+        )
         await self._emit_control_if_needed()
         return None, duration_ms
 
@@ -204,7 +221,10 @@ class DeckControlService:
         try:
             self._control_state = ControlState.COMMANDING
             await self._emit(
-                ws_control_state(control_state=self._control_state, operating_mode=self._operating_mode),
+                ws_control_state(
+                    control_state=self._control_state,
+                    operating_mode=self._operating_mode,
+                ),
             )
             try:
                 try:
@@ -237,11 +257,14 @@ class DeckControlService:
             self._pulse_in_progress = False
 
     async def _emit(self, event: object) -> None:
-        if self.ws_hub.client_count == 0:
-            return
         payload = (
             event.model_dump(mode="json") if hasattr(event, "model_dump") else event  # type: ignore[assignment]
         )
         if not isinstance(payload, dict):
             return
+        log_event = self.live_log.record_event(payload)
+        if self.ws_hub.client_count == 0:
+            return
         await self.ws_hub.broadcast_json(payload)
+        if log_event is not None:
+            await self.ws_hub.broadcast_json(log_event.model_dump(mode="json"))

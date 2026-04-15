@@ -3,13 +3,11 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 
-import { fetchStatus, websocketEventsUrl } from "../api/client";
+import { fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
 import { bumpHeldCount } from "./deckHoldPeerSync";
-import { formatWsEventLine } from "../log/formatWsEvent";
 import type { JogAction, StatusPayload, WsEventV1 } from "../types";
 
 const MAX_LOG = 220;
@@ -57,39 +55,12 @@ export function useDeckEvents(): DeckEventsState {
   const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
-  const sockRef = useRef<WebSocket | null>(null);
-  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const stopped = useRef(false);
-
-  /** Batched log lines (stamped) flushed once per animation frame to cut React / <pre> churn on Pi. */
-  const pendingLogRef = useRef<string[]>([]);
-  const logFlushRafRef = useRef<number | null>(null);
-
-  const flushPendingLogs = useCallback(() => {
-    logFlushRafRef.current = null;
-    const batch = pendingLogRef.current;
-    if (batch.length === 0) {
-      return;
-    }
-    pendingLogRef.current = [];
-    setLogLines((prev) => {
-      const next = [...prev, ...batch];
-      if (next.length > MAX_LOG) {
-        return next.slice(next.length - MAX_LOG);
-      }
-      return next;
-    });
-  }, []);
 
   const pushLogLine = useCallback(
     (line: string) => {
-      const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
-      pendingLogRef.current.push(`${stamp}  ${line}`);
-      if (logFlushRafRef.current == null) {
-        logFlushRafRef.current = requestAnimationFrame(flushPendingLogs);
-      }
+      void postLogEntry({ source: "ui", message: line }).catch(() => {});
     },
-    [flushPendingLogs],
+    [],
   );
 
   const refreshStatus = useCallback(async () => {
@@ -103,23 +74,25 @@ export function useDeckEvents(): DeckEventsState {
   }, [pushLogLine]);
 
   useEffect(() => {
-    stopped.current = false;
     void refreshStatus();
+    let stopped = false;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    let sock: WebSocket | null = null;
 
     const connectRef: { fn?: () => void } = {};
 
     const scheduleReconnect = () => {
-      if (reconnectTimer.current) {
-        clearTimeout(reconnectTimer.current);
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
       }
-      reconnectTimer.current = setTimeout(() => {
-        reconnectTimer.current = null;
+      reconnectTimer = setTimeout(() => {
+        reconnectTimer = null;
         connectRef.fn?.();
       }, 1500);
     };
 
     const connect = () => {
-      if (stopped.current) {
+      if (stopped) {
         return;
       }
       const url = websocketEventsUrl();
@@ -132,7 +105,7 @@ export function useDeckEvents(): DeckEventsState {
         scheduleReconnect();
         return;
       }
-      sockRef.current = ws;
+      sock = ws;
 
       ws.onmessage = (ev) => {
         const parsed = parseWs(String(ev.data));
@@ -150,6 +123,7 @@ export function useDeckEvents(): DeckEventsState {
           setWsReleaseTick(0);
           setWsLastReleasedAction(null);
           setWsSessionEpoch((e) => e + 1);
+          setLogLines([]);
         }
         if (parsed.category === "command" && parsed.type === "held") {
           const action = parsed.data.action;
@@ -166,8 +140,16 @@ export function useDeckEvents(): DeckEventsState {
           }
         }
 
-        /* Log line — batched per frame (see pendingLogRef). */
-        pushLogLine(formatWsEventLine(parsed));
+        if (parsed.category === "log" && parsed.type === "entry") {
+          const message = String(parsed.data.message ?? "");
+          const source = String(parsed.data.source ?? "log");
+          const stamp = parsed.ts.replace("T", " ").replace("Z", "").slice(0, 19);
+          const line = `${stamp}  ${source}  ${message}`;
+          setLogLines((prev) => {
+            const next = [...prev, line];
+            return next.length > MAX_LOG ? next.slice(next.length - MAX_LOG) : next;
+          });
+        }
 
         /* Status mirrors that are not jog-critical — low priority. */
         if (parsed.category === "control" && parsed.type === "state") {
@@ -205,8 +187,8 @@ export function useDeckEvents(): DeckEventsState {
       };
 
       ws.onclose = () => {
-        sockRef.current = null;
-        if (!stopped.current) {
+        sock = null;
+        if (!stopped) {
           scheduleReconnect();
         }
       };
@@ -216,19 +198,14 @@ export function useDeckEvents(): DeckEventsState {
     connect();
 
     return () => {
-      stopped.current = true;
-      if (logFlushRafRef.current != null) {
-        cancelAnimationFrame(logFlushRafRef.current);
-        logFlushRafRef.current = null;
+      stopped = true;
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
       }
-      pendingLogRef.current = [];
-      if (reconnectTimer.current) {
-        clearTimeout(reconnectTimer.current);
-        reconnectTimer.current = null;
-      }
-      if (sockRef.current) {
-        sockRef.current.close();
-        sockRef.current = null;
+      if (sock) {
+        sock.close();
+        sock = null;
       }
     };
   }, [pushLogLine, refreshStatus]);

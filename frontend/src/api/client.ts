@@ -1,4 +1,4 @@
-import type { CommandRejectedBody, JogAction, StatusPayload } from "../types";
+import type { CommandRejectedBody, JogAction, LogLevel, StatusPayload } from "../types";
 
 function apiBase(): string {
   const v = import.meta.env.VITE_API_BASE;
@@ -76,6 +76,25 @@ export async function jogPress(action: JogAction, durationMs: number): Promise<J
     throw new Error("invalid jog request");
   }
   throw new Error(`jog press failed: ${r.status}`);
+}
+
+export async function postLogEntry(params: {
+  level?: LogLevel;
+  source: string;
+  message: string;
+}): Promise<void> {
+  const r = await fetch(`${apiBase()}/api/v1/log`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      level: params.level ?? "info",
+      source: params.source,
+      message: params.message,
+    }),
+  });
+  if (!r.ok) {
+    throw new Error(`log append failed: ${r.status}`);
+  }
 }
 
 export function websocketEventsUrl(): string {

@@ -12,11 +12,13 @@ from pi_deck.models.schemas import (
     JogHoldIn,
     JogPressIn,
     JogReleaseIn,
+    LogIn,
     OperatingModeIn,
     StatusOut,
     ws_status_connected,
 )
 from pi_deck.services.deck_control import DeckControlService
+from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
 api_v1 = APIRouter(prefix="/api/v1")
@@ -96,13 +98,28 @@ async def api_jog_release(
     return JSONResponse({"ok": True, "duration_ms": duration_ms})
 
 
+@api_v1.post("/log")
+async def api_log_entry_from_request(
+    body: LogIn,
+    deck: DeckControlService = Depends(get_deck),
+) -> JSONResponse:
+    live_log: LiveLogService = deck.live_log
+    await live_log.publish(level=body.level, source=body.source, message=body.message)
+    return JSONResponse({"ok": True})
+
+
 async def websocket_events(ws: WebSocket) -> None:
     deck: DeckControlService = ws.app.state.deck
     hub: WsHub = ws.app.state.ws_hub
+    live_log: LiveLogService = ws.app.state.live_log
     await hub.connect(ws)
     try:
         hello = ws_status_connected(status=deck.status())
         await ws.send_json(hello.model_dump(mode="json"))
+        await live_log.replay_to(ws)
+        connected_log = live_log.record_event(hello.model_dump(mode="json"))
+        if connected_log is not None:
+            await hub.broadcast_json(connected_log.model_dump(mode="json"))
         while True:
             await ws.receive_text()
     except WebSocketDisconnect:

@@ -6,6 +6,8 @@ export type ControlState = "idle" | "commanding";
 
 export type HardwareKind = "live" | "mock";
 
+export type LogLevel = "debug" | "info" | "warning" | "error";
+
 export interface SignalSnapshot {
   key_adc1_active: boolean;
   key_led_active: boolean;
