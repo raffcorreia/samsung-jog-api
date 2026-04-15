@@ -1,0 +1,101 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  overflow: hidden;
+  gap: 10px;
+  min-height: 0;
+}
+
+.header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+/* 7-column day grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.dayLabel {
+  font-size: 0.62rem;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 500;
+  padding-bottom: 4px;
+  letter-spacing: 0.03em;
+}
+
+.day {
+  font-size: 0.72rem;
+  text-align: center;
+  padding: 3px 2px;
+  border-radius: 4px;
+  color: var(--muted);
+  line-height: 1.4;
+  cursor: default;
+  position: relative;
+}
+
+.day.today {
+  background: var(--accent-dim);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Small dot beneath days with events */
+.day.hasEvent::after {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin: 1px auto 0;
+}
+
+.day.today.hasEvent::after {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Today's event list */
+.eventList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.event {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.72rem;
+}
+
+.eventTime {
+  color: var(--accent);
+  font-family: monospace;
+  font-size: 0.68rem;
+  flex-shrink: 0;
+}
+
+.eventLabel {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

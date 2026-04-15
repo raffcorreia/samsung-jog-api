@@ -1,6 +1,6 @@
 .badge {
   position: fixed;
-  top: 6px;
+  top: calc(var(--deck-topbar-height, 48px) + 4px);
   left: 8px;
   z-index: 50;
   font-size: 0.65rem;

@@ -1,10 +1,24 @@
+@font-face {
+  font-family: "Deck Clock";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src:
+    url("dseg/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff2") format("woff2"),
+    url("dseg/fonts/DSEG7-Classic/DSEG7Classic-Regular.woff") format("woff");
+}
+
 :root {
   color-scheme: dark;
   /* 7" DSI kiosk: 1280×800 — layout is single-screen; widgets use fixed geometry */
   --deck-viewport-w: 1280px;
   --deck-viewport-h: 800px;
+  /* Top bar height (px) — shared between TopBar component and VersionBadge positioning. */
+  --deck-topbar-height: 48px;
   /* Reserved height for the log band (px). Muscle memory: does not grow with log text. */
   --deck-log-height: 200px;
+  /* Left column width — the JOG widget frame. */
+  --deck-left-col: 350px;
   --bg: #0c0f14;
   --surface: #121820;
   --surface-elevated: #1a222c;

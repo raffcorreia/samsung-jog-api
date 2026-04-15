@@ -1,0 +1,90 @@
+/* Visual-only backdrop — never blocks pointer events so JogPad stays usable */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.panel {
+  position: fixed;
+  z-index: 100;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+/* Position variants */
+.posCenter {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Right — sits in the right panel, clear of the left JogPad column */
+.posRight {
+  top: calc(var(--deck-topbar-height, 48px) + 32px);
+  left: calc(var(--deck-left-col, 260px) + var(--pad));
+  right: var(--pad);
+  max-width: none;
+  width: auto;
+}
+
+.posLeft {
+  top: 50%;
+  left: var(--pad);
+  transform: translateY(-50%);
+}
+
+/* Header row: title left, close button right */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 10px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.body {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 14px;
+}

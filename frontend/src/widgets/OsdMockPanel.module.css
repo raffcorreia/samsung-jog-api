@@ -1,0 +1,131 @@
+/* Samsung-style OSD overlay — dark panel with horizontal tab navigation */
+
+.osd {
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 12, 16, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  min-width: 380px;
+  overflow: hidden;
+  font-size: 0.78rem;
+  /* Subtle Samsung blue-grey tint on the border */
+  box-shadow: 0 0 0 1px rgba(108, 182, 255, 0.15), 0 8px 32px rgba(0, 0, 0, 0.7);
+}
+
+.brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brandName {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(108, 182, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.modelName {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+}
+
+/* Horizontal tab bar */
+.tabBar {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabBar::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex-shrink: 0;
+  padding: 7px 11px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.tabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Sub-item list */
+.itemList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px;
+  cursor: default;
+  transition: background 0.08s;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.itemSelected {
+  background: rgba(108, 182, 255, 0.12);
+}
+
+.itemLabel {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.74rem;
+}
+
+.itemValue {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-family: "SF Mono", "Fira Mono", "Consolas", monospace;
+  min-width: 60px;
+  text-align: right;
+}
+
+.itemSelected .itemLabel {
+  color: #fff;
+}
+
+/* Bottom controls hint */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.03em;
+}
+
+.controlSep {
+  color: rgba(255, 255, 255, 0.18);
+}
