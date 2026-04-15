@@ -11,10 +11,11 @@ describe("JogPad touch / kiosk contract", () => {
   it("exposes a single jog surface with explicit touch policy metadata", () => {
     render(
       <JogPad
-        peerHeldActionCounts={{}}
+        holdCounts={{}}
+        wsReleaseTick={0}
+        wsLastReleasedAction={null}
+        wsSessionEpoch={0}
         onLocalLog={() => {}}
-        restHoldOk={() => {}}
-        restReleaseOk={() => {}}
       />,
     );
     const pad = screen.getByTestId("jog-pad");
@@ -24,10 +25,11 @@ describe("JogPad touch / kiosk contract", () => {
   it("renders five primary jog hit targets (center button + four ring segments)", () => {
     render(
       <JogPad
-        peerHeldActionCounts={{}}
+        holdCounts={{}}
+        wsReleaseTick={0}
+        wsLastReleasedAction={null}
+        wsSessionEpoch={0}
         onLocalLog={() => {}}
-        restHoldOk={() => {}}
-        restReleaseOk={() => {}}
       />,
     );
     expect(screen.getAllByLabelText(/^Jog /)).toHaveLength(5);

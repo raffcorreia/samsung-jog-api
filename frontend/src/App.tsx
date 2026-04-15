@@ -1,6 +1,4 @@
-import { useRef } from "react";
-
-import { JogPad, type JogPadHandle } from "./components/JogPad";
+import { JogPad } from "./components/JogPad";
 import { useDeckEvents } from "./hooks/useDeckEvents";
 import { DeckShell } from "./widgets/DeckShell";
 import { JogWidget } from "./widgets/JogWidget";
@@ -10,8 +8,7 @@ import { StatusBarWidget } from "./widgets/StatusBarWidget";
 import styles from "./App.module.css";
 
 export function App() {
-  const jogPadRef = useRef<JogPadHandle>(null);
-  const deck = useDeckEvents(jogPadRef);
+  const deck = useDeckEvents();
 
   return (
     <DeckShell>
@@ -23,11 +20,11 @@ export function App() {
       <div className={styles.deckBody}>
         <JogWidget>
           <JogPad
-            ref={jogPadRef}
-            peerHeldActionCounts={deck.peerHeldActionCounts}
+            holdCounts={deck.holdCounts}
+            wsReleaseTick={deck.wsReleaseTick}
+            wsLastReleasedAction={deck.wsLastReleasedAction}
+            wsSessionEpoch={deck.wsSessionEpoch}
             onLocalLog={deck.pushLogLine}
-            restHoldOk={deck.restHoldOk}
-            restReleaseOk={deck.restReleaseOk}
           />
         </JogWidget>
         <LiveLogWidget lines={deck.logLines} />

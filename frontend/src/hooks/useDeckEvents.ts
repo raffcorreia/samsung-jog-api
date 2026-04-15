@@ -5,10 +5,8 @@ import {
   useMemo,
   useRef,
   useState,
-  type RefObject,
 } from "react";
 
-import type { JogPadHandle } from "../components/JogPad";
 import { fetchStatus, websocketEventsUrl } from "../api/client";
 import { bumpHeldCount } from "./deckHoldPeerSync";
 import { formatWsEventLine } from "../log/formatWsEvent";
@@ -18,16 +16,18 @@ const MAX_LOG = 220;
 
 export interface DeckEventsState {
   status: StatusPayload | null;
-  peerHeldActionCounts: Record<JogAction, number>;
+  /** Hold counts derived only from websocket ``held`` / ``released`` (all clients see the same stream). */
+  holdCounts: Record<JogAction, number>;
+  /** Increments on each ``released`` so JogPad can drop stale pointer state (replace, peer release). */
+  wsReleaseTick: number;
+  wsLastReleasedAction: JogAction | null;
+  /** Increments on each websocket ``connected`` so JogPad clears stale pointers even when ``wsReleaseTick`` stays 0. */
+  wsSessionEpoch: number;
   wsConnected: boolean;
   wsError: string | null;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
   refreshStatus: () => Promise<void>;
-  /** After REST ``jog/hold`` succeeds — skip duplicate peer ``held`` for this action. */
-  restHoldOk: (action: JogAction) => void;
-  /** After REST ``jog/release`` succeeds — skip echo ``released`` for this action. */
-  restReleaseOk: (action: JogAction) => void;
 }
 
 function isJogAction(s: unknown): s is JogAction {
@@ -52,31 +52,18 @@ function parseWs(raw: string): WsEventV1 | null {
   return null;
 }
 
-export function useDeckEvents(jogPadRef?: RefObject<JogPadHandle | null>): DeckEventsState {
+export function useDeckEvents(): DeckEventsState {
   const [status, setStatus] = useState<StatusPayload | null>(null);
-  const [peerHeldActionCounts, setPeerHeldActionCounts] = useState<Record<JogAction, number>>({});
+  const [holdCounts, setHoldCounts] = useState<Record<JogAction, number>>({});
+  const [wsReleaseTick, setWsReleaseTick] = useState(0);
+  const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
+  const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [wsConnected, setWsConnected] = useState(false);
   const [wsError, setWsError] = useState<string | null>(null);
   const [logLines, setLogLines] = useState<string[]>([]);
   const sockRef = useRef<WebSocket | null>(null);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopped = useRef(false);
-
-  /** Directions we established via REST hold in this browser (skip duplicate WS ``held``). */
-  const myLocalHeldRef = useRef(new Set<JogAction>());
-  /** Skip next ``released`` WS — our REST release already updated local state. */
-  const skipReleasedEchoRef = useRef(new Set<JogAction>());
-
-  const restHoldOk = useCallback((action: JogAction) => {
-    myLocalHeldRef.current.add(action);
-    /* Undo the peer +1 from our own ``held`` websocket echo so local+peer does not double-count. */
-    setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
-  }, []);
-
-  const restReleaseOk = useCallback((action: JogAction) => {
-    myLocalHeldRef.current.delete(action);
-    skipReleasedEchoRef.current.add(action);
-  }, []);
 
   const pushLogLine = useCallback((line: string) => {
     const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
@@ -149,35 +136,26 @@ export function useDeckEvents(jogPadRef?: RefObject<JogPadHandle | null>): DeckE
             if (st) {
               setStatus(st);
             }
-            setPeerHeldActionCounts({});
-            myLocalHeldRef.current.clear();
-            skipReleasedEchoRef.current.clear();
+            setHoldCounts({});
+            setWsReleaseTick(0);
+            setWsLastReleasedAction(null);
+            setWsSessionEpoch((e) => e + 1);
           }
           if (parsed.category === "command" && parsed.type === "held") {
             const action = parsed.data.action;
             if (!isJogAction(action)) {
               return;
             }
-            if (myLocalHeldRef.current.has(action)) {
-              return;
-            }
-            setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, 1));
+            setHoldCounts((prev) => bumpHeldCount(prev, action, 1));
           }
           if (parsed.category === "command" && parsed.type === "released") {
             const action = parsed.data.action;
             if (!isJogAction(action)) {
               return;
             }
-            if (skipReleasedEchoRef.current.has(action)) {
-              skipReleasedEchoRef.current.delete(action);
-              return;
-            }
-            /* Another client replaced our hold (or server watchdog): drop local +1 and ref so the next ``held`` is not skipped as "our echo". */
-            if (myLocalHeldRef.current.has(action)) {
-              myLocalHeldRef.current.delete(action);
-              jogPadRef?.current?.serverHoldEndedByPeer(action);
-            }
-            setPeerHeldActionCounts((prev) => bumpHeldCount(prev, action, -1));
+            setHoldCounts((prev) => bumpHeldCount(prev, action, -1));
+            setWsLastReleasedAction(action);
+            setWsReleaseTick((n) => n + 1);
           }
           if (parsed.category === "control" && parsed.type === "state") {
             setStatus((prev) =>
@@ -238,25 +216,27 @@ export function useDeckEvents(jogPadRef?: RefObject<JogPadHandle | null>): DeckE
   return useMemo(
     () => ({
       status,
-      peerHeldActionCounts,
+      holdCounts,
+      wsReleaseTick,
+      wsLastReleasedAction,
+      wsSessionEpoch,
       wsConnected,
       wsError,
       logLines,
       pushLogLine,
       refreshStatus,
-      restHoldOk,
-      restReleaseOk,
     }),
     [
       status,
-      peerHeldActionCounts,
+      holdCounts,
+      wsReleaseTick,
+      wsLastReleasedAction,
+      wsSessionEpoch,
       wsConnected,
       wsError,
       logLines,
       pushLogLine,
       refreshStatus,
-      restHoldOk,
-      restReleaseOk,
     ],
   );
 }

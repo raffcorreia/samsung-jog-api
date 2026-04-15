@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useRef,
-  useState,
-  type PointerEvent,
-} from "react";
+import { useCallback, useEffect, useRef, type PointerEvent } from "react";
 
 import { jogHold, releaseJog } from "../api/client";
 import type { JogAction } from "../types";
@@ -64,57 +57,43 @@ type PtrState = {
   releaseInFlight: boolean;
 };
 
-function mergeHeld(
-  local: Record<JogAction, number>,
-  peer: Record<JogAction, number>,
-  action: JogAction,
-): number {
-  return Math.max(0, (local[action] ?? 0) + (peer[action] ?? 0));
+function heldFromServer(holdCounts: Record<JogAction, number>, action: JogAction): boolean {
+  return (holdCounts[action] ?? 0) > 0;
 }
 
-/** Imperative sync when the server ends our hold (another client replaced it, watchdog, etc.). */
-export interface JogPadHandle {
-  serverHoldEndedByPeer(action: JogAction): void;
-}
-
-export const JogPad = forwardRef<JogPadHandle, {
-  peerHeldActionCounts: Record<JogAction, number>;
+export function JogPad(props: {
+  holdCounts: Record<JogAction, number>;
+  wsReleaseTick: number;
+  wsLastReleasedAction: JogAction | null;
+  wsSessionEpoch: number;
   onLocalLog: (line: string) => void;
-  restHoldOk: (action: JogAction) => void;
-  restReleaseOk: (action: JogAction) => void;
-}>(function JogPad(props, ref) {
-  const { peerHeldActionCounts, onLocalLog, restHoldOk, restReleaseOk } = props;
-  const [localHeldCounts, setLocalHeldCounts] = useState<Record<JogAction, number>>({});
+}) {
+  const { holdCounts, wsReleaseTick, wsLastReleasedAction, wsSessionEpoch, onLocalLog } = props;
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
 
-  const bumpLocal = useCallback((action: JogAction, delta: 1 | -1) => {
-    setLocalHeldCounts((prev) => {
-      const n = Math.max(0, (prev[action] ?? 0) + delta);
-      const next: Record<JogAction, number> = { ...prev };
-      if (n === 0) {
-        delete next[action];
-      } else {
-        next[action] = n;
-      }
-      return next;
-    });
-  }, []);
+  /* New websocket session (including first ``connected``): clear stale pointer holds. */
+  useEffect(() => {
+    for (const rec of ptrMapRef.current.values()) {
+      rec.holdEstablished = false;
+    }
+  }, [wsSessionEpoch]);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      serverHoldEndedByPeer(action: JogAction) {
-        bumpLocal(action, -1);
-        for (const rec of ptrMapRef.current.values()) {
-          if (rec.action === action && rec.holdEstablished) {
-            rec.holdEstablished = false;
-          }
-        }
-      },
-    }),
-    [bumpLocal],
-  );
+  /* Server ``released`` (peer replace, release, watchdog): drop matching pointer hold so pointer-up does not send a bogus release. */
+  useEffect(() => {
+    if (wsReleaseTick === 0) {
+      return;
+    }
+    const a = wsLastReleasedAction;
+    if (!a) {
+      return;
+    }
+    for (const rec of ptrMapRef.current.values()) {
+      if (rec.action === a && rec.holdEstablished) {
+        rec.holdEstablished = false;
+      }
+    }
+  }, [wsReleaseTick, wsLastReleasedAction]);
 
   const releasePointer = useCallback(
     async (pointerId: number) => {
@@ -138,10 +117,7 @@ export const JogPad = forwardRef<JogPadHandle, {
         const action = rec.action;
         try {
           const r = await releaseJog(action);
-          if (r.ok) {
-            bumpLocal(action, -1);
-            restReleaseOk(action);
-          } else {
+          if (!r.ok) {
             onLocalLog(`http jog/release — ${r.body.reason}: ${r.body.message}`);
           }
         } catch (e) {
@@ -153,7 +129,7 @@ export const JogPad = forwardRef<JogPadHandle, {
         rec.releaseInFlight = false;
       }
     },
-    [bumpLocal, onLocalLog, restReleaseOk],
+    [onLocalLog],
   );
 
   const onSurfacePointerDown = (ev: PointerEvent<HTMLDivElement>) => {
@@ -193,8 +169,6 @@ export const JogPad = forwardRef<JogPadHandle, {
       .then((r) => {
         if (r.ok) {
           rec.holdEstablished = true;
-          bumpLocal(action, 1);
-          restHoldOk(action);
         } else {
           onLocalLog(`http jog/hold — ${r.body.reason}: ${r.body.message}`);
         }
@@ -256,8 +230,8 @@ export const JogPad = forwardRef<JogPadHandle, {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.up}`}
-            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "up") > 0}
-            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "up") > 0 ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "up")}
+            data-pressed={heldFromServer(holdCounts, "up") ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segRight}`}
@@ -266,8 +240,8 @@ export const JogPad = forwardRef<JogPadHandle, {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.right}`}
-            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "right") > 0}
-            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "right") > 0 ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "right")}
+            data-pressed={heldFromServer(holdCounts, "right") ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segDown}`}
@@ -276,8 +250,8 @@ export const JogPad = forwardRef<JogPadHandle, {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.down}`}
-            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "down") > 0}
-            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "down") > 0 ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "down")}
+            data-pressed={heldFromServer(holdCounts, "down") ? "true" : undefined}
           />
           <path
             className={`${styles.ringSeg} ${styles.segLeft}`}
@@ -286,8 +260,8 @@ export const JogPad = forwardRef<JogPadHandle, {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.left}`}
-            aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "left") > 0}
-            data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "left") > 0 ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "left")}
+            data-pressed={heldFromServer(holdCounts, "left") ? "true" : undefined}
           />
         </svg>
         <button
@@ -295,8 +269,8 @@ export const JogPad = forwardRef<JogPadHandle, {
           className={styles.centerBtn}
           data-jog-action="center"
           aria-label={`Jog ${SEGMENT_LABELS.center}`}
-          aria-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "center") > 0}
-          data-pressed={mergeHeld(localHeldCounts, peerHeldActionCounts, "center") > 0 ? "true" : undefined}
+          aria-pressed={heldFromServer(holdCounts, "center")}
+          data-pressed={heldFromServer(holdCounts, "center") ? "true" : undefined}
         >
           <svg className={styles.powerIcon} viewBox="0 0 24 24" aria-hidden>
             <path
@@ -312,4 +286,4 @@ export const JogPad = forwardRef<JogPadHandle, {
       </div>
     </div>
   );
-});
+}
