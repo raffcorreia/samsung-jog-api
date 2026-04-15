@@ -116,7 +116,7 @@ class DeckControlService:
         if jog is None:
             return CommandRejectedReason.HARDWARE_ERROR
 
-        # Replace same direction: end previous logically; keep line high (no GPIO glitch).
+        # Replace same direction: no GPIO toggle — observation does not emit; keep peer UX in sync.
         if jog in self._hold:
             prev = self._hold[jog]
             self._cancel_watchdog(prev)
@@ -129,9 +129,7 @@ class DeckControlService:
             await self._emit(ws_command_held(action=action))
             adc1, led = self.hardware.read_signals()
             await self._emit(
-                ws_bus_snapshot(
-                    signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-                ),
+                ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)),
             )
             await self._emit_control_if_needed()
             return None
@@ -152,9 +150,7 @@ class DeckControlService:
         await self._emit_control_if_needed()
         adc1, led = self.hardware.read_signals()
         await self._emit(
-            ws_bus_snapshot(
-                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-            ),
+            ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)),
         )
         return None
 
@@ -180,13 +176,11 @@ class DeckControlService:
             return CommandRejectedReason.HARDWARE_ERROR, 0
 
         await self._emit(ws_command_released(action=action, duration_ms=duration_ms))
+        await self._emit_control_if_needed()
         adc1, led = self.hardware.read_signals()
         await self._emit(
-            ws_bus_snapshot(
-                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-            ),
+            ws_bus_snapshot(signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led)),
         )
-        await self._emit_control_if_needed()
         return None, duration_ms
 
     async def jog_press(self, action: str, duration_ms: int) -> None | CommandRejectedReason:
@@ -242,8 +236,11 @@ class DeckControlService:
 
                 await self._emit(ws_command_pulse(action=action, duration_ms=duration_ms))
                 adc1, led = self.hardware.read_signals()
-                snap = SignalSnapshot(key_adc1_active=adc1, key_led_active=led)
-                await self._emit(ws_bus_snapshot(signals=snap))
+                await self._emit(
+                    ws_bus_snapshot(
+                        signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
+                    ),
+                )
                 return None
             finally:
                 self._control_state = ControlState.IDLE

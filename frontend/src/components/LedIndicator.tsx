@@ -2,9 +2,7 @@ import styles from "./LedIndicator.module.css";
 
 /**
  * KEY_LED status indicator — small circle overlaid on the JogPad area.
- * Gray = LED off / unknown. Blue = LED on.
- *
- * Phase 13: always stubbed to off (on=false). Phase 15 wires up real KEY_LED events.
+ * Gray = off, blue = on, driven by ``status.signals.key_led_active`` / ``bus/led_changed``.
  */
 export function LedIndicator({ on }: { on: boolean }) {
   return (

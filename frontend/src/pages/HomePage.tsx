@@ -18,6 +18,8 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
   // The popup must not close when clicking inside the JogPad column.
   const jogColRef = useRef<HTMLDivElement>(null);
 
+  const keyLedOn = deck.status?.signals.key_led_active ?? false;
+
   return (
     <div className={styles.page}>
       {deck.status && <VersionBadge version={deck.status.version} />}
@@ -25,8 +27,7 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
       {/* Left column — JogPad + LED indicator */}
       <div className={styles.leftCol} ref={jogColRef} data-widget="jog-col">
         <div className={styles.ledCorner}>
-          {/* Phase 15 wires this to blink events; Phase 13 stays grey by default. */}
-          <LedIndicator on={false} />
+          <LedIndicator on={keyLedOn} />
         </div>
 
         {/* Recording lands in Phase 16; Phase 13 places the permanent control. */}
@@ -52,14 +53,13 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
           />
         </JogWidget>
 
-        {/* Dev trigger — Phase 15 replaces this with WebSocket bus events */}
         <button
           className={styles.osdTrigger}
           type="button"
           onClick={() => setOsdOpen(true)}
           aria-label="Show OSD mock"
           data-testid="osd-trigger"
-          title="Dev: open OSD mock panel (Phase 15 wires this to bus events)"
+          title="Open OSD mock panel"
         >
           OSD
         </button>

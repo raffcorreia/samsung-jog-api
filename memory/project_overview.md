@@ -8,7 +8,7 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Deck UI:** Phase 13 complete. Single-screen kiosk layout (**1280×800** target). Widgets use **fixed layout bands** so panels do not reflow when the log grows (log scrolls internally). Final Phase 13 geometry: top bar `48px`, left JOG column `350px`, bottom log band `200px`. Optional widget visibility is user-driven later — not implicit layout shift. Identity (“pi-deck”) stays in the status/version area, not duplicated as nested marketing chrome around each control.
 
-**Phase structure (20 phases, 0–19). Phases 0–6, 8–14 complete. Phase 7 KiCad/layout in progress. Current focus: Phase 15 (Observation Bus and Hardware Interface). Phases 16–19 not started.**
+**Phase structure (20 phases, 0–19). Phases 0–6, 8–15 complete. Phase 7 KiCad/layout in progress. Current focus: Phase 16 (Recording and Replay). Phases 17–19 not started.**
 
 **Phase 13 UI state:** Full-screen deck shell is implemented and deployed (`0.1.0+r20`). The real JogPad remains the priority control and lives in the fixed left column. The clock uses `DSEG7 Classic` seven-segment font, enlarged and vertically centered without increasing the `48px` top bar. Settings cog is top-right. LED is an 8mm-style gray default indicator and should turn blue only for future blink/feedback events, not for steady backend `key_led_active`. Record control exists as a visual/logging stub in the upper-right of the JOG column. Calendar, notes, settings, and OSD popup are realistic stubs/placeholders for later phases.
 

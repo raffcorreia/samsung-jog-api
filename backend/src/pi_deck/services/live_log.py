@@ -50,6 +50,9 @@ def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
         adc1 = bool(data.get("key_adc1_active"))
         led = bool(data.get("key_led_active"))
         return "info", "bus", f"signals - adc1_active={adc1} key_led_active={led}"
+    if category == "bus" and event_type == "led_changed":
+        led = bool(data.get("key_led_active"))
+        return "info", "bus", f"key_led -> {'on' if led else 'off'}"
 
     return "info", category, f"{category}/{event_type}"
 

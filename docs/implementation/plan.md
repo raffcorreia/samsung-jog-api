@@ -690,6 +690,8 @@ Move log ownership from the browser to the backend so logs are durable across se
 
 ## Phase 15: Observation Bus and Hardware Interface
 
+**Status:** completed. See [Phase 15 Execution Record](./phase-15-execution.md).
+
 ### Goal
 
 Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt, full decode of `KEY_ADC1` / `KEY_ADC2` / `KEY_LED` into domain events, and make the observation bus the single authority for WebSocket broadcasts about what the hardware is doing — including physical JOG presses.
@@ -1053,6 +1055,6 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- begin Phase 15: observation bus and hardware interface
+- begin Phase 16: recording and replay subsystem
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

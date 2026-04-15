@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, type PointerEvent } from "react";
+import { memo, useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 
 import { jogHold, releaseJog } from "../api/client";
 import type { JogAction } from "../types";
@@ -61,6 +61,16 @@ function heldFromServer(holdCounts: Record<JogAction, number>, action: JogAction
   return (holdCounts[action] ?? 0) > 0;
 }
 
+function emptyOptimistic(): Record<JogAction, boolean> {
+  return {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    center: false,
+  };
+}
+
 function JogPadInner(props: {
   holdCounts: Record<JogAction, number>;
   wsReleaseTick: number;
@@ -71,13 +81,31 @@ function JogPadInner(props: {
   const { holdCounts, wsReleaseTick, wsLastReleasedAction, wsSessionEpoch, onLocalLog } = props;
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
+  const [optimistic, setOptimistic] = useState(() => emptyOptimistic());
 
   /* New websocket session (including first ``connected``): clear stale pointer holds. */
   useEffect(() => {
     for (const rec of ptrMapRef.current.values()) {
       rec.holdEstablished = false;
     }
+    setOptimistic(emptyOptimistic());
   }, [wsSessionEpoch]);
+
+  /* Drop optimistic overlay once observation stream confirms the hold. */
+  useEffect(() => {
+    setOptimistic((prev) => {
+      let next = prev;
+      for (const a of Object.keys(prev) as JogAction[]) {
+        if (prev[a] && heldFromServer(holdCounts, a)) {
+          if (next === prev) {
+            next = { ...prev };
+          }
+          next[a] = false;
+        }
+      }
+      return next;
+    });
+  }, [holdCounts]);
 
   /* Server ``released`` (peer replace, release, watchdog): drop matching pointer hold so pointer-up does not send a bogus release. */
   useEffect(() => {
@@ -169,6 +197,7 @@ function JogPadInner(props: {
       .then((r) => {
         if (r.ok) {
           rec.holdEstablished = true;
+          setOptimistic((o) => ({ ...o, [action]: true }));
         } else {
           onLocalLog(`http jog/hold — ${r.body.reason}: ${r.body.message}`);
         }
@@ -230,8 +259,15 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.up}`}
-            aria-pressed={heldFromServer(holdCounts, "up")}
-            data-pressed={heldFromServer(holdCounts, "up") ? "true" : undefined}
+            aria-pressed={
+              heldFromServer(holdCounts, "up") || optimistic.up
+            }
+            data-pressed={
+              heldFromServer(holdCounts, "up") || optimistic.up ? "true" : undefined
+            }
+            data-optimistic={
+              optimistic.up && !heldFromServer(holdCounts, "up") ? "true" : undefined
+            }
           />
           <path
             className={`${styles.ringSeg} ${styles.segRight}`}
@@ -240,8 +276,13 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.right}`}
-            aria-pressed={heldFromServer(holdCounts, "right")}
-            data-pressed={heldFromServer(holdCounts, "right") ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "right") || optimistic.right}
+            data-pressed={
+              heldFromServer(holdCounts, "right") || optimistic.right ? "true" : undefined
+            }
+            data-optimistic={
+              optimistic.right && !heldFromServer(holdCounts, "right") ? "true" : undefined
+            }
           />
           <path
             className={`${styles.ringSeg} ${styles.segDown}`}
@@ -250,8 +291,13 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.down}`}
-            aria-pressed={heldFromServer(holdCounts, "down")}
-            data-pressed={heldFromServer(holdCounts, "down") ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "down") || optimistic.down}
+            data-pressed={
+              heldFromServer(holdCounts, "down") || optimistic.down ? "true" : undefined
+            }
+            data-optimistic={
+              optimistic.down && !heldFromServer(holdCounts, "down") ? "true" : undefined
+            }
           />
           <path
             className={`${styles.ringSeg} ${styles.segLeft}`}
@@ -260,8 +306,13 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.left}`}
-            aria-pressed={heldFromServer(holdCounts, "left")}
-            data-pressed={heldFromServer(holdCounts, "left") ? "true" : undefined}
+            aria-pressed={heldFromServer(holdCounts, "left") || optimistic.left}
+            data-pressed={
+              heldFromServer(holdCounts, "left") || optimistic.left ? "true" : undefined
+            }
+            data-optimistic={
+              optimistic.left && !heldFromServer(holdCounts, "left") ? "true" : undefined
+            }
           />
         </svg>
         <button
@@ -269,8 +320,13 @@ function JogPadInner(props: {
           className={styles.centerBtn}
           data-jog-action="center"
           aria-label={`Jog ${SEGMENT_LABELS.center}`}
-          aria-pressed={heldFromServer(holdCounts, "center")}
-          data-pressed={heldFromServer(holdCounts, "center") ? "true" : undefined}
+          aria-pressed={heldFromServer(holdCounts, "center") || optimistic.center}
+          data-pressed={
+            heldFromServer(holdCounts, "center") || optimistic.center ? "true" : undefined
+          }
+          data-optimistic={
+            optimistic.center && !heldFromServer(holdCounts, "center") ? "true" : undefined
+          }
         >
           <svg className={styles.powerIcon} viewBox="0 0 24 24" aria-hidden>
             <path

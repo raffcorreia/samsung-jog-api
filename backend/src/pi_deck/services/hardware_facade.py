@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from typing import Protocol, runtime_checkable
 
 from pi_deck.hardware.jog_drive import JogDrive
@@ -44,6 +45,18 @@ class LiveDeckHardware:
         self._led = KeyLedObserve(self._pins)
 
     @property
+    def pins(self) -> ProtoboardPins:
+        return self._pins
+
+    @property
+    def adc1_observer(self) -> KeyAdc1Observe:
+        return self._adc1
+
+    @property
+    def led_observer(self) -> KeyLedObserve:
+        return self._led
+
+    @property
     def kind(self) -> str:
         return "live"
 
@@ -66,13 +79,24 @@ class MockDeckHardware:
     """No GPIO; used for pytest and dev hosts without the protoboard."""
 
     def __init__(self) -> None:
-        self._adc1_active = False
         self._led_active = False
         self._lines_on: set[JogAction] = set()
+        self._change_notifier: Callable[[], None] | None = None
 
     @property
     def kind(self) -> str:
         return "mock"
+
+    @property
+    def active_drive_lines(self) -> set[JogAction]:
+        return set(self._lines_on)
+
+    def set_change_notifier(self, fn: Callable[[], None] | None) -> None:
+        self._change_notifier = fn
+
+    def _notify_change(self) -> None:
+        if self._change_notifier is not None:
+            self._change_notifier()
 
     def pulse(self, action: JogAction, duration_s: float) -> None:
         logger.debug("mock pulse %s %.4fs", action.value, duration_s)
@@ -83,9 +107,10 @@ class MockDeckHardware:
         else:
             self._lines_on.discard(action)
         logger.debug("mock set_jog_line %s %s", action.value, active)
+        self._notify_change()
 
     def read_signals(self) -> tuple[bool, bool]:
-        return (self._adc1_active, self._led_active)
+        return (JogAction.CENTER in self._lines_on, self._led_active)
 
     def close(self) -> None:
         pass

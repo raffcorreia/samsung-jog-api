@@ -3,12 +3,13 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
 import { fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
 import { bumpHeldCount } from "./deckHoldPeerSync";
-import type { JogAction, StatusPayload, WsEventV1 } from "../types";
+import type { JogAction, SignalSnapshot, StatusPayload, WsEventV1 } from "../types";
 
 const MAX_LOG = 220;
 
@@ -55,6 +56,7 @@ export function useDeckEvents(): DeckEventsState {
   const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
+  const prevSignalsRef = useRef<SignalSnapshot | null>(null);
 
   const pushLogLine = useCallback(
     (line: string) => {
@@ -118,6 +120,7 @@ export function useDeckEvents(): DeckEventsState {
           const st = parsed.data.status as StatusPayload | undefined;
           if (st) {
             setStatus(st);
+            prevSignalsRef.current = st.signals;
           }
           setHoldCounts({});
           setWsReleaseTick(0);
@@ -166,17 +169,44 @@ export function useDeckEvents(): DeckEventsState {
           });
         }
         if (parsed.category === "bus" && parsed.type === "snapshot") {
+          const nextSig: SignalSnapshot = {
+            key_adc1_active: Boolean(parsed.data.key_adc1_active),
+            key_led_active: Boolean(parsed.data.key_led_active),
+          };
+          prevSignalsRef.current = nextSig;
           startTransition(() => {
-            setStatus((prev) =>
-              prev
+            setStatus((p) =>
+              p
                 ? {
-                    ...prev,
+                    ...p,
+                    signals: nextSig,
+                  }
+                : p,
+            );
+          });
+        }
+        if (parsed.category === "bus" && parsed.type === "led_changed") {
+          const keyLedActive = Boolean(parsed.data.key_led_active);
+          prevSignalsRef.current = prevSignalsRef.current
+            ? {
+                ...prevSignalsRef.current,
+                key_led_active: keyLedActive,
+              }
+            : {
+                key_adc1_active: false,
+                key_led_active: keyLedActive,
+              };
+          startTransition(() => {
+            setStatus((p) =>
+              p
+                ? {
+                    ...p,
                     signals: {
-                      key_adc1_active: Boolean(parsed.data.key_adc1_active),
-                      key_led_active: Boolean(parsed.data.key_led_active),
+                      ...p.signals,
+                      key_led_active: keyLedActive,
                     },
                   }
-                : prev,
+                : p,
             );
           });
         }

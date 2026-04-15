@@ -68,6 +68,23 @@ def test_websocket_connected_envelope(client: TestClient) -> None:
         assert "status" in msg["data"]
 
 
+def test_websocket_receives_held_after_jog_hold_mock(client: TestClient) -> None:
+    """REST hold must stream ``command/held`` on the websocket (deck_control is the source)."""
+    with client.websocket_connect("/ws/events") as ws:
+        ws.receive_text()
+        r = client.post("/api/v1/jog/hold", json={"action": "down"})
+        assert r.status_code == 200
+        saw_held = False
+        for _ in range(40):
+            msg = json.loads(ws.receive_text())
+            if msg.get("category") == "command" and msg.get("type") == "held":
+                assert msg["data"].get("action") == "down"
+                saw_held = True
+                break
+        assert saw_held, "expected observation-backed command/held on websocket"
+        client.post("/api/v1/jog/release", json={"action": "down"})
+
+
 def test_websocket_receives_pulse_after_jog_press(client: TestClient) -> None:
     """Integrated: REST jog press while WS client connected streams pulse event."""
     with client.websocket_connect("/ws/events") as ws:

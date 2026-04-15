@@ -155,6 +155,15 @@ def ws_bus_snapshot(*, signals: SignalSnapshot) -> WsEventV1:
     )
 
 
+def ws_bus_led_changed(*, active: bool) -> WsEventV1:
+    return WsEventV1(
+        category="bus",
+        type="led_changed",
+        ts=utc_iso(),
+        data={"key_led_active": active},
+    )
+
+
 def ws_status_connected(*, status: StatusOut) -> WsEventV1:
     return WsEventV1(
         category="control",

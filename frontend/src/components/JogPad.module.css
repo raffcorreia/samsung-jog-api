@@ -73,6 +73,12 @@
   stroke-width: 2;
 }
 
+/* REST succeeded but observation not yet confirmed — cooler tint vs confirmed ring */
+.ringSeg[data-optimistic="true"] {
+  fill: #6d8aa0;
+  stroke: color-mix(in srgb, #6db3c8 50%, rgba(0, 0, 0, 0.45));
+}
+
 .centerBtn {
   position: absolute;
   left: 50%;
@@ -128,6 +134,13 @@
     inset 0 5px 14px rgba(0, 0, 0, 0.65),
     0 0 0 2px color-mix(in srgb, var(--accent) 50%, transparent);
   color: rgba(250, 252, 255, 0.98);
+}
+
+.centerBtn[data-optimistic="true"]:not([data-pressed="true"]) {
+  filter: brightness(0.94);
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.5),
+    0 0 0 2px color-mix(in srgb, #6db3c8 48%, transparent);
 }
 
 .centerBtn:disabled {
