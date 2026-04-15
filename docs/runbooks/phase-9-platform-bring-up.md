@@ -83,7 +83,13 @@ Log out and back in, or reboot, to verify Chromium loads the **JOG console** (he
 
 The kiosk script (`scripts/kiosk/pi-deck-chromium-kiosk.sh`) waits for `/health` before launching. **Pointer hiding:** on X11 it runs `unclutter` when installed; on **Wayland** it runs `wlrctl pointer hide` when that tool is available ([Phase 11](../implementation/phase-11-execution.md) polish). If the pointer still shows, install `wlrctl` or use X11 — see the [implementation plan](../implementation/plan.md#phase-9-local-platform-bring-up) history.
 
-After changing the React UI, rebuild `frontend/` and restart `pi-deck` (or rsync `backend/src/pi_deck/static/`); refresh the kiosk session if Chromium cached an old bundle.
+After changing any code, use the canonical deploy script from the dev machine (repo root):
+
+```bash
+PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+```
+
+This builds the frontend, rsyncs all code to the Pi, restarts `pi-deck`, and reloads Chromium. Do not rsync partial directories or restart the service manually — use the script so the deploy counter increments and the kiosk picks up the latest assets.
 
 ## 3. Recovery checks
 

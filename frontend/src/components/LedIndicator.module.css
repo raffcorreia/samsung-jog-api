@@ -1,0 +1,29 @@
+.indicator {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(232, 238, 244, 0.14);
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.off {
+  background: radial-gradient(circle at 38% 32%, #a1a8b0 0%, #6d747c 46%, #3b424a 100%);
+  opacity: 1;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.18),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.45),
+    0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.on {
+  background: radial-gradient(circle at 38% 32%, #bfe0ff 0%, var(--accent) 45%, #1b6fbe 100%);
+  opacity: 1;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.34),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.32),
+    0 0 7px var(--accent),
+    0 0 16px color-mix(in srgb, var(--accent) 46%, transparent);
+}

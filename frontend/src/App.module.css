@@ -1,10 +1,2 @@
-.deckBody {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: grid;
-  /* JOG keeps a stable share of the viewport; log is a fixed band — no mutual reflow. */
-  grid-template-rows: minmax(0, 1fr) var(--deck-log-height, 200px);
-  width: 100%;
-  padding: 0 var(--pad);
-  gap: 0;
-}
+/* App.module.css — intentionally empty.
+   Layout CSS lives in pages/HomePage.module.css and pages/SettingsPage.module.css. */

@@ -1,0 +1,141 @@
+.bar {
+  flex: 0 0 var(--deck-topbar-height, 48px);
+  height: var(--deck-topbar-height, 48px);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad);
+  gap: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  /* Sit above any page content that might overflow */
+  z-index: 10;
+  position: relative;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.center {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+/* Power button */
+.powerBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--danger);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.1s, opacity 0.1s;
+  opacity: 0.75;
+}
+
+.powerBtn:hover {
+  background: rgba(255, 123, 114, 0.1);
+  opacity: 1;
+}
+
+.powerBtn:active {
+  background: rgba(255, 123, 114, 0.2);
+}
+
+/* Clock */
+.clock {
+  font-family: "Deck Clock", monospace;
+  font-size: 2.38rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  flex-shrink: 0;
+  user-select: none;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transform: translateY(2px);
+}
+
+/* Back button (non-home screens) */
+.backBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-140px, -50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.backBtn:hover {
+  background: rgba(108, 182, 255, 0.1);
+  border-color: var(--accent-dim);
+}
+
+.title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Settings cog */
+.cogBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.cogBtn:hover {
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+
+.cogBtn:active {
+  background: var(--border);
+}

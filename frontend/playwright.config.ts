@@ -10,7 +10,7 @@ const backendScript = path.join(__dirname, "scripts", "e2e-backend.sh");
 /**
  * Local runs: Playwright hits pi-deck on 8756 (same origin as API + `/ws/events` — no Vite proxy).
  * Set E2E_BASE_URL to skip starting the local backend, e.g.:
- *   E2E_BASE_URL=http://10.0.0.11:8756 npm run test:e2e
+ *   E2E_BASE_URL=http://<deck-host-ip>:8756 npm run test:e2e
  */
 const remoteBase = process.env.E2E_BASE_URL?.replace(/\/$/, "") ?? "";
 const useRemote = remoteBase.length > 0;

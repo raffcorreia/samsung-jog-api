@@ -1005,6 +1005,32 @@ Harden the system for regular use.
 - verify whether monitor power-off or standby preserves power to attached `USB` and `Thunderbolt` devices before adopting this behavior
 - evaluate whether a low-power dedicated device, such as a Raspberry Pi Zero 2 W, could be attached there purely for monitor communication
 
+### Frontend build output location
+
+Currently `frontend/` builds into `backend/src/pi_deck/static/`, placing Vite output inside the Python package source tree. This mixes frontend build artifacts with Python package contents. Since the project uses an editable install and rsync-based deploy rather than a real `pip install`, the "bundle with the package" benefit does not apply.
+
+A cleaner structure would emit the build to a dedicated directory outside `src/` (e.g. `backend/dist/` or a repo-root `dist/`) and configure FastAPI to locate it via an env var or repo-relative path. This would require coordinated changes to `vite.config.ts`, `backend/src/pi_deck/api/app.py`, and `scripts/deploy.sh`.
+
+Worth addressing before significant UI expansion (Phase 13 onward) adds more build output assumptions on top of the current layout.
+
+### CI/CD and update strategy
+
+The current deploy model (`scripts/deploy.sh`: build → rsync → restart → reload) is intentional for Phase 12 but has known limitations as the project matures:
+
+- **No artifact verification** — the deploy script does not hash or sign the transferred files; a failed rsync mid-transfer leaves the Pi in a partially updated state
+- **No rollback** — there is no previous-version snapshot or rollback path if a deploy introduces a regression; the deploy counter only goes forward
+- **No staging environment** — code goes directly from the dev machine to the production kiosk with no intermediate validation
+- **Chromium reload is best-effort** — xdotool is not installed by default; the fallback kill-and-relaunch approach depends on display environment variables that may not be available over SSH
+- **Single deploy target** — the script is hard-coded to one Pi; deploying to additional decks would require scripting around `PI_TARGET`
+
+When the project reaches a more stable feature state, consider:
+
+- a lightweight artifact bundle (tarball or OCI image) with a checksum so the Pi can verify before applying
+- a `deploy --dry-run` mode and a `rollback` command that reverts to the previous counter-tagged snapshot
+- a GitHub Actions or self-hosted CI job that builds the frontend, runs backend and frontend tests, and produces a release artifact on each merge to `main`
+- replacing the rsync+restart pattern with a proper package release (`pip install pi-deck==x.y.z`) from a private or local PyPI index, so the Pi can always reconstruct a known good state
+- `xdotool` added to the Pi's base image so Chromium F5 reload is always available without the kill-and-relaunch fallback
+
 ## Milestones
 
 - milestone 1: approved observation circuit design with schematic and BOM
@@ -1023,6 +1049,7 @@ Harden the system for regular use.
 
 ## Immediate Next Steps
 
-- begin Phase 12: deployment and version tracking (deploy script, `status.version`, UI badge)
+- close Phase 12: confirm version badge visible in kiosk UI, paste host health snapshot into execution record
+- begin Phase 13: full-screen UI layout with placeholders
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

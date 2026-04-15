@@ -1,0 +1,12 @@
+.badge {
+  position: fixed;
+  top: calc(var(--deck-topbar-height, 48px) + 4px);
+  left: 8px;
+  z-index: 50;
+  font-size: 0.65rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: monospace;
+  pointer-events: none;
+  user-select: none;
+}

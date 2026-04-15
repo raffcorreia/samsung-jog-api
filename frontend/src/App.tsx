@@ -1,28 +1,36 @@
-import { JogPad } from "./components/JogPad";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+
+import { TopBar } from "./components/TopBar";
 import { useDeckEvents } from "./hooks/useDeckEvents";
+import { HomePage } from "./pages/HomePage";
+import { SettingsPage } from "./pages/SettingsPage";
 import { DeckShell } from "./widgets/DeckShell";
-import { JogWidget } from "./widgets/JogWidget";
-import { LiveLogWidget } from "./widgets/LiveLogWidget";
 
-import styles from "./App.module.css";
+// Add entries here as new routes are introduced.
+const ROUTE_TITLES: Record<string, string> = {
+  "/settings": "Settings",
+};
 
-export function App() {
+function AppInner() {
   const deck = useDeckEvents();
+  const location = useLocation();
+  const title = ROUTE_TITLES[location.pathname];
 
   return (
     <DeckShell>
-      <div className={styles.deckBody}>
-        <JogWidget>
-          <JogPad
-            holdCounts={deck.holdCounts}
-            wsReleaseTick={deck.wsReleaseTick}
-            wsLastReleasedAction={deck.wsLastReleasedAction}
-            wsSessionEpoch={deck.wsSessionEpoch}
-            onLocalLog={deck.pushLogLine}
-          />
-        </JogWidget>
-        <LiveLogWidget lines={deck.logLines} />
-      </div>
+      <TopBar title={title} />
+      <Routes>
+        <Route path="/" element={<HomePage deck={deck} />} />
+        <Route path="/settings" element={<SettingsPage />} />
+      </Routes>
     </DeckShell>
+  );
+}
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AppInner />
+    </BrowserRouter>
   );
 }

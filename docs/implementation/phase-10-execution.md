@@ -1,6 +1,6 @@
 # Phase 10 Execution Record
 
-**Status:** complete (repository; verified on deck host `pi-deck`).
+**Status:** complete (repository; verified on deck host).
 
 **Date:** 2026-04-13
 
@@ -35,7 +35,7 @@ Phase 10 defines and implements the **local backend API** used by all UI and con
 
 ## Host health snapshot
 
-Recorded on the deck host **`pi-deck`** (`10.0.0.11`):
+Recorded on the deck host:
 
 ```bash
 python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py

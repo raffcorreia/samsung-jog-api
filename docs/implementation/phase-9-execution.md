@@ -33,7 +33,7 @@ Phase 9 delivers a supervised local runtime aligned with [Solution Overview — 
 
 ## On-device verification (2026-04-13)
 
-- Deployed to deck host `pi-deck` (`10.0.0.11`, user `rafael`) via `rsync` to `~/samsung-jog-api` and `sudo ./scripts/host/install_pi_deck_systemd.sh`.
+- Deployed to the deck host via `rsync` to `~/samsung-jog-api` and `sudo ./scripts/host/install_pi_deck_systemd.sh`.
 - `curl http://127.0.0.1:8756/health` returns `{"status":"ok"}`; `systemctl restart pi-deck` restores the listener.
 - The host was initially **console-only** (`multi-user.target`); full-screen Chromium kiosk requires `scripts/host/phase9_install_desktop_stack.sh` (or equivalent) plus `install_pi_deck_kiosk_autostart.sh` — see the runbook.
 

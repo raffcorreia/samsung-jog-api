@@ -3,7 +3,7 @@
 # Without this, autologin often triggers "Default Keyring" password prompts because the keyring
 # is not unlocked by PAM.
 #
-# Usage: run once as the graphical login user (e.g. rafael), not with sudo:
+# Usage: run once as the graphical login user (not with sudo):
 #   ./scripts/kiosk/pi-deck-disable-gnome-keyring-autostart.sh
 
 set -euo pipefail

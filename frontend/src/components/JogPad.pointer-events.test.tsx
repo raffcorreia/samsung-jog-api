@@ -20,6 +20,7 @@ function renderPad() {
 
 describe("JogPad pointer events", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.mocked(client.jogHold).mockResolvedValue({ ok: true });
     vi.mocked(client.releaseJog).mockResolvedValue({ ok: true, duration_ms: 50 });
   });
