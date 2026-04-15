@@ -3,7 +3,6 @@
  * Components set `data-widget={DECK_WIDGETS.jog}` on their root.
  */
 export const DECK_WIDGETS = {
-  status: "deck-status",
   jog: "deck-jog",
   log: "deck-log",
 } as const;

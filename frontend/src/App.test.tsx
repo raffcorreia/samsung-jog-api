@@ -47,7 +47,7 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(await screen.findByText(/v0\.0-test/)).toBeInTheDocument();
+    expect(await screen.findByTestId("jog-pad")).toBeInTheDocument();
 
     const ws = instances[0];
     expect(ws).toBeDefined();

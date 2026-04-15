@@ -23,6 +23,10 @@ Environment=PI_DECK_PORT=8756
 # Override factory if needed: Environment=GPIOZERO_PIN_FACTORY=lgpio
 Environment=PI_DECK_HARDWARE=live
 Environment=PI_DECK_LOG_DIR=@SERVICE_HOME@/.local/share/pi-deck/logs
+# Optional CPU tuning: higher Nice = lower priority for this service vs. other processes (e.g. kiosk
+# Chromium). Uncomment so the HTTP/WebSocket server yields under load instead of competing with the UI.
+# See also scripts/kiosk/pi-deck-chromium-kiosk.sh (PI_DECK_KIOSK_NICE) to raise browser priority.
+# Nice=5
 ExecStart=@REPO_ROOT@/backend/.venv/bin/pi-deck
 Restart=on-failure
 RestartSec=3

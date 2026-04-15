@@ -23,8 +23,6 @@ export interface DeckEventsState {
   wsLastReleasedAction: JogAction | null;
   /** Increments on each websocket ``connected`` so JogPad clears stale pointers even when ``wsReleaseTick`` stays 0. */
   wsSessionEpoch: number;
-  wsConnected: boolean;
-  wsError: string | null;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
   refreshStatus: () => Promise<void>;
@@ -58,8 +56,6 @@ export function useDeckEvents(): DeckEventsState {
   const [wsReleaseTick, setWsReleaseTick] = useState(0);
   const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
-  const [wsConnected, setWsConnected] = useState(false);
-  const [wsError, setWsError] = useState<string | null>(null);
   const [logLines, setLogLines] = useState<string[]>([]);
   const sockRef = useRef<WebSocket | null>(null);
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -106,23 +102,17 @@ export function useDeckEvents(): DeckEventsState {
       if (stopped.current) {
         return;
       }
-      setWsError(null);
       const url = websocketEventsUrl();
       let ws: WebSocket;
       try {
         ws = new WebSocket(url);
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        setWsError(msg);
         pushLogLine(`websocket open failed — ${msg}`);
         scheduleReconnect();
         return;
       }
       sockRef.current = ws;
-
-      ws.onopen = () => {
-        setWsConnected(true);
-      };
 
       ws.onmessage = (ev) => {
         const parsed = parseWs(String(ev.data));
@@ -185,11 +175,10 @@ export function useDeckEvents(): DeckEventsState {
       };
 
       ws.onerror = () => {
-        setWsError("websocket error");
+        pushLogLine("websocket error");
       };
 
       ws.onclose = () => {
-        setWsConnected(false);
         sockRef.current = null;
         if (!stopped.current) {
           scheduleReconnect();
@@ -220,8 +209,6 @@ export function useDeckEvents(): DeckEventsState {
       wsReleaseTick,
       wsLastReleasedAction,
       wsSessionEpoch,
-      wsConnected,
-      wsError,
       logLines,
       pushLogLine,
       refreshStatus,
@@ -232,8 +219,6 @@ export function useDeckEvents(): DeckEventsState {
       wsReleaseTick,
       wsLastReleasedAction,
       wsSessionEpoch,
-      wsConnected,
-      wsError,
       logLines,
       pushLogLine,
       refreshStatus,

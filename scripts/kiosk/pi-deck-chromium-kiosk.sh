@@ -11,6 +11,18 @@
 #   PI_DECK_PORT   Listen port (default 8756). Must match pi-deck.service.
 #   PI_DECK_URL    Full URL to open (default http://127.0.0.1:${PI_DECK_PORT}/).
 #                  Override only if you proxy or split HTTP vs WS (normally unnecessary).
+#
+# CPU priority — cannot create CPU out of thin air; this nudges the scheduler toward Chromium.
+#   PI_DECK_KIOSK_NICE  e.g. -5 (higher priority than default 0). Values below ~-10 often need
+#                        root or CAP_SYS_NICE; unprivileged users are typically limited (see `man nice`).
+#
+# Memory — the Pi has one RAM pool; “giving more” to the browser means not starving it (swap/zram,
+# fewer background services) or slightly raising the V8 heap (example only; test on device):
+#   PI_DECK_CHROMIUM_EXTRA_ARGS='--js-flags=--max-old-space-size=256'
+#   (Add more Chromium flags separated by spaces; use the desktop file or export before this script.)
+#
+# Complementary (often better than raising Chromium): lower pi-deck’s priority so the UI wins under load.
+# In systemd unit for pi-deck:  Nice=5  or  CPUWeight=50
 
 set -euo pipefail
 
@@ -84,11 +96,24 @@ CHROME_ARGS=(
   --disable-http-cache
   # Appliance UX: no translate bar on first load; kiosk is a known single origin.
   --disable-features=Translate
-  "${URL}"
 )
 
-if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-  exec "${BROWSER[@]}" --ozone-platform=wayland "${CHROME_ARGS[@]}"
+# Optional extra flags (e.g. --js-flags=--max-old-space-size=256); split on spaces — avoid spaces inside one flag.
+if [[ -n "${PI_DECK_CHROMIUM_EXTRA_ARGS:-}" ]]; then
+  # shellcheck disable=SC2206
+  CHROME_ARGS+=(${PI_DECK_CHROMIUM_EXTRA_ARGS})
 fi
 
-exec "${BROWSER[@]}" "${CHROME_ARGS[@]}"
+CHROME_ARGS+=("${URL}")
+
+run_chromium() {
+  if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+    set -- --ozone-platform=wayland "$@"
+  fi
+  if [[ -n "${PI_DECK_KIOSK_NICE:-}" ]]; then
+    exec nice -n "${PI_DECK_KIOSK_NICE}" "${BROWSER[@]}" "$@"
+  fi
+  exec "${BROWSER[@]}" "$@"
+}
+
+run_chromium "${CHROME_ARGS[@]}"

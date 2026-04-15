@@ -3,7 +3,6 @@ import { useDeckEvents } from "./hooks/useDeckEvents";
 import { DeckShell } from "./widgets/DeckShell";
 import { JogWidget } from "./widgets/JogWidget";
 import { LiveLogWidget } from "./widgets/LiveLogWidget";
-import { StatusBarWidget } from "./widgets/StatusBarWidget";
 
 import styles from "./App.module.css";
 
@@ -12,11 +11,6 @@ export function App() {
 
   return (
     <DeckShell>
-      <StatusBarWidget
-        status={deck.status}
-        wsConnected={deck.wsConnected}
-        wsError={deck.wsError}
-      />
       <div className={styles.deckBody}>
         <JogWidget>
           <JogPad
