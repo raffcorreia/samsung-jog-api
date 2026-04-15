@@ -2,7 +2,7 @@
 
 ## Phase Index
 
-- [Host health gate (feature phases 10–19)](#host-health-gate-feature-phases-1019)
+- [Host health gate (feature phases 10–23)](#host-health-gate-feature-phases-1023)
 - [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
 - [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
 - [Phase 2: Hardware Validation](#phase-2-hardware-validation)
@@ -15,14 +15,18 @@
 - [Phase 9: Local Platform Bring-Up](#phase-9-local-platform-bring-up)
 - [Phase 10: Local API](#phase-10-local-api)
 - [Phase 11: Low-Level JOG Console UI](#phase-11-low-level-jog-console-ui)
-- [Phase 12: Recording and Replay Subsystem](#phase-12-recording-and-replay-subsystem)
-- [Phase 13: DDC Capability Investigation](#phase-13-ddc-capability-investigation)
-- [Phase 14: LED Feedback Characterization](#phase-14-led-feedback-characterization)
-- [Phase 15: State Investigation and Sequence Cleanup](#phase-15-state-investigation-and-sequence-cleanup)
-- [Phase 16: Productized Monitor Features](#phase-16-productized-monitor-features)
-- [Phase 17: Dashboard Data-Source Spike](#phase-17-dashboard-data-source-spike)
-- [Phase 18: Dashboard Widgets](#phase-18-dashboard-widgets)
-- [Phase 19: Stabilization](#phase-19-stabilization)
+- [Phase 12: Deployment and Version Tracking](#phase-12-deployment-and-version-tracking)
+- [Phase 13: Full-Screen UI Layout with Placeholders](#phase-13-full-screen-ui-layout-with-placeholders)
+- [Phase 14: Log Architecture Refactor](#phase-14-log-architecture-refactor)
+- [Phase 15: Observation Bus and Hardware Interface](#phase-15-observation-bus-and-hardware-interface)
+- [Phase 16: Recording and Replay Subsystem](#phase-16-recording-and-replay-subsystem)
+- [Phase 17: DDC Capability Investigation](#phase-17-ddc-capability-investigation)
+- [Phase 18: LED Feedback Characterization](#phase-18-led-feedback-characterization)
+- [Phase 19: State Investigation and Sequence Cleanup](#phase-19-state-investigation-and-sequence-cleanup)
+- [Phase 20: Productized Monitor Features](#phase-20-productized-monitor-features)
+- [Phase 21: Dashboard Data-Source Spike](#phase-21-dashboard-data-source-spike)
+- [Phase 22: Dashboard Widgets](#phase-22-dashboard-widgets)
+- [Phase 23: Stabilization](#phase-23-stabilization)
 - [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
 
 ## Summary
@@ -42,9 +46,9 @@ The overall strategy is:
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
-## Host health gate (feature phases 10–19)
+## Host health gate (feature phases 10–23)
 
-Phases **10–19** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
+Phases **10–23** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
 
 **Procedure (run on the deck host):**
 
@@ -52,7 +56,7 @@ Phases **10–19** introduce or expand product behavior on the **Raspberry Pi co
 2. Paste the **full default (text) output** into that phase’s **Markdown execution record** under a heading such as `## Host health snapshot` (a fenced code block is fine), with the **date** and **host** clear from the output or a one-line note.
 3. Briefly **review** the snapshot: e.g. `get_throttled` flags should not show sustained under-voltage or active throttling under normal idle/deck workload; root filesystem use should remain in a safe band for the SD card. Exact numeric thresholds are project judgment — the point is **documented evidence** each phase.
 
-Phases **10–19** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
+Phases **10–23** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
 
 ## Deferred integrated-board GPIO and software migration
 
@@ -80,7 +84,7 @@ The implementation is expected to grow these testing layers over time:
 
 Detailed test design still needs its own document, but no phase should be treated as complete without the relevant tests for that phase.
 
-For **Phases 10–19**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in the phase execution record.
+For **Phases 10–23**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in the phase execution record.
 
 ## Phase 0: Documentation and Evidence Capture
 
@@ -524,7 +528,7 @@ Define and implement the local backend command surface that all UI and control f
 ### Exit criteria
 
 - the frontend can drive low-level control and receive live state from the backend
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
 ## Phase 11: Low-Level JOG Console UI
 
@@ -567,9 +571,162 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions **on the deck host with live hardware** (not mock-only)
 - no unvalidated high-level monitor feature UI is exposed yet
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 12: Recording and Replay Subsystem
+## Phase 12: Deployment and Version Tracking
+
+### Goal
+
+Establish a single, agent-authorizable deploy script that pushes the latest code to the deck Pi, restarts all services, and refreshes Chromium in kiosk mode. Introduce a version counter so every deployment is visible in the UI.
+
+### Scope
+
+- `rsync`-based deploy from the dev machine to the Pi (no git pull on the Pi, no CI/CD)
+- service restart after copy
+- Chromium kiosk refresh
+- `status.version` field on the backend, incremented each deploy
+- version badge in the UI
+
+### Tasks
+
+- write a single deploy script (`scripts/deploy.sh` or similar) that:
+  - `rsync`s the repository to the Pi over SSH
+  - restarts the `pi-deck` systemd service (and any other managed services)
+  - sends a keypress or remote-debugging command to refresh Chromium in kiosk mode without relaunching the full session
+  - increments a persistent version counter on the Pi (e.g. a plain file or env var baked in at deploy time)
+- expose `version` in `GET /api/v1/status` response
+- add a floating version badge in the top-left corner of the UI, sourced from `status.version`
+- document the script as the canonical deploy method; make it safe to run repeatedly
+- add the script to the agent authorization list so it can be invoked without per-run confirmation
+
+### Deliverables
+
+- `scripts/deploy.sh` (or equivalent) that is the one and only deploy mechanism
+- `status.version` in the API and visible in the UI
+
+### Exit criteria
+
+- running the deploy script from the dev machine results in the Pi running the latest code with a freshly reloaded kiosk and an incremented version number visible in the UI
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase's execution record
+
+## Phase 13: Full-Screen UI Layout with Placeholders
+
+### Goal
+
+Build the target UI shell at `1280×800` with correct proportions, real functional widgets where they exist today, and static placeholder panels for everything that is not yet wired to real data.
+
+### Scope
+
+- top bar with clock and action buttons
+- left column with power button and JOG widget
+- bottom log panel
+- placeholder calendar and placeholder notes
+- all panels sized and positioned for `1280×800`
+
+### Tasks
+
+- design the full-screen layout grid for `1280×800`
+- implement a top bar containing:
+  - clock on the left (display only for now; real time wiring comes in a later phase)
+  - settings button and any other header actions on the right
+- implement a left column containing:
+  - power button (visible; behavior can be a stub)
+  - the **real, functional JOG widget** from Phase 11
+- implement a bottom panel showing the **real live log** from Phase 11
+- implement a placeholder calendar panel with hardcoded mock entries
+- implement a placeholder notes panel with hardcoded mock content
+- ensure no panel overflows or breaks the layout at exactly `1280×800`
+- keep placeholder panels visually distinct (e.g. labelled "coming soon" or greyed) so the intent is clear
+- add frontend tests for layout rendering at the target resolution
+
+### Deliverables
+
+- full-screen UI shell at `1280×800` with real JOG and log panels and placeholder calendar and notes
+
+### Exit criteria
+
+- the deck display shows the complete intended layout with correct proportions
+- no real feature work is blocked waiting on this layout
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase's execution record
+
+## Phase 14: Log Architecture Refactor
+
+### Goal
+
+Move log ownership from the browser to the backend so logs are durable across sessions, available to all connected clients simultaneously, and not lost on refresh or reconnect.
+
+### Scope
+
+- backend log collection and formatting
+- WebSocket delivery of log events to all clients
+- replay of recent log history on new WebSocket connection
+- frontend reduced to a pure log renderer
+
+### Tasks
+
+- define a structured log event shape for WebSocket delivery (level, timestamp, message, source)
+- implement a server-side log buffer (last N entries or last X minutes) that survives browser disconnects
+- emit log events over the existing WebSocket connection to all connected clients
+- on new WebSocket connection, replay the buffered log history before switching to live events so the browser has immediate context
+- remove any log collection or formatting logic from the frontend; the UI only receives and renders
+- ensure log events from all backend services (hardware, API, sequence runner, etc.) flow through the central buffer
+- add backend tests for log buffering, replay on connect, and delivery to multiple simultaneous clients
+
+### Deliverables
+
+- backend-owned log stream delivered over WebSocket with history replay on connect
+- frontend is a stateless log renderer
+
+### Exit criteria
+
+- opening a new browser tab shows recent log history immediately without any action from the user
+- two simultaneous browser clients see the same log stream in sync
+- no log state lives in the browser
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase's execution record
+
+## Phase 15: Observation Bus and Hardware Interface
+
+### Goal
+
+Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt, full decode of `KEY_ADC1` / `KEY_ADC2` / `KEY_LED` into domain events, and make the observation bus the single authority for WebSocket broadcasts about what the hardware is doing — including physical JOG presses.
+
+### Scope
+
+- ADS1115 `ALERT/RDY` interrupt path (no ADC polling)
+- decode of `KEY_ADC1` and `KEY_ADC2` into directional hold/release events
+- `KEY_LED` on/off event detection
+- observation-backed domain events as the single WebSocket broadcast source
+- physical JOG mirrored in the UI ring
+- optimistic UI on the initiating browser; confirmed stream for all clients
+
+### Tasks
+
+- wire `ADS1115 ALERT/RDY` to a Pi GPIO and configure the comparator threshold so the interrupt fires when a key changes state
+- implement an interrupt handler that reads the ADC value once on alert rather than polling
+- decode the ADC reading into a domain event: which direction (`up`, `down`, `left`, `right`, `center`), press or release, and timestamp
+- implement `KEY_LED` observation (GPIO input or ADC depending on Phase 6 wiring) and emit `led_on` / `led_off` domain events
+- make observation-backed domain events the single producer of `held` / `released` / `led_changed` WebSocket broadcasts to all clients — remove duplicate emissions from the command path for the same physical transitions
+- ensure physical front-panel JOG use produces the same `held`/`released` ring animation in the UI as a deck tap (observation does not distinguish who caused the change)
+- on the initiating browser: render optimistic feedback immediately on REST success; reconcile to a confirmed/virtual style (e.g. distinct color) when the observation event arrives
+- other browsers: show only the confirmed (observation-aligned) state
+- treat any disagreement between drive and sense as a defect to investigate, not a UX tolerance to hide
+- add backend tests for interrupt handling, ADC decode, LED event emission, and domain event broadcast; add frontend tests for optimistic vs confirmed ring state
+
+### Deliverables
+
+- interrupt-driven `ADS1115` observation replacing any polling path
+- full observation decode for all JOG directions and LED state
+- single WebSocket broadcast authority (observation bus)
+- physical JOG mirrored in the deck UI
+
+### Exit criteria
+
+- pressing the physical monitor JOG is reflected in the deck UI ring
+- `KEY_LED` state changes appear as domain events in the WebSocket stream
+- no duplicate held/released events when a deck tap triggers a GPIO drive
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase's execution record
+
+## Phase 16: Recording and Replay Subsystem
 
 ### Goal
 
@@ -606,9 +763,9 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 ### Exit criteria
 
 - sequences can be recorded, replayed, stopped, and validated reliably
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 13: DDC Capability Investigation
+## Phase 17: DDC Capability Investigation
 
 ### Goal
 
@@ -640,9 +797,9 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 ### Exit criteria
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 14: LED Feedback Characterization
+## Phase 18: LED Feedback Characterization
 
 ### Goal
 
@@ -671,9 +828,9 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 ### Exit criteria
 
 - the project knows when LED feedback can be trusted as part of sequence execution
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 15: State Investigation and Sequence Cleanup
+## Phase 19: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -704,9 +861,9 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 ### Exit criteria
 
 - important monitor workflows are represented by stable, reusable, named sequence files
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 16: Productized Monitor Features
+## Phase 20: Productized Monitor Features
 
 ### Goal
 
@@ -736,9 +893,9 @@ Turn validated monitor workflows into real user-facing features.
 ### Exit criteria
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 17: Dashboard Data-Source Spike
+## Phase 21: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -768,9 +925,9 @@ Decide how dashboard data will be sourced before widget implementation expands.
 ### Exit criteria
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 18: Dashboard Widgets
+## Phase 22: Dashboard Widgets
 
 ### Goal
 
@@ -800,9 +957,9 @@ Implement the dashboard side of the product using the data-source decisions from
 ### Exit criteria
 
 - the dashboard is useful and stable without compromising the monitor-control surface
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
-## Phase 19: Stabilization
+## Phase 23: Stabilization
 
 ### Goal
 
@@ -834,7 +991,7 @@ Harden the system for regular use.
 ### Exit criteria
 
 - the system is stable enough for regular daily use
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1019) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1023) in this phase’s execution record
 
 ## Later Extensions
 
@@ -866,6 +1023,6 @@ Harden the system for regular use.
 
 ## Immediate Next Steps
 
-- begin Phase 11: low-level `JOG` console UI (touch-first; calls Phase 10 REST + WebSocket)
+- begin Phase 12: deployment and version tracking (deploy script, `status.version`, UI badge)
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
