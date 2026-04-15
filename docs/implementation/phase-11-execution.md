@@ -121,11 +121,11 @@ python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py
 
 Use the **default text output** (not `--json`) when pasting into execution records.
 
-**Before comparing UI builds**, deploy the built static bundle and restart `pi-deck` so the kiosk is not on stale hashed assets:
+**Before comparing UI builds**, deploy the latest code and restart `pi-deck` so the kiosk is not on stale hashed assets:
 
 ```bash
-# From dev machine, repo root (see scripts/host/deploy_pi_deck_ui.sh)
-./scripts/host/deploy_pi_deck_ui.sh
+# From dev machine, repo root — canonical deploy (Phase 12+)
+PI_TARGET=user@pi-hostname ./scripts/deploy.sh
 ```
 
 Then re-run `pi-deck-host-health.py` on the Pi.
