@@ -11,7 +11,7 @@
 - [Phase 5: HDMI and DDC Communication Design](#phase-5-hdmi-and-ddc-communication-design)
 - [Phase 6: Discrete-Component Protoboard Validation](#phase-6-discrete-component-protoboard-validation)
 - [Phase 7: Integrated Controller Board Design](#phase-7-integrated-controller-board-design)
-- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype) — **complete**
+- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype)
 - [Phase 9: Local Platform Bring-Up](#phase-9-local-platform-bring-up)
 - [Phase 10: Local API](#phase-10-local-api)
 - [Phase 11: Low-Level JOG Console UI](#phase-11-low-level-jog-console-ui)
