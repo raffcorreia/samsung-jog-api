@@ -1,13 +1,14 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("JOG console (integrated: pi-deck + static build, mock hardware or Pi)", () => {
-  test("shell loads: hero, five controls, log", async ({ page }) => {
+  test("shell loads: deck root, five controls, log", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { name: /JOG console/i })).toBeVisible();
-    await expect(page.getByText(/Samsung CJ791/i)).toBeVisible();
+    await expect(page.locator("[data-deck-root]")).toBeVisible();
     await expect(page.getByTestId("jog-pad")).toBeVisible();
-    expect(await page.getByRole("button").count()).toBe(5);
+    /* Four ring sectors are SVG paths with role=button; center is a <button>. ARIA exposure varies by engine. */
+    expect(await page.locator("[data-jog-action]").count()).toBe(5);
     await expect(page.getByRole("log")).toBeVisible();
+    await expect(page).toHaveTitle(/pi-deck|JOG/i);
   });
 
   test("websocket connects and first line appears in log", async ({ page }) => {
@@ -18,7 +19,7 @@ test.describe("JOG console (integrated: pi-deck + static build, mock hardware or
 
   test("pointer tap Up yields command acceptance in log", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Up" }).click();
+    await page.locator('[data-jog-action="up"]').click();
     await expect(page.getByRole("log")).toContainText(/hold|release|up/i, { timeout: 15_000 });
   });
 });

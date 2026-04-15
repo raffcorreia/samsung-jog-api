@@ -61,16 +61,36 @@ export function useDeckEvents(): DeckEventsState {
   const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stopped = useRef(false);
 
-  const pushLogLine = useCallback((line: string) => {
-    const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
+  /** Batched log lines (stamped) flushed once per animation frame to cut React / <pre> churn on Pi. */
+  const pendingLogRef = useRef<string[]>([]);
+  const logFlushRafRef = useRef<number | null>(null);
+
+  const flushPendingLogs = useCallback(() => {
+    logFlushRafRef.current = null;
+    const batch = pendingLogRef.current;
+    if (batch.length === 0) {
+      return;
+    }
+    pendingLogRef.current = [];
     setLogLines((prev) => {
-      const next = [...prev, `${stamp}  ${line}`];
+      const next = [...prev, ...batch];
       if (next.length > MAX_LOG) {
         return next.slice(next.length - MAX_LOG);
       }
       return next;
     });
   }, []);
+
+  const pushLogLine = useCallback(
+    (line: string) => {
+      const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
+      pendingLogRef.current.push(`${stamp}  ${line}`);
+      if (logFlushRafRef.current == null) {
+        logFlushRafRef.current = requestAnimationFrame(flushPendingLogs);
+      }
+    },
+    [flushPendingLogs],
+  );
 
   const refreshStatus = useCallback(async () => {
     try {
@@ -119,35 +139,39 @@ export function useDeckEvents(): DeckEventsState {
         if (!parsed) {
           return;
         }
-        startTransition(() => {
-          pushLogLine(formatWsEventLine(parsed));
-          if (parsed.category === "control" && parsed.type === "connected") {
-            const st = parsed.data.status as StatusPayload | undefined;
-            if (st) {
-              setStatus(st);
-            }
-            setHoldCounts({});
-            setWsReleaseTick(0);
-            setWsLastReleasedAction(null);
-            setWsSessionEpoch((e) => e + 1);
+
+        /* Jog ring + session: sync updates so the UI is not deferred behind startTransition. */
+        if (parsed.category === "control" && parsed.type === "connected") {
+          const st = parsed.data.status as StatusPayload | undefined;
+          if (st) {
+            setStatus(st);
           }
-          if (parsed.category === "command" && parsed.type === "held") {
-            const action = parsed.data.action;
-            if (!isJogAction(action)) {
-              return;
-            }
+          setHoldCounts({});
+          setWsReleaseTick(0);
+          setWsLastReleasedAction(null);
+          setWsSessionEpoch((e) => e + 1);
+        }
+        if (parsed.category === "command" && parsed.type === "held") {
+          const action = parsed.data.action;
+          if (isJogAction(action)) {
             setHoldCounts((prev) => bumpHeldCount(prev, action, 1));
           }
-          if (parsed.category === "command" && parsed.type === "released") {
-            const action = parsed.data.action;
-            if (!isJogAction(action)) {
-              return;
-            }
+        }
+        if (parsed.category === "command" && parsed.type === "released") {
+          const action = parsed.data.action;
+          if (isJogAction(action)) {
             setHoldCounts((prev) => bumpHeldCount(prev, action, -1));
             setWsLastReleasedAction(action);
             setWsReleaseTick((n) => n + 1);
           }
-          if (parsed.category === "control" && parsed.type === "state") {
+        }
+
+        /* Log line — batched per frame (see pendingLogRef). */
+        pushLogLine(formatWsEventLine(parsed));
+
+        /* Status mirrors that are not jog-critical — low priority. */
+        if (parsed.category === "control" && parsed.type === "state") {
+          startTransition(() => {
             setStatus((prev) =>
               prev
                 ? {
@@ -157,8 +181,10 @@ export function useDeckEvents(): DeckEventsState {
                   }
                 : prev,
             );
-          }
-          if (parsed.category === "bus" && parsed.type === "snapshot") {
+          });
+        }
+        if (parsed.category === "bus" && parsed.type === "snapshot") {
+          startTransition(() => {
             setStatus((prev) =>
               prev
                 ? {
@@ -170,8 +196,8 @@ export function useDeckEvents(): DeckEventsState {
                   }
                 : prev,
             );
-          }
-        });
+          });
+        }
       };
 
       ws.onerror = () => {
@@ -191,6 +217,11 @@ export function useDeckEvents(): DeckEventsState {
 
     return () => {
       stopped.current = true;
+      if (logFlushRafRef.current != null) {
+        cancelAnimationFrame(logFlushRafRef.current);
+        logFlushRafRef.current = null;
+      }
+      pendingLogRef.current = [];
       if (reconnectTimer.current) {
         clearTimeout(reconnectTimer.current);
         reconnectTimer.current = null;

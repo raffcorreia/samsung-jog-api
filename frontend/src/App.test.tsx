@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
@@ -64,6 +64,9 @@ describe("App", () => {
       } as MessageEvent);
     });
 
-    expect(screen.getByRole("log")).toHaveTextContent("release — up 80ms");
+    /* Log lines are flushed on requestAnimationFrame (batching for Pi performance). */
+    await waitFor(() => {
+      expect(screen.getByRole("log")).toHaveTextContent("release — up 80ms");
+    });
   });
 });

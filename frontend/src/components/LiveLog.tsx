@@ -1,8 +1,26 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import styles from "./LiveLog.module.css";
 
-export function LiveLog(props: { lines: readonly string[] }) {
+function liveLogPropsEqual(
+  prev: { lines: readonly string[] },
+  next: { lines: readonly string[] },
+): boolean {
+  if (prev.lines === next.lines) {
+    return true;
+  }
+  if (prev.lines.length !== next.lines.length) {
+    return false;
+  }
+  for (let i = 0; i < prev.lines.length; i++) {
+    if (prev.lines[i] !== next.lines[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function LiveLogInner(props: { lines: readonly string[] }) {
   const preRef = useRef<HTMLPreElement | null>(null);
   const { lines } = props;
   const body = lines.join("\n");
@@ -27,3 +45,6 @@ export function LiveLog(props: { lines: readonly string[] }) {
     </section>
   );
 }
+
+/** Memoized so parent re-renders that only touch the jog pad do not rebuild the log <pre> body. */
+export const LiveLog = memo(LiveLogInner, liveLogPropsEqual);

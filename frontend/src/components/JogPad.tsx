@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type PointerEvent } from "react";
+import { memo, useCallback, useEffect, useRef, type PointerEvent } from "react";
 
 import { jogHold, releaseJog } from "../api/client";
 import type { JogAction } from "../types";
@@ -61,7 +61,7 @@ function heldFromServer(holdCounts: Record<JogAction, number>, action: JogAction
   return (holdCounts[action] ?? 0) > 0;
 }
 
-export function JogPad(props: {
+function JogPadInner(props: {
   holdCounts: Record<JogAction, number>;
   wsReleaseTick: number;
   wsLastReleasedAction: JogAction | null;
@@ -287,3 +287,6 @@ export function JogPad(props: {
     </div>
   );
 }
+
+/** Skip re-render when only the live log updates (same hold props). Important on low-power kiosk browsers. */
+export const JogPad = memo(JogPadInner);
