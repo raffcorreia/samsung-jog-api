@@ -1,0 +1,46 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.message {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  min-width: 96px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.secondary {
+  border: 1px solid var(--border-bright);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+
+.primary {
+  border: 1px solid color-mix(in srgb, var(--danger) 72%, var(--border));
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+  color: #ffd8d4;
+}
+
+.primary:disabled,
+.secondary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -757,7 +757,11 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 - support `press`, `delay`, `wait_led`, and `wait_ddc` events
 - support polling interval and timeout behavior for wait events
 - store recordings in a writable local directory
-- place recording and replay tools in the advanced/settings area
+- use the observation bus as the recording source of truth so both deck-driven and physical JOG activity can be captured
+- auto-save raw captures on stop with a timestamp filename; renaming can happen later from the UI
+- place recording and replay tools in a large right-side recording workspace popup that respects the Phase 13 popup rules and fits the fixed `1280×800` kiosk layout
+- provide replay, stop, rename, upload, download, and delete actions in that workspace
+- add a reusable centered confirmation popup standard for destructive yes/no actions such as delete
 - add schema validation tests and sequence-runner tests for timeout, abort, and rejection behavior
 
 ### Deliverables
@@ -1010,6 +1014,7 @@ Harden the system for regular use.
 - test both `DDC` power control and `JOG`-driven OSD power workflows for that behavior
 - verify whether monitor power-off or standby preserves power to attached `USB` and `Thunderbolt` devices before adopting this behavior
 - evaluate whether a low-power dedicated device, such as a Raspberry Pi Zero 2 W, could be attached there purely for monitor communication
+- evaluate `SSE` (`Server-Sent Events`) as an alternative to the current WebSocket event stream for one-way UI notifications, and measure whether it improves Chromium performance or stability on the Raspberry Pi deck host before considering any transport change
 
 ### Frontend build output location
 

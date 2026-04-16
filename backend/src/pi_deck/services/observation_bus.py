@@ -13,6 +13,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
+from collections.abc import Awaitable, Callable
 from typing import cast
 
 from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
@@ -45,6 +46,13 @@ class ObservationBusService:
         self._edge_coalesce = CoalesceGate()
         self._last_signals: SignalSnapshot | None = None
         self._led_prev: bool | None = None
+        self._listeners: list[Callable[[dict[str, object]], Awaitable[None] | None]] = []
+
+    def add_listener(
+        self,
+        fn: Callable[[dict[str, object]], Awaitable[None] | None],
+    ) -> None:
+        self._listeners.append(fn)
 
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
         self._loop = loop
@@ -196,6 +204,10 @@ class ObservationBusService:
         )
         if not isinstance(payload, dict):
             return
+        for listener in self._listeners:
+            maybe_awaitable = listener(payload)
+            if maybe_awaitable is not None:
+                await maybe_awaitable
         log_event = self._live_log.record_event(payload)
         if self._ws_hub.client_count == 0:
             return

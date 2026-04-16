@@ -1,4 +1,13 @@
-import type { CommandRejectedBody, JogAction, LogLevel, StatusPayload } from "../types";
+import type {
+  CommandRejectedBody,
+  JogAction,
+  LogLevel,
+  RecordingLibrary,
+  RecordingRejectedBody,
+  RecordingState,
+  RecordingSummary,
+  StatusPayload,
+} from "../types";
 
 function apiBase(): string {
   const v = import.meta.env.VITE_API_BASE;
@@ -114,6 +123,121 @@ export async function deleteLiveLog(): Promise<void> {
   if (!r.ok) {
     throw new Error(`log clear failed: ${r.status}`);
   }
+}
+
+export type RecordingResult<T> = { ok: true; body: T } | { ok: false; body: RecordingRejectedBody };
+
+export async function fetchRecordingLibrary(): Promise<RecordingLibrary> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings`);
+  if (!r.ok) {
+    throw new Error(`recordings ${r.status}`);
+  }
+  return (await r.json()) as RecordingLibrary;
+}
+
+export async function fetchRecordingState(): Promise<RecordingState> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/state`);
+  if (!r.ok) {
+    throw new Error(`recording state ${r.status}`);
+  }
+  return (await r.json()) as RecordingState;
+}
+
+export async function startRecording(): Promise<RecordingResult<RecordingState>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/start`, { method: "POST" });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as RecordingState };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording start failed: ${r.status}`);
+}
+
+export async function stopRecording(): Promise<RecordingResult<{ ok: true; item: RecordingSummary }>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/stop`, { method: "POST" });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as { ok: true; item: RecordingSummary } };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording stop failed: ${r.status}`);
+}
+
+export async function playRecording(recordingId: string): Promise<RecordingResult<RecordingState>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/play`, {
+    method: "POST",
+  });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as RecordingState };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording play failed: ${r.status}`);
+}
+
+export async function stopRecordingPlayback(): Promise<RecordingResult<RecordingState>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/stop-playback`, { method: "POST" });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as RecordingState };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording stop playback failed: ${r.status}`);
+}
+
+export async function renameRecording(
+  recordingId: string,
+  name: string,
+): Promise<RecordingResult<{ ok: true; item: RecordingSummary }>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as { ok: true; item: RecordingSummary } };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording rename failed: ${r.status}`);
+}
+
+export async function deleteRecording(recordingId: string): Promise<RecordingResult<{ ok: true }>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}`, {
+    method: "DELETE",
+  });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as { ok: true } };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording delete failed: ${r.status}`);
+}
+
+export async function uploadRecording(file: File): Promise<RecordingResult<{ ok: true; item: RecordingSummary }>> {
+  const body = new FormData();
+  body.append("file", file);
+  const r = await fetch(`${apiBase()}/api/v1/recordings/upload`, {
+    method: "POST",
+    body,
+  });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as { ok: true; item: RecordingSummary } };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording upload failed: ${r.status}`);
+}
+
+export function recordingDownloadUrl(recordingId: string): string {
+  return `${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/download`;
 }
 
 export function websocketEventsUrl(): string {

@@ -1,0 +1,274 @@
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100%;
+}
+
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  margin-bottom: 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  max-width: 34rem;
+}
+
+.statusCard {
+  min-width: 230px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-bright);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.statusCard[data-mode="recording"] {
+  border-color: color-mix(in srgb, var(--danger) 60%, var(--border-bright));
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+.statusCard[data-mode="replaying"] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-bright));
+}
+
+.statusDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #7d8590;
+  flex: 0 0 auto;
+}
+
+.statusCard[data-mode="recording"] .statusDot {
+  background: var(--danger);
+  box-shadow: 0 0 10px rgba(255, 123, 114, 0.6);
+}
+
+.statusCard[data-mode="replaying"] .statusDot {
+  background: var(--accent);
+}
+
+.statusText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.statusText strong {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.74rem;
+}
+
+.statusText span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actionButton {
+  min-width: 154px;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-bright);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.recordAction {
+  border-color: color-mix(in srgb, var(--danger) 70%, var(--border-bright));
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  color: #ffd9d4;
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.errorBanner {
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--danger) 55%, var(--border-bright));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: #ffd9d4;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(250px, 0.95fr);
+  gap: 14px;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.libraryPane,
+.detailPane {
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emptyState,
+.emptyDetail {
+  margin: auto;
+  max-width: 20rem;
+  text-align: center;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.listItem {
+  text-align: left;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.listItem[data-selected="true"] {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-bright));
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.14);
+}
+
+.itemTop,
+.itemMeta,
+.detailRow,
+.inlineActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.itemTop strong,
+.detailRow strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemMeta {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.inlineActions {
+  justify-content: flex-end;
+}
+
+.inlineButton {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-bright);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.renameInput {
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 38px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border-bright);
+  background: rgba(10, 16, 22, 0.72);
+  color: var(--text);
+  font: inherit;
+}
+
+.detailCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.detailActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.detailRow {
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+}
+
+.detailRow span {
+  color: var(--muted);
+}
+
+.deleteButton {
+  border-color: color-mix(in srgb, var(--danger) 65%, var(--border-bright));
+  color: #ffd9d4;
+}

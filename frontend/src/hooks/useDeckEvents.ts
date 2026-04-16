@@ -7,9 +7,31 @@ import {
   useState,
 } from "react";
 
-import { deleteLiveLog, fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
+import {
+  deleteLiveLog,
+  deleteRecording,
+  fetchRecordingLibrary,
+  fetchRecordingState,
+  fetchStatus,
+  playRecording,
+  postLogEntry,
+  recordingDownloadUrl,
+  renameRecording,
+  startRecording,
+  stopRecording,
+  stopRecordingPlayback,
+  uploadRecording,
+  websocketEventsUrl,
+} from "../api/client";
 import { formatBusLedLogMessage } from "../log/busLogFormat";
-import type { JogAction, SignalSnapshot, StatusPayload, WsEventV1 } from "../types";
+import type {
+  JogAction,
+  RecordingLibrary,
+  RecordingState,
+  SignalSnapshot,
+  StatusPayload,
+  WsEventV1,
+} from "../types";
 
 const MAX_LOG = 220;
 
@@ -24,6 +46,15 @@ function emptyHardwareHeld(): Record<JogAction, boolean> {
     center: false,
   };
 }
+
+const EMPTY_RECORDING_STATE: RecordingState = {
+  mode: "idle",
+  recording_started_at: null,
+  replaying_id: null,
+  active_name: null,
+  event_count: 0,
+  last_error: null,
+};
 
 export function signalsToHardwareHeld(s: SignalSnapshot): Record<JogAction, boolean> {
   const h = emptyHardwareHeld();
@@ -49,18 +80,26 @@ function parseBusSnapshotData(data: Record<string, unknown>): SignalSnapshot {
 
 export interface DeckEventsState {
   status: StatusPayload | null;
-  /** Observed jog actuation from ``bus/snapshot`` / ``status.signals`` (hardware truth). */
   hardwareHeld: Record<JogAction, boolean>;
-  /** Increments when observation shows key(s) no longer held (peer sync / watchdog). */
   wsReleaseTick: number;
-  /** Actions that transitioned held→idle on the wire for this tick (may be multiple). */
   wsReleasedActions: readonly JogAction[];
-  /** Increments on each websocket ``connected`` so JogPad clears stale pointers. */
   wsSessionEpoch: number;
   logLines: readonly string[];
+  recordingState: RecordingState;
+  recordings: RecordingLibrary;
   pushLogLine: (line: string) => void;
   clearServerLog: () => Promise<void>;
   refreshStatus: () => Promise<void>;
+  refreshRecordings: () => Promise<void>;
+  refreshRecordingState: () => Promise<void>;
+  startRecording: () => Promise<boolean>;
+  stopRecording: () => Promise<boolean>;
+  playRecording: (recordingId: string) => Promise<boolean>;
+  stopRecordingPlayback: () => Promise<boolean>;
+  renameRecording: (recordingId: string, name: string) => Promise<boolean>;
+  deleteRecording: (recordingId: string) => Promise<boolean>;
+  uploadRecording: (file: File) => Promise<boolean>;
+  recordingDownloadUrl: (recordingId: string) => string;
 }
 
 function parseWs(raw: string): WsEventV1 | null {
@@ -81,6 +120,8 @@ export function useDeckEvents(): DeckEventsState {
   const [wsReleasedActions, setWsReleasedActions] = useState<readonly JogAction[]>([]);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
+  const [recordingState, setRecordingState] = useState<RecordingState>(EMPTY_RECORDING_STATE);
+  const [recordings, setRecordings] = useState<RecordingLibrary>({ items: [] });
   const prevSignalsRef = useRef<SignalSnapshot | null>(null);
 
   const hardwareHeld = useMemo(
@@ -88,12 +129,9 @@ export function useDeckEvents(): DeckEventsState {
     [status],
   );
 
-  const pushLogLine = useCallback(
-    (line: string) => {
-      void postLogEntry({ source: "ui", message: line }).catch(() => {});
-    },
-    [],
-  );
+  const pushLogLine = useCallback((line: string) => {
+    void postLogEntry({ source: "ui", message: line }).catch(() => {});
+  }, []);
 
   const clearServerLog = useCallback(async () => {
     try {
@@ -107,16 +145,160 @@ export function useDeckEvents(): DeckEventsState {
 
   const refreshStatus = useCallback(async () => {
     try {
-      const s = await fetchStatus();
-      setStatus(s);
+      setStatus(await fetchStatus());
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       pushLogLine(`status fetch failed — ${msg}`);
     }
   }, [pushLogLine]);
 
+  const refreshRecordings = useCallback(async () => {
+    try {
+      setRecordings(await fetchRecordingLibrary());
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`recordings fetch failed — ${msg}`);
+    }
+  }, [pushLogLine]);
+
+  const refreshRecordingState = useCallback(async () => {
+    try {
+      setRecordingState(await fetchRecordingState());
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`recording state fetch failed — ${msg}`);
+    }
+  }, [pushLogLine]);
+
+  const startRecordingAction = useCallback(async () => {
+    try {
+      const r = await startRecording();
+      if (!r.ok) {
+        pushLogLine(`recording start rejected — ${r.body.message}`);
+        return false;
+      }
+      setRecordingState(r.body);
+      return true;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`recording start failed — ${msg}`);
+      return false;
+    }
+  }, [pushLogLine]);
+
+  const stopRecordingAction = useCallback(async () => {
+    try {
+      const r = await stopRecording();
+      if (!r.ok) {
+        pushLogLine(`recording stop rejected — ${r.body.message}`);
+        return false;
+      }
+      await refreshRecordings();
+      await refreshRecordingState();
+      return true;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`recording stop failed — ${msg}`);
+      return false;
+    }
+  }, [pushLogLine, refreshRecordingState, refreshRecordings]);
+
+  const playRecordingAction = useCallback(
+    async (recordingId: string) => {
+      try {
+        const r = await playRecording(recordingId);
+        if (!r.ok) {
+          pushLogLine(`recording play rejected — ${r.body.message}`);
+          return false;
+        }
+        setRecordingState(r.body);
+        return true;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording play failed — ${msg}`);
+        return false;
+      }
+    },
+    [pushLogLine],
+  );
+
+  const stopPlaybackAction = useCallback(async () => {
+    try {
+      const r = await stopRecordingPlayback();
+      if (!r.ok) {
+        pushLogLine(`recording stop rejected — ${r.body.message}`);
+        return false;
+      }
+      setRecordingState(r.body);
+      return true;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`recording stop failed — ${msg}`);
+      return false;
+    }
+  }, [pushLogLine]);
+
+  const renameRecordingAction = useCallback(
+    async (recordingId: string, name: string) => {
+      try {
+        const r = await renameRecording(recordingId, name);
+        if (!r.ok) {
+          pushLogLine(`recording rename rejected — ${r.body.message}`);
+          return false;
+        }
+        await refreshRecordings();
+        return true;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording rename failed — ${msg}`);
+        return false;
+      }
+    },
+    [pushLogLine, refreshRecordings],
+  );
+
+  const deleteRecordingAction = useCallback(
+    async (recordingId: string) => {
+      try {
+        const r = await deleteRecording(recordingId);
+        if (!r.ok) {
+          pushLogLine(`recording delete rejected — ${r.body.message}`);
+          return false;
+        }
+        await refreshRecordings();
+        return true;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording delete failed — ${msg}`);
+        return false;
+      }
+    },
+    [pushLogLine, refreshRecordings],
+  );
+
+  const uploadRecordingAction = useCallback(
+    async (file: File) => {
+      try {
+        const r = await uploadRecording(file);
+        if (!r.ok) {
+          pushLogLine(`recording upload rejected — ${r.body.message}`);
+          return false;
+        }
+        await refreshRecordings();
+        return true;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording upload failed — ${msg}`);
+        return false;
+      }
+    },
+    [pushLogLine, refreshRecordings],
+  );
+
   useEffect(() => {
     void refreshStatus();
+    void refreshRecordingState();
+    void refreshRecordings();
     let stopped = false;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
     let sock: WebSocket | null = null;
@@ -165,6 +347,13 @@ export function useDeckEvents(): DeckEventsState {
           setWsReleasedActions([]);
           setWsSessionEpoch((e) => e + 1);
           setLogLines([]);
+        }
+
+        if (parsed.category === "recording" && parsed.type === "state") {
+          setRecordingState(parsed.data as RecordingState);
+        }
+        if (parsed.category === "recording" && parsed.type === "library") {
+          setRecordings(parsed.data as RecordingLibrary);
         }
 
         if (parsed.category === "log" && parsed.type === "cleared") {
@@ -283,7 +472,7 @@ export function useDeckEvents(): DeckEventsState {
         sock = null;
       }
     };
-  }, [pushLogLine, refreshStatus]);
+  }, [pushLogLine, refreshRecordingState, refreshRecordings, refreshStatus]);
 
   return useMemo(
     () => ({
@@ -293,9 +482,21 @@ export function useDeckEvents(): DeckEventsState {
       wsReleasedActions,
       wsSessionEpoch,
       logLines,
+      recordingState,
+      recordings,
       pushLogLine,
       clearServerLog,
       refreshStatus,
+      refreshRecordings,
+      refreshRecordingState,
+      startRecording: startRecordingAction,
+      stopRecording: stopRecordingAction,
+      playRecording: playRecordingAction,
+      stopRecordingPlayback: stopPlaybackAction,
+      renameRecording: renameRecordingAction,
+      deleteRecording: deleteRecordingAction,
+      uploadRecording: uploadRecordingAction,
+      recordingDownloadUrl,
     }),
     [
       status,
@@ -304,9 +505,20 @@ export function useDeckEvents(): DeckEventsState {
       wsReleasedActions,
       wsSessionEpoch,
       logLines,
+      recordingState,
+      recordings,
       pushLogLine,
       clearServerLog,
       refreshStatus,
+      refreshRecordings,
+      refreshRecordingState,
+      startRecordingAction,
+      stopRecordingAction,
+      playRecordingAction,
+      stopPlaybackAction,
+      renameRecordingAction,
+      deleteRecordingAction,
+      uploadRecordingAction,
     ],
   );
 }

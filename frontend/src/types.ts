@@ -38,3 +38,64 @@ export interface CommandRejectedBody {
   reason: string;
   message: string;
 }
+
+export interface RecordingPressEvent {
+  type: "press";
+  action: JogAction;
+  duration_ms: number;
+}
+
+export interface RecordingDelayEvent {
+  type: "delay";
+  duration_ms: number;
+}
+
+export interface RecordingWaitLedEvent {
+  type: "wait_led";
+  match: { active: boolean };
+  poll_interval_ms: number;
+  timeout_ms: number;
+}
+
+export interface RecordingWaitDdcEvent {
+  type: "wait_ddc";
+  match: Record<string, unknown>;
+  poll_interval_ms: number;
+  timeout_ms: number;
+}
+
+export type RecordingEvent =
+  | RecordingPressEvent
+  | RecordingDelayEvent
+  | RecordingWaitLedEvent
+  | RecordingWaitDdcEvent;
+
+export interface RecordingSummary {
+  id: string;
+  filename: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  event_count: number;
+  duration_ms: number;
+  size_bytes: number;
+}
+
+export interface RecordingLibrary {
+  items: RecordingSummary[];
+}
+
+export interface RecordingState {
+  mode: "idle" | "recording" | "replaying";
+  recording_started_at: string | null;
+  replaying_id: string | null;
+  active_name: string | null;
+  event_count: number;
+  last_error: string | null;
+}
+
+export interface RecordingRejectedBody {
+  error: "recording_rejected";
+  reason: string;
+  message: string;
+}

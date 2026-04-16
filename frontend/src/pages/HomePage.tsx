@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
 
+import { ConfirmDialog } from "../components/ConfirmDialog";
 import { JogPad } from "../components/JogPad";
 import { LedIndicator } from "../components/LedIndicator";
 import { Popup } from "../components/Popup";
+import { RecordingWorkspace } from "../components/RecordingWorkspace";
 import { VersionBadge } from "../components/VersionBadge";
 import type { DeckEventsState } from "../hooks/useDeckEvents";
+import type { RecordingSummary } from "../types";
 import { CalendarWidget } from "../widgets/CalendarWidget";
 import { JogWidget } from "../widgets/JogWidget";
 import { LiveLogWidget } from "../widgets/LiveLogWidget";
@@ -15,6 +18,8 @@ import styles from "./HomePage.module.css";
 
 export function HomePage({ deck }: { deck: DeckEventsState }) {
   const [osdOpen, setOsdOpen] = useState(false);
+  const [recordingsOpen, setRecordingsOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<RecordingSummary | null>(null);
   // The popup must not close when clicking inside the JogPad column.
   const jogColRef = useRef<HTMLDivElement>(null);
 
@@ -34,11 +39,9 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
         <button
           className={styles.recordButton}
           type="button"
-          aria-label="Record sequence (not yet active)"
-          title="Record sequence - coming in Phase 16"
-          onClick={() => {
-            deck.pushLogLine("record — not wired yet");
-          }}
+          aria-label="Open recording workspace"
+          title="Open recording workspace"
+          onClick={() => setRecordingsOpen(true)}
         >
           <span className={styles.recordGlyph} aria-hidden="true" />
         </button>
@@ -86,6 +89,38 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
       >
         <OsdMockPanel />
       </Popup>
+
+      <Popup
+        open={recordingsOpen}
+        onClose={() => setRecordingsOpen(false)}
+        position="right"
+        ignoreRef={jogColRef}
+        title="Recordings"
+        size="workspace"
+      >
+        <RecordingWorkspace deck={deck} onRequestDelete={setPendingDelete} />
+      </Popup>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        title="Delete Recording"
+        message={
+          pendingDelete
+            ? `Delete "${pendingDelete.name}"? This removes the saved macro from the Pi.`
+            : ""
+        }
+        confirmLabel="Delete"
+        cancelLabel="Keep"
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => {
+          const item = pendingDelete;
+          if (!item) {
+            return;
+          }
+          setPendingDelete(null);
+          void deck.deleteRecording(item.id);
+        }}
+      />
     </div>
   );
 }

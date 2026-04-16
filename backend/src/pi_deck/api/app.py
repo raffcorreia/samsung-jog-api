@@ -19,7 +19,9 @@ from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.hardware_facade import build_hardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.observation_bus import ObservationBusService
+from pi_deck.services.recordings import RecordingService
 from pi_deck.services.ws_hub import WsHub
+from pi_deck.storage.recordings import RecordingStore
 
 # Path written by scripts/deploy.sh on each deployment.
 _DEPLOY_COUNTER_FILE = Path.home() / ".pi-deck-deploy"
@@ -68,13 +70,22 @@ async def lifespan(app: FastAPI):
     hw = build_hardware()
     version = _build_version()
     deck = DeckControlService(hardware=hw, ws_hub=hub, live_log=live_log, version=version)
+    recordings = RecordingService(
+        store=RecordingStore(),
+        ws_hub=hub,
+        live_log=live_log,
+        deck=deck,
+        hardware=hw,
+    )
     observation = ObservationBusService(ws_hub=hub, live_log=live_log, hardware=hw)
+    observation.add_listener(recordings.observe_event)
     observation.start(asyncio.get_running_loop())
     app.state.ws_hub = hub
     app.state.live_log = live_log
     app.state.deck = deck
     app.state.hw = hw
     app.state.observation = observation
+    app.state.recordings = recordings
     logger.info("pi-deck hardware mode: %s  version: %s", hw.kind, version)
     yield
     await observation.stop()
