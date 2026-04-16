@@ -7,6 +7,11 @@ import { annulusSectorPath } from "./jogGeometry";
 
 import styles from "./JogPad.module.css";
 
+/** Minimum time a sector looks pressed (UI-only; drive timing unchanged). */
+const MIN_PRESSED_VISUAL_MS = 160;
+
+const JOG_ACTIONS: readonly JogAction[] = ["up", "down", "left", "right", "center"];
+
 const VB = 200;
 const CX = 100;
 const CY = 100;
@@ -74,6 +79,10 @@ function emptyOptimistic(): Record<JogAction, boolean> {
   };
 }
 
+function emptyVisual(): Record<JogAction, boolean> {
+  return emptyOptimistic();
+}
+
 function JogPadInner(props: {
   hardwareHeld: Record<JogAction, boolean>;
   wsReleaseTick: number;
@@ -85,14 +94,120 @@ function JogPadInner(props: {
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
   const [optimistic, setOptimistic] = useState(() => emptyOptimistic());
+  /**
+   * Pointer-only highlight (not merged into wire ``truth``) so REST + ``bus/snapshot`` stay aligned
+   * with ``hardwareHeld`` / optimistic; still shows a flash on slow clients before hold ACK.
+   */
+  const [pointerGlow, setPointerGlow] = useState(() => emptyOptimistic());
+  /** Display-only pressed state from wire truth (may lag by up to ``MIN_PRESSED_VISUAL_MS`` on release). */
+  const [visualHeld, setVisualHeld] = useState(() => emptyVisual());
+  const prevTruthRef = useRef<Record<JogAction, boolean>>(emptyVisual());
+  const pressStartMsRef = useRef<Partial<Record<JogAction, number>>>({});
+  const hideTimerRef = useRef<Partial<Record<JogAction, ReturnType<typeof setTimeout>>>>({});
+  const pointerGlowStartMsRef = useRef<Partial<Record<JogAction, number>>>({});
+  const pointerGlowHideTimerRef = useRef<Partial<Record<JogAction, ReturnType<typeof setTimeout>>>>({});
+  const latestTruthRef = useRef<Record<JogAction, boolean>>(emptyVisual());
+  const sessionEpochSeenRef = useRef(wsSessionEpoch);
 
-  /* New websocket session (including first ``connected``): clear stale pointer holds. */
-  useEffect(() => {
-    for (const rec of ptrMapRef.current.values()) {
-      rec.holdEstablished = false;
+  for (const a of JOG_ACTIONS) {
+    latestTruthRef.current[a] = Boolean(hardwareHeld[a]) || Boolean(optimistic[a]);
+  }
+
+  const clearHideTimer = useCallback((a: JogAction) => {
+    const t = hideTimerRef.current[a];
+    if (t !== undefined) {
+      clearTimeout(t);
+      delete hideTimerRef.current[a];
     }
-    setOptimistic(emptyOptimistic());
-  }, [wsSessionEpoch]);
+  }, []);
+
+  const clearPointerGlowHideTimer = useCallback((a: JogAction) => {
+    const t = pointerGlowHideTimerRef.current[a];
+    if (t !== undefined) {
+      clearTimeout(t);
+      delete pointerGlowHideTimerRef.current[a];
+    }
+  }, []);
+
+  /* Truth edges + minimum visible press duration (display only). On websocket reconnect, snap
+   * visual state to wire (no artificial delay) so nothing stays stuck. */
+  useEffect(() => {
+    const epochChanged = sessionEpochSeenRef.current !== wsSessionEpoch;
+    sessionEpochSeenRef.current = wsSessionEpoch;
+
+    if (epochChanged) {
+      for (const rec of ptrMapRef.current.values()) {
+        rec.holdEstablished = false;
+      }
+      setOptimistic(emptyOptimistic());
+      setPointerGlow(emptyOptimistic());
+      for (const a of JOG_ACTIONS) {
+        clearHideTimer(a);
+        clearPointerGlowHideTimer(a);
+        delete pointerGlowStartMsRef.current[a];
+      }
+      const snap = emptyVisual();
+      for (const a of JOG_ACTIONS) {
+        const w = Boolean(hardwareHeld[a]);
+        snap[a] = w;
+        prevTruthRef.current[a] = w;
+        if (w) {
+          pressStartMsRef.current[a] = performance.now();
+        } else {
+          delete pressStartMsRef.current[a];
+        }
+      }
+      setVisualHeld(snap);
+      return;
+    }
+
+    for (const a of JOG_ACTIONS) {
+      const truth = Boolean(hardwareHeld[a]) || Boolean(optimistic[a]);
+      const prev = prevTruthRef.current[a];
+      if (truth === prev) {
+        continue;
+      }
+      if (truth && !prev) {
+        clearHideTimer(a);
+        pressStartMsRef.current[a] = performance.now();
+        setVisualHeld((v) => ({ ...v, [a]: true }));
+      } else if (!truth && prev) {
+        const start = pressStartMsRef.current[a];
+        const elapsed =
+          start !== undefined ? performance.now() - start : MIN_PRESSED_VISUAL_MS;
+        const rem = Math.max(0, MIN_PRESSED_VISUAL_MS - elapsed);
+        clearHideTimer(a);
+        if (rem <= 0) {
+          delete pressStartMsRef.current[a];
+          setVisualHeld((v) => ({ ...v, [a]: false }));
+        } else {
+          hideTimerRef.current[a] = window.setTimeout(() => {
+            delete hideTimerRef.current[a];
+            if (!latestTruthRef.current[a]) {
+              setVisualHeld((v) => ({ ...v, [a]: false }));
+            }
+            delete pressStartMsRef.current[a];
+          }, rem);
+        }
+      }
+      prevTruthRef.current[a] = truth;
+    }
+  }, [clearHideTimer, clearPointerGlowHideTimer, hardwareHeld, optimistic, wsSessionEpoch]);
+
+  useEffect(() => {
+    return () => {
+      for (const a of JOG_ACTIONS) {
+        const t = hideTimerRef.current[a];
+        if (t !== undefined) {
+          clearTimeout(t);
+        }
+        const pt = pointerGlowHideTimerRef.current[a];
+        if (pt !== undefined) {
+          clearTimeout(pt);
+        }
+      }
+    };
+  }, []);
 
   /* Drop optimistic overlay once observation stream confirms the hold. */
   useEffect(() => {
@@ -169,11 +284,26 @@ function JogPadInner(props: {
         /* Always clear local optimistic for this gesture so a tab never sticks “pressed”
          * if the wire already idled or REST errored. */
         setOptimistic((o) => ({ ...o, [action]: false }));
+        const g0 = pointerGlowStartMsRef.current[action];
+        const gElapsed =
+          g0 !== undefined ? performance.now() - g0 : MIN_PRESSED_VISUAL_MS;
+        const gRem = Math.max(0, MIN_PRESSED_VISUAL_MS - gElapsed);
+        clearPointerGlowHideTimer(action);
+        if (gRem <= 0) {
+          delete pointerGlowStartMsRef.current[action];
+          setPointerGlow((o) => ({ ...o, [action]: false }));
+        } else {
+          pointerGlowHideTimerRef.current[action] = window.setTimeout(() => {
+            delete pointerGlowHideTimerRef.current[action];
+            delete pointerGlowStartMsRef.current[action];
+            setPointerGlow((o) => ({ ...o, [action]: false }));
+          }, gRem);
+        }
         ptrMapRef.current.delete(pointerId);
         rec.releaseInFlight = false;
       }
     },
-    [onLocalLog],
+    [clearPointerGlowHideTimer, onLocalLog],
   );
 
   const onSurfacePointerDown = (ev: PointerEvent<HTMLDivElement>) => {
@@ -208,6 +338,10 @@ function JogPadInner(props: {
       releaseInFlight: false,
     };
     ptrMapRef.current.set(ev.pointerId, rec);
+
+    clearPointerGlowHideTimer(action);
+    pointerGlowStartMsRef.current[action] = performance.now();
+    setPointerGlow((o) => ({ ...o, [action]: true }));
 
     void jogHold(action)
       .then((r) => {
@@ -275,12 +409,8 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.up}`}
-            aria-pressed={
-              isHeldOnWire(hardwareHeld, "up") || optimistic.up
-            }
-            data-pressed={
-              isHeldOnWire(hardwareHeld, "up") || optimistic.up ? "true" : undefined
-            }
+            aria-pressed={visualHeld.up || pointerGlow.up}
+            data-pressed={visualHeld.up || pointerGlow.up ? "true" : undefined}
             data-optimistic={
               optimistic.up && !isHeldOnWire(hardwareHeld, "up") ? "true" : undefined
             }
@@ -292,10 +422,8 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.right}`}
-            aria-pressed={isHeldOnWire(hardwareHeld, "right") || optimistic.right}
-            data-pressed={
-              isHeldOnWire(hardwareHeld, "right") || optimistic.right ? "true" : undefined
-            }
+            aria-pressed={visualHeld.right || pointerGlow.right}
+            data-pressed={visualHeld.right || pointerGlow.right ? "true" : undefined}
             data-optimistic={
               optimistic.right && !isHeldOnWire(hardwareHeld, "right") ? "true" : undefined
             }
@@ -307,10 +435,8 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.down}`}
-            aria-pressed={isHeldOnWire(hardwareHeld, "down") || optimistic.down}
-            data-pressed={
-              isHeldOnWire(hardwareHeld, "down") || optimistic.down ? "true" : undefined
-            }
+            aria-pressed={visualHeld.down || pointerGlow.down}
+            data-pressed={visualHeld.down || pointerGlow.down ? "true" : undefined}
             data-optimistic={
               optimistic.down && !isHeldOnWire(hardwareHeld, "down") ? "true" : undefined
             }
@@ -322,10 +448,8 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.left}`}
-            aria-pressed={isHeldOnWire(hardwareHeld, "left") || optimistic.left}
-            data-pressed={
-              isHeldOnWire(hardwareHeld, "left") || optimistic.left ? "true" : undefined
-            }
+            aria-pressed={visualHeld.left || pointerGlow.left}
+            data-pressed={visualHeld.left || pointerGlow.left ? "true" : undefined}
             data-optimistic={
               optimistic.left && !isHeldOnWire(hardwareHeld, "left") ? "true" : undefined
             }
@@ -336,10 +460,8 @@ function JogPadInner(props: {
           className={styles.centerBtn}
           data-jog-action="center"
           aria-label={`Jog ${SEGMENT_LABELS.center}`}
-          aria-pressed={isHeldOnWire(hardwareHeld, "center") || optimistic.center}
-          data-pressed={
-            isHeldOnWire(hardwareHeld, "center") || optimistic.center ? "true" : undefined
-          }
+          aria-pressed={visualHeld.center || pointerGlow.center}
+          data-pressed={visualHeld.center || pointerGlow.center ? "true" : undefined}
           data-optimistic={
             optimistic.center && !isHeldOnWire(hardwareHeld, "center") ? "true" : undefined
           }
