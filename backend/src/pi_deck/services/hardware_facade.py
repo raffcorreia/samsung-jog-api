@@ -9,6 +9,7 @@ from typing import Protocol, runtime_checkable
 
 from pi_deck.hardware.ads1115 import Ads1115
 from pi_deck.hardware.ads_alert_pin import AdsAlertPin
+from pi_deck.hardware.ads_alert_rpi_gpio import AdsAlertPinRpi
 from pi_deck.hardware.jog_drive import JogDrive
 from pi_deck.hardware.jog_observe import KeyAdc1Observe
 from pi_deck.hardware.key_adc2_decode import decode_key_adc2_direction
@@ -44,11 +45,16 @@ class LiveDeckHardware:
     """Protoboard GPIO stack (Phase 6 map)."""
 
     def __init__(self, pins: ProtoboardPins | None = None) -> None:
+        import os
+
         self._pins = pins or ProtoboardPins()
         self._drive = JogDrive(self._pins)
         self._adc1 = KeyAdc1Observe(self._pins)
         self._led = KeyLedObserve(self._pins)
-        self._ads_alert = AdsAlertPin(self._pins.ads_alert)
+        if os.environ.get("PI_DECK_ADS_ALERT_BACKEND", "").strip().lower() == "rpi":
+            self._ads_alert: AdsAlertPin | AdsAlertPinRpi = AdsAlertPinRpi(self._pins.ads_alert)
+        else:
+            self._ads_alert = AdsAlertPin(self._pins.ads_alert)
         self._ads: Ads1115 | None = None
         try:
             ads = Ads1115()
@@ -70,7 +76,7 @@ class LiveDeckHardware:
         return self._led
 
     @property
-    def ads_alert_pin(self) -> AdsAlertPin:
+    def ads_alert_pin(self) -> AdsAlertPin | AdsAlertPinRpi:
         return self._ads_alert
 
     @property
@@ -164,10 +170,16 @@ def _gpiozero_pin_factory_for_live() -> None:
 
     Prefer **lgpio** (Pi 5 / Bookworm) so edge IRQs work for inputs + outputs; fall back to **rpigpio**
     (RPi.GPIO) on older images. Override with ``GPIOZERO_PIN_FACTORY`` if needed.
+
+    If ``PI_DECK_ADS_ALERT_BACKEND=rpi``, raw ``RPi.GPIO`` is used for ALERT (see ``AdsAlertPinRpi``);
+    gpiozero must use **rpigpio** so everything shares one RPi.GPIO stack.
     """
     import os
 
     if os.environ.get("GPIOZERO_PIN_FACTORY"):
+        return
+    if os.environ.get("PI_DECK_ADS_ALERT_BACKEND", "").strip().lower() == "rpi":
+        os.environ["GPIOZERO_PIN_FACTORY"] = "rpigpio"
         return
     try:
         import lgpio  # noqa: F401
