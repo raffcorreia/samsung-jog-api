@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Callable
 
 from pi_deck.hardware.protoboard_pins import ProtoboardPins
+
+logger = logging.getLogger(__name__)
 
 
 def _rpi_gpio():
@@ -34,12 +37,15 @@ class KeyAdc1Observe:
         GPIO = _rpi_gpio()
         return GPIO.input(self._bcm) == GPIO.HIGH
 
-    def enable_edge_detect(self, on_edge: Callable[[], None], *, bouncetime_ms: int = 25) -> None:
-        """Register BOTH-edge detection; ``on_edge`` runs on RPi.GPIO's helper thread — keep it tiny."""
+    def enable_edge_detect(self, on_edge: Callable[[], None], *, bouncetime_ms: int = 25) -> bool:
+        """Register BOTH-edge detection; ``on_edge`` runs on RPi.GPIO's helper thread — keep it tiny.
+
+        Returns False on platforms where RPi.GPIO edge detection is unavailable (caller uses poll).
+        """
         import sys
 
         if sys.platform != "linux":
-            return
+            return False
         self.disable_edge_detect()
         self._edge_cb = on_edge
         GPIO = _rpi_gpio()
@@ -48,7 +54,17 @@ class KeyAdc1Observe:
             if self._edge_cb is not None:
                 self._edge_cb()
 
-        GPIO.add_event_detect(self._bcm, GPIO.BOTH, callback=_wrapped, bouncetime=bouncetime_ms)
+        try:
+            GPIO.add_event_detect(self._bcm, GPIO.BOTH, callback=_wrapped, bouncetime=bouncetime_ms)
+        except Exception as e:
+            self._edge_cb = None
+            logger.warning(
+                "KEY_ADC1 BCM %s: add_event_detect failed (%s); telemetry falls back to asyncio poll",
+                self._bcm,
+                e,
+            )
+            return False
+        return True
 
     def disable_edge_detect(self) -> None:
         import sys

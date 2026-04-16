@@ -75,6 +75,8 @@ class ObservationBusService:
             name="observation-telemetry",
         )
 
+        self._install_live_gpio_edges(live_hw)
+
         self._alert_stop.clear()
         self._alert_thread = threading.Thread(
             target=self._alert_gpio_loop,
@@ -83,7 +85,6 @@ class ObservationBusService:
             daemon=True,
         )
         self._alert_thread.start()
-        self._install_live_gpio_edges(live_hw)
 
     def _schedule_sample_from_notifier(self) -> None:
         loop = self._loop
@@ -142,13 +143,21 @@ class ObservationBusService:
         def _kick() -> None:
             self._schedule_observe_from_thread(hw)
 
-        hw.adc1_observer.enable_edge_detect(_kick)
-        hw.led_observer.enable_edge_detect(_kick)
-        logger.info(
-            "observation: KEY_ADC1 / KEY_LED BOTH-edge detect (bouncetime) on BCM %s / %s",
-            hw.pins.key_adc1_digital,
-            hw.pins.key_led_digital,
-        )
+        ok_adc1 = hw.adc1_observer.enable_edge_detect(_kick)
+        ok_led = hw.led_observer.enable_edge_detect(_kick)
+        if ok_adc1 and ok_led:
+            logger.info(
+                "observation: KEY_ADC1 / KEY_LED BOTH-edge detect (bouncetime) on BCM %s / %s",
+                hw.pins.key_adc1_digital,
+                hw.pins.key_led_digital,
+            )
+        else:
+            logger.warning(
+                "observation: GPIO edge IRQs unavailable for KEY_ADC1=%s KEY_LED=%s "
+                "(common on Pi 5 / newer kernels); using asyncio poll only for those lines",
+                ok_adc1,
+                ok_led,
+            )
 
     def _schedule_observe_from_thread(self, hw: LiveDeckHardware) -> None:
         loop = self._loop
@@ -219,8 +228,13 @@ class ObservationBusService:
         while not self._alert_stop.is_set():
             try:
                 ch = GPIO.wait_for_edge(bcm, GPIO.BOTH, timeout=_ALERT_EDGE_TIMEOUT_MS)
-            except Exception:
-                logger.exception("observation: wait_for_edge on BCM %s", bcm)
+            except Exception as e:
+                logger.warning(
+                    "observation: wait_for_edge unsupported or failed on BCM %s (%s); "
+                    "ADS telemetry uses asyncio poll only",
+                    bcm,
+                    e,
+                )
                 break
             if self._alert_stop.is_set():
                 break

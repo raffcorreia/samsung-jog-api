@@ -24,9 +24,14 @@ Continuous AIN0 at 250 SPS with ALERT as conversion-ready is appropriate for fee
 
 With ALERT and GPIO wiring connected, exercise KEY1 / KEY2 and LED: expect timely `bus/snapshot` and bus log lines. If anything still depends on the slow poll alone, it will show up as a delay of ~25 ms worst case rather than IRQ-limited latency.
 
+## RPi.GPIO edge limitations (Pi 5 / newer stacks)
+
+On some images, ``add_event_detect`` / ``wait_for_edge`` raise at runtime (e.g. ``Failed to add edge detection``, ``Error waiting for edge``). The service **does not fail startup**: KEY lines and ADS ALERT fall back to the asyncio ~25 ms poll path only. For full IRQ support on newer Pis, investigate ``lgpio`` / libgpiod-based factories (separate from this fallback).
+
 ## Revision history
 
 | When | Notes |
 |------|--------|
 | Phase 15 ship | Poll + ADS `wait_for_edge` only; KEY lines level-polled in snapshot |
 | IRQ-first follow-up | BOTH-edge on KEY_ADC1 / KEY_LED + coalesced observe path shared with ALERT |
+| Graceful fallback | If RPi.GPIO edges are unavailable, log warning and use poll-only (no crash) |
