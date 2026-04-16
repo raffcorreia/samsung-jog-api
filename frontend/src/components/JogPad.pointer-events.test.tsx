@@ -15,7 +15,7 @@ const defaultProps = {
     center: false,
   },
   wsReleaseTick: 0,
-  wsLastReleasedAction: null,
+  wsReleasedActions: [],
   wsSessionEpoch: 0,
   onLocalLog: vi.fn(),
 };

@@ -77,11 +77,11 @@ function emptyOptimistic(): Record<JogAction, boolean> {
 function JogPadInner(props: {
   hardwareHeld: Record<JogAction, boolean>;
   wsReleaseTick: number;
-  wsLastReleasedAction: JogAction | null;
+  wsReleasedActions: readonly JogAction[];
   wsSessionEpoch: number;
   onLocalLog: (line: string) => void;
 }) {
-  const { hardwareHeld, wsReleaseTick, wsLastReleasedAction, wsSessionEpoch, onLocalLog } = props;
+  const { hardwareHeld, wsReleaseTick, wsReleasedActions, wsSessionEpoch, onLocalLog } = props;
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
   const [optimistic, setOptimistic] = useState(() => emptyOptimistic());
@@ -110,21 +110,31 @@ function JogPadInner(props: {
     });
   }, [hardwareHeld]);
 
-  /* Observation shows release (peer / watchdog): drop matching pointer hold so pointer-up does not send a bogus release. */
+  /* Wire released (peer tab, watchdog, or own gesture completing on the bus): clear optimistic
+   * overlay and drop local hold bookkeeping so we never show “stuck pressed” after remote idle. */
   useEffect(() => {
-    if (wsReleaseTick === 0) {
+    if (wsReleaseTick === 0 || wsReleasedActions.length === 0) {
       return;
     }
-    const a = wsLastReleasedAction;
-    if (!a) {
-      return;
-    }
+    const released = new Set(wsReleasedActions);
+    setOptimistic((prev) => {
+      let next = prev;
+      for (const a of released) {
+        if (prev[a]) {
+          if (next === prev) {
+            next = { ...prev };
+          }
+          next[a] = false;
+        }
+      }
+      return next;
+    });
     for (const rec of ptrMapRef.current.values()) {
-      if (rec.action === a && rec.holdEstablished) {
+      if (released.has(rec.action) && rec.holdEstablished) {
         rec.holdEstablished = false;
       }
     }
-  }, [wsReleaseTick, wsLastReleasedAction]);
+  }, [wsReleaseTick, wsReleasedActions]);
 
   const releasePointer = useCallback(
     async (pointerId: number) => {
@@ -136,6 +146,7 @@ function JogPadInner(props: {
         return;
       }
       rec.releaseInFlight = true;
+      const action = rec.action;
       try {
         try {
           await rec.downPromise;
@@ -145,7 +156,6 @@ function JogPadInner(props: {
         if (!rec.holdEstablished) {
           return;
         }
-        const action = rec.action;
         try {
           const r = await releaseJog(action);
           if (!r.ok) {
@@ -156,6 +166,9 @@ function JogPadInner(props: {
           onLocalLog(`jog release failed — ${msg}`);
         }
       } finally {
+        /* Always clear local optimistic for this gesture so a tab never sticks “pressed”
+         * if the wire already idled or REST errored. */
+        setOptimistic((o) => ({ ...o, [action]: false }));
         ptrMapRef.current.delete(pointerId);
         rec.releaseInFlight = false;
       }

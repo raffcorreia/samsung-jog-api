@@ -51,9 +51,10 @@ export interface DeckEventsState {
   status: StatusPayload | null;
   /** Observed jog actuation from ``bus/snapshot`` / ``status.signals`` (hardware truth). */
   hardwareHeld: Record<JogAction, boolean>;
-  /** Increments when observation shows a key no longer held (peer sync / watchdog). */
+  /** Increments when observation shows key(s) no longer held (peer sync / watchdog). */
   wsReleaseTick: number;
-  wsLastReleasedAction: JogAction | null;
+  /** Actions that transitioned held→idle on the wire for this tick (may be multiple). */
+  wsReleasedActions: readonly JogAction[];
   /** Increments on each websocket ``connected`` so JogPad clears stale pointers. */
   wsSessionEpoch: number;
   logLines: readonly string[];
@@ -77,7 +78,7 @@ function parseWs(raw: string): WsEventV1 | null {
 export function useDeckEvents(): DeckEventsState {
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [wsReleaseTick, setWsReleaseTick] = useState(0);
-  const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
+  const [wsReleasedActions, setWsReleasedActions] = useState<readonly JogAction[]>([]);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
   const prevSignalsRef = useRef<SignalSnapshot | null>(null);
@@ -161,7 +162,7 @@ export function useDeckEvents(): DeckEventsState {
             prevSignalsRef.current = st.signals;
           }
           setWsReleaseTick(0);
-          setWsLastReleasedAction(null);
+          setWsReleasedActions([]);
           setWsSessionEpoch((e) => e + 1);
           setLogLines([]);
         }
@@ -205,11 +206,15 @@ export function useDeckEvents(): DeckEventsState {
           if (prev) {
             const pHeld = signalsToHardwareHeld(prev);
             const nHeld = signalsToHardwareHeld(nextSig);
+            const released: JogAction[] = [];
             for (const a of JOG_ACTIONS) {
               if (pHeld[a] && !nHeld[a]) {
-                setWsLastReleasedAction(a);
-                setWsReleaseTick((n) => n + 1);
+                released.push(a);
               }
+            }
+            if (released.length > 0) {
+              setWsReleasedActions(released);
+              setWsReleaseTick((n) => n + 1);
             }
           }
           prevSignalsRef.current = nextSig;
@@ -291,7 +296,7 @@ export function useDeckEvents(): DeckEventsState {
       status,
       hardwareHeld,
       wsReleaseTick,
-      wsLastReleasedAction,
+      wsReleasedActions,
       wsSessionEpoch,
       logLines,
       pushLogLine,
@@ -302,7 +307,7 @@ export function useDeckEvents(): DeckEventsState {
       status,
       hardwareHeld,
       wsReleaseTick,
-      wsLastReleasedAction,
+      wsReleasedActions,
       wsSessionEpoch,
       logLines,
       pushLogLine,

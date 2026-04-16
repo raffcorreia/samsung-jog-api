@@ -19,7 +19,7 @@ describe("JogPad touch / kiosk contract", () => {
           center: false,
         }}
         wsReleaseTick={0}
-        wsLastReleasedAction={null}
+        wsReleasedActions={[]}
         wsSessionEpoch={0}
         onLocalLog={() => {}}
       />,
@@ -39,7 +39,7 @@ describe("JogPad touch / kiosk contract", () => {
           center: false,
         }}
         wsReleaseTick={0}
-        wsLastReleasedAction={null}
+        wsReleasedActions={[]}
         wsSessionEpoch={0}
         onLocalLog={() => {}}
       />,
