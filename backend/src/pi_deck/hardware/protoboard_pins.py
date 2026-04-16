@@ -34,7 +34,7 @@ class ProtoboardPins:
 
     i2c_sda: int = 2
     i2c_scl: int = 3
-    # ADS1115 ALERT/RDY → ``wait_for_edge`` in observation_bus + I²C poll backup.
+    # ADS1115 ALERT/RDY → ``wait_for_edge`` in observation_bus + asyncio poll watchdog.
     ads_alert: int = 17
     key_adc1_digital: int = 27
     key_led_digital: int = 22

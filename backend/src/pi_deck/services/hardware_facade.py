@@ -155,8 +155,8 @@ class MockDeckHardware:
 def _gpiozero_pin_factory_for_live() -> None:
     """Use RPi.GPIO for gpiozero outputs (JogDrive). Native sysfs often fails export on older Pis.
 
-    KEY_ADC1 / KEY_LED observation uses direct ``RPi.GPIO`` polling (no edge IRQs). Override with
-    ``GPIOZERO_PIN_FACTORY`` if needed (e.g. ``lgpio`` on Pi 4+ Bookworm).
+    KEY_ADC1 / KEY_LED observation uses ``RPi.GPIO`` for input levels and BOTH-edge ``add_event_detect``
+    (ObservationBusService). Override with ``GPIOZERO_PIN_FACTORY`` if needed (e.g. ``lgpio`` on Pi 4+ Bookworm).
     """
     import os
 

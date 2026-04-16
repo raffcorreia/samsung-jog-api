@@ -1,7 +1,9 @@
 """Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
 Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED are emitted **only** from this service, driven
-by ``read_bus_snapshot()`` on the hardware facade (poll + ADS ALERT edge on live hardware).
+by ``read_bus_snapshot()`` on the hardware facade. On live hardware, KEY_ADC1 / KEY_LED use
+RPi.GPIO BOTH-edge callbacks plus a ~25 ms asyncio poll as watchdog; ADS1115 uses ALERT/RDY
+(``wait_for_edge``) with the same coalesced observe path as GPIO edges.
 
 ``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
 """
@@ -17,6 +19,7 @@ from typing import cast
 from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
 from pi_deck.services.hardware_facade import DeckHardwareFacade, LiveDeckHardware, MockDeckHardware
 from pi_deck.services.live_log import LiveLogService, bus_delta_log_messages
+from pi_deck.services.observation_coalesce import CoalesceGate
 from pi_deck.services.ws_hub import WsHub
 
 logger = logging.getLogger(__name__)
@@ -42,11 +45,15 @@ class ObservationBusService:
         self._poll_task: asyncio.Task[None] | None = None
         self._alert_thread: threading.Thread | None = None
         self._alert_stop = threading.Event()
+        self._observe_lock: asyncio.Lock | None = None
+        self._edge_coalesce = CoalesceGate()
         self._last_signals: SignalSnapshot | None = None
         self._led_prev: bool | None = None
 
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
         self._loop = loop
+        self._observe_lock = asyncio.Lock()
+        self._edge_coalesce.reset()
         hw = self._hardware
         kind = getattr(hw, "kind", None)
 
@@ -76,6 +83,7 @@ class ObservationBusService:
             daemon=True,
         )
         self._alert_thread.start()
+        self._install_live_gpio_edges(live_hw)
 
     def _schedule_sample_from_notifier(self) -> None:
         loop = self._loop
@@ -99,6 +107,13 @@ class ObservationBusService:
         fut.add_done_callback(_log_done)
 
     async def stop(self) -> None:
+        hw = self._hardware
+        if getattr(hw, "kind", None) == "live":
+            live = cast(LiveDeckHardware, hw)
+            live.adc1_observer.disable_edge_detect()
+            live.led_observer.disable_edge_detect()
+        self._edge_coalesce.reset()
+
         self._alert_stop.set()
         if self._alert_thread is not None:
             self._alert_thread.join(timeout=3.0)
@@ -117,6 +132,55 @@ class ObservationBusService:
             cast(MockDeckHardware, hw).set_change_notifier(None)
 
         self._loop = None
+        self._observe_lock = None
+
+    def _install_live_gpio_edges(self, hw: LiveDeckHardware) -> None:
+        """RPi.GPIO edge callbacks (helper thread) only schedule asyncio work — never block the loop."""
+        if sys.platform != "linux":
+            return
+
+        def _kick() -> None:
+            self._schedule_observe_from_thread(hw)
+
+        hw.adc1_observer.enable_edge_detect(_kick)
+        hw.led_observer.enable_edge_detect(_kick)
+        logger.info(
+            "observation: KEY_ADC1 / KEY_LED BOTH-edge detect (bouncetime) on BCM %s / %s",
+            hw.pins.key_adc1_digital,
+            hw.pins.key_led_digital,
+        )
+
+    def _schedule_observe_from_thread(self, hw: LiveDeckHardware) -> None:
+        loop = self._loop
+        if loop is None:
+            return
+        if not self._edge_coalesce.request_from_thread():
+            return
+
+        fut = asyncio.run_coroutine_threadsafe(self._coalesced_edge_observe_loop(hw), loop)
+
+        def _log_done(f: asyncio.Future[None]) -> None:
+            try:
+                exc = f.exception()
+            except asyncio.CancelledError:
+                return
+            if exc is not None:
+                logger.error("observation: coalesced edge observe failed", exc_info=exc)
+
+        fut.add_done_callback(_log_done)
+
+    async def _coalesced_edge_observe_loop(self, hw: LiveDeckHardware) -> None:
+        try:
+            while True:
+                await self._observe_signals(hw)
+                if not self._edge_coalesce.should_continue_after_round():
+                    break
+        except asyncio.CancelledError:
+            self._edge_coalesce.reset()
+            raise
+        except Exception:
+            logger.exception("observation: coalesced edge observe failed")
+            self._edge_coalesce.reset()
 
     async def _emit(self, event: object) -> None:
         payload = (
@@ -163,25 +227,12 @@ class ObservationBusService:
             if ch is None:
                 continue
 
-            fut = asyncio.run_coroutine_threadsafe(self._sample_after_alert(hw), loop)
-
-            def _log_alert_done(f: asyncio.Future[None]) -> None:
-                try:
-                    exc = f.exception()
-                except asyncio.CancelledError:
-                    return
-                if exc is not None:
-                    logger.error("observation: alert telemetry sample failed", exc_info=exc)
-
-            fut.add_done_callback(_log_alert_done)
+            self._schedule_observe_from_thread(hw)
 
         try:
             GPIO.cleanup(bcm)
         except Exception:
             logger.debug("observation: GPIO.cleanup(%s)", bcm, exc_info=True)
-
-    async def _sample_after_alert(self, hw: LiveDeckHardware) -> None:
-        await self._observe_signals(hw)
 
     async def _mock_telemetry_loop(self, hw: MockDeckHardware) -> None:
         logger.info("observation: mock telemetry poll (interval=%ss)", _POLL_INTERVAL_S)
@@ -202,6 +253,13 @@ class ObservationBusService:
             raise
 
     async def _observe_signals(self, hw: DeckHardwareFacade) -> None:
+        lock = self._observe_lock
+        if lock is None:
+            return
+        async with lock:
+            await self._observe_signals_locked(hw)
+
+    async def _observe_signals_locked(self, hw: DeckHardwareFacade) -> None:
         try:
             snap = hw.read_bus_snapshot()
         except Exception:
