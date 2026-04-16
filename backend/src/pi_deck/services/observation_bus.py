@@ -9,10 +9,10 @@ run an infinite asyncio loop with ``await asyncio.sleep(_POLL_INTERVAL_S)`` (~25
 once (GPIO levels for KEY_ADC1 / KEY_LED and I²C read + decode for KEY_ADC2). Nothing in the
 IRQ fallback path disables this loop.
 
-**Optional extras (when RPi.GPIO supports them):** BOTH-edge callbacks on KEY lines and a thread
-blocking on ADS ALERT ``wait_for_edge`` can schedule extra observations between polls via the same
-``read_bus_snapshot()`` path. If those fail on the platform, telemetry is **poll-only**, not
-telemetry-off.
+**IRQ path (live):** gpiozero ``when_activated`` / ``when_deactivated`` on KEY_ADC1, KEY_LED, and
+ADS ALERT (``lgpio`` factory on Pi 5 / Bookworm; ``rpigpio`` fallback). Those callbacks schedule the
+same ``read_bus_snapshot()`` path via ``run_coroutine_threadsafe``. If edge hooks fail, telemetry
+falls back to asyncio poll only for that line — the service still starts.
 
 ``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
 """
@@ -22,7 +22,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
-import threading
 from typing import cast
 
 from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
@@ -34,7 +33,6 @@ from pi_deck.services.ws_hub import WsHub
 logger = logging.getLogger(__name__)
 
 _POLL_INTERVAL_S = 0.025
-_ALERT_EDGE_TIMEOUT_MS = 500
 
 
 class ObservationBusService:
@@ -52,8 +50,6 @@ class ObservationBusService:
         self._hardware = hardware
         self._loop: asyncio.AbstractEventLoop | None = None
         self._poll_task: asyncio.Task[None] | None = None
-        self._alert_thread: threading.Thread | None = None
-        self._alert_stop = threading.Event()
         self._observe_lock: asyncio.Lock | None = None
         self._edge_coalesce = CoalesceGate()
         self._last_signals: SignalSnapshot | None = None
@@ -85,15 +81,7 @@ class ObservationBusService:
         )
 
         self._install_live_gpio_edges(live_hw)
-
-        self._alert_stop.clear()
-        self._alert_thread = threading.Thread(
-            target=self._alert_gpio_loop,
-            args=(live_hw,),
-            name="ads-alert",
-            daemon=True,
-        )
-        self._alert_thread.start()
+        self._install_ads_alert_edges(live_hw)
 
     def _schedule_sample_from_notifier(self) -> None:
         loop = self._loop
@@ -122,12 +110,8 @@ class ObservationBusService:
             live = cast(LiveDeckHardware, hw)
             live.adc1_observer.disable_edge_detect()
             live.led_observer.disable_edge_detect()
+            live.ads_alert_pin.disable_edge_detect()
         self._edge_coalesce.reset()
-
-        self._alert_stop.set()
-        if self._alert_thread is not None:
-            self._alert_thread.join(timeout=3.0)
-            self._alert_thread = None
 
         if self._poll_task is not None:
             self._poll_task.cancel()
@@ -145,7 +129,7 @@ class ObservationBusService:
         self._observe_lock = None
 
     def _install_live_gpio_edges(self, hw: LiveDeckHardware) -> None:
-        """RPi.GPIO edge callbacks (helper thread) only schedule asyncio work — never block the loop."""
+        """gpiozero edge callbacks (helper thread) only schedule asyncio work — never block the loop."""
         if sys.platform != "linux":
             return
 
@@ -156,16 +140,31 @@ class ObservationBusService:
         ok_led = hw.led_observer.enable_edge_detect(_kick)
         if ok_adc1 and ok_led:
             logger.info(
-                "observation: KEY_ADC1 / KEY_LED BOTH-edge detect (bouncetime) on BCM %s / %s",
+                "observation: KEY_ADC1 / KEY_LED edge IRQs (gpiozero) on BCM %s / %s",
                 hw.pins.key_adc1_digital,
                 hw.pins.key_led_digital,
             )
         else:
             logger.warning(
-                "observation: GPIO edge IRQs unavailable for KEY_ADC1=%s KEY_LED=%s "
-                "(common on Pi 5 / newer kernels); using asyncio poll only for those lines",
+                "observation: KEY edge IRQs partial or off (KEY_ADC1=%s KEY_LED=%s); asyncio poll backup",
                 ok_adc1,
                 ok_led,
+            )
+
+    def _install_ads_alert_edges(self, hw: LiveDeckHardware) -> None:
+        """ADS ALERT/RDY → same coalesced observe path as KEY lines (no RPi.GPIO wait_for_edge thread)."""
+        if sys.platform != "linux":
+            return
+
+        def _kick() -> None:
+            self._schedule_observe_from_thread(hw)
+
+        ok = hw.ads_alert_pin.enable_edge_detect(_kick)
+        if ok:
+            logger.info("observation: ADS ALERT edge IRQ (gpiozero) on BCM %s", hw.pins.ads_alert)
+        else:
+            logger.warning(
+                "observation: ADS ALERT edge IRQ unavailable; KEY_ADC2 path uses asyncio poll only"
             )
 
     def _schedule_observe_from_thread(self, hw: LiveDeckHardware) -> None:
@@ -214,48 +213,6 @@ class ObservationBusService:
         # ``bus_delta_log_messages``. ``bus/led_changed`` and other categories still record/replay.
         if log_event is not None and payload.get("category") != "bus":
             await self._ws_hub.broadcast_json(log_event.model_dump(mode="json"))
-
-    def _alert_gpio_loop(self, hw: LiveDeckHardware) -> None:
-        """Block on ALERT/RDY edges; schedule one async telemetry sample per edge."""
-        if sys.platform != "linux":
-            return
-        loop = self._loop
-        if loop is None:
-            return
-
-        import RPi.GPIO as GPIO  # noqa: N814
-
-        bcm = hw.pins.ads_alert
-        try:
-            GPIO.setup(bcm, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        except Exception:
-            logger.exception("observation: cannot setup ALERT BCM %s", bcm)
-            return
-
-        logger.info("observation: ADS ALERT monitoring on BCM %s (wait_for_edge)", bcm)
-
-        while not self._alert_stop.is_set():
-            try:
-                ch = GPIO.wait_for_edge(bcm, GPIO.BOTH, timeout=_ALERT_EDGE_TIMEOUT_MS)
-            except Exception as e:
-                logger.warning(
-                    "observation: wait_for_edge unsupported or failed on BCM %s (%s); "
-                    "ADS telemetry uses asyncio poll only",
-                    bcm,
-                    e,
-                )
-                break
-            if self._alert_stop.is_set():
-                break
-            if ch is None:
-                continue
-
-            self._schedule_observe_from_thread(hw)
-
-        try:
-            GPIO.cleanup(bcm)
-        except Exception:
-            logger.debug("observation: GPIO.cleanup(%s)", bcm, exc_info=True)
 
     async def _mock_telemetry_loop(self, hw: MockDeckHardware) -> None:
         logger.info("observation: mock telemetry poll (interval=%ss)", _POLL_INTERVAL_S)

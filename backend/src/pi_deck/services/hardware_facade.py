@@ -8,6 +8,7 @@ from collections.abc import Callable
 from typing import Protocol, runtime_checkable
 
 from pi_deck.hardware.ads1115 import Ads1115
+from pi_deck.hardware.ads_alert_pin import AdsAlertPin
 from pi_deck.hardware.jog_drive import JogDrive
 from pi_deck.hardware.jog_observe import KeyAdc1Observe
 from pi_deck.hardware.key_adc2_decode import decode_key_adc2_direction
@@ -47,6 +48,7 @@ class LiveDeckHardware:
         self._drive = JogDrive(self._pins)
         self._adc1 = KeyAdc1Observe(self._pins)
         self._led = KeyLedObserve(self._pins)
+        self._ads_alert = AdsAlertPin(self._pins.ads_alert)
         self._ads: Ads1115 | None = None
         try:
             ads = Ads1115()
@@ -66,6 +68,10 @@ class LiveDeckHardware:
     @property
     def led_observer(self) -> KeyLedObserve:
         return self._led
+
+    @property
+    def ads_alert_pin(self) -> AdsAlertPin:
+        return self._ads_alert
 
     @property
     def kind(self) -> str:
@@ -93,6 +99,7 @@ class LiveDeckHardware:
         self._drive.close()
         self._adc1.close()
         self._led.close()
+        self._ads_alert.close()
         if self._ads is not None:
             try:
                 self._ads.close()
@@ -153,14 +160,21 @@ class MockDeckHardware:
 
 
 def _gpiozero_pin_factory_for_live() -> None:
-    """Use RPi.GPIO for gpiozero outputs (JogDrive). Native sysfs often fails export on older Pis.
+    """Select gpiozero pin factory before any ``OutputDevice`` / ``DigitalInputDevice``.
 
-    KEY_ADC1 / KEY_LED observation uses ``RPi.GPIO`` for input levels and BOTH-edge ``add_event_detect``
-    (ObservationBusService). Override with ``GPIOZERO_PIN_FACTORY`` if needed (e.g. ``lgpio`` on Pi 4+ Bookworm).
+    Prefer **lgpio** (Pi 5 / Bookworm) so edge IRQs work for inputs + outputs; fall back to **rpigpio**
+    (RPi.GPIO) on older images. Override with ``GPIOZERO_PIN_FACTORY`` if needed.
     """
     import os
 
-    os.environ.setdefault("GPIOZERO_PIN_FACTORY", "rpigpio")
+    if os.environ.get("GPIOZERO_PIN_FACTORY"):
+        return
+    try:
+        import lgpio  # noqa: F401
+
+        os.environ["GPIOZERO_PIN_FACTORY"] = "lgpio"
+    except ImportError:
+        os.environ.setdefault("GPIOZERO_PIN_FACTORY", "rpigpio")
 
 
 def build_hardware() -> DeckHardwareFacade:
