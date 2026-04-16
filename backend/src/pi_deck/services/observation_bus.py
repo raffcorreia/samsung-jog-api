@@ -1,9 +1,18 @@
 """Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
 Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED are emitted **only** from this service, driven
-by ``read_bus_snapshot()`` on the hardware facade. On live hardware, KEY_ADC1 / KEY_LED use
-RPi.GPIO BOTH-edge callbacks plus a ~25 ms asyncio poll as watchdog; ADS1115 uses ALERT/RDY
-(``wait_for_edge``) with the same coalesced observe path as GPIO edges.
+by ``read_bus_snapshot()`` on the hardware facade.
+
+**Continuous sampling (always on, live + mock):** ``_live_telemetry_loop`` / ``_mock_telemetry_loop``
+run an infinite asyncio loop with ``await asyncio.sleep(_POLL_INTERVAL_S)`` (~25 ms), then
+``_observe_signals`` → ``read_bus_snapshot()``. That single call refreshes **the whole bus** at
+once (GPIO levels for KEY_ADC1 / KEY_LED and I²C read + decode for KEY_ADC2). Nothing in the
+IRQ fallback path disables this loop.
+
+**Optional extras (when RPi.GPIO supports them):** BOTH-edge callbacks on KEY lines and a thread
+blocking on ADS ALERT ``wait_for_edge`` can schedule extra observations between polls via the same
+``read_bus_snapshot()`` path. If those fail on the platform, telemetry is **poll-only**, not
+telemetry-off.
 
 ``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
 """
