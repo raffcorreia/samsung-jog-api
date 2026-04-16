@@ -7,9 +7,15 @@ import { JogPad } from "./JogPad";
 vi.mock("../api/client");
 
 const defaultProps = {
-  holdCounts: {} as Record<string, number>,
+  hardwareHeld: {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    center: false,
+  },
   wsReleaseTick: 0,
-  wsLastReleasedAction: null,
+  wsReleasedActions: [],
   wsSessionEpoch: 0,
   onLocalLog: vi.fn(),
 };

@@ -12,12 +12,71 @@
 
 .head {
   flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
   padding: 0.32rem var(--pad);
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
   border-bottom: 1px solid var(--border);
+}
+
+.headTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.headActions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.35rem;
+}
+
+.toolBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.28rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.toolIcon {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.toolIconSpin {
+  animation: live-log-spin 0.65s linear infinite;
+}
+
+@keyframes live-log-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toolBtn:hover:not(:disabled) {
+  color: var(--text, #e8edf4);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.toolBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .pre {

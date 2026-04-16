@@ -11,9 +11,15 @@ describe("JogPad touch / kiosk contract", () => {
   it("exposes a single jog surface with explicit touch policy metadata", () => {
     render(
       <JogPad
-        holdCounts={{}}
+        hardwareHeld={{
+          up: false,
+          down: false,
+          left: false,
+          right: false,
+          center: false,
+        }}
         wsReleaseTick={0}
-        wsLastReleasedAction={null}
+        wsReleasedActions={[]}
         wsSessionEpoch={0}
         onLocalLog={() => {}}
       />,
@@ -25,9 +31,15 @@ describe("JogPad touch / kiosk contract", () => {
   it("renders five primary jog hit targets (center button + four ring segments)", () => {
     render(
       <JogPad
-        holdCounts={{}}
+        hardwareHeld={{
+          up: false,
+          down: false,
+          left: false,
+          right: false,
+          center: false,
+        }}
         wsReleaseTick={0}
-        wsLastReleasedAction={null}
+        wsReleasedActions={[]}
         wsSessionEpoch={0}
         onLocalLog={() => {}}
       />,

@@ -68,20 +68,37 @@ def test_websocket_connected_envelope(client: TestClient) -> None:
         assert "status" in msg["data"]
 
 
-def test_websocket_receives_pulse_after_jog_press(client: TestClient) -> None:
-    """Integrated: REST jog press while WS client connected streams pulse event."""
+def test_websocket_receives_bus_snapshot_after_jog_hold_mock(client: TestClient) -> None:
+    """REST hold drives GPIO; ``bus/snapshot`` from observation carries KEY_ADC2 direction."""
+    with client.websocket_connect("/ws/events") as ws:
+        ws.receive_text()
+        r = client.post("/api/v1/jog/hold", json={"action": "down"})
+        assert r.status_code == 200
+        saw = False
+        for _ in range(40):
+            msg = json.loads(ws.receive_text())
+            if msg.get("category") == "bus" and msg.get("type") == "snapshot":
+                if msg["data"].get("key_adc2_direction") == "down":
+                    saw = True
+                    break
+        assert saw, "expected bus/snapshot with key_adc2_direction=down from observation"
+        client.post("/api/v1/jog/release", json={"action": "down"})
+
+
+def test_websocket_receives_bus_snapshot_after_jog_press_mock(client: TestClient) -> None:
+    """REST jog press asserts lines; observation emits ``bus/snapshot`` with direction."""
     with client.websocket_connect("/ws/events") as ws:
         ws.receive_text()
         r = client.post("/api/v1/jog/press", json={"action": "up", "duration_ms": 8})
         assert r.status_code == 200
-        saw_pulse = False
-        for _ in range(20):
+        saw = False
+        for _ in range(40):
             msg = json.loads(ws.receive_text())
-            if msg.get("category") == "command" and msg.get("type") == "pulse":
-                assert msg["data"].get("action") == "up"
-                saw_pulse = True
-                break
-        assert saw_pulse, "expected command/pulse on websocket"
+            if msg.get("category") == "bus" and msg.get("type") == "snapshot":
+                if msg["data"].get("key_adc2_direction") == "up":
+                    saw = True
+                    break
+        assert saw, "expected bus/snapshot with key_adc2_direction=up from observation"
 
 
 def test_concurrent_jog_rejects_second_command() -> None:

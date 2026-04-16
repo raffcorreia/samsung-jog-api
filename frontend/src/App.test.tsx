@@ -9,7 +9,11 @@ const { statusPayload } = vi.hoisted(() => ({
     hardware: "mock" as const,
     operating_mode: "jog" as const,
     control_state: "idle" as const,
-    signals: { key_adc1_active: false, key_led_active: false },
+    signals: {
+      key_adc1_active: false,
+      key_led_active: false,
+      key_adc2_direction: null,
+    },
   },
 }));
 
@@ -17,6 +21,7 @@ vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
   postLogEntry: vi.fn(() => Promise.resolve()),
+  deleteLiveLog: vi.fn(() => Promise.resolve()),
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
@@ -54,15 +59,6 @@ describe("App", () => {
     expect(ws).toBeDefined();
 
     await act(async () => {
-      ws.onmessage?.({
-        data: JSON.stringify({
-          v: 1,
-          category: "command",
-          type: "released",
-          ts: "2026-01-01T00:00:00Z",
-          data: { action: "up", duration_ms: 80 },
-        }),
-      } as MessageEvent);
       ws.onmessage?.({
         data: JSON.stringify({
           v: 1,

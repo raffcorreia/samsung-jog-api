@@ -11,6 +11,8 @@ export type LogLevel = "debug" | "info" | "warning" | "error";
 export interface SignalSnapshot {
   key_adc1_active: boolean;
   key_led_active: boolean;
+  /** Decoded KEY_ADC2 direction when asserted; null when idle / unknown. */
+  key_adc2_direction: "up" | "down" | "left" | "right" | null;
 }
 
 export interface StatusPayload {

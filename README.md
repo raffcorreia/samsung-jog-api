@@ -29,7 +29,8 @@ Current state of the repository:
 - completed: `Phase 12: Deployment and Version Tracking` — [execution record](docs/implementation/phase-12-execution.md) (`scripts/deploy.sh`, deploy counter/version badge, kiosk reload workflow)
 - completed: `Phase 13: Full-Screen UI Layout with Placeholders` — [execution record](docs/implementation/phase-13-execution.md) (1280×800 deck shell, real JOG/log, calendar and notes placeholders, settings route, popup template, seven-segment clock, LED/record stubs)
 - completed: `Phase 14: Log Architecture Refactor` — [execution record](docs/implementation/phase-14-execution.md) (backend-owned live log buffer, WebSocket replay on connect, synced multi-client log stream)
-- current phase: `Phase 15: Observation Bus and Hardware Interface` (see [Implementation Plan](docs/implementation/plan.md))
+- completed: `Phase 15: Observation Bus and Hardware Interface` — [execution record](docs/implementation/phase-15-execution.md) (interrupt-driven ADS1115 + GPIO observation bus, single websocket authority for holds/releases/LED)
+- current phase: `Phase 16: Recording and Replay Subsystem` (see [Implementation Plan](docs/implementation/plan.md))
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

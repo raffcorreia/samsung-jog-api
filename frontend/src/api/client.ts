@@ -8,12 +8,23 @@ function apiBase(): string {
   return "";
 }
 
+function normalizeStatusPayload(p: StatusPayload): StatusPayload {
+  return {
+    ...p,
+    signals: {
+      ...p.signals,
+      key_adc2_direction: p.signals.key_adc2_direction ?? null,
+    },
+  };
+}
+
 export async function fetchStatus(): Promise<StatusPayload> {
   const r = await fetch(`${apiBase()}/api/v1/status`);
   if (!r.ok) {
     throw new Error(`status ${r.status}`);
   }
-  return (await r.json()) as StatusPayload;
+  const j = (await r.json()) as StatusPayload;
+  return normalizeStatusPayload(j);
 }
 
 export type JogPressResult = { ok: true } | { ok: false; body: CommandRejectedBody };
@@ -94,6 +105,14 @@ export async function postLogEntry(params: {
   });
   if (!r.ok) {
     throw new Error(`log append failed: ${r.status}`);
+  }
+}
+
+/** Remove all entries from the server-side live log buffer (broadcasts to websocket clients). */
+export async function deleteLiveLog(): Promise<void> {
+  const r = await fetch(`${apiBase()}/api/v1/log`, { method: "DELETE" });
+  if (!r.ok) {
+    throw new Error(`log clear failed: ${r.status}`);
   }
 }
 

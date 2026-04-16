@@ -25,31 +25,25 @@ def test_websocket_replays_backend_log_history_on_connect() -> None:
             assert replay["data"]["message"] == "history before connect"
 
 
-def test_command_events_also_emit_log_entries_to_connected_clients() -> None:
+def test_command_rejection_emits_log_entries_to_connected_clients() -> None:
+    """Successful jog commands do not stream ``command/*``; rejections still do."""
     with TestClient(create_app()) as client:
         with client.websocket_connect("/ws/events") as ws:
             ws.receive_text()  # control/connected
             ws.receive_text()  # log/entry for the connection
 
-            r = client.post("/api/v1/jog/press", json={"action": "up", "duration_ms": 5})
-            assert r.status_code == 200
+            assert client.post("/api/v1/jog/hold", json={"action": "up"}).status_code == 200
+            r = client.post("/api/v1/jog/press", json={"action": "left", "duration_ms": 10})
+            assert r.status_code == 409
 
-            saw_command = False
             saw_log = False
-            for _ in range(10):
+            for _ in range(15):
                 msg = json.loads(ws.receive_text())
-                if msg["category"] == "command" and msg["type"] == "pulse":
-                    saw_command = True
-                if (
-                    msg["category"] == "log"
-                    and msg["type"] == "entry"
-                    and msg["data"]["message"] == "pulse - up 5ms"
-                ):
-                    saw_log = True
-                if saw_command and saw_log:
-                    break
+                if msg["category"] == "log" and msg["type"] == "entry":
+                    if "command rejected" in msg["data"].get("message", ""):
+                        saw_log = True
+                        break
 
-            assert saw_command
             assert saw_log
 
 
@@ -76,3 +70,21 @@ def test_two_websocket_clients_receive_same_log_entry() -> None:
                 assert msg2["category"] == "log"
                 assert msg1["data"]["message"] == "shared event"
                 assert msg2["data"]["message"] == "shared event"
+
+
+def test_delete_log_clears_buffer_and_not_replayed() -> None:
+    with TestClient(create_app()) as client:
+        assert (
+            client.post(
+                "/api/v1/log",
+                json={"level": "info", "source": "test", "message": "before clear"},
+            ).status_code
+            == 200
+        )
+        assert client.delete("/api/v1/log").status_code == 200
+
+        with client.websocket_connect("/ws/events") as ws:
+            assert json.loads(ws.receive_text())["category"] == "control"
+            nxt = json.loads(ws.receive_text())
+            assert nxt["category"] == "log"
+            assert "before clear" not in json.dumps(nxt)

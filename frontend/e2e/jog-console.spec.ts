@@ -17,9 +17,11 @@ test.describe("JOG console (integrated: pi-deck + static build, mock hardware or
     await expect(log).toContainText(/connected|control — state=/i, { timeout: 20_000 });
   });
 
-  test("pointer tap Up yields command acceptance in log", async ({ page }) => {
+  test("pointer tap Up shows hardware-observed press on ring", async ({ page }) => {
     await page.goto("/");
     await page.locator('[data-jog-action="up"]').click();
-    await expect(page.getByRole("log")).toContainText(/hold|release|up/i, { timeout: 15_000 });
+    await expect(page.locator('[data-jog-action="up"]')).toHaveAttribute("aria-pressed", "true", {
+      timeout: 15_000,
+    });
   });
 });

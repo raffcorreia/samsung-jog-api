@@ -65,10 +65,18 @@ class LogIn(BaseModel):
 
 
 class SignalSnapshot(BaseModel):
-    """Observed front-panel / bus signals (best-effort; depends on hardware wiring)."""
+    """Observed front-panel / bus signals (best-effort; depends on hardware wiring).
+
+    ``key_adc1_active`` is **not** an ADS1115 reading. It is the **digital** observation of the
+    monitor ``KEY_ADC1`` line (center / enter on this product), after conditioning: ``True`` when
+    the Pi GPIO reads **high** (~3.3 V asserted at the observe pin for this build).
+    Direction keys are decoded from ``KEY_ADC2`` (ADS1115 AIN0 mV thresholds) on live hardware;
+    mock hardware derives them from asserted drive lines for parity with observation.
+    """
 
     key_adc1_active: bool
     key_led_active: bool
+    key_adc2_direction: Literal["up", "down", "left", "right"] | None = None
 
 
 class StatusOut(BaseModel):
@@ -147,11 +155,25 @@ def ws_control_state(*, control_state: ControlState, operating_mode: OperatingMo
 
 
 def ws_bus_snapshot(*, signals: SignalSnapshot) -> WsEventV1:
+    data = {
+        "key_adc1_active": signals.key_adc1_active,
+        "key_led_active": signals.key_led_active,
+        "key_adc2_direction": signals.key_adc2_direction,
+    }
     return WsEventV1(
         category="bus",
         type="snapshot",
         ts=utc_iso(),
-        data={"key_adc1_active": signals.key_adc1_active, "key_led_active": signals.key_led_active},
+        data=data,
+    )
+
+
+def ws_bus_led_changed(*, active: bool) -> WsEventV1:
+    return WsEventV1(
+        category="bus",
+        type="led_changed",
+        ts=utc_iso(),
+        data={"key_led_active": active},
     )
 
 
@@ -176,4 +198,14 @@ def ws_log_entry(
         type="entry",
         ts=ts or utc_iso(),
         data={"level": level, "source": source, "message": message},
+    )
+
+
+def ws_log_cleared() -> WsEventV1:
+    """Notify clients that the server-side live log buffer was wiped."""
+    return WsEventV1(
+        category="log",
+        type="cleared",
+        ts=utc_iso(),
+        data={},
     )

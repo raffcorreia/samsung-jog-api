@@ -12,7 +12,11 @@ def _rpi_gpio():
 
 
 class KeyAdc1Observe:
-    """Poll KEY_ADC1 with RPi.GPIO (no edge IRQs; stable on Pi 2 / older stacks)."""
+    """Poll KEY_ADC1 with RPi.GPIO (no edge IRQs; stable on Pi 2 / older stacks).
+
+    **Active-high at the Pi pin:** center assert reads ~3.3 V (GPIO HIGH); idle reads ~0 V (LOW).
+    This matches the conditioned net on the Phase 6 board for this product path.
+    """
 
     def __init__(self, pins: ProtoboardPins | None = None, *, pull_up: bool | None = None) -> None:
         self._pins = pins or ProtoboardPins()
@@ -25,7 +29,7 @@ class KeyAdc1Observe:
     @property
     def is_active(self) -> bool:
         GPIO = _rpi_gpio()
-        return GPIO.input(self._bcm) == GPIO.LOW
+        return GPIO.input(self._bcm) == GPIO.HIGH
 
     def close(self) -> None:
         # JogDrive (gpiozero) still owns other BCM lines; do not GPIO.cleanup() the whole chip here.

@@ -13,14 +13,8 @@ from pi_deck.models.schemas import (
     CommandRejectedReason,
     ControlState,
     OperatingMode,
-    SignalSnapshot,
     StatusOut,
-    ws_bus_snapshot,
-    ws_command_held,
-    ws_command_pulse,
     ws_command_rejected,
-    ws_command_released,
-    ws_control_state,
 )
 from pi_deck.services.hardware_facade import DeckHardwareFacade
 from pi_deck.services.live_log import LiveLogService
@@ -60,13 +54,12 @@ class DeckControlService:
     _pulse_in_progress: bool = field(default=False, repr=False)
 
     def status(self) -> StatusOut:
-        adc1, led = self.hardware.read_signals()
         return StatusOut(
             version=self.version,
             hardware=cast(Literal["live", "mock"], self.hardware.kind),
             operating_mode=self._operating_mode,
             control_state=self._control_state,
-            signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
+            signals=self.hardware.read_bus_snapshot(),
         )
 
     def set_operating_mode(self, mode: OperatingMode) -> None:
@@ -99,41 +92,19 @@ class DeckControlService:
         self._cancel_watchdog(rec)
         rec.watchdog = asyncio.create_task(_run())
 
-    async def _emit_control_if_needed(self) -> None:
-        want = ControlState.COMMANDING if self._any_holds() else ControlState.IDLE
-        if want != self._control_state:
-            self._control_state = want
-            await self._emit(
-                ws_control_state(
-                    control_state=self._control_state,
-                    operating_mode=self._operating_mode,
-                ),
-            )
-
     async def jog_hold(self, action: str) -> CommandRejectedReason | None:
         """Assert ``action``; same-direction replacement avoids a GPIO glitch."""
         jog = _ACTION_MAP.get(action)
         if jog is None:
             return CommandRejectedReason.HARDWARE_ERROR
 
-        # Replace same direction: end previous logically; keep line high (no GPIO glitch).
+        # Replace same direction: no GPIO toggle (no extra drive edge).
         if jog in self._hold:
             prev = self._hold[jog]
             self._cancel_watchdog(prev)
-            duration_ms = int((time.monotonic() - prev.start_monotonic) * 1000)
-            duration_ms = max(0, min(duration_ms, 60_000))
-            await self._emit(ws_command_released(action=action, duration_ms=duration_ms))
             now = time.monotonic()
             self._hold[jog] = HoldRecord(start_monotonic=now)
             self._schedule_watchdog(jog)
-            await self._emit(ws_command_held(action=action))
-            adc1, led = self.hardware.read_signals()
-            await self._emit(
-                ws_bus_snapshot(
-                    signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-                ),
-            )
-            await self._emit_control_if_needed()
             return None
 
         try:
@@ -147,15 +118,8 @@ class DeckControlService:
             return CommandRejectedReason.HARDWARE_ERROR
 
         self._hold[jog] = HoldRecord(start_monotonic=time.monotonic())
-        await self._emit(ws_command_held(action=action))
         self._schedule_watchdog(jog)
-        await self._emit_control_if_needed()
-        adc1, led = self.hardware.read_signals()
-        await self._emit(
-            ws_bus_snapshot(
-                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-            ),
-        )
+        self._control_state = ControlState.COMMANDING if self._any_holds() else ControlState.IDLE
         return None
 
     async def jog_release(self, action: str) -> tuple[CommandRejectedReason | None, int]:
@@ -176,17 +140,13 @@ class DeckControlService:
             await asyncio.to_thread(self.hardware.set_jog_line, jog, False)
         except Exception:
             logger.exception("set_jog_line off failed")
-            await self._emit_control_if_needed()
+            want = ControlState.COMMANDING if self._any_holds() else ControlState.IDLE
+            self._control_state = want
             return CommandRejectedReason.HARDWARE_ERROR, 0
 
-        await self._emit(ws_command_released(action=action, duration_ms=duration_ms))
-        adc1, led = self.hardware.read_signals()
-        await self._emit(
-            ws_bus_snapshot(
-                signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-            ),
+        self._control_state = (
+            ControlState.COMMANDING if self._any_holds() else ControlState.IDLE
         )
-        await self._emit_control_if_needed()
         return None, duration_ms
 
     async def jog_press(self, action: str, duration_ms: int) -> None | CommandRejectedReason:
@@ -220,12 +180,6 @@ class DeckControlService:
         self._pulse_in_progress = True
         try:
             self._control_state = ControlState.COMMANDING
-            await self._emit(
-                ws_control_state(
-                    control_state=self._control_state,
-                    operating_mode=self._operating_mode,
-                ),
-            )
             try:
                 try:
                     await asyncio.to_thread(self.hardware.pulse, jog, duration_s)
@@ -240,19 +194,9 @@ class DeckControlService:
                     )
                     return CommandRejectedReason.HARDWARE_ERROR
 
-                await self._emit(ws_command_pulse(action=action, duration_ms=duration_ms))
-                adc1, led = self.hardware.read_signals()
-                snap = SignalSnapshot(key_adc1_active=adc1, key_led_active=led)
-                await self._emit(ws_bus_snapshot(signals=snap))
                 return None
             finally:
                 self._control_state = ControlState.IDLE
-                await self._emit(
-                    ws_control_state(
-                        control_state=self._control_state,
-                        operating_mode=self._operating_mode,
-                    ),
-                )
         finally:
             self._pulse_in_progress = False
 
