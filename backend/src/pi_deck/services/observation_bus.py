@@ -16,7 +16,7 @@ from typing import cast
 
 from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
 from pi_deck.services.hardware_facade import DeckHardwareFacade, LiveDeckHardware, MockDeckHardware
-from pi_deck.services.live_log import LiveLogService
+from pi_deck.services.live_log import LiveLogService, bus_delta_log_messages
 from pi_deck.services.ws_hub import WsHub
 
 logger = logging.getLogger(__name__)
@@ -128,9 +128,8 @@ class ObservationBusService:
         if self._ws_hub.client_count == 0:
             return
         await self._ws_hub.broadcast_json(payload)
-        # One wire event per observation: ``bus/*`` updates UI; ``record_event`` still appends
-        # matching ``log/entry`` to the replay buffer, but we do not broadcast that again (avoids
-        # duplicate messages). The UI derives the visible log line from ``bus/led_changed``.
+        # ``bus/snapshot`` does not append a log row here; semantic lines use ``publish`` from
+        # ``bus_delta_log_messages``. ``bus/led_changed`` and other categories still record/replay.
         if log_event is not None and payload.get("category") != "bus":
             await self._ws_hub.broadcast_json(log_event.model_dump(mode="json"))
 
@@ -221,11 +220,17 @@ class ObservationBusService:
             # Avoid duplicate idle snapshot vs ``control/connected``; but if something is
             # asserted before the first poll interval (e.g. mock notifier), publish once.
             if not observed_idle:
+                for msg in bus_delta_log_messages(None, snap):
+                    await self._live_log.publish(level="info", source="bus", message=msg)
                 await self._emit(ws_bus_snapshot(signals=snap))
                 await self._emit_led_if_changed(snap.key_led_active)
             return
 
         if snap != self._last_signals:
+            # Steady state: first iteration always returned from the ``_last_signals is None`` branch.
+            prev_sig = self._last_signals
+            for msg in bus_delta_log_messages(prev_sig, snap):
+                await self._live_log.publish(level="info", source="bus", message=msg)
             self._last_signals = snap
             await self._emit(ws_bus_snapshot(signals=snap))
 

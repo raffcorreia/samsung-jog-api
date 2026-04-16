@@ -1,9 +1,9 @@
 """Backend-owned live log buffer and websocket log event creation.
 
-Bus frames (``bus/snapshot``, ``bus/led_changed``) are **stored** as readable ``log/entry`` rows
-(``source: bus``) for websocket **replay** only. The observation service sends **one** ``bus/*``
-frame per change — never a second ``category: log`` for the same event; clients mirror the line
-locally. Use ``category: log`` for explicit entries (``POST /log``, notices, rejections).
+Human-readable lines for the deck UI come from ``log/entry`` (``source: bus``).  ``bus/snapshot``
+frames carry state for the UI but **do not** append a dump of every field to the log; observation
+emits one short line per **changed** signal (same style as ``key_led -> on``).  ``bus/led_changed``
+continues to log LED on its own envelope.
 """
 
 from __future__ import annotations
@@ -14,26 +14,27 @@ from typing import Any, Literal
 
 from fastapi import WebSocket
 
-from pi_deck.models.schemas import WsEventV1, utc_iso, ws_log_cleared, ws_log_entry
+from pi_deck.models.schemas import SignalSnapshot, WsEventV1, utc_iso, ws_log_cleared, ws_log_entry
 from pi_deck.services.ws_hub import WsHub
 
 LogLevel = Literal["debug", "info", "warning", "error"]
 
 
-def _bus_snapshot_log_message(data: dict[str, Any]) -> str:
-    """Keep in sync with ``frontend/src/log/busLogFormat.ts`` (`formatBusSnapshotLogMessage`)."""
-    k1 = bool(data.get("key_adc1_active"))
-    led = bool(data.get("key_led_active"))
-    raw = data.get("key_adc2_direction")
-    if raw is None:
-        k2s = "null"
-    else:
-        k2s = str(raw)
-    return (
-        f"key_adc1_active={'true' if k1 else 'false'} "
-        f"key_adc2_direction={k2s} "
-        f"key_led_active={'true' if led else 'false'}"
-    )
+def bus_delta_log_messages(prev: SignalSnapshot | None, snap: SignalSnapshot) -> list[str]:
+    """One concise line per changed field (KEY_ADC1 / KEY_ADC2 only). KEY_LED uses ``led_changed``."""
+    lines: list[str] = []
+    if prev is None:
+        if snap.key_adc1_active:
+            lines.append("key_adc1 -> on")
+        if snap.key_adc2_direction is not None:
+            lines.append(f"key_adc2 -> {snap.key_adc2_direction}")
+        return lines
+    if snap.key_adc1_active != prev.key_adc1_active:
+        lines.append(f"key_adc1 -> {'on' if snap.key_adc1_active else 'off'}")
+    if snap.key_adc2_direction != prev.key_adc2_direction:
+        d = snap.key_adc2_direction
+        lines.append(f"key_adc2 -> {d}" if d is not None else "key_adc2 -> idle")
+    return lines
 
 
 def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
@@ -68,8 +69,6 @@ def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
         state = data.get("control_state", "?")
         mode = data.get("operating_mode", "?")
         return "info", "control", f"control - state={state} mode={mode}"
-    if category == "bus" and event_type == "snapshot":
-        return "info", "bus", _bus_snapshot_log_message(data)
     if category == "bus" and event_type == "led_changed":
         led = bool(data.get("key_led_active"))
         return "info", "bus", f"key_led -> {'on' if led else 'off'}"
@@ -113,6 +112,8 @@ class LiveLogService:
         if event.get("category") == "log":
             return None
         if event.get("category") == "control" and event.get("type") == "state":
+            return None
+        if event.get("category") == "bus" and event.get("type") == "snapshot":
             return None
         level, source, message = _event_message(event)
         ts = event.get("ts") if isinstance(event.get("ts"), str) else None

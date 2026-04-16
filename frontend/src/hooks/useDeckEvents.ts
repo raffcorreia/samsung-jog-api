@@ -8,7 +8,7 @@ import {
 } from "react";
 
 import { deleteLiveLog, fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
-import { formatBusLedLogMessage, formatBusSnapshotLogMessage } from "../log/busLogFormat";
+import { formatBusLedLogMessage } from "../log/busLogFormat";
 import type { JogAction, SignalSnapshot, StatusPayload, WsEventV1 } from "../types";
 
 const MAX_LOG = 220;
@@ -196,12 +196,6 @@ export function useDeckEvents(): DeckEventsState {
         }
         if (parsed.category === "bus" && parsed.type === "snapshot") {
           const nextSig = parseBusSnapshotData(parsed.data as Record<string, unknown>);
-          const stamp = parsed.ts.replace("T", " ").replace("Z", "").slice(0, 19);
-          const line = `${stamp}  bus  ${formatBusSnapshotLogMessage(nextSig)}`;
-          setLogLines((prev) => {
-            const next = [...prev, line];
-            return next.length > MAX_LOG ? next.slice(next.length - MAX_LOG) : next;
-          });
           const prev = prevSignalsRef.current;
           if (prev) {
             const pHeld = signalsToHardwareHeld(prev);
