@@ -1,10 +1,11 @@
-"""Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed`` (Phase 15).
+"""Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
-``command/held`` and ``command/released`` are emitted by ``DeckControlService`` so the UI stays
-reliable. This service reports KEY_ADC1 / KEY_LED and refreshes ADS1115 AIN0 (KEY_ADC2 analog path).
+``command/*`` jog events come from ``DeckControlService`` only. **Physical** KEY_ADC1 /
+KEY_LED (and ADS1115 refresh for KEY_ADC2) are emitted **here** only—not from deck_control
+after jog (avoids misleading combined snapshots next to direction commands).
 
 Live: **BCM 17** (ADS ALERT): ``wait_for_edge`` in a daemon thread, one async sample per edge.
-A **~25 ms poll** backs up KEY1/LED.
+A **~25 ms poll** backs up KEY1/LED. Mock: same poll interval, GPIO observe only (no ADS).
 """
 
 from __future__ import annotations
@@ -21,7 +22,7 @@ from pi_deck.models.schemas import (
     ws_bus_led_changed,
     ws_bus_snapshot,
 )
-from pi_deck.services.hardware_facade import LiveDeckHardware
+from pi_deck.services.hardware_facade import DeckHardwareFacade, LiveDeckHardware, MockDeckHardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
@@ -32,7 +33,7 @@ _ALERT_EDGE_TIMEOUT_MS = 500
 
 
 class ObservationBusService:
-    """Background telemetry: ``bus/snapshot`` and ``bus/led_changed`` on live hardware."""
+    """Background telemetry: ``bus/snapshot`` and ``bus/led_changed`` (live and mock)."""
 
     def __init__(
         self,
@@ -55,7 +56,16 @@ class ObservationBusService:
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
         self._loop = loop
         hw = self._hardware
-        if getattr(hw, "kind", None) != "live":
+        kind = getattr(hw, "kind", None)
+
+        if kind == "mock":
+            self._poll_task = asyncio.create_task(
+                self._mock_telemetry_loop(cast(MockDeckHardware, hw)),
+                name="observation-mock-telemetry",
+            )
+            return
+
+        if kind != "live":
             return
         live_hw = cast(LiveDeckHardware, hw)
 
@@ -168,6 +178,15 @@ class ObservationBusService:
     async def _sample_after_alert(self, hw: LiveDeckHardware) -> None:
         await self._poll_telemetry_once(hw, self._ads)
 
+    async def _mock_telemetry_loop(self, hw: MockDeckHardware) -> None:
+        logger.info("observation: mock telemetry poll (interval=%ss)", _POLL_INTERVAL_S)
+        try:
+            while True:
+                await asyncio.sleep(_POLL_INTERVAL_S)
+                await self._observe_signals(hw)
+        except asyncio.CancelledError:
+            raise
+
     async def _live_telemetry_loop(self, hw: LiveDeckHardware, ads: Ads1115 | None) -> None:
         logger.info("observation: live telemetry poll started (interval=%ss)", _POLL_INTERVAL_S)
         try:
@@ -183,7 +202,9 @@ class ObservationBusService:
                 await asyncio.to_thread(ads.read_conversion_mv)
             except Exception:
                 logger.exception("observation: ADS read failed")
+        await self._observe_signals(hw)
 
+    async def _observe_signals(self, hw: DeckHardwareFacade) -> None:
         try:
             adc1, led = hw.read_signals()
         except Exception:

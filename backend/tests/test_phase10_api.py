@@ -81,7 +81,7 @@ def test_websocket_receives_held_after_jog_hold_mock(client: TestClient) -> None
                 assert msg["data"].get("action") == "down"
                 saw_held = True
                 break
-        assert saw_held, "expected observation-backed command/held on websocket"
+        assert saw_held, "expected command/held from deck_control on websocket"
         client.post("/api/v1/jog/release", json={"action": "down"})
 
 
