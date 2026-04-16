@@ -11,7 +11,9 @@ requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.115",
     "gpiozero>=2.0",
-    # Used by gpiozero when GPIOZERO_PIN_FACTORY=rpigpio (default for live hardware on Pi).
+    # Prefer with GPIOZERO_PIN_FACTORY=lgpio (set in hardware_facade when import succeeds).
+    "lgpio>=0.2; sys_platform == 'linux'",
+    # Used by gpiozero when GPIOZERO_PIN_FACTORY=rpigpio (fallback if lgpio missing).
     "RPi.GPIO>=0.7.1; sys_platform == 'linux'",
     "smbus2>=0.4",
     # Avoid uvicorn[standard] here: uvloop/httptools wheels are missing on some armhf images and

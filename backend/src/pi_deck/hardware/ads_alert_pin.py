@@ -1,40 +1,29 @@
-"""Digital observation of conditioned KEY_LED (gpiozero — same pin factory as JogDrive)."""
+"""ADS1115 ALERT/RDY as a gpiozero digital input (IRQ-style edges via lgpio / rpigpio factory)."""
 
 from __future__ import annotations
 
 import logging
-import sys
 from collections.abc import Callable
 
 from gpiozero import DigitalInputDevice
 
-from pi_deck.hardware.protoboard_pins import ProtoboardPins
-
 logger = logging.getLogger(__name__)
 
 
-class KeyLedObserve:
-    """KEY_LED: gpiozero ``DigitalInputDevice``; **active-low** at the pin matches Phase 6 wiring."""
+class AdsAlertPin:
+    """Open-drain ALERT/RDY (active low with pull-up). Edges schedule observation via gpiozero."""
 
-    def __init__(self, pins: ProtoboardPins | None = None, *, pull_up: bool | None = None) -> None:
-        self._pins = pins or ProtoboardPins()
-        self._bcm = self._pins.key_led_digital
-        self._pull_up = pull_up if pull_up is not None else True
+    def __init__(self, bcm: int) -> None:
+        self._bcm = bcm
         self._edge_cb: Callable[[], None] | None = None
         self._dev = DigitalInputDevice(
-            self._bcm,
-            pull_up=self._pull_up,
+            bcm,
+            pull_up=True,
             active_state=None,
-            bounce_time=0.025,
+            bounce_time=0.001,
         )
 
-    @property
-    def is_active(self) -> bool:
-        return self._dev.is_active
-
-    def enable_edge_detect(self, on_edge: Callable[[], None], *, _bouncetime_ms: int = 25) -> bool:
-        if sys.platform != "linux":
-            return False
+    def enable_edge_detect(self, on_edge: Callable[[], None]) -> bool:
         self.disable_edge_detect()
         self._edge_cb = on_edge
 
@@ -48,7 +37,7 @@ class KeyLedObserve:
         except Exception as e:
             self._edge_cb = None
             logger.warning(
-                "KEY_LED BCM %s: gpiozero edge hooks failed (%s); telemetry uses asyncio poll only",
+                "ADS ALERT BCM %s: gpiozero edge hooks failed (%s); KEY_ADC2 path uses asyncio poll only",
                 self._bcm,
                 e,
             )

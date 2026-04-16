@@ -1,9 +1,11 @@
 """Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
-Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED are emitted **only** from this service, driven
-by ``read_bus_snapshot()`` on the hardware facade (poll + ADS ALERT edge on live hardware).
+Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED come only from ``read_bus_snapshot()`` here.
 
-``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
+Live: ~25 ms asyncio poll always runs. gpiozero edge callbacks on KEY lines and ADS ALERT schedule
+extra ``read_bus_snapshot()`` rounds via ``run_coroutine_threadsafe`` and ``CoalesceGate``.
+
+``DeckControlService`` drives GPIO only; it does **not** emit jog ``command/*`` events.
 """
 
 from __future__ import annotations
@@ -11,18 +13,17 @@ from __future__ import annotations
 import asyncio
 import logging
 import sys
-import threading
 from typing import cast
 
 from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
 from pi_deck.services.hardware_facade import DeckHardwareFacade, LiveDeckHardware, MockDeckHardware
 from pi_deck.services.live_log import LiveLogService, bus_delta_log_messages
+from pi_deck.services.observation_coalesce import CoalesceGate
 from pi_deck.services.ws_hub import WsHub
 
 logger = logging.getLogger(__name__)
 
 _POLL_INTERVAL_S = 0.025
-_ALERT_EDGE_TIMEOUT_MS = 500
 
 
 class ObservationBusService:
@@ -40,13 +41,15 @@ class ObservationBusService:
         self._hardware = hardware
         self._loop: asyncio.AbstractEventLoop | None = None
         self._poll_task: asyncio.Task[None] | None = None
-        self._alert_thread: threading.Thread | None = None
-        self._alert_stop = threading.Event()
+        self._observe_lock: asyncio.Lock | None = None
+        self._edge_coalesce = CoalesceGate()
         self._last_signals: SignalSnapshot | None = None
         self._led_prev: bool | None = None
 
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
         self._loop = loop
+        self._observe_lock = asyncio.Lock()
+        self._edge_coalesce.reset()
         hw = self._hardware
         kind = getattr(hw, "kind", None)
 
@@ -68,14 +71,8 @@ class ObservationBusService:
             name="observation-telemetry",
         )
 
-        self._alert_stop.clear()
-        self._alert_thread = threading.Thread(
-            target=self._alert_gpio_loop,
-            args=(live_hw,),
-            name="ads-alert",
-            daemon=True,
-        )
-        self._alert_thread.start()
+        self._install_live_gpio_edges(live_hw)
+        self._install_ads_alert_edges(live_hw)
 
     def _schedule_sample_from_notifier(self) -> None:
         loop = self._loop
@@ -99,10 +96,13 @@ class ObservationBusService:
         fut.add_done_callback(_log_done)
 
     async def stop(self) -> None:
-        self._alert_stop.set()
-        if self._alert_thread is not None:
-            self._alert_thread.join(timeout=3.0)
-            self._alert_thread = None
+        hw = self._hardware
+        if getattr(hw, "kind", None) == "live":
+            live = cast(LiveDeckHardware, hw)
+            live.adc1_observer.disable_edge_detect()
+            live.led_observer.disable_edge_detect()
+            live.ads_alert_pin.disable_edge_detect()
+        self._edge_coalesce.reset()
 
         if self._poll_task is not None:
             self._poll_task.cancel()
@@ -117,6 +117,78 @@ class ObservationBusService:
             cast(MockDeckHardware, hw).set_change_notifier(None)
 
         self._loop = None
+        self._observe_lock = None
+
+    def _install_live_gpio_edges(self, hw: LiveDeckHardware) -> None:
+        """gpiozero edge callbacks (helper thread) only schedule asyncio work — never block the loop."""
+        if sys.platform != "linux":
+            return
+
+        def _kick() -> None:
+            self._schedule_observe_from_thread(hw)
+
+        ok_adc1 = hw.adc1_observer.enable_edge_detect(_kick)
+        ok_led = hw.led_observer.enable_edge_detect(_kick)
+        if ok_adc1 and ok_led:
+            logger.info(
+                "observation: KEY_ADC1 / KEY_LED edge IRQs (gpiozero) on BCM %s / %s",
+                hw.pins.key_adc1_digital,
+                hw.pins.key_led_digital,
+            )
+        else:
+            logger.warning(
+                "observation: KEY edge IRQs partial or off (KEY_ADC1=%s KEY_LED=%s); asyncio poll backup",
+                ok_adc1,
+                ok_led,
+            )
+
+    def _install_ads_alert_edges(self, hw: LiveDeckHardware) -> None:
+        """ADS ALERT/RDY → same coalesced observe path as KEY lines."""
+        if sys.platform != "linux":
+            return
+
+        def _kick() -> None:
+            self._schedule_observe_from_thread(hw)
+
+        ok = hw.ads_alert_pin.enable_edge_detect(_kick)
+        if ok:
+            logger.info("observation: ADS ALERT edge IRQ (gpiozero) on BCM %s", hw.pins.ads_alert)
+        else:
+            logger.warning(
+                "observation: ADS ALERT edge IRQ unavailable; KEY_ADC2 path uses asyncio poll only"
+            )
+
+    def _schedule_observe_from_thread(self, hw: LiveDeckHardware) -> None:
+        loop = self._loop
+        if loop is None:
+            return
+        if not self._edge_coalesce.request_from_thread():
+            return
+
+        fut = asyncio.run_coroutine_threadsafe(self._coalesced_edge_observe_loop(hw), loop)
+
+        def _log_done(f: asyncio.Future[None]) -> None:
+            try:
+                exc = f.exception()
+            except asyncio.CancelledError:
+                return
+            if exc is not None:
+                logger.error("observation: coalesced edge observe failed", exc_info=exc)
+
+        fut.add_done_callback(_log_done)
+
+    async def _coalesced_edge_observe_loop(self, hw: LiveDeckHardware) -> None:
+        try:
+            while True:
+                await self._observe_signals(hw)
+                if not self._edge_coalesce.should_continue_after_round():
+                    break
+        except asyncio.CancelledError:
+            self._edge_coalesce.reset()
+            raise
+        except Exception:
+            logger.exception("observation: coalesced edge observe failed")
+            self._edge_coalesce.reset()
 
     async def _emit(self, event: object) -> None:
         payload = (
@@ -132,56 +204,6 @@ class ObservationBusService:
         # ``bus_delta_log_messages``. ``bus/led_changed`` and other categories still record/replay.
         if log_event is not None and payload.get("category") != "bus":
             await self._ws_hub.broadcast_json(log_event.model_dump(mode="json"))
-
-    def _alert_gpio_loop(self, hw: LiveDeckHardware) -> None:
-        """Block on ALERT/RDY edges; schedule one async telemetry sample per edge."""
-        if sys.platform != "linux":
-            return
-        loop = self._loop
-        if loop is None:
-            return
-
-        import RPi.GPIO as GPIO  # noqa: N814
-
-        bcm = hw.pins.ads_alert
-        try:
-            GPIO.setup(bcm, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        except Exception:
-            logger.exception("observation: cannot setup ALERT BCM %s", bcm)
-            return
-
-        logger.info("observation: ADS ALERT monitoring on BCM %s (wait_for_edge)", bcm)
-
-        while not self._alert_stop.is_set():
-            try:
-                ch = GPIO.wait_for_edge(bcm, GPIO.BOTH, timeout=_ALERT_EDGE_TIMEOUT_MS)
-            except Exception:
-                logger.exception("observation: wait_for_edge on BCM %s", bcm)
-                break
-            if self._alert_stop.is_set():
-                break
-            if ch is None:
-                continue
-
-            fut = asyncio.run_coroutine_threadsafe(self._sample_after_alert(hw), loop)
-
-            def _log_alert_done(f: asyncio.Future[None]) -> None:
-                try:
-                    exc = f.exception()
-                except asyncio.CancelledError:
-                    return
-                if exc is not None:
-                    logger.error("observation: alert telemetry sample failed", exc_info=exc)
-
-            fut.add_done_callback(_log_alert_done)
-
-        try:
-            GPIO.cleanup(bcm)
-        except Exception:
-            logger.debug("observation: GPIO.cleanup(%s)", bcm, exc_info=True)
-
-    async def _sample_after_alert(self, hw: LiveDeckHardware) -> None:
-        await self._observe_signals(hw)
 
     async def _mock_telemetry_loop(self, hw: MockDeckHardware) -> None:
         logger.info("observation: mock telemetry poll (interval=%ss)", _POLL_INTERVAL_S)
@@ -202,6 +224,13 @@ class ObservationBusService:
             raise
 
     async def _observe_signals(self, hw: DeckHardwareFacade) -> None:
+        lock = self._observe_lock
+        if lock is None:
+            return
+        async with lock:
+            await self._observe_signals_locked(hw)
+
+    async def _observe_signals_locked(self, hw: DeckHardwareFacade) -> None:
         try:
             snap = hw.read_bus_snapshot()
         except Exception:
