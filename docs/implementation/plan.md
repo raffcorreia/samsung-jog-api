@@ -690,7 +690,7 @@ Move log ownership from the browser to the backend so logs are durable across se
 
 ## Phase 15: Observation Bus and Hardware Interface
 
-**Status:** completed. See [Phase 15 Execution Record](./phase-15-execution.md).
+**Status:** **closed** (merged to `main`, 2026-04-16). [Phase 15 Execution Record](./phase-15-execution.md) (host health gate satisfied). Design detail: [phase-15-observation-telemetry.md](./phase-15-observation-telemetry.md).
 
 ### Goal
 
@@ -698,7 +698,7 @@ Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt,
 
 ### Scope
 
-- ADS1115 `ALERT/RDY` interrupt path (no ADC polling)
+- ADS1115 `ALERT/RDY` edge path plus asyncio watchdog (continuous conversion / conversion-ready ALERT; not “zero polling” for the whole bus)
 - decode of `KEY_ADC1` and `KEY_ADC2` into directional hold/release events
 - `KEY_LED` on/off event detection
 - observation-backed domain events as the single WebSocket broadcast source

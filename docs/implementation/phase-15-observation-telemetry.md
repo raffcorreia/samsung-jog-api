@@ -1,5 +1,7 @@
 # Phase 15 — Observation telemetry
 
+**Phase 15 closed** with merge to `main` (2026-04-16). Execution record: [phase-15-execution.md](./phase-15-execution.md).
+
 ## Behavior
 
 `ObservationBusService` emits physical bus state via `read_bus_snapshot()` only.
