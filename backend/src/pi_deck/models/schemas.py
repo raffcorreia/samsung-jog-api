@@ -68,8 +68,8 @@ class SignalSnapshot(BaseModel):
     """Observed front-panel / bus signals (best-effort; depends on hardware wiring).
 
     ``key_adc1_active`` is **not** an ADS1115 reading. It is the **digital** observation of the
-    monitor ``KEY_ADC1`` line (center / enter on this product), after conditioning: ``True`` means
-    the Pi sees that line **asserted** (GPIO low with pull-up on the Phase 6 protoboard map).
+    monitor ``KEY_ADC1`` line (center / enter on this product), after conditioning: ``True`` when
+    the Pi GPIO reads **high** (~3.3 V asserted at the observe pin for this build).
     Direction keys are decoded from ``KEY_ADC2`` (ADS1115 AIN0 mV thresholds) on live hardware;
     mock hardware derives them from asserted drive lines for parity with observation.
     """
