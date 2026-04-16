@@ -76,3 +76,21 @@ def test_two_websocket_clients_receive_same_log_entry() -> None:
                 assert msg2["category"] == "log"
                 assert msg1["data"]["message"] == "shared event"
                 assert msg2["data"]["message"] == "shared event"
+
+
+def test_delete_log_clears_buffer_and_not_replayed() -> None:
+    with TestClient(create_app()) as client:
+        assert (
+            client.post(
+                "/api/v1/log",
+                json={"level": "info", "source": "test", "message": "before clear"},
+            ).status_code
+            == 200
+        )
+        assert client.delete("/api/v1/log").status_code == 200
+
+        with client.websocket_connect("/ws/events") as ws:
+            assert json.loads(ws.receive_text())["category"] == "control"
+            nxt = json.loads(ws.receive_text())
+            assert nxt["category"] == "log"
+            assert "before clear" not in json.dumps(nxt)

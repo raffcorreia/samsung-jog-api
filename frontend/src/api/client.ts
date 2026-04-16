@@ -97,6 +97,14 @@ export async function postLogEntry(params: {
   }
 }
 
+/** Remove all entries from the server-side live log buffer (broadcasts to websocket clients). */
+export async function deleteLiveLog(): Promise<void> {
+  const r = await fetch(`${apiBase()}/api/v1/log`, { method: "DELETE" });
+  if (!r.ok) {
+    throw new Error(`log clear failed: ${r.status}`);
+  }
+}
+
 export function websocketEventsUrl(): string {
   const base = apiBase();
   if (base.startsWith("http://") || base.startsWith("https://")) {

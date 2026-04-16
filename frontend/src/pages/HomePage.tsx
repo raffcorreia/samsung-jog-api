@@ -73,7 +73,7 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
 
       {/* Log band — fixed height, scrolls inside */}
       <div className={styles.logRow}>
-        <LiveLogWidget lines={deck.logLines} />
+        <LiveLogWidget lines={deck.logLines} onClearServerLog={deck.clearServerLog} />
       </div>
 
       {/* OSD popup — positioned right of JogPad, does not close on JogPad clicks */}

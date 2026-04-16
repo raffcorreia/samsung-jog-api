@@ -17,6 +17,7 @@ vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
   postLogEntry: vi.fn(() => Promise.resolve()),
+  deleteLiveLog: vi.fn(() => Promise.resolve()),
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),

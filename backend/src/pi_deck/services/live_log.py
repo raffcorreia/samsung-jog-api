@@ -8,7 +8,7 @@ from typing import Any, Literal
 
 from fastapi import WebSocket
 
-from pi_deck.models.schemas import WsEventV1, utc_iso, ws_log_entry
+from pi_deck.models.schemas import WsEventV1, utc_iso, ws_log_cleared, ws_log_entry
 from pi_deck.services.ws_hub import WsHub
 
 LogLevel = Literal["debug", "info", "warning", "error"]
@@ -47,9 +47,11 @@ def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
         mode = data.get("operating_mode", "?")
         return "info", "control", f"control - state={state} mode={mode}"
     if category == "bus" and event_type == "snapshot":
-        adc1 = bool(data.get("key_adc1_active"))
+        center = bool(data.get("key_adc1_active"))
         led = bool(data.get("key_led_active"))
-        return "info", "bus", f"signals - adc1_active={adc1} key_led_active={led}"
+        c = "pressed" if center else "idle"
+        led_s = "on" if led else "off"
+        return "info", "bus", f"signals - KEY_ADC1(center)={c} KEY_LED={led_s}"
     if category == "bus" and event_type == "led_changed":
         led = bool(data.get("key_led_active"))
         return "info", "bus", f"key_led -> {'on' if led else 'off'}"
@@ -104,3 +106,10 @@ class LiveLogService:
     async def replay_to(self, ws: WebSocket) -> None:
         for entry in self.entries:
             await ws.send_json(entry.model_dump(mode="json"))
+
+    async def clear(self) -> WsEventV1:
+        """Drop all buffered entries and tell every connected client to clear their UI."""
+        self._entries.clear()
+        event = ws_log_cleared()
+        await self.ws_hub.broadcast_json(event.model_dump(mode="json"))
+        return event

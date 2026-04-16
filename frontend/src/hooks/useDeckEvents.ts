@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
+import { deleteLiveLog, fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
 import { bumpHeldCount } from "./deckHoldPeerSync";
 import type { JogAction, SignalSnapshot, StatusPayload, WsEventV1 } from "../types";
 
@@ -24,6 +24,8 @@ export interface DeckEventsState {
   wsSessionEpoch: number;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
+  /** Wipes the backend log buffer and clears local lines (DELETE /api/v1/log). */
+  clearServerLog: () => Promise<void>;
   refreshStatus: () => Promise<void>;
 }
 
@@ -64,6 +66,16 @@ export function useDeckEvents(): DeckEventsState {
     },
     [],
   );
+
+  const clearServerLog = useCallback(async () => {
+    try {
+      await deleteLiveLog();
+      setLogLines([]);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      pushLogLine(`log clear failed — ${msg}`);
+    }
+  }, [pushLogLine]);
 
   const refreshStatus = useCallback(async () => {
     try {
@@ -143,6 +155,9 @@ export function useDeckEvents(): DeckEventsState {
           }
         }
 
+        if (parsed.category === "log" && parsed.type === "cleared") {
+          setLogLines([]);
+        }
         if (parsed.category === "log" && parsed.type === "entry") {
           const message = String(parsed.data.message ?? "");
           const source = String(parsed.data.source ?? "log");
@@ -249,6 +264,7 @@ export function useDeckEvents(): DeckEventsState {
       wsSessionEpoch,
       logLines,
       pushLogLine,
+      clearServerLog,
       refreshStatus,
     }),
     [
@@ -259,6 +275,7 @@ export function useDeckEvents(): DeckEventsState {
       wsSessionEpoch,
       logLines,
       pushLogLine,
+      clearServerLog,
       refreshStatus,
     ],
   );

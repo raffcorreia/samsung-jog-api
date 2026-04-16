@@ -65,7 +65,13 @@ class LogIn(BaseModel):
 
 
 class SignalSnapshot(BaseModel):
-    """Observed front-panel / bus signals (best-effort; depends on hardware wiring)."""
+    """Observed front-panel / bus signals (best-effort; depends on hardware wiring).
+
+    ``key_adc1_active`` is **not** an ADS1115 reading. It is the **digital** observation of the
+    monitor ``KEY_ADC1`` line (center / enter on this product), after conditioning: ``True`` means
+    the Pi sees that line **asserted** (GPIO low with pull-up on the Phase 6 protoboard map).
+    Direction keys use ``KEY_ADC2`` (analog) elsewhere, not this field.
+    """
 
     key_adc1_active: bool
     key_led_active: bool
@@ -185,4 +191,14 @@ def ws_log_entry(
         type="entry",
         ts=ts or utc_iso(),
         data={"level": level, "source": source, "message": message},
+    )
+
+
+def ws_log_cleared() -> WsEventV1:
+    """Notify clients that the server-side live log buffer was wiped."""
+    return WsEventV1(
+        category="log",
+        type="cleared",
+        ts=utc_iso(),
+        data={},
     )

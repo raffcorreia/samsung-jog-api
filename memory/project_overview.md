@@ -14,6 +14,8 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Phase 14 log state:** Backend-owned live logging is implemented and deployed (`0.1.0+r22`). `LiveLogService` owns the `220`-entry replay buffer and emits structured `log/entry` WebSocket events. New clients receive replayed history immediately; multiple clients receive the same live stream. Frontend log code no longer formats command/control/bus events into local history.
 
+**Log / event hygiene (backlog):** WebSocket and derived log traffic may feel excessive or not representative of what operators care about (duplicate `bus/snapshot` with `deck_control`, telemetry poll cadence, verbosity of `command`/`control` lines). Plan a later pass to coalesce, filter, or re-level categories so the live log stays readable without losing auditability.
+
 **Hardware vs software sequencing:** Phase 8+ low-level software is brought up on the **Phase 6 GPIO map** first. When Phase 7 boards are fabricated, an **extra migration phase** will be inserted (slot TBD) to remap GPIO and retest software against the **Phase 7 pinout** — see `docs/implementation/plan.md` (“Deferred integrated-board GPIO and software migration”).
 
 **Why:** Input switching on the CJ791 is cycle-through-inputs only. DDC alone can't switch; JOG alone can't read state. Both are needed together.

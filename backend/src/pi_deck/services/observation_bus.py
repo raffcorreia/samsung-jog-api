@@ -1,16 +1,18 @@
-"""Hardware telemetry → websocket ``bus.snapshot`` / ``bus.led_changed`` (Phase 15).
+"""Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed`` (Phase 15).
 
 ``command/held`` and ``command/released`` are emitted by ``DeckControlService`` so the UI stays
-reliable even if I²C/GPIO observation glitches. This module pushes **signal** updates for KEY_ADC1 /
-KEY_LED and keeps the ADS1115 conversion register fresh (AIN0 = KEY_ADC2 analog path).
+reliable. This service reports KEY_ADC1 / KEY_LED and refreshes ADS1115 AIN0 (KEY_ADC2 analog path).
 
-Live: asyncio poll (~25 ms). Avoids GPIO edge IRQs at ~250 Hz scheduling work onto asyncio
-(``run_coroutine_threadsafe``), which had starved the event loop."""
+Live: **BCM 17** (ADS ALERT): ``wait_for_edge`` in a daemon thread, one async sample per edge.
+A **~25 ms poll** backs up KEY1/LED.
+"""
 
 from __future__ import annotations
 
 import asyncio
 import logging
+import sys
+import threading
 from typing import cast
 
 from pi_deck.hardware.ads1115 import Ads1115
@@ -26,6 +28,7 @@ from pi_deck.services.ws_hub import WsHub
 logger = logging.getLogger(__name__)
 
 _POLL_INTERVAL_S = 0.025
+_ALERT_EDGE_TIMEOUT_MS = 500
 
 
 class ObservationBusService:
@@ -42,21 +45,50 @@ class ObservationBusService:
         self._live_log = live_log
         self._hardware = hardware
         self._ads: Ads1115 | None = None
+        self._loop: asyncio.AbstractEventLoop | None = None
         self._poll_task: asyncio.Task[None] | None = None
+        self._alert_thread: threading.Thread | None = None
+        self._alert_stop = threading.Event()
         self._last_signals: tuple[bool, bool] | None = None
         self._led_prev: bool | None = None
 
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
-        _ = loop
+        self._loop = loop
         hw = self._hardware
         if getattr(hw, "kind", None) != "live":
             return
+        live_hw = cast(LiveDeckHardware, hw)
+
+        try:
+            ads = Ads1115()
+            ads.start_continuous_ain0_rdy()
+            self._ads = ads
+        except Exception:
+            logger.exception(
+                "observation: ADS1115 continuous mode failed; telemetry limited to GPIO",
+            )
+            self._ads = None
+
         self._poll_task = asyncio.create_task(
-            self._live_telemetry_loop(),
+            self._live_telemetry_loop(live_hw, self._ads),
             name="observation-telemetry",
         )
 
+        self._alert_stop.clear()
+        self._alert_thread = threading.Thread(
+            target=self._alert_gpio_loop,
+            args=(live_hw,),
+            name="ads-alert",
+            daemon=True,
+        )
+        self._alert_thread.start()
+
     async def stop(self) -> None:
+        self._alert_stop.set()
+        if self._alert_thread is not None:
+            self._alert_thread.join(timeout=3.0)
+            self._alert_thread = None
+
         if self._poll_task is not None:
             self._poll_task.cancel()
             try:
@@ -64,12 +96,14 @@ class ObservationBusService:
             except asyncio.CancelledError:
                 pass
             self._poll_task = None
+
         if self._ads is not None:
             try:
                 self._ads.close()
             except Exception:
                 logger.debug("observation: ads close failed", exc_info=True)
             self._ads = None
+        self._loop = None
 
     async def _emit(self, event: object) -> None:
         payload = (
@@ -84,20 +118,57 @@ class ObservationBusService:
         if log_event is not None:
             await self._ws_hub.broadcast_json(log_event.model_dump(mode="json"))
 
-    async def _live_telemetry_loop(self) -> None:
-        hw = cast(LiveDeckHardware, self._hardware)
+    def _alert_gpio_loop(self, hw: LiveDeckHardware) -> None:
+        """Block on ALERT/RDY edges; schedule one async telemetry sample per edge."""
+        if sys.platform != "linux":
+            return
+        loop = self._loop
+        if loop is None:
+            return
+
+        import RPi.GPIO as GPIO  # noqa: N814
+
+        bcm = hw.pins.ads_alert
+        try:
+            GPIO.setup(bcm, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        except Exception:
+            logger.exception("observation: cannot setup ALERT BCM %s", bcm)
+            return
+
+        logger.info("observation: ADS ALERT monitoring on BCM %s (wait_for_edge)", bcm)
+
+        while not self._alert_stop.is_set():
+            try:
+                ch = GPIO.wait_for_edge(bcm, GPIO.BOTH, timeout=_ALERT_EDGE_TIMEOUT_MS)
+            except Exception:
+                logger.exception("observation: wait_for_edge on BCM %s", bcm)
+                break
+            if self._alert_stop.is_set():
+                break
+            if ch is None:
+                continue
+
+            fut = asyncio.run_coroutine_threadsafe(self._sample_after_alert(hw), loop)
+
+            def _log_alert_done(f: asyncio.Future[None]) -> None:
+                try:
+                    exc = f.exception()
+                except asyncio.CancelledError:
+                    return
+                if exc is not None:
+                    logger.error("observation: alert telemetry sample failed", exc_info=exc)
+
+            fut.add_done_callback(_log_alert_done)
 
         try:
-            ads = Ads1115()
-            ads.start_continuous_ain0_rdy()
-            self._ads = ads
+            GPIO.cleanup(bcm)
         except Exception:
-            logger.exception(
-                "observation: ADS1115 continuous mode failed; telemetry limited to GPIO",
-            )
-            ads = None
-            self._ads = None
+            logger.debug("observation: GPIO.cleanup(%s)", bcm, exc_info=True)
 
+    async def _sample_after_alert(self, hw: LiveDeckHardware) -> None:
+        await self._poll_telemetry_once(hw, self._ads)
+
+    async def _live_telemetry_loop(self, hw: LiveDeckHardware, ads: Ads1115 | None) -> None:
         logger.info("observation: live telemetry poll started (interval=%ss)", _POLL_INTERVAL_S)
         try:
             while True:
@@ -105,13 +176,6 @@ class ObservationBusService:
                 await self._poll_telemetry_once(hw, ads)
         except asyncio.CancelledError:
             raise
-        finally:
-            if self._ads is not None:
-                try:
-                    self._ads.close()
-                except Exception:
-                    pass
-                self._ads = None
 
     async def _poll_telemetry_once(self, hw: LiveDeckHardware, ads: Ads1115 | None) -> None:
         if ads is not None:

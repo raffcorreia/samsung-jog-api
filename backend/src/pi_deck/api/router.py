@@ -108,6 +108,12 @@ async def api_log_entry_from_request(
     return JSONResponse({"ok": True})
 
 
+@api_v1.delete("/log")
+async def api_log_clear(deck: DeckControlService = Depends(get_deck)) -> JSONResponse:
+    await deck.live_log.clear()
+    return JSONResponse({"ok": True})
+
+
 async def websocket_events(ws: WebSocket) -> None:
     deck: DeckControlService = ws.app.state.deck
     hub: WsHub = ws.app.state.ws_hub

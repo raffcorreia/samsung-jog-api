@@ -8,7 +8,7 @@ Record completion of **Phase 15: Observation Bus and Hardware Interface** per [I
 
 - **Backend:** `DeckControlService` emits `command/held`, `command/released`, and `bus/snapshot` on REST-driven hold/release/pulse so the UI and logs stay reliable. `ObservationBusService` runs an asyncio **telemetry poll** on live hardware (~25 ms): refreshes **ADS1115** AIN0 reads and emits **`bus/snapshot`** / **`bus/led_changed`** when KEY_ADC1 / KEY_LED signals change, without competing with the main event loop (earlier GPIO-edge + `run_coroutine_threadsafe` storms could starve asyncio and drop all websocket progress).
 - **Decode:** `KEY_ADC2` millivolt thresholds are derived from Phase 2 powered measurements (`key_adc2_decode.py`).
-- **Frontend:** JogPad shows an optimistic pressed state after REST success and reconciles to observation-backed `holdCounts`. `LedIndicator` pulses on `bus/led_changed` when `KEY_LED` turns on. OSD mock can auto-open after a short post-mount delay when bus activity ticks increase.
+- **Frontend:** JogPad shows an optimistic pressed state after REST success and reconciles to websocket `holdCounts`. `LedIndicator` tracks `key_led_active` from status / bus events. OSD mock opens only from the manual OSD control (no auto-open on bus).
 
 ## Host health snapshot
 
@@ -28,3 +28,4 @@ Paste the full default (text) output below when closing the phase.
 
 - Deploy updated code to the Pi with `PI_TARGET=user@host ./scripts/deploy.sh` so the deck runs the new `ObservationBusService` and `Ads1115.start_continuous_ain0_rdy`.
 - Bench verification: `scripts/pi-deck-gpio-probe read-ads --channel 0` on `/dev/i2c-1` address `0x48` (AIN0).
+- **Follow-up:** Review websocket event volume and `LiveLogService` fan-out (command + control + bus telemetry). Current streams can feel noisy or duplicative; a future pass should tighten what becomes a `log/entry`, add levels or coalescing, and keep operator-facing logs representative without losing traceability.
