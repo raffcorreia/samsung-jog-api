@@ -8,35 +8,58 @@ import {
 } from "react";
 
 import { deleteLiveLog, fetchStatus, postLogEntry, websocketEventsUrl } from "../api/client";
-import { bumpHeldCount } from "./deckHoldPeerSync";
+import { formatBusLedLogMessage, formatBusSnapshotLogMessage } from "../log/busLogFormat";
 import type { JogAction, SignalSnapshot, StatusPayload, WsEventV1 } from "../types";
 
 const MAX_LOG = 220;
 
+const JOG_ACTIONS: readonly JogAction[] = ["up", "down", "left", "right", "center"];
+
+function emptyHardwareHeld(): Record<JogAction, boolean> {
+  return {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    center: false,
+  };
+}
+
+export function signalsToHardwareHeld(s: SignalSnapshot): Record<JogAction, boolean> {
+  const h = emptyHardwareHeld();
+  if (s.key_adc1_active) {
+    h.center = true;
+  }
+  const d = s.key_adc2_direction;
+  if (d === "up" || d === "down" || d === "left" || d === "right") {
+    h[d] = true;
+  }
+  return h;
+}
+
+function parseBusSnapshotData(data: Record<string, unknown>): SignalSnapshot {
+  const d = data.key_adc2_direction;
+  return {
+    key_adc1_active: Boolean(data.key_adc1_active),
+    key_led_active: Boolean(data.key_led_active),
+    key_adc2_direction:
+      d === "up" || d === "down" || d === "left" || d === "right" ? d : null,
+  };
+}
+
 export interface DeckEventsState {
   status: StatusPayload | null;
-  /** Hold counts derived only from websocket ``held`` / ``released`` (all clients see the same stream). */
-  holdCounts: Record<JogAction, number>;
-  /** Increments on each ``released`` so JogPad can drop stale pointer state (replace, peer release). */
+  /** Observed jog actuation from ``bus/snapshot`` / ``status.signals`` (hardware truth). */
+  hardwareHeld: Record<JogAction, boolean>;
+  /** Increments when observation shows a key no longer held (peer sync / watchdog). */
   wsReleaseTick: number;
   wsLastReleasedAction: JogAction | null;
-  /** Increments on each websocket ``connected`` so JogPad clears stale pointers even when ``wsReleaseTick`` stays 0. */
+  /** Increments on each websocket ``connected`` so JogPad clears stale pointers. */
   wsSessionEpoch: number;
   logLines: readonly string[];
   pushLogLine: (line: string) => void;
-  /** Wipes the backend log buffer and clears local lines (DELETE /api/v1/log). */
   clearServerLog: () => Promise<void>;
   refreshStatus: () => Promise<void>;
-}
-
-function isJogAction(s: unknown): s is JogAction {
-  return (
-    s === "up" ||
-    s === "down" ||
-    s === "left" ||
-    s === "right" ||
-    s === "center"
-  );
 }
 
 function parseWs(raw: string): WsEventV1 | null {
@@ -53,12 +76,16 @@ function parseWs(raw: string): WsEventV1 | null {
 
 export function useDeckEvents(): DeckEventsState {
   const [status, setStatus] = useState<StatusPayload | null>(null);
-  const [holdCounts, setHoldCounts] = useState<Record<JogAction, number>>({});
   const [wsReleaseTick, setWsReleaseTick] = useState(0);
   const [wsLastReleasedAction, setWsLastReleasedAction] = useState<JogAction | null>(null);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
   const prevSignalsRef = useRef<SignalSnapshot | null>(null);
+
+  const hardwareHeld = useMemo(
+    () => (status ? signalsToHardwareHeld(status.signals) : emptyHardwareHeld()),
+    [status],
+  );
 
   const pushLogLine = useCallback(
     (line: string) => {
@@ -127,32 +154,16 @@ export function useDeckEvents(): DeckEventsState {
           return;
         }
 
-        /* Jog ring + session: sync updates so the UI is not deferred behind startTransition. */
         if (parsed.category === "control" && parsed.type === "connected") {
           const st = parsed.data.status as StatusPayload | undefined;
           if (st) {
             setStatus(st);
             prevSignalsRef.current = st.signals;
           }
-          setHoldCounts({});
           setWsReleaseTick(0);
           setWsLastReleasedAction(null);
           setWsSessionEpoch((e) => e + 1);
           setLogLines([]);
-        }
-        if (parsed.category === "command" && parsed.type === "held") {
-          const action = parsed.data.action;
-          if (isJogAction(action)) {
-            setHoldCounts((prev) => bumpHeldCount(prev, action, 1));
-          }
-        }
-        if (parsed.category === "command" && parsed.type === "released") {
-          const action = parsed.data.action;
-          if (isJogAction(action)) {
-            setHoldCounts((prev) => bumpHeldCount(prev, action, -1));
-            setWsLastReleasedAction(action);
-            setWsReleaseTick((n) => n + 1);
-          }
         }
 
         if (parsed.category === "log" && parsed.type === "cleared") {
@@ -169,7 +180,6 @@ export function useDeckEvents(): DeckEventsState {
           });
         }
 
-        /* Status mirrors that are not jog-critical — low priority. */
         if (parsed.category === "control" && parsed.type === "state") {
           startTransition(() => {
             setStatus((prev) =>
@@ -184,10 +194,24 @@ export function useDeckEvents(): DeckEventsState {
           });
         }
         if (parsed.category === "bus" && parsed.type === "snapshot") {
-          const nextSig: SignalSnapshot = {
-            key_adc1_active: Boolean(parsed.data.key_adc1_active),
-            key_led_active: Boolean(parsed.data.key_led_active),
-          };
+          const nextSig = parseBusSnapshotData(parsed.data as Record<string, unknown>);
+          const stamp = parsed.ts.replace("T", " ").replace("Z", "").slice(0, 19);
+          const line = `${stamp}  bus  ${formatBusSnapshotLogMessage(nextSig)}`;
+          setLogLines((prev) => {
+            const next = [...prev, line];
+            return next.length > MAX_LOG ? next.slice(next.length - MAX_LOG) : next;
+          });
+          const prev = prevSignalsRef.current;
+          if (prev) {
+            const pHeld = signalsToHardwareHeld(prev);
+            const nHeld = signalsToHardwareHeld(nextSig);
+            for (const a of JOG_ACTIONS) {
+              if (pHeld[a] && !nHeld[a]) {
+                setWsLastReleasedAction(a);
+                setWsReleaseTick((n) => n + 1);
+              }
+            }
+          }
           prevSignalsRef.current = nextSig;
           startTransition(() => {
             setStatus((p) =>
@@ -202,6 +226,12 @@ export function useDeckEvents(): DeckEventsState {
         }
         if (parsed.category === "bus" && parsed.type === "led_changed") {
           const keyLedActive = Boolean(parsed.data.key_led_active);
+          const stamp = parsed.ts.replace("T", " ").replace("Z", "").slice(0, 19);
+          const line = `${stamp}  bus  ${formatBusLedLogMessage(keyLedActive)}`;
+          setLogLines((prev) => {
+            const next = [...prev, line];
+            return next.length > MAX_LOG ? next.slice(next.length - MAX_LOG) : next;
+          });
           prevSignalsRef.current = prevSignalsRef.current
             ? {
                 ...prevSignalsRef.current,
@@ -210,6 +240,7 @@ export function useDeckEvents(): DeckEventsState {
             : {
                 key_adc1_active: false,
                 key_led_active: keyLedActive,
+                key_adc2_direction: null,
               };
           startTransition(() => {
             setStatus((p) =>
@@ -258,7 +289,7 @@ export function useDeckEvents(): DeckEventsState {
   return useMemo(
     () => ({
       status,
-      holdCounts,
+      hardwareHeld,
       wsReleaseTick,
       wsLastReleasedAction,
       wsSessionEpoch,
@@ -269,7 +300,7 @@ export function useDeckEvents(): DeckEventsState {
     }),
     [
       status,
-      holdCounts,
+      hardwareHeld,
       wsReleaseTick,
       wsLastReleasedAction,
       wsSessionEpoch,

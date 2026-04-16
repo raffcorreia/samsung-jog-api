@@ -45,7 +45,7 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
 
         <JogWidget>
           <JogPad
-            holdCounts={deck.holdCounts}
+            hardwareHeld={deck.hardwareHeld}
             wsReleaseTick={deck.wsReleaseTick}
             wsLastReleasedAction={deck.wsLastReleasedAction}
             wsSessionEpoch={deck.wsSessionEpoch}

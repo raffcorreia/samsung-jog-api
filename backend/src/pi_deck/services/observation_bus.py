@@ -1,11 +1,9 @@
 """Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
-``command/*`` jog events come from ``DeckControlService`` only. **Physical** KEY_ADC1 /
-KEY_LED (and ADS1115 refresh for KEY_ADC2) are emitted **here** only—not from deck_control
-after jog (avoids misleading combined snapshots next to direction commands).
+Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED are emitted **only** from this service, driven
+by ``read_bus_snapshot()`` on the hardware facade (poll + ADS ALERT edge on live hardware).
 
-Live: **BCM 17** (ADS ALERT): ``wait_for_edge`` in a daemon thread, one async sample per edge.
-A **~25 ms poll** backs up KEY1/LED. Mock: same poll interval, GPIO observe only (no ADS).
+``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
 """
 
 from __future__ import annotations
@@ -16,12 +14,7 @@ import sys
 import threading
 from typing import cast
 
-from pi_deck.hardware.ads1115 import Ads1115
-from pi_deck.models.schemas import (
-    SignalSnapshot,
-    ws_bus_led_changed,
-    ws_bus_snapshot,
-)
+from pi_deck.models.schemas import SignalSnapshot, ws_bus_led_changed, ws_bus_snapshot
 from pi_deck.services.hardware_facade import DeckHardwareFacade, LiveDeckHardware, MockDeckHardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
@@ -45,12 +38,11 @@ class ObservationBusService:
         self._ws_hub = ws_hub
         self._live_log = live_log
         self._hardware = hardware
-        self._ads: Ads1115 | None = None
         self._loop: asyncio.AbstractEventLoop | None = None
         self._poll_task: asyncio.Task[None] | None = None
         self._alert_thread: threading.Thread | None = None
         self._alert_stop = threading.Event()
-        self._last_signals: tuple[bool, bool] | None = None
+        self._last_signals: SignalSnapshot | None = None
         self._led_prev: bool | None = None
 
     def start(self, loop: asyncio.AbstractEventLoop) -> None:
@@ -59,8 +51,10 @@ class ObservationBusService:
         kind = getattr(hw, "kind", None)
 
         if kind == "mock":
+            mock_hw = cast(MockDeckHardware, hw)
+            mock_hw.set_change_notifier(lambda: self._schedule_sample_from_notifier())
             self._poll_task = asyncio.create_task(
-                self._mock_telemetry_loop(cast(MockDeckHardware, hw)),
+                self._mock_telemetry_loop(mock_hw),
                 name="observation-mock-telemetry",
             )
             return
@@ -69,18 +63,8 @@ class ObservationBusService:
             return
         live_hw = cast(LiveDeckHardware, hw)
 
-        try:
-            ads = Ads1115()
-            ads.start_continuous_ain0_rdy()
-            self._ads = ads
-        except Exception:
-            logger.exception(
-                "observation: ADS1115 continuous mode failed; telemetry limited to GPIO",
-            )
-            self._ads = None
-
         self._poll_task = asyncio.create_task(
-            self._live_telemetry_loop(live_hw, self._ads),
+            self._live_telemetry_loop(live_hw),
             name="observation-telemetry",
         )
 
@@ -92,6 +76,27 @@ class ObservationBusService:
             daemon=True,
         )
         self._alert_thread.start()
+
+    def _schedule_sample_from_notifier(self) -> None:
+        loop = self._loop
+        if loop is None:
+            return
+        mock_hw = cast(MockDeckHardware, self._hardware)
+
+        async def _once() -> None:
+            await self._observe_signals(mock_hw)
+
+        fut = asyncio.run_coroutine_threadsafe(_once(), loop)
+
+        def _log_done(f: asyncio.Future[None]) -> None:
+            try:
+                exc = f.exception()
+            except asyncio.CancelledError:
+                return
+            if exc is not None:
+                logger.error("observation: mock notifier sample failed", exc_info=exc)
+
+        fut.add_done_callback(_log_done)
 
     async def stop(self) -> None:
         self._alert_stop.set()
@@ -107,12 +112,10 @@ class ObservationBusService:
                 pass
             self._poll_task = None
 
-        if self._ads is not None:
-            try:
-                self._ads.close()
-            except Exception:
-                logger.debug("observation: ads close failed", exc_info=True)
-            self._ads = None
+        hw = self._hardware
+        if getattr(hw, "kind", None) == "mock":
+            cast(MockDeckHardware, hw).set_change_notifier(None)
+
         self._loop = None
 
     async def _emit(self, event: object) -> None:
@@ -125,7 +128,10 @@ class ObservationBusService:
         if self._ws_hub.client_count == 0:
             return
         await self._ws_hub.broadcast_json(payload)
-        if log_event is not None:
+        # One wire event per observation: ``bus/*`` updates UI; ``record_event`` still appends
+        # matching ``log/entry`` to the replay buffer, but we do not broadcast that again (avoids
+        # duplicate messages). The UI derives the visible log line from ``bus/led_changed``.
+        if log_event is not None and payload.get("category") != "bus":
             await self._ws_hub.broadcast_json(log_event.model_dump(mode="json"))
 
     def _alert_gpio_loop(self, hw: LiveDeckHardware) -> None:
@@ -176,7 +182,7 @@ class ObservationBusService:
             logger.debug("observation: GPIO.cleanup(%s)", bcm, exc_info=True)
 
     async def _sample_after_alert(self, hw: LiveDeckHardware) -> None:
-        await self._poll_telemetry_once(hw, self._ads)
+        await self._observe_signals(hw)
 
     async def _mock_telemetry_loop(self, hw: MockDeckHardware) -> None:
         logger.info("observation: mock telemetry poll (interval=%ss)", _POLL_INTERVAL_S)
@@ -187,46 +193,43 @@ class ObservationBusService:
         except asyncio.CancelledError:
             raise
 
-    async def _live_telemetry_loop(self, hw: LiveDeckHardware, ads: Ads1115 | None) -> None:
+    async def _live_telemetry_loop(self, hw: LiveDeckHardware) -> None:
         logger.info("observation: live telemetry poll started (interval=%ss)", _POLL_INTERVAL_S)
         try:
             while True:
                 await asyncio.sleep(_POLL_INTERVAL_S)
-                await self._poll_telemetry_once(hw, ads)
+                await self._observe_signals(hw)
         except asyncio.CancelledError:
             raise
 
-    async def _poll_telemetry_once(self, hw: LiveDeckHardware, ads: Ads1115 | None) -> None:
-        if ads is not None:
-            try:
-                await asyncio.to_thread(ads.read_conversion_mv)
-            except Exception:
-                logger.exception("observation: ADS read failed")
-        await self._observe_signals(hw)
-
     async def _observe_signals(self, hw: DeckHardwareFacade) -> None:
         try:
-            adc1, led = hw.read_signals()
+            snap = hw.read_bus_snapshot()
         except Exception:
-            logger.exception("observation: read_signals failed")
+            logger.exception("observation: read_bus_snapshot failed")
             return
 
-        snap = (adc1, led)
         if self._last_signals is None:
             self._last_signals = snap
             if self._led_prev is None:
-                self._led_prev = led
+                self._led_prev = snap.key_led_active
+            observed_idle = (
+                not snap.key_adc1_active
+                and not snap.key_led_active
+                and snap.key_adc2_direction is None
+            )
+            # Avoid duplicate idle snapshot vs ``control/connected``; but if something is
+            # asserted before the first poll interval (e.g. mock notifier), publish once.
+            if not observed_idle:
+                await self._emit(ws_bus_snapshot(signals=snap))
+                await self._emit_led_if_changed(snap.key_led_active)
             return
 
         if snap != self._last_signals:
             self._last_signals = snap
-            await self._emit(
-                ws_bus_snapshot(
-                    signals=SignalSnapshot(key_adc1_active=adc1, key_led_active=led),
-                ),
-            )
+            await self._emit(ws_bus_snapshot(signals=snap))
 
-        await self._emit_led_if_changed(led)
+        await self._emit_led_if_changed(snap.key_led_active)
 
     async def _emit_led_if_changed(self, led: bool) -> None:
         if self._led_prev is None:

@@ -57,8 +57,11 @@ type PtrState = {
   releaseInFlight: boolean;
 };
 
-function heldFromServer(holdCounts: Record<JogAction, number>, action: JogAction): boolean {
-  return (holdCounts[action] ?? 0) > 0;
+function isHeldOnWire(
+  hardwareHeld: Record<JogAction, boolean>,
+  action: JogAction,
+): boolean {
+  return hardwareHeld[action] ?? false;
 }
 
 function emptyOptimistic(): Record<JogAction, boolean> {
@@ -72,13 +75,13 @@ function emptyOptimistic(): Record<JogAction, boolean> {
 }
 
 function JogPadInner(props: {
-  holdCounts: Record<JogAction, number>;
+  hardwareHeld: Record<JogAction, boolean>;
   wsReleaseTick: number;
   wsLastReleasedAction: JogAction | null;
   wsSessionEpoch: number;
   onLocalLog: (line: string) => void;
 }) {
-  const { holdCounts, wsReleaseTick, wsLastReleasedAction, wsSessionEpoch, onLocalLog } = props;
+  const { hardwareHeld, wsReleaseTick, wsLastReleasedAction, wsSessionEpoch, onLocalLog } = props;
   const surfaceRef = useRef<HTMLDivElement | null>(null);
   const ptrMapRef = useRef(new Map<number, PtrState>());
   const [optimistic, setOptimistic] = useState(() => emptyOptimistic());
@@ -96,7 +99,7 @@ function JogPadInner(props: {
     setOptimistic((prev) => {
       let next = prev;
       for (const a of Object.keys(prev) as JogAction[]) {
-        if (prev[a] && heldFromServer(holdCounts, a)) {
+        if (prev[a] && isHeldOnWire(hardwareHeld, a)) {
           if (next === prev) {
             next = { ...prev };
           }
@@ -105,9 +108,9 @@ function JogPadInner(props: {
       }
       return next;
     });
-  }, [holdCounts]);
+  }, [hardwareHeld]);
 
-  /* Server ``released`` (peer replace, release, watchdog): drop matching pointer hold so pointer-up does not send a bogus release. */
+  /* Observation shows release (peer / watchdog): drop matching pointer hold so pointer-up does not send a bogus release. */
   useEffect(() => {
     if (wsReleaseTick === 0) {
       return;
@@ -260,13 +263,13 @@ function JogPadInner(props: {
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.up}`}
             aria-pressed={
-              heldFromServer(holdCounts, "up") || optimistic.up
+              isHeldOnWire(hardwareHeld, "up") || optimistic.up
             }
             data-pressed={
-              heldFromServer(holdCounts, "up") || optimistic.up ? "true" : undefined
+              isHeldOnWire(hardwareHeld, "up") || optimistic.up ? "true" : undefined
             }
             data-optimistic={
-              optimistic.up && !heldFromServer(holdCounts, "up") ? "true" : undefined
+              optimistic.up && !isHeldOnWire(hardwareHeld, "up") ? "true" : undefined
             }
           />
           <path
@@ -276,12 +279,12 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.right}`}
-            aria-pressed={heldFromServer(holdCounts, "right") || optimistic.right}
+            aria-pressed={isHeldOnWire(hardwareHeld, "right") || optimistic.right}
             data-pressed={
-              heldFromServer(holdCounts, "right") || optimistic.right ? "true" : undefined
+              isHeldOnWire(hardwareHeld, "right") || optimistic.right ? "true" : undefined
             }
             data-optimistic={
-              optimistic.right && !heldFromServer(holdCounts, "right") ? "true" : undefined
+              optimistic.right && !isHeldOnWire(hardwareHeld, "right") ? "true" : undefined
             }
           />
           <path
@@ -291,12 +294,12 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.down}`}
-            aria-pressed={heldFromServer(holdCounts, "down") || optimistic.down}
+            aria-pressed={isHeldOnWire(hardwareHeld, "down") || optimistic.down}
             data-pressed={
-              heldFromServer(holdCounts, "down") || optimistic.down ? "true" : undefined
+              isHeldOnWire(hardwareHeld, "down") || optimistic.down ? "true" : undefined
             }
             data-optimistic={
-              optimistic.down && !heldFromServer(holdCounts, "down") ? "true" : undefined
+              optimistic.down && !isHeldOnWire(hardwareHeld, "down") ? "true" : undefined
             }
           />
           <path
@@ -306,12 +309,12 @@ function JogPadInner(props: {
             role="button"
             tabIndex={0}
             aria-label={`Jog ${SEGMENT_LABELS.left}`}
-            aria-pressed={heldFromServer(holdCounts, "left") || optimistic.left}
+            aria-pressed={isHeldOnWire(hardwareHeld, "left") || optimistic.left}
             data-pressed={
-              heldFromServer(holdCounts, "left") || optimistic.left ? "true" : undefined
+              isHeldOnWire(hardwareHeld, "left") || optimistic.left ? "true" : undefined
             }
             data-optimistic={
-              optimistic.left && !heldFromServer(holdCounts, "left") ? "true" : undefined
+              optimistic.left && !isHeldOnWire(hardwareHeld, "left") ? "true" : undefined
             }
           />
         </svg>
@@ -320,12 +323,12 @@ function JogPadInner(props: {
           className={styles.centerBtn}
           data-jog-action="center"
           aria-label={`Jog ${SEGMENT_LABELS.center}`}
-          aria-pressed={heldFromServer(holdCounts, "center") || optimistic.center}
+          aria-pressed={isHeldOnWire(hardwareHeld, "center") || optimistic.center}
           data-pressed={
-            heldFromServer(holdCounts, "center") || optimistic.center ? "true" : undefined
+            isHeldOnWire(hardwareHeld, "center") || optimistic.center ? "true" : undefined
           }
           data-optimistic={
-            optimistic.center && !heldFromServer(holdCounts, "center") ? "true" : undefined
+            optimistic.center && !isHeldOnWire(hardwareHeld, "center") ? "true" : undefined
           }
         >
           <svg className={styles.powerIcon} viewBox="0 0 24 24" aria-hidden>

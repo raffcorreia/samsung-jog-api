@@ -8,12 +8,23 @@ function apiBase(): string {
   return "";
 }
 
+function normalizeStatusPayload(p: StatusPayload): StatusPayload {
+  return {
+    ...p,
+    signals: {
+      ...p.signals,
+      key_adc2_direction: p.signals.key_adc2_direction ?? null,
+    },
+  };
+}
+
 export async function fetchStatus(): Promise<StatusPayload> {
   const r = await fetch(`${apiBase()}/api/v1/status`);
   if (!r.ok) {
     throw new Error(`status ${r.status}`);
   }
-  return (await r.json()) as StatusPayload;
+  const j = (await r.json()) as StatusPayload;
+  return normalizeStatusPayload(j);
 }
 
 export type JogPressResult = { ok: true } | { ok: false; body: CommandRejectedBody };

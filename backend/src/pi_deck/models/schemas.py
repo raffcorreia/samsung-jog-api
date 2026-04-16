@@ -70,11 +70,13 @@ class SignalSnapshot(BaseModel):
     ``key_adc1_active`` is **not** an ADS1115 reading. It is the **digital** observation of the
     monitor ``KEY_ADC1`` line (center / enter on this product), after conditioning: ``True`` means
     the Pi sees that line **asserted** (GPIO low with pull-up on the Phase 6 protoboard map).
-    Direction keys use ``KEY_ADC2`` (analog) elsewhere, not this field.
+    Direction keys are decoded from ``KEY_ADC2`` (ADS1115 AIN0 mV thresholds) on live hardware;
+    mock hardware derives them from asserted drive lines for parity with observation.
     """
 
     key_adc1_active: bool
     key_led_active: bool
+    key_adc2_direction: Literal["up", "down", "left", "right"] | None = None
 
 
 class StatusOut(BaseModel):
@@ -153,11 +155,16 @@ def ws_control_state(*, control_state: ControlState, operating_mode: OperatingMo
 
 
 def ws_bus_snapshot(*, signals: SignalSnapshot) -> WsEventV1:
+    data = {
+        "key_adc1_active": signals.key_adc1_active,
+        "key_led_active": signals.key_led_active,
+        "key_adc2_direction": signals.key_adc2_direction,
+    }
     return WsEventV1(
         category="bus",
         type="snapshot",
         ts=utc_iso(),
-        data={"key_adc1_active": signals.key_adc1_active, "key_led_active": signals.key_led_active},
+        data=data,
     )
 
 

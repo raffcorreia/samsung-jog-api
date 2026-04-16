@@ -1,8 +1,9 @@
 """Backend-owned live log buffer and websocket log event creation.
 
-``bus/snapshot`` is broadcast on ``/ws/events`` for UI state but is **not** copied into this
-buffer (avoids bundled KEY_ADC1+KEY_LED lines that duplicate ``bus/led_changed`` and confuse
-operators). LED and other bus facts use targeted log lines (e.g. ``key_led -> on``).
+Bus frames (``bus/snapshot``, ``bus/led_changed``) are **stored** as readable ``log/entry`` rows
+(``source: bus``) for websocket **replay** only. The observation service sends **one** ``bus/*``
+frame per change — never a second ``category: log`` for the same event; clients mirror the line
+locally. Use ``category: log`` for explicit entries (``POST /log``, notices, rejections).
 """
 
 from __future__ import annotations
@@ -17,6 +18,22 @@ from pi_deck.models.schemas import WsEventV1, utc_iso, ws_log_cleared, ws_log_en
 from pi_deck.services.ws_hub import WsHub
 
 LogLevel = Literal["debug", "info", "warning", "error"]
+
+
+def _bus_snapshot_log_message(data: dict[str, Any]) -> str:
+    """Keep in sync with ``frontend/src/log/busLogFormat.ts`` (`formatBusSnapshotLogMessage`)."""
+    k1 = bool(data.get("key_adc1_active"))
+    led = bool(data.get("key_led_active"))
+    raw = data.get("key_adc2_direction")
+    if raw is None:
+        k2s = "null"
+    else:
+        k2s = str(raw)
+    return (
+        f"key_adc1_active={'true' if k1 else 'false'} "
+        f"key_adc2_direction={k2s} "
+        f"key_led_active={'true' if led else 'false'}"
+    )
 
 
 def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
@@ -51,6 +68,8 @@ def _event_message(event: dict[str, Any]) -> tuple[LogLevel, str, str]:
         state = data.get("control_state", "?")
         mode = data.get("operating_mode", "?")
         return "info", "control", f"control - state={state} mode={mode}"
+    if category == "bus" and event_type == "snapshot":
+        return "info", "bus", _bus_snapshot_log_message(data)
     if category == "bus" and event_type == "led_changed":
         led = bool(data.get("key_led_active"))
         return "info", "bus", f"key_led -> {'on' if led else 'off'}"
@@ -94,8 +113,6 @@ class LiveLogService:
         if event.get("category") == "log":
             return None
         if event.get("category") == "control" and event.get("type") == "state":
-            return None
-        if event.get("category") == "bus" and event.get("type") == "snapshot":
             return None
         level, source, message = _event_message(event)
         ts = event.get("ts") if isinstance(event.get("ts"), str) else None
