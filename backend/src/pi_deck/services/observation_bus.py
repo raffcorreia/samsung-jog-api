@@ -1,20 +1,11 @@
 """Hardware telemetry → websocket ``bus.snapshot`` / ``bus/led_changed``.
 
-Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED are emitted **only** from this service, driven
-by ``read_bus_snapshot()`` on the hardware facade.
+Physical KEY_ADC1, KEY_ADC2 (decoded), and KEY_LED come only from ``read_bus_snapshot()`` here.
 
-**Continuous sampling (always on, live + mock):** ``_live_telemetry_loop`` / ``_mock_telemetry_loop``
-run an infinite asyncio loop with ``await asyncio.sleep(_POLL_INTERVAL_S)`` (~25 ms), then
-``_observe_signals`` → ``read_bus_snapshot()``. That single call refreshes **the whole bus** at
-once (GPIO levels for KEY_ADC1 / KEY_LED and I²C read + decode for KEY_ADC2). Nothing in the
-IRQ fallback path disables this loop.
+Live: ~25 ms asyncio poll always runs. gpiozero edge callbacks on KEY lines and ADS ALERT schedule
+extra ``read_bus_snapshot()`` rounds via ``run_coroutine_threadsafe`` and ``CoalesceGate``.
 
-**IRQ path (live):** gpiozero ``when_activated`` / ``when_deactivated`` on KEY_ADC1, KEY_LED, and
-ADS ALERT (``lgpio`` factory on Pi 5 / Bookworm; ``rpigpio`` fallback). Those callbacks schedule the
-same ``read_bus_snapshot()`` path via ``run_coroutine_threadsafe``. If edge hooks fail, telemetry
-falls back to asyncio poll only for that line — the service still starts.
-
-``DeckControlService`` sends commands to GPIO only; it does **not** emit jog ``command/*`` events.
+``DeckControlService`` drives GPIO only; it does **not** emit jog ``command/*`` events.
 """
 
 from __future__ import annotations
@@ -152,7 +143,7 @@ class ObservationBusService:
             )
 
     def _install_ads_alert_edges(self, hw: LiveDeckHardware) -> None:
-        """ADS ALERT/RDY → same coalesced observe path as KEY lines (no RPi.GPIO wait_for_edge thread)."""
+        """ADS ALERT/RDY → same coalesced observe path as KEY lines."""
         if sys.platform != "linux":
             return
 
