@@ -108,31 +108,61 @@ if [ ! -x .venv/bin/pip ]; then python3 -m venv .venv; fi
 .venv/bin/pip install -q -U pip
 .venv/bin/pip install -q -e .
 
-# Ensure live GPIO is set in the systemd unit (idempotent)
 U=/etc/systemd/system/pi-deck.service
-if [ -f "$U" ]; then
-    if grep -q "^Environment=PI_DECK_HARDWARE=mock" "$U"; then
-        sudo sed -i "s/^Environment=PI_DECK_HARDWARE=mock/Environment=PI_DECK_HARDWARE=live/" "$U"
-    fi
-    if ! grep -q "^Environment=PI_DECK_HARDWARE=" "$U"; then
-        sudo sed -i "/^Environment=PI_DECK_PORT=8756/a Environment=PI_DECK_HARDWARE=live" "$U"
-    fi
-    sudo systemctl daemon-reload
+if [ ! -f "$U" ]; then
+    echo "ERROR: ${U} is missing — systemd was never set up for pi-deck on this host." >&2
+    echo "On the Pi, run once (from repo root):" >&2
+    echo "  sudo ./scripts/host/install_pi_deck_systemd.sh \"\$(pwd)\"" >&2
+    echo "Or: sudo ./scripts/host/install_pi_deck_systemd.sh \$HOME/samsung-jog-api" >&2
+    exit 1
 fi
-sudo systemctl restart pi-deck'
+
+# Ensure live GPIO is set in the systemd unit (idempotent)
+if grep -q "^Environment=PI_DECK_HARDWARE=mock" "$U"; then
+    sudo sed -i "s/^Environment=PI_DECK_HARDWARE=mock/Environment=PI_DECK_HARDWARE=live/" "$U"
+fi
+if ! grep -q "^Environment=PI_DECK_HARDWARE=" "$U"; then
+    sudo sed -i "/^Environment=PI_DECK_PORT=8756/a Environment=PI_DECK_HARDWARE=live" "$U"
+fi
+sudo systemctl daemon-reload
+
+sudo systemctl restart pi-deck
+_ok=0
+for _w in $(seq 1 20); do
+    if sudo systemctl is-active --quiet pi-deck; then
+        _ok=1
+        break
+    fi
+    if sudo systemctl is-failed --quiet pi-deck 2>/dev/null; then
+        break
+    fi
+    sleep 0.5
+done
+if [ "$_ok" != "1" ]; then
+    echo "ERROR: pi-deck.service is not active after restart (unit failed or exited immediately)." >&2
+    echo "--- systemctl status pi-deck.service ---" >&2
+    sudo systemctl --no-pager -l status pi-deck.service || true
+    echo "--- journalctl -u pi-deck (last 80 lines) ---" >&2
+    sudo journalctl -u pi-deck -n 80 --no-pager || true
+    exit 1
+fi'
 
 # ---------------------------------------------------------------------------
 # 5. Wait for the backend to be healthy, then verify status.version
 # ---------------------------------------------------------------------------
 echo "==> Waiting for pi-deck to become healthy ..."
 ssh -o BatchMode=yes "${PI_TARGET}" 'set -e
-for i in $(seq 1 15); do
+for i in $(seq 1 30); do
     if curl -sfS --connect-timeout 3 http://127.0.0.1:8756/health >/dev/null 2>&1; then
         echo "Health OK."
         break
     fi
-    if [ "$i" -eq 15 ]; then
-        echo "ERROR: pi-deck did not become healthy after restart." >&2
+    if [ "$i" -eq 30 ]; then
+        echo "ERROR: /health on 127.0.0.1:8756 did not respond (app may have crashed after systemd start)." >&2
+        echo "--- systemctl status pi-deck.service ---" >&2
+        sudo systemctl --no-pager -l status pi-deck.service || true
+        echo "--- journalctl -u pi-deck (last 80 lines) ---" >&2
+        sudo journalctl -u pi-deck -n 80 --no-pager || true
         exit 1
     fi
     sleep 1
