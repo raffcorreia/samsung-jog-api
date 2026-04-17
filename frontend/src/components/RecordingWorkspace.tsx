@@ -55,12 +55,19 @@ function RecordingStatusIcon({
       data-mode={mode}
     >
       <rect x="8" y="10" width="80" height="52" rx="12" className={styles.cassetteBody} />
-      <rect x="21" y="22" width="54" height="20" rx="6" className={styles.cassetteWindow} />
-      <circle cx="34" cy="32" r="10" className={styles.cassetteReel} />
-      <circle cx="62" cy="32" r="10" className={styles.cassetteReel} />
-      <circle cx="34" cy="32" r="2.8" className={styles.cassetteHub} />
-      <circle cx="62" cy="32" r="2.8" className={styles.cassetteHub} />
-      <path d="M42 50h12l8 12H34l8-12Z" className={styles.cassetteBase} />
+      <rect x="18" y="16" width="60" height="10" rx="4" className={styles.cassetteLabel} />
+      <rect x="19" y="28" width="58" height="18" rx="5" className={styles.cassetteWindow} />
+      <path d="M27 36h42" className={styles.cassetteTape} />
+      <path d="M34 36h8" className={styles.cassetteGuide} />
+      <path d="M54 36h8" className={styles.cassetteGuide} />
+      <circle cx="31" cy="37" r="8.5" className={styles.cassetteReel} />
+      <circle cx="65" cy="37" r="8.5" className={styles.cassetteReel} />
+      <circle cx="31" cy="37" r="2.6" className={styles.cassetteHub} />
+      <circle cx="65" cy="37" r="2.6" className={styles.cassetteHub} />
+      <circle cx="18" cy="56" r="1.8" className={styles.cassetteScrew} />
+      <circle cx="78" cy="56" r="1.8" className={styles.cassetteScrew} />
+      <path d="M26 52h12l-4 8h-8Z" className={styles.cassetteBase} />
+      <path d="M70 52H58l4 8h8Z" className={styles.cassetteBase} />
     </svg>
   );
 }
@@ -177,6 +184,9 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   return (
     <div className={styles.workspace}>
       <div className={styles.hero}>
+        <div className={styles.heroHeading}>
+          <h2>Macros</h2>
+        </div>
         <div className={styles.statusCard} data-mode={deck.recordingState.mode}>
           <RecordingStatusIcon mode={deck.recordingState.mode} />
           <div className={styles.statusText}>
