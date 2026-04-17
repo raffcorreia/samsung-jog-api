@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type DragEvent } from "react";
 
 import type { DeckEventsState } from "../hooks/useDeckEvents";
 import type { RecordingSummary } from "../types";
@@ -167,7 +167,8 @@ function ActionIcon({
     return (
       <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
         <path d="M7 7h10v10H7z" />
-        <path d="M4.5 12h-1" />
+        <path d="M9.5 9.5 14.5 14.5" />
+        <path d="M14.5 9.5 9.5 14.5" />
       </svg>
     );
   }
@@ -197,6 +198,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const [editorOriginal, setEditorOriginal] = useState("");
   const [editorDraft, setEditorDraft] = useState("");
   const [closeEditorConfirmOpen, setCloseEditorConfirmOpen] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const selected = useMemo(
@@ -269,6 +271,40 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
 
   const triggerUpload = () => {
     inputRef.current?.click();
+  };
+
+  const handleUploadFile = async (file: File | null) => {
+    if (!file) {
+      return;
+    }
+    const looksJson = file.type === "application/json" || file.name.toLowerCase().endsWith(".json");
+    if (!looksJson) {
+      deck.pushLogLine("recording upload rejected — only V1 JSON recordings are accepted");
+      return;
+    }
+    setBusy(true);
+    try {
+      await deck.uploadRecording(file);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleLibraryDrag = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (busy) {
+      return;
+    }
+    setDragActive(true);
+  };
+
+  const handleLibraryDrop = async (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setDragActive(false);
+    if (busy) {
+      return;
+    }
+    await handleUploadFile(event.dataTransfer.files?.[0] ?? null);
   };
 
   const replayProgress =
@@ -417,16 +453,10 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
           type="file"
           accept="application/json,.json"
           onChange={async (event) => {
-            const file = event.target.files?.[0];
-            if (!file) {
-              return;
-            }
-            setBusy(true);
             try {
-              await deck.uploadRecording(file);
+              await handleUploadFile(event.target.files?.[0] ?? null);
             } finally {
               event.target.value = "";
-              setBusy(false);
             }
           }}
         />
@@ -442,10 +472,25 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             <span>Library</span>
             <span>{deck.recordings.items.length} items</span>
           </div>
-          <div className={styles.list} role="list">
+          <div
+            className={styles.libraryDropZone}
+            data-drag-active={dragActive}
+            onDragEnter={handleLibraryDrag}
+            onDragOver={handleLibraryDrag}
+            onDragLeave={(event) => {
+              if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                return;
+              }
+              setDragActive(false);
+            }}
+            onDrop={(event) => {
+              void handleLibraryDrop(event);
+            }}
+          >
+            <div className={styles.list} role="list">
             {deck.recordings.items.length === 0 ? (
               <div className={styles.emptyState}>
-                No recordings yet. Start a capture and it will save with date and time.
+                No recordings yet. Start a capture or drop a V1 JSON recording here.
               </div>
             ) : null}
             {deck.recordings.items.map((item) => {
@@ -519,6 +564,8 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                 </div>
               );
             })}
+            </div>
+            {dragActive ? <div className={styles.dropHint}>Drop a V1 recording JSON file to upload</div> : null}
           </div>
         </div>
 

@@ -54,6 +54,14 @@ export interface RecordingDelayEvent {
   duration_ms: number;
 }
 
+export interface RecordingLedEvent {
+  type: "led";
+  active: boolean;
+  blocking: boolean;
+  poll_interval_ms?: number | null;
+  timeout_ms?: number | null;
+}
+
 export interface RecordingWaitLedEvent {
   type: "wait_led";
   match: { active: boolean };
@@ -72,6 +80,7 @@ export type RecordingEvent =
   | RecordingHoldEvent
   | RecordingReleaseEvent
   | RecordingDelayEvent
+  | RecordingLedEvent
   | RecordingWaitLedEvent
   | RecordingWaitDdcEvent;
 

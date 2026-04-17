@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  min-height: 100%;
+  min-height: 0;
+  height: 100%;
 }
 
 .hero {
@@ -358,6 +359,39 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.libraryDropZone {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.libraryDropZone[data-drag-active="true"] {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.libraryDropZone[data-drag-active="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 65%, var(--border-bright));
+  pointer-events: none;
+}
+
+.dropHint {
+  position: absolute;
+  inset: auto 20px 18px 20px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border-bright));
+  background: color-mix(in srgb, var(--accent) 12%, rgba(10, 16, 22, 0.92));
+  color: var(--text);
+  text-align: center;
+  pointer-events: none;
 }
 
 .emptyState,

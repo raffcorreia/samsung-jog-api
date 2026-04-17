@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import time
 from pathlib import Path
@@ -54,6 +55,26 @@ def test_start_stop_recording_saves_observation_sequence(tmp_path: Path, monkeyp
         assert "end_state" not in saved
         assert saved["events"][0]["type"] == "hold"
         assert saved["events"][1]["type"] == "release"
+        assert saved["duration_ms"] == 0
+
+
+def test_led_changes_are_recorded_as_non_blocking_led_events(tmp_path: Path, monkeypatch) -> None:
+    with _build_client(tmp_path, monkeypatch) as client:
+        assert client.post("/api/v1/recordings/start").status_code == 200
+        asyncio.run(
+            client.app.state.recordings.observe_event(
+                {
+                    "category": "bus",
+                    "type": "led_changed",
+                    "ts": "2026-04-16T12:00:00Z",
+                    "data": {"key_led_active": True},
+                }
+            )
+        )
+        item = client.post("/api/v1/recordings/stop").json()["item"]
+        body = json.loads((tmp_path / item["filename"]).read_text())
+        led_events = [event for event in body["events"] if event["type"] == "led"]
+        assert led_events == [{"type": "led", "active": True, "blocking": False, "poll_interval_ms": None, "timeout_ms": None}]
 
 
 def test_recordings_can_be_renamed_and_deleted(tmp_path: Path, monkeypatch) -> None:
@@ -118,6 +139,8 @@ def test_recording_does_not_persist_initial_setup_delay(tmp_path: Path, monkeypa
         assert body["events"][0]["type"] == "hold"
         assert body["events"][1]["type"] == "release"
         assert all(event["type"] != "delay" for event in body["events"][:2])
+        assert item["duration_ms"] == 0
+        assert body["duration_ms"] == 0
 
 
 def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None:
@@ -146,6 +169,8 @@ def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None
         assert download.status_code == 200
         body = json.loads(download.text)
         assert body["name"] == "Imported"
+        assert item["duration_ms"] == 80
+        assert body["duration_ms"] == 80
 
 
 def test_recording_content_can_be_loaded_and_replaced(tmp_path: Path, monkeypatch) -> None:
@@ -183,6 +208,7 @@ def test_recording_content_can_be_loaded_and_replaced(tmp_path: Path, monkeypatc
         replaced_item = replace.json()["item"]
         assert replaced_item["name"] == "Edited Raw"
         assert replaced_item["filename"] == item["filename"]
+        assert replaced_item["duration_ms"] == 80
 
 
 def test_empty_recording_playback_returns_idle_immediately(tmp_path: Path, monkeypatch) -> None:
@@ -209,6 +235,8 @@ def test_empty_recording_playback_returns_idle_immediately(tmp_path: Path, monke
         state = client.get("/api/v1/recordings/state")
         assert state.status_code == 200
         assert state.json()["mode"] == "idle"
+        library = client.get("/api/v1/recordings").json()
+        assert library["items"][0]["duration_ms"] == 0
 
 
 def test_stop_playback_interrupts_long_delay_recording(tmp_path: Path, monkeypatch) -> None:
@@ -237,3 +265,53 @@ def test_stop_playback_interrupts_long_delay_recording(tmp_path: Path, monkeypat
         stop = client.post("/api/v1/recordings/stop-playback")
         assert stop.status_code == 200
         assert stop.json()["mode"] == "idle"
+
+
+def test_uploaded_stale_duration_is_ignored_in_favor_of_event_timing(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Stale Duration",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 9999,
+        "events": [
+            {"type": "hold", "action": "left"},
+            {"type": "delay", "duration_ms": 120},
+            {"type": "release", "action": "left"},
+        ],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("stale-duration.json", json.dumps(payload), "application/json")},
+        )
+        assert uploaded.status_code == 200
+        item = uploaded.json()["item"]
+        assert item["duration_ms"] == 120
+
+        content = client.get(f"/api/v1/recordings/{item['id']}/content")
+        assert content.status_code == 200
+        saved = json.loads(content.text)
+        assert saved["duration_ms"] == 120
+
+
+def test_upload_rejects_unsupported_recording_version(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Unsupported Version",
+        "version": "V2",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 0,
+        "events": [],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("unsupported.json", json.dumps(payload), "application/json")},
+        )
+        assert uploaded.status_code == 400
+        body = uploaded.json()
+        assert body["error"] == "recording_rejected"
+        assert body["reason"] == "invalid_recording"

@@ -9,7 +9,12 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pi_deck.models.recordings import RecordingFile, RecordingLibraryOut, RecordingSummary
+from pi_deck.models.recordings import (
+    RecordingFile,
+    RecordingLibraryOut,
+    RecordingSummary,
+    recording_duration_ms,
+)
 
 
 def default_recordings_dir() -> Path:
@@ -47,7 +52,8 @@ class RecordingStore:
 
     def read(self, recording_id: str) -> RecordingFile:
         path = self._path_for(recording_id)
-        return RecordingFile.model_validate_json(path.read_text())
+        recording = RecordingFile.model_validate_json(path.read_text())
+        return recording.model_copy(update={"duration_ms": recording_duration_ms(recording.events)})
 
     def read_text(self, recording_id: str) -> str:
         return self._path_for(recording_id).read_text()
@@ -59,21 +65,11 @@ class RecordingStore:
                 recording = RecordingFile.model_validate_json(path.read_text())
             except Exception:
                 continue
-            items.append(
-                RecordingSummary(
-                    id=path.name,
-                    filename=path.name,
-                    name=recording.name,
-                    created_at=recording.created_at,
-                    updated_at=recording.updated_at,
-                    event_count=len(recording.events),
-                    duration_ms=recording.duration_ms,
-                    size_bytes=path.stat().st_size,
-                ),
-            )
+            items.append(self._summary_for(path, recording))
         return RecordingLibraryOut(items=items)
 
     def write_new(self, recording: RecordingFile, *, preferred_stem: str) -> RecordingSummary:
+        recording = recording.model_copy(update={"duration_ms": recording_duration_ms(recording.events)})
         stem = _safe_stem(preferred_stem)
         path = self._base_dir / f"{stem}.json"
         index = 2
@@ -81,22 +77,19 @@ class RecordingStore:
             path = self._base_dir / f"{stem}-{index}.json"
             index += 1
         path.write_text(json.dumps(recording.model_dump(mode="json"), indent=2) + "\n")
-        return RecordingSummary(
-            id=path.name,
-            filename=path.name,
-            name=recording.name,
-            created_at=recording.created_at,
-            updated_at=recording.updated_at,
-            event_count=len(recording.events),
-            duration_ms=recording.duration_ms,
-            size_bytes=path.stat().st_size,
-        )
+        return self._summary_for(path, recording)
 
     def rename(self, recording_id: str, *, new_name: str) -> RecordingSummary:
         path = self._path_for(recording_id)
         recording = RecordingFile.model_validate_json(path.read_text())
         updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        updated = recording.model_copy(update={"name": new_name, "updated_at": updated_at})
+        updated = recording.model_copy(
+            update={
+                "name": new_name,
+                "updated_at": updated_at,
+                "duration_ms": recording_duration_ms(recording.events),
+            }
+        )
         new_path = self._base_dir / f"{_safe_stem(new_name)}.json"
         index = 2
         while new_path.exists() and new_path != path:
@@ -104,16 +97,7 @@ class RecordingStore:
             index += 1
         path.unlink()
         new_path.write_text(json.dumps(updated.model_dump(mode="json"), indent=2) + "\n")
-        return RecordingSummary(
-            id=new_path.name,
-            filename=new_path.name,
-            name=updated.name,
-            created_at=updated.created_at,
-            updated_at=updated.updated_at,
-            event_count=len(updated.events),
-            duration_ms=updated.duration_ms,
-            size_bytes=new_path.stat().st_size,
-        )
+        return self._summary_for(new_path, updated)
 
     def delete(self, recording_id: str) -> None:
         self._path_for(recording_id).unlink()
@@ -125,15 +109,23 @@ class RecordingStore:
         path = self._path_for(recording_id)
         recording = RecordingFile.model_validate_json(payload)
         updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        updated = recording.model_copy(update={"updated_at": updated_at})
+        updated = recording.model_copy(
+            update={
+                "updated_at": updated_at,
+                "duration_ms": recording_duration_ms(recording.events),
+            }
+        )
         path.write_text(json.dumps(updated.model_dump(mode="json"), indent=2) + "\n")
+        return self._summary_for(path, updated)
+
+    def _summary_for(self, path: Path, recording: RecordingFile) -> RecordingSummary:
         return RecordingSummary(
             id=path.name,
             filename=path.name,
-            name=updated.name,
-            created_at=updated.created_at,
-            updated_at=updated.updated_at,
-            event_count=len(updated.events),
-            duration_ms=updated.duration_ms,
+            name=recording.name,
+            created_at=recording.created_at,
+            updated_at=recording.updated_at,
+            event_count=len(recording.events),
+            duration_ms=recording_duration_ms(recording.events),
             size_bytes=path.stat().st_size,
         )

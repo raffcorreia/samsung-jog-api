@@ -10,8 +10,10 @@ from pathlib import Path
 from typing import Any
 
 from pi_deck.models.recordings import (
+    CURRENT_RECORDING_VERSION,
     DelayEvent,
     HoldEvent,
+    LedEvent,
     RecordingFile,
     RecordingLibraryOut,
     RecordingRejectedReason,
@@ -21,6 +23,8 @@ from pi_deck.models.recordings import (
     WaitDdcEvent,
     WaitLedEvent,
     WaitLedMatch,
+    is_supported_upload_version,
+    recording_duration_ms,
     ws_recording_library,
     ws_recording_state,
 )
@@ -175,7 +179,7 @@ class RecordingService:
             name=session.base_name,
             created_at=session.started_at.isoformat().replace("+00:00", "Z"),
             updated_at=stop_at.isoformat().replace("+00:00", "Z"),
-            duration_ms=max(0, int((stop_at - session.started_at).total_seconds() * 1000)),
+            duration_ms=recording_duration_ms(session.events),
             events=session.events,
         )
         summary = self._store.write_new(recording, preferred_stem=session.base_name)
@@ -216,6 +220,12 @@ class RecordingService:
                 "Invalid recording file",
                 status_code=400,
             ) from exc
+        if not is_supported_upload_version(recording.version):
+            raise RecordingServiceError(
+                RecordingRejectedReason.INVALID_RECORDING,
+                f"Unsupported recording version: expected {CURRENT_RECORDING_VERSION}",
+                status_code=400,
+            )
         preferred = recording.name if recording.name.strip() else filename.removesuffix(".json")
         summary = self._store.write_new(recording, preferred_stem=preferred)
         await self._broadcast_library()
@@ -270,7 +280,7 @@ class RecordingService:
             return self.state()
         self._replaying_id = recording_id
         self._replay_started_at = datetime.now().astimezone()
-        self._replay_total_duration_ms = recording.duration_ms
+        self._replay_total_duration_ms = recording_duration_ms(recording.events)
         self._replay_stop = asyncio.Event()
         self._replay_task = asyncio.create_task(self._run_playback(recording_id, recording))
         await self._broadcast_state()
@@ -354,16 +364,8 @@ class RecordingService:
     def _handle_led_changed(self, session: _RecordingSession, payload: dict[str, Any]) -> None:
         at = _parse_ts(str(payload.get("ts")))
         self._append_delay_if_needed(session, at)
-        elapsed_ms = max(0, int((at - session.last_semantic_at).total_seconds() * 1000))
-        timeout_ms = min(60_000, max(1_000, elapsed_ms + 800))
         active = bool((payload.get("data") or {}).get("key_led_active"))
-        session.events.append(
-            WaitLedEvent(
-                match=WaitLedMatch(active=active),
-                poll_interval_ms=50,
-                timeout_ms=timeout_ms,
-            )
-        )
+        session.events.append(LedEvent(active=active, blocking=False))
         session.last_semantic_at = at
 
     async def _run_playback(self, recording_id: str, recording: RecordingFile) -> None:
@@ -378,6 +380,16 @@ class RecordingService:
                     break
                 if isinstance(event, DelayEvent):
                     await self._sleep_or_stop(event.duration_ms / 1000.0)
+                    continue
+                if isinstance(event, LedEvent):
+                    if event.blocking:
+                        await self._wait_led(
+                            WaitLedEvent(
+                                match=WaitLedMatch(active=event.active),
+                                poll_interval_ms=event.poll_interval_ms or 50,
+                                timeout_ms=event.timeout_ms or 1800,
+                            )
+                        )
                     continue
                 if isinstance(event, HoldEvent):
                     err = await self._deck.jog_hold(event.action)

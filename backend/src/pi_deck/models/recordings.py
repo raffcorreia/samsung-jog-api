@@ -9,6 +9,9 @@ from pydantic import BaseModel, Field
 
 from pi_deck.models.schemas import WsEventV1, utc_iso
 
+CURRENT_RECORDING_VERSION = "V1"
+SUPPORTED_UPLOAD_RECORDING_VERSIONS = {CURRENT_RECORDING_VERSION}
+
 
 class HoldEvent(BaseModel):
     type: Literal["hold"] = "hold"
@@ -29,6 +32,14 @@ class WaitLedMatch(BaseModel):
     active: bool
 
 
+class LedEvent(BaseModel):
+    type: Literal["led"] = "led"
+    active: bool
+    blocking: bool = False
+    poll_interval_ms: int | None = Field(default=None, ge=10, le=1_000)
+    timeout_ms: int | None = Field(default=None, ge=100, le=60_000)
+
+
 class WaitLedEvent(BaseModel):
     type: Literal["wait_led"] = "wait_led"
     match: WaitLedMatch
@@ -44,14 +55,26 @@ class WaitDdcEvent(BaseModel):
 
 
 RecordingEvent = Annotated[
-    HoldEvent | ReleaseEvent | DelayEvent | WaitLedEvent | WaitDdcEvent,
+    HoldEvent | ReleaseEvent | DelayEvent | LedEvent | WaitLedEvent | WaitDdcEvent,
     Field(discriminator="type"),
 ]
 
 
+def recording_duration_ms(events: list[RecordingEvent]) -> int:
+    total = 0
+    for event in events:
+        if isinstance(event, DelayEvent):
+            total += event.duration_ms
+    return total
+
+
+def is_supported_upload_version(version: str | int) -> bool:
+    return version in SUPPORTED_UPLOAD_RECORDING_VERSIONS
+
+
 class RecordingFile(BaseModel):
     name: str = Field(min_length=1, max_length=80)
-    version: Literal["V1", 1] = "V1"
+    version: Literal["V1", 1] = CURRENT_RECORDING_VERSION
     description: str | None = Field(default=None, max_length=240)
     source: Literal["observation"] = "observation"
     created_at: str

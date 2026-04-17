@@ -11,6 +11,7 @@ The recorder captures real observation-bus semantics:
 - `hold`
 - `release`
 - `delay`
+- `led`
 - `wait_led`
 - `wait_ddc`
 
@@ -33,10 +34,9 @@ Current files use version `V1`.
     { "type": "delay", "duration_ms": 88 },
     { "type": "release", "action": "center" },
     {
-      "type": "wait_led",
-      "match": { "active": true },
-      "poll_interval_ms": 50,
-      "timeout_ms": 2000
+      "type": "led",
+      "active": true,
+      "blocking": false
     }
   ]
 }
@@ -55,7 +55,7 @@ Current files use version `V1`.
 - `updated_at`
   Last modification timestamp in ISO-8601 UTC form.
 - `duration_ms`
-  Total wall-clock duration represented by the saved recording.
+  Derived playback length in milliseconds. Phase 16 derives this from the event list when files are loaded or rewritten.
 - `events`
   Ordered list of executable macro events.
 
@@ -97,7 +97,27 @@ Notes:
 
 - The recorder does not persist the initial setup delay before the first captured event.
 - Internal timing between recorded events is preserved.
+- `duration_ms` is derived from explicit event timing, so removing a leading delay reduces the recording length.
 - If a macro intentionally needs an initial wait before doing anything, add a leading `delay` event manually to the JSON file.
+
+### `led`
+
+Represents an observed LED state transition from the observation bus.
+
+```json
+{
+  "type": "led",
+  "active": true,
+  "blocking": false
+}
+```
+
+Notes:
+
+- normal recorded LED observations should use `blocking: false`
+- this preserves the observed cue without blocking later events
+- if a macro needs LED-gated continuation, set `blocking: true` and provide timeout settings
+- `led` should be the default form used by the recorder for observed `KEY_LED` changes
 
 ### `wait_led`
 
@@ -114,9 +134,47 @@ Blocks playback until the observed LED state matches the requested condition.
 
 Important:
 
+- `led` is the normal recorded observation event for LED changes.
 - `wait_led` is an observation gate.
 - It does not command the hardware LED to blink or change state.
 - It only blocks until the observed LED state matches the expected condition or times out.
+
+## LED Rules
+
+The LED rules for Phase 16 are:
+
+- LED changes should be recorded as observation events.
+- Recorded LED changes should not block later events by default.
+- LED does not represent an output command channel.
+- The system must never interpret recorded LED events as instructions to drive the monitor LED.
+- Blocking LED behavior is explicit, not implied.
+
+That means:
+
+- use `led` for normal recorded LED state changes
+- use `wait_led` when a macro step must pause until a target LED state is observed
+- or set `blocking: true` on a `led` event when editing a recording and you want that specific LED event to behave as a gate
+
+## When To Use `wait_led`
+
+Use `wait_led` only when the next event must not continue until LED feedback reaches a known state.
+
+Good uses:
+
+- waiting for an LED cue that indicates an input transition has settled
+- pausing until the monitor returns to an idle LED state
+- synchronizing a later action to a known LED feedback moment
+
+Bad uses:
+
+- recording every LED change as a blocking wait
+- treating LED events as if they were commands
+- adding `wait_led` when the sequence can safely continue without it
+
+In short:
+
+- `led` preserves observation
+- `wait_led` enforces synchronization
 
 ### `wait_ddc`
 
@@ -151,6 +209,7 @@ Safe edits include:
 - renaming `name`
 - adding an initial `delay`
 - adjusting intermediate `delay.duration_ms`
+- changing an observed `led` event to `blocking: true` when a macro should wait on LED
 - changing or removing `wait_led` gates
 
 Unsafe edits include:
