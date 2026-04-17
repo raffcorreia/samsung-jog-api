@@ -16,6 +16,8 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Log / event hygiene (backlog):** WebSocket and derived log traffic may feel excessive or not representative of what operators care about (duplicate `bus/snapshot` with `deck_control`, telemetry poll cadence, verbosity of `command`/`control` lines). Plan a later pass to coalesce, filter, or re-level categories so the live log stays readable without losing auditability.
 
+**Active defect:** `KEY_ADC2` live observation has stalled twice across Phase 15/16 work. In the later case, redeploying the app restored directional observation without changing wiring. Treat this as an unresolved observation-path/runtime defect, not a closed protoboard-only issue.
+
 **Hardware vs software sequencing:** Phase 8+ low-level software is brought up on the **Phase 6 GPIO map** first. When Phase 7 boards are fabricated, an **extra migration phase** will be inserted (slot TBD) to remap GPIO and retest software against the **Phase 7 pinout** — see `docs/implementation/plan.md` (“Deferred integrated-board GPIO and software migration”).
 
 **Why:** Input switching on the CJ791 is cycle-through-inputs only. DDC alone can't switch; JOG alone can't read state. Both are needed together.
