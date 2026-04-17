@@ -562,6 +562,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                     if (isEditorOpen) {
                       return;
                     }
+                    setErrorDismissed(true);
                     setSelectedId(item.id);
                   }}
                   onKeyDown={(event) => {
@@ -570,6 +571,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                       if (isEditorOpen) {
                         return;
                       }
+                      setErrorDismissed(true);
                       setSelectedId(item.id);
                     }
                   }}
