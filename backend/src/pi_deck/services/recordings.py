@@ -254,6 +254,14 @@ class RecordingService:
                 status_code=404,
             ) from exc
         self._last_error = None
+        if not recording.events:
+            await self._live_log.publish(
+                level="info",
+                source="recording",
+                message=f"play skipped - {recording.name} has no events",
+            )
+            await self._broadcast_state()
+            return self.state()
         self._replaying_id = recording_id
         self._replay_stop = asyncio.Event()
         self._replay_task = asyncio.create_task(self._run_playback(recording_id, recording))

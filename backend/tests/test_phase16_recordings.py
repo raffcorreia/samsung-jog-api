@@ -183,3 +183,57 @@ def test_recording_content_can_be_loaded_and_replaced(tmp_path: Path, monkeypatc
         replaced_item = replace.json()["item"]
         assert replaced_item["name"] == "Edited Raw"
         assert replaced_item["filename"] == item["filename"]
+
+
+def test_empty_recording_playback_returns_idle_immediately(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Empty",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 0,
+        "events": [],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("empty.json", json.dumps(payload), "application/json")},
+        )
+        item = uploaded.json()["item"]
+
+        play = client.post(f"/api/v1/recordings/{item['id']}/play")
+        assert play.status_code == 200
+        assert play.json()["mode"] == "idle"
+
+        state = client.get("/api/v1/recordings/state")
+        assert state.status_code == 200
+        assert state.json()["mode"] == "idle"
+
+
+def test_stop_playback_interrupts_long_delay_recording(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Long Delay",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 5000,
+        "events": [
+            {"type": "delay", "duration_ms": 5000},
+        ],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("long-delay.json", json.dumps(payload), "application/json")},
+        )
+        item = uploaded.json()["item"]
+
+        play = client.post(f"/api/v1/recordings/{item['id']}/play")
+        assert play.status_code == 200
+        assert play.json()["mode"] == "replaying"
+
+        stop = client.post("/api/v1/recordings/stop-playback")
+        assert stop.status_code == 200
+        assert stop.json()["mode"] == "idle"
