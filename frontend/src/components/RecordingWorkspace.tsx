@@ -287,6 +287,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
         : "ready";
 
   const beginRename = (item: RecordingSummary) => {
+    setErrorDismissed(true);
     setRenamingId(item.id);
     setRenameDraft(item.name);
   };
@@ -365,6 +366,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
       : 0;
 
   const beginEdit = async (item: RecordingSummary) => {
+    setErrorDismissed(true);
     setBusy(true);
     try {
       const content = await deck.fetchRecordingContent(item.id);
