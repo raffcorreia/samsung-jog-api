@@ -288,7 +288,7 @@
 
 .progressValue {
   stroke: currentColor;
-  stroke-linecap: round;
+  stroke-linecap: butt;
   transition: stroke-dashoffset 100ms linear;
 }
 
@@ -458,6 +458,7 @@
   gap: 12px;
   padding: 16px;
   min-height: 0;
+  flex: 1 1 auto;
 }
 
 .renameBlock {
@@ -476,7 +477,7 @@
 
 .editorText {
   flex: 1 1 auto;
-  min-height: 340px;
+  min-height: 0;
   width: 100%;
   resize: none;
   padding: 14px;
@@ -493,9 +494,32 @@
   gap: 10px;
 }
 
+.nameEditor,
+.nameValue {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.nameValue strong {
+  min-width: 0;
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+.nameEditButton {
+  width: 48px;
+  min-width: 48px;
+  min-height: 42px;
+}
+
 .detailTable {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .detailActions {
@@ -508,6 +532,7 @@
 .detailRow {
   padding-bottom: 10px;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+  min-width: 0;
 }
 
 .detailRow span {
