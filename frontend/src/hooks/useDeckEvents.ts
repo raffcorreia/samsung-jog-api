@@ -213,17 +213,20 @@ export function useDeckEvents(): DeckEventsState {
         const r = await playRecording(recordingId);
         if (!r.ok) {
           pushLogLine(`recording play rejected — ${r.body.message}`);
+          await refreshRecordingState();
           return false;
         }
         setRecordingState(r.body);
+        await refreshRecordingState();
         return true;
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         pushLogLine(`recording play failed — ${msg}`);
+        await refreshRecordingState();
         return false;
       }
     },
-    [pushLogLine],
+    [pushLogLine, refreshRecordingState],
   );
 
   const stopPlaybackAction = useCallback(async () => {
@@ -231,16 +234,19 @@ export function useDeckEvents(): DeckEventsState {
       const r = await stopRecordingPlayback();
       if (!r.ok) {
         pushLogLine(`recording stop rejected — ${r.body.message}`);
+        await refreshRecordingState();
         return false;
       }
       setRecordingState(r.body);
+      await refreshRecordingState();
       return true;
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       pushLogLine(`recording stop failed — ${msg}`);
+      await refreshRecordingState();
       return false;
     }
-  }, [pushLogLine]);
+  }, [pushLogLine, refreshRecordingState]);
 
   const renameRecordingAction = useCallback(
     async (recordingId: string, name: string) => {

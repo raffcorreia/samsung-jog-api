@@ -76,7 +76,18 @@ function RecordingStatusIcon({
 function ActionIcon({
   kind,
 }: {
-  kind: "record" | "stop" | "play" | "upload" | "download" | "rename" | "edit" | "delete";
+  kind:
+    | "record"
+    | "stop"
+    | "play"
+    | "upload"
+    | "download"
+    | "rename"
+    | "edit"
+    | "delete"
+    | "save"
+    | "cancel"
+    | "close";
 }) {
   if (kind === "record") {
     return <span className={styles.recordGlyph} aria-hidden="true" />;
@@ -108,8 +119,8 @@ function ActionIcon({
   if (kind === "rename") {
     return (
       <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
-        <path d="m4 20 4.5-1 8.9-8.9-3.5-3.5L5 15.5 4 20Z" />
-        <path d="m13.9 6.6 3.5 3.5" />
+        <path d="M6 18.5V14l7.9-7.9 4 4-7.9 7.9H6Z" />
+        <path d="m12.9 7 4 4" />
       </svg>
     );
   }
@@ -120,6 +131,29 @@ function ActionIcon({
         <path d="M8 12h8" />
         <path d="M8 18h10" />
         <path d="m4 19 1.1-3.9L12.8 7.4l2.8 2.8-7.7 7.7L4 19Z" />
+      </svg>
+    );
+  }
+  if (kind === "save") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M5 12.5 10 17l9-10" />
+      </svg>
+    );
+  }
+  if (kind === "cancel") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M7 7h10v10H7z" />
+        <path d="M4.5 12h-1" />
+      </svg>
+    );
+  }
+  if (kind === "close") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
       </svg>
     );
   }
@@ -432,7 +466,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
 
         <div className={styles.detailPane}>
           <div className={styles.sectionHeader}>
-            <span>Details</span>
+            <span>{isEditorOpen ? "Editor" : "Details"}</span>
             <span>{selected ? selected.filename : "No selection"}</span>
           </div>
           {selected ? (
@@ -451,25 +485,29 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                   />
                   <div className={styles.editorActions}>
                     <button
-                      className={styles.inlineButton}
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
                       type="button"
                       onClick={() => {
                         void saveEditor();
                       }}
                       disabled={busy}
+                      aria-label="Save file changes"
+                      title="Save file changes"
                     >
-                      Save
+                      <ActionIcon kind="save" />
                     </button>
                     <button
-                      className={styles.inlineButton}
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
                       type="button"
                       onClick={cancelEditorChanges}
                       disabled={busy || !editorDirty}
+                      aria-label="Revert file changes"
+                      title="Revert file changes"
                     >
-                      Cancel
+                      <ActionIcon kind="cancel" />
                     </button>
                     <button
-                      className={styles.inlineButton}
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
                       type="button"
                       onClick={() => {
                         if (editorDirty) {
@@ -479,124 +517,133 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                         }
                       }}
                       disabled={busy}
+                      aria-label="Close file editor"
+                      title="Close file editor"
                     >
-                      Close
+                      <ActionIcon kind="close" />
                     </button>
                   </div>
                 </>
-              ) : renamingId === selected.id ? (
-                <div className={styles.renameBlock}>
-                  <input
-                    className={styles.renameInput}
-                    value={renameDraft}
-                    onChange={(event) => setRenameDraft(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        void commitRename();
-                      }
-                      if (event.key === "Escape") {
-                        setRenamingId(null);
-                        setRenameDraft("");
-                      }
-                    }}
-                  />
-                  <div className={styles.inlineActions}>
+              ) : (
+                <>
+                  <div className={styles.detailTable}>
+                    <div className={styles.detailRow}>
+                      <span>Name</span>
+                      {renamingId === selected.id ? (
+                        <div className={styles.nameEditor}>
+                          <input
+                            className={styles.renameInput}
+                            value={renameDraft}
+                            onChange={(event) => setRenameDraft(event.target.value)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter") {
+                                event.preventDefault();
+                                void commitRename();
+                              }
+                              if (event.key === "Escape") {
+                                setRenamingId(null);
+                                setRenameDraft("");
+                              }
+                            }}
+                          />
+                          <button
+                            className={`${styles.inlineButton} ${styles.iconAction}`}
+                            type="button"
+                            onClick={() => {
+                              void commitRename();
+                            }}
+                            disabled={busy || renameDraft.trim().length === 0}
+                            aria-label="Save recording name"
+                            title="Save recording name"
+                          >
+                            <ActionIcon kind="save" />
+                          </button>
+                          <button
+                            className={`${styles.inlineButton} ${styles.iconAction}`}
+                            type="button"
+                            onClick={() => {
+                              setRenamingId(null);
+                              setRenameDraft("");
+                            }}
+                            disabled={busy}
+                            aria-label="Cancel name edit"
+                            title="Cancel name edit"
+                          >
+                            <ActionIcon kind="cancel" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className={styles.nameValue}>
+                          <strong>{selected.name}</strong>
+                          <button
+                            className={`${styles.inlineButton} ${styles.iconAction} ${styles.nameEditButton}`}
+                            type="button"
+                            disabled={busy || deck.recordingState.mode !== "idle"}
+                            onClick={() => beginRename(selected)}
+                            aria-label="Edit recording name"
+                            title="Edit recording name"
+                          >
+                            <ActionIcon kind="rename" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span>Created</span>
+                      <strong>{formatTimestamp(selected.created_at)}</strong>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span>Updated</span>
+                      <strong>{formatTimestamp(selected.updated_at)}</strong>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span>Duration</span>
+                      <strong>{formatDuration(selected.duration_ms)}</strong>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span>Events</span>
+                      <strong>{selected.event_count}</strong>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span>File size</span>
+                      <strong>{formatBytes(selected.size_bytes)}</strong>
+                    </div>
+                  </div>
+                  <div className={styles.detailActions}>
                     <button
-                      className={styles.inlineButton}
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
                       type="button"
+                      disabled={busy || deck.recordingState.mode !== "idle"}
                       onClick={() => {
-                        void commitRename();
+                        void beginEdit(selected);
                       }}
-                      disabled={busy || renameDraft.trim().length === 0}
+                      aria-label="Edit recording file"
+                      title="Edit recording file"
                     >
-                      Save
+                      <ActionIcon kind="edit" />
                     </button>
-                    <button
-                      className={styles.inlineButton}
-                      type="button"
-                      onClick={() => {
-                        setRenamingId(null);
-                        setRenameDraft("");
-                      }}
-                      disabled={busy}
+                    <a
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
+                      href={deck.recordingDownloadUrl(selected.id)}
+                      download={selected.filename}
+                      aria-label="Download recording"
+                      title="Download recording"
                     >
-                      Cancel
+                      <ActionIcon kind="download" />
+                    </a>
+                    <button
+                      className={`${styles.inlineButton} ${styles.iconAction} ${styles.deleteButton}`}
+                      type="button"
+                      disabled={busy || deck.recordingState.mode !== "idle"}
+                      onClick={() => onRequestDelete(selected)}
+                      aria-label="Delete recording"
+                      title="Delete recording"
+                    >
+                      <ActionIcon kind="delete" />
                     </button>
                   </div>
-                </div>
-              ) : null}
-              <div className={styles.detailTable}>
-                <div className={styles.detailRow}>
-                  <span>Name</span>
-                  <strong>{selected.name}</strong>
-                </div>
-                <div className={styles.detailRow}>
-                  <span>Created</span>
-                  <strong>{formatTimestamp(selected.created_at)}</strong>
-                </div>
-                <div className={styles.detailRow}>
-                  <span>Updated</span>
-                  <strong>{formatTimestamp(selected.updated_at)}</strong>
-                </div>
-                <div className={styles.detailRow}>
-                  <span>Duration</span>
-                  <strong>{formatDuration(selected.duration_ms)}</strong>
-                </div>
-                <div className={styles.detailRow}>
-                  <span>Events</span>
-                  <strong>{selected.event_count}</strong>
-                </div>
-                <div className={styles.detailRow}>
-                  <span>File size</span>
-                  <strong>{formatBytes(selected.size_bytes)}</strong>
-                </div>
-              </div>
-              {!isEditorOpen ? (
-                <div className={styles.detailActions}>
-                  <button
-                    className={`${styles.inlineButton} ${styles.iconAction}`}
-                    type="button"
-                    disabled={busy || deck.recordingState.mode !== "idle"}
-                    onClick={() => {
-                      void beginEdit(selected);
-                    }}
-                    aria-label="Edit recording file"
-                    title="Edit recording file"
-                  >
-                    <ActionIcon kind="edit" />
-                  </button>
-                  <a
-                    className={`${styles.inlineButton} ${styles.iconAction}`}
-                    href={deck.recordingDownloadUrl(selected.id)}
-                    download={selected.filename}
-                    aria-label="Download recording"
-                    title="Download recording"
-                  >
-                    <ActionIcon kind="download" />
-                  </a>
-                  <button
-                    className={`${styles.inlineButton} ${styles.iconAction}`}
-                    type="button"
-                    disabled={busy || deck.recordingState.mode !== "idle"}
-                    onClick={() => beginRename(selected)}
-                    aria-label="Rename recording"
-                    title="Rename recording"
-                  >
-                    <ActionIcon kind="rename" />
-                  </button>
-                  <button
-                    className={`${styles.inlineButton} ${styles.iconAction} ${styles.deleteButton}`}
-                    type="button"
-                    disabled={busy || deck.recordingState.mode !== "idle"}
-                    onClick={() => onRequestDelete(selected)}
-                    aria-label="Delete recording"
-                    title="Delete recording"
-                  >
-                    <ActionIcon kind="delete" />
-                  </button>
-                </div>
-              ) : null}
+                </>
+              )}
             </div>
           ) : (
             <div className={styles.emptyDetail}>Select a recording to inspect or replay it.</div>
