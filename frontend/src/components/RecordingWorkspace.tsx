@@ -43,6 +43,28 @@ export interface RecordingWorkspaceProps {
   onRequestDelete: (item: RecordingSummary) => void;
 }
 
+function ReplayProgressIcon({ progress }: { progress: number }) {
+  const radius = 11;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - Math.max(0, Math.min(1, progress)));
+  return (
+    <span className={styles.progressIcon} aria-hidden="true">
+      <svg viewBox="0 0 32 32" className={styles.progressSvg}>
+        <circle cx="16" cy="16" r={radius} className={styles.progressTrack} />
+        <circle
+          cx="16"
+          cy="16"
+          r={radius}
+          className={styles.progressValue}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+        />
+      </svg>
+      <span className={styles.progressStopGlyph} />
+    </span>
+  );
+}
+
 function RecordingStatusIcon({
   mode,
 }: {
@@ -183,6 +205,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   );
   const isEditorOpen = editingId !== null && selected?.id === editingId;
   const editorDirty = isEditorOpen && editorDraft !== editorOriginal;
+  const [nowMs, setNowMs] = useState(() => Date.now());
 
   useEffect(() => {
     if (!selected && selectedId !== null) {
@@ -199,6 +222,18 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
       setSelectedId(selected.id);
     }
   }, [selected, selectedId]);
+
+  useEffect(() => {
+    if (deck.recordingState.mode !== "replaying") {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 120);
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [deck.recordingState.mode]);
 
   const modeLabel =
     deck.recordingState.mode === "recording"
@@ -235,6 +270,21 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const triggerUpload = () => {
     inputRef.current?.click();
   };
+
+  const replayProgress =
+    deck.recordingState.mode === "replaying" &&
+    deck.recordingState.replay_started_at &&
+    deck.recordingState.replay_total_duration_ms &&
+    deck.recordingState.replay_total_duration_ms > 0
+      ? Math.max(
+          0,
+          Math.min(
+            1,
+            (nowMs - new Date(deck.recordingState.replay_started_at).getTime()) /
+              deck.recordingState.replay_total_duration_ms,
+          ),
+        )
+      : 0;
 
   const beginEdit = async (item: RecordingSummary) => {
     setBusy(true);
@@ -333,7 +383,11 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
               }
             }}
           >
-            <ActionIcon kind={deck.recordingState.mode === "replaying" ? "stop" : "play"} />
+            {deck.recordingState.mode === "replaying" ? (
+              <ReplayProgressIcon progress={replayProgress} />
+            ) : (
+              <ActionIcon kind="play" />
+            )}
           </button>
           <button
             className={`${styles.actionButton} ${styles.iconButton}`}
@@ -450,7 +504,11 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                           }
                         }}
                       >
-                        <ActionIcon kind={isActiveReplay ? "stop" : "play"} />
+                        {isActiveReplay ? (
+                          <ReplayProgressIcon progress={replayProgress} />
+                        ) : (
+                          <ActionIcon kind="play" />
+                        )}
                       </button>
                     </div>
                   </div>

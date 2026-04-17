@@ -93,6 +93,8 @@ export interface RecordingLibrary {
 export interface RecordingState {
   mode: "idle" | "recording" | "replaying";
   recording_started_at: string | null;
+  replay_started_at: string | null;
+  replay_total_duration_ms: number | null;
   replaying_id: string | null;
   active_name: string | null;
   event_count: number;

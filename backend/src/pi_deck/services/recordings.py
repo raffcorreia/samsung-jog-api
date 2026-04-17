@@ -101,6 +101,8 @@ class RecordingService:
         self._replay_task: asyncio.Task[None] | None = None
         self._replay_stop = asyncio.Event()
         self._replaying_id: str | None = None
+        self._replay_started_at: datetime | None = None
+        self._replay_total_duration_ms: int | None = None
         self._last_error: str | None = None
 
     def state(self) -> RecordingStateOut:
@@ -115,6 +117,10 @@ class RecordingService:
         if self._replay_task is not None and not self._replay_task.done():
             return RecordingStateOut(
                 mode="replaying",
+                replay_started_at=self._replay_started_at.isoformat().replace("+00:00", "Z")
+                if self._replay_started_at is not None
+                else None,
+                replay_total_duration_ms=self._replay_total_duration_ms,
                 replaying_id=self._replaying_id,
                 active_name=self._replaying_id,
                 last_error=self._last_error,
@@ -263,6 +269,8 @@ class RecordingService:
             await self._broadcast_state()
             return self.state()
         self._replaying_id = recording_id
+        self._replay_started_at = datetime.now().astimezone()
+        self._replay_total_duration_ms = recording.duration_ms
         self._replay_stop = asyncio.Event()
         self._replay_task = asyncio.create_task(self._run_playback(recording_id, recording))
         await self._broadcast_state()
@@ -417,6 +425,8 @@ class RecordingService:
         finally:
             self._replay_task = None
             self._replaying_id = None
+            self._replay_started_at = None
+            self._replay_total_duration_ms = None
             self._replay_stop = asyncio.Event()
             await self._broadcast_state()
 

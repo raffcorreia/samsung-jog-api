@@ -78,6 +78,8 @@ class RecordingLibraryOut(BaseModel):
 class RecordingStateOut(BaseModel):
     mode: Literal["idle", "recording", "replaying"] = "idle"
     recording_started_at: str | None = None
+    replay_started_at: str | None = None
+    replay_total_duration_ms: int | None = None
     replaying_id: str | None = None
     active_name: str | None = None
     event_count: int = 0

@@ -233,7 +233,8 @@
 
 .recordGlyph,
 .stopGlyph,
-.playGlyph {
+.playGlyph,
+.progressIcon {
   display: inline-block;
 }
 
@@ -261,6 +262,44 @@
   border-bottom: 10px solid transparent;
   border-left: 16px solid currentColor;
   margin-left: 2px;
+}
+
+.progressIcon {
+  position: relative;
+  width: 26px;
+  height: 26px;
+}
+
+.progressSvg {
+  width: 26px;
+  height: 26px;
+  transform: rotate(-90deg);
+}
+
+.progressTrack,
+.progressValue {
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.progressTrack {
+  stroke: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.progressValue {
+  stroke: currentColor;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 100ms linear;
+}
+
+.progressStopGlyph {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: currentColor;
 }
 
 .actionButton:disabled {

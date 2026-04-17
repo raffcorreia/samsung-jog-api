@@ -52,6 +52,8 @@ function emptyHardwareHeld(): Record<JogAction, boolean> {
 const EMPTY_RECORDING_STATE: RecordingState = {
   mode: "idle",
   recording_started_at: null,
+  replay_started_at: null,
+  replay_total_duration_ms: null,
   replaying_id: null,
   active_name: null,
   event_count: 0,
