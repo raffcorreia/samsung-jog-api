@@ -199,6 +199,9 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const [editorDraft, setEditorDraft] = useState("");
   const [closeEditorConfirmOpen, setCloseEditorConfirmOpen] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [isDraggingFile, setIsDraggingFile] = useState(false);
+  const [errorDismissed, setErrorDismissed] = useState(false);
+  const prevErrorRef = useRef<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   const selected = useMemo(
@@ -208,6 +211,45 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const isEditorOpen = editingId !== null && selected?.id === editingId;
   const editorDirty = isEditorOpen && editorDraft !== editorOriginal;
   const [nowMs, setNowMs] = useState(() => Date.now());
+
+  // Document-level drag detection: light up the drop zone as soon as a drag starts anywhere.
+  useEffect(() => {
+    let count = 0;
+    const onEnter = () => {
+      count += 1;
+      setIsDraggingFile(true);
+    };
+    const onLeave = () => {
+      count -= 1;
+      if (count <= 0) {
+        count = 0;
+        setIsDraggingFile(false);
+      }
+    };
+    const onEnd = () => {
+      count = 0;
+      setIsDraggingFile(false);
+    };
+    document.addEventListener("dragenter", onEnter);
+    document.addEventListener("dragleave", onLeave);
+    document.addEventListener("drop", onEnd);
+    document.addEventListener("dragend", onEnd);
+    return () => {
+      document.removeEventListener("dragenter", onEnter);
+      document.removeEventListener("dragleave", onLeave);
+      document.removeEventListener("drop", onEnd);
+      document.removeEventListener("dragend", onEnd);
+    };
+  }, []);
+
+  // Reset error dismissal when a new error arrives.
+  useEffect(() => {
+    const err = deck.recordingState.last_error;
+    if (err !== null && err !== prevErrorRef.current) {
+      setErrorDismissed(false);
+    }
+    prevErrorRef.current = err;
+  }, [deck.recordingState.last_error]);
 
   useEffect(() => {
     if (!selected && selectedId !== null) {
@@ -462,8 +504,18 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
         />
       </div>
 
-      {deck.recordingState.last_error ? (
-        <div className={styles.errorBanner}>{deck.recordingState.last_error}</div>
+      {deck.recordingState.last_error && !errorDismissed ? (
+        <div className={styles.errorBanner}>
+          <span>{deck.recordingState.last_error}</span>
+          <button
+            className={styles.errorDismiss}
+            type="button"
+            aria-label="Dismiss error"
+            onClick={() => setErrorDismissed(true)}
+          >
+            <ActionIcon kind="close" />
+          </button>
+        </div>
       ) : null}
 
       <div className={styles.grid}>
@@ -475,6 +527,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
           <div
             className={styles.libraryDropZone}
             data-drag-active={dragActive}
+            data-file-dragging={isDraggingFile && !dragActive}
             onDragEnter={handleLibraryDrag}
             onDragOver={handleLibraryDrag}
             onDragLeave={(event) => {
@@ -572,7 +625,11 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
         <div className={styles.detailPane}>
           <div className={styles.sectionHeader}>
             <span>{isEditorOpen ? "Editor" : "Details"}</span>
-            <span>{selected ? selected.filename : "No selection"}</span>
+            {isEditorOpen && selected ? (
+              <span>{selected.filename}</span>
+            ) : !selected ? (
+              <span>No selection</span>
+            ) : null}
           </div>
           {selected ? (
             <div className={styles.detailCard}>

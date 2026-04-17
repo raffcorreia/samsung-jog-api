@@ -474,5 +474,7 @@ class RecordingService:
                 return
             remaining = deadline - asyncio.get_running_loop().time()
             if remaining <= 0:
-                raise RuntimeError(f"LED wait timed out for active={event.match.active}")
+                raise RuntimeError(
+                    f"Timed out waiting for LED to turn {'on' if event.match.active else 'off'}"
+                )
             await asyncio.sleep(min(remaining, event.poll_interval_ms / 1000.0))
