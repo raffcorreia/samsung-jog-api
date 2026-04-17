@@ -111,13 +111,25 @@ export interface DeckEventsState {
 function parseWs(raw: string): WsEventV1 | null {
   try {
     const o = JSON.parse(raw) as WsEventV1;
-    if (o && o.v === 1 && typeof o.category === "string") {
+    if (o && o.v === 1 && typeof o.category === "string" && typeof o.type === "string") {
       return o;
     }
   } catch {
     /* ignore */
   }
   return null;
+}
+
+function isRecordingState(data: unknown): data is RecordingState {
+  if (typeof data !== "object" || data === null) return false;
+  const d = data as Record<string, unknown>;
+  return d.mode === "idle" || d.mode === "recording" || d.mode === "replaying";
+}
+
+function isRecordingLibrary(data: unknown): data is RecordingLibrary {
+  if (typeof data !== "object" || data === null) return false;
+  const d = data as Record<string, unknown>;
+  return Array.isArray(d.items);
 }
 
 export function useDeckEvents(): DeckEventsState {
@@ -394,10 +406,14 @@ export function useDeckEvents(): DeckEventsState {
         }
 
         if (parsed.category === "recording" && parsed.type === "state") {
-          setRecordingState(parsed.data as RecordingState);
+          if (isRecordingState(parsed.data)) {
+            setRecordingState(parsed.data);
+          }
         }
         if (parsed.category === "recording" && parsed.type === "library") {
-          setRecordings(parsed.data as RecordingLibrary);
+          if (isRecordingLibrary(parsed.data)) {
+            setRecordings(parsed.data);
+          }
         }
 
         if (parsed.category === "log" && parsed.type === "cleared") {

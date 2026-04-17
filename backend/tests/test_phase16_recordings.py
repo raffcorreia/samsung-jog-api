@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -294,6 +295,110 @@ def test_uploaded_stale_duration_is_ignored_in_favor_of_event_timing(tmp_path: P
         assert content.status_code == 200
         saved = json.loads(content.text)
         assert saved["duration_ms"] == 120
+
+
+def test_concurrent_operations_are_rejected_while_busy(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Long",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 5000,
+        "events": [{"type": "delay", "duration_ms": 5000}],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        # start recording → second start is rejected
+        assert client.post("/api/v1/recordings/start").status_code == 200
+        busy = client.post("/api/v1/recordings/start")
+        assert busy.status_code == 409
+        assert busy.json()["reason"] == "busy"
+
+        # playback while recording is also rejected
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("long.json", json.dumps(payload), "application/json")},
+        )
+        item = uploaded.json()["item"]
+        assert client.post(f"/api/v1/recordings/{item['id']}/play").status_code == 409
+
+        # stop recording
+        client.post("/api/v1/recordings/stop")
+
+        # start playback → second start is rejected
+        assert client.post(f"/api/v1/recordings/{item['id']}/play").status_code == 200
+        busy = client.post(f"/api/v1/recordings/{item['id']}/play")
+        assert busy.status_code == 409
+        assert busy.json()["reason"] == "busy"
+
+        # recording while replaying is also rejected
+        assert client.post("/api/v1/recordings/start").status_code == 409
+
+        client.post("/api/v1/recordings/stop-playback")
+
+
+def test_delete_recording_while_replaying_succeeds_and_playback_continues(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Delete During Replay",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 5000,
+        "events": [{"type": "delay", "duration_ms": 5000}],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        item = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("replay-delete.json", json.dumps(payload), "application/json")},
+        ).json()["item"]
+
+        assert client.post(f"/api/v1/recordings/{item['id']}/play").status_code == 200
+        assert client.get("/api/v1/recordings/state").json()["mode"] == "replaying"
+
+        # delete while replaying: the file is removed but playback continues from in-memory copy
+        deleted = client.delete(f"/api/v1/recordings/{item['id']}")
+        assert deleted.status_code == 200
+        assert client.get("/api/v1/recordings/state").json()["mode"] == "replaying"
+        assert client.get("/api/v1/recordings").json() == {"items": []}
+
+        client.post("/api/v1/recordings/stop-playback")
+        assert client.get("/api/v1/recordings/state").json()["mode"] == "idle"
+
+
+def test_recording_with_interleaved_led_and_hold_release_events(tmp_path: Path, monkeypatch) -> None:
+    with _build_client(tmp_path, monkeypatch) as client:
+        assert client.post("/api/v1/recordings/start").status_code == 200
+
+        assert client.post("/api/v1/jog/hold", json={"action": "up"}).status_code == 200
+        _wait_for(lambda: client.get("/api/v1/recordings/state").json()["event_count"] >= 1)
+
+        led_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        asyncio.run(
+            client.app.state.recordings.observe_event(
+                {
+                    "category": "bus",
+                    "type": "led_changed",
+                    "ts": led_ts,
+                    "data": {"key_led_active": True},
+                }
+            )
+        )
+        _wait_for(lambda: client.get("/api/v1/recordings/state").json()["event_count"] >= 2)
+
+        assert client.post("/api/v1/jog/release", json={"action": "up"}).status_code == 200
+        _wait_for(lambda: client.get("/api/v1/recordings/state").json()["event_count"] >= 3)
+
+        item = client.post("/api/v1/recordings/stop").json()["item"]
+        body = json.loads((tmp_path / item["filename"]).read_text())
+
+        types = [e["type"] for e in body["events"]]
+        assert "hold" in types
+        assert "led" in types
+        assert "release" in types
+        # hold must come before the led event, led before release
+        assert types.index("hold") < types.index("led")
+        assert types.index("led") < types.index("release")
 
 
 def test_upload_rejects_unsupported_recording_version(tmp_path: Path, monkeypatch) -> None:

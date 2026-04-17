@@ -79,6 +79,7 @@ class RecordingFile(BaseModel):
     source: Literal["observation"] = "observation"
     created_at: str
     updated_at: str
+    # Always derived from events on load/save; the stored value is overwritten and never trusted.
     duration_ms: int = Field(ge=0, le=3_600_000)
     events: list[RecordingEvent] = Field(default_factory=list)
 

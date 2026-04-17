@@ -5,9 +5,11 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from pydantic import ValidationError
 
 from pi_deck.models.recordings import (
     CURRENT_RECORDING_VERSION,
@@ -151,7 +153,7 @@ class RecordingService:
 
     async def start_recording(self) -> RecordingStateOut:
         self._ensure_idle()
-        now = datetime.now().astimezone()
+        now = datetime.now(timezone.utc)
         current = self._hardware.read_bus_snapshot()
         base_name = _recording_name_for_now(now)
         self._session = _RecordingSession(
@@ -174,7 +176,7 @@ class RecordingService:
                 "No active recording",
             )
         self._session = None
-        stop_at = datetime.now().astimezone()
+        stop_at = datetime.now(timezone.utc)
         recording = RecordingFile(
             name=session.base_name,
             created_at=session.started_at.isoformat().replace("+00:00", "Z"),
@@ -214,6 +216,12 @@ class RecordingService:
     async def upload_recording(self, filename: str, payload: bytes) -> RecordingSummary:
         try:
             recording = RecordingFile.model_validate_json(payload)
+        except ValidationError as exc:
+            raise RecordingServiceError(
+                RecordingRejectedReason.INVALID_RECORDING,
+                f"Invalid recording: {exc.error_count()} validation error(s) — {exc.errors()[0]['loc']}: {exc.errors()[0]['msg']}",
+                status_code=400,
+            ) from exc
         except Exception as exc:
             raise RecordingServiceError(
                 RecordingRejectedReason.INVALID_RECORDING,
@@ -250,6 +258,12 @@ class RecordingService:
                 f"Recording not found: {recording_id}",
                 status_code=404,
             ) from exc
+        except ValidationError as exc:
+            raise RecordingServiceError(
+                RecordingRejectedReason.INVALID_RECORDING,
+                f"Invalid recording: {exc.error_count()} validation error(s) — {exc.errors()[0]['loc']}: {exc.errors()[0]['msg']}",
+                status_code=400,
+            ) from exc
         except Exception as exc:
             raise RecordingServiceError(
                 RecordingRejectedReason.INVALID_RECORDING,
@@ -279,7 +293,7 @@ class RecordingService:
             await self._broadcast_state()
             return self.state()
         self._replaying_id = recording_id
-        self._replay_started_at = datetime.now().astimezone()
+        self._replay_started_at = datetime.now(timezone.utc)
         self._replay_total_duration_ms = recording_duration_ms(recording.events)
         self._replay_stop = asyncio.Event()
         self._replay_task = asyncio.create_task(self._run_playback(recording_id, recording))
@@ -296,7 +310,7 @@ class RecordingService:
         self._replay_stop.set()
         try:
             await task
-        except asyncio.CancelledError:
+        except (asyncio.CancelledError, Exception):
             pass
         await self._broadcast_state()
         return self.state()

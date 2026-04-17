@@ -71,12 +71,17 @@ class RecordingStore:
     def write_new(self, recording: RecordingFile, *, preferred_stem: str) -> RecordingSummary:
         recording = recording.model_copy(update={"duration_ms": recording_duration_ms(recording.events)})
         stem = _safe_stem(preferred_stem)
+        content = json.dumps(recording.model_dump(mode="json"), indent=2) + "\n"
         path = self._base_dir / f"{stem}.json"
         index = 2
-        while path.exists():
-            path = self._base_dir / f"{stem}-{index}.json"
-            index += 1
-        path.write_text(json.dumps(recording.model_dump(mode="json"), indent=2) + "\n")
+        while True:
+            try:
+                with path.open("x") as f:
+                    f.write(content)
+                break
+            except FileExistsError:
+                path = self._base_dir / f"{stem}-{index}.json"
+                index += 1
         return self._summary_for(path, recording)
 
     def rename(self, recording_id: str, *, new_name: str) -> RecordingSummary:
@@ -90,13 +95,21 @@ class RecordingStore:
                 "duration_ms": recording_duration_ms(recording.events),
             }
         )
+        content = json.dumps(updated.model_dump(mode="json"), indent=2) + "\n"
         new_path = self._base_dir / f"{_safe_stem(new_name)}.json"
         index = 2
-        while new_path.exists() and new_path != path:
-            new_path = self._base_dir / f"{_safe_stem(new_name)}-{index}.json"
-            index += 1
-        path.unlink()
-        new_path.write_text(json.dumps(updated.model_dump(mode="json"), indent=2) + "\n")
+        if new_path != path:
+            while True:
+                try:
+                    with new_path.open("x") as f:
+                        f.write(content)
+                    break
+                except FileExistsError:
+                    new_path = self._base_dir / f"{_safe_stem(new_name)}-{index}.json"
+                    index += 1
+            path.unlink()
+        else:
+            new_path.write_text(content)
         return self._summary_for(new_path, updated)
 
     def delete(self, recording_id: str) -> None:
