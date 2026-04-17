@@ -42,6 +42,78 @@ export interface RecordingWorkspaceProps {
   onRequestDelete: (item: RecordingSummary) => void;
 }
 
+function RecordingStatusIcon({
+  mode,
+}: {
+  mode: DeckEventsState["recordingState"]["mode"];
+}) {
+  return (
+    <svg
+      className={styles.statusIcon}
+      viewBox="0 0 96 72"
+      aria-hidden="true"
+      data-mode={mode}
+    >
+      <rect x="8" y="10" width="80" height="52" rx="12" className={styles.cassetteBody} />
+      <rect x="21" y="22" width="54" height="20" rx="6" className={styles.cassetteWindow} />
+      <circle cx="34" cy="32" r="10" className={styles.cassetteReel} />
+      <circle cx="62" cy="32" r="10" className={styles.cassetteReel} />
+      <circle cx="34" cy="32" r="2.8" className={styles.cassetteHub} />
+      <circle cx="62" cy="32" r="2.8" className={styles.cassetteHub} />
+      <path d="M42 50h12l8 12H34l8-12Z" className={styles.cassetteBase} />
+    </svg>
+  );
+}
+
+function ActionIcon({
+  kind,
+}: {
+  kind: "record" | "stop" | "play" | "upload" | "download" | "rename" | "delete";
+}) {
+  if (kind === "record") {
+    return <span className={styles.recordGlyph} aria-hidden="true" />;
+  }
+  if (kind === "stop") {
+    return <span className={styles.stopGlyph} aria-hidden="true" />;
+  }
+  if (kind === "play") {
+    return <span className={styles.playGlyph} aria-hidden="true" />;
+  }
+  if (kind === "upload") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M12 16V5" />
+        <path d="m7 10 5-5 5 5" />
+        <path d="M5 19h14" />
+      </svg>
+    );
+  }
+  if (kind === "download") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M12 5v11" />
+        <path d="m17 11-5 5-5-5" />
+        <path d="M5 19h14" />
+      </svg>
+    );
+  }
+  if (kind === "rename") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="m4 20 4.5-1 8.9-8.9-3.5-3.5L5 15.5 4 20Z" />
+        <path d="m13.9 6.6 3.5 3.5" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+      <path d="M6 7h12" />
+      <path d="M9 7V5h6v2" />
+      <path d="M8 7v12h8V7" />
+    </svg>
+  );
+}
+
 export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspaceProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -71,7 +143,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
       ? "recording"
       : deck.recordingState.mode === "replaying"
         ? "replaying"
-        : "idle";
+        : "ready";
 
   const beginRename = (item: RecordingSummary) => {
     setRenamingId(item.id);
@@ -105,29 +177,26 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   return (
     <div className={styles.workspace}>
       <div className={styles.hero}>
-        <div>
-          <div className={styles.eyebrow}>Recording Workspace</div>
-          <h2 className={styles.title}>Capture, replay, and manage macros from the observation bus.</h2>
-        </div>
         <div className={styles.statusCard} data-mode={deck.recordingState.mode}>
-          <span className={styles.statusDot} />
+          <RecordingStatusIcon mode={deck.recordingState.mode} />
           <div className={styles.statusText}>
             <strong>{modeLabel}</strong>
-            <span>
-              {deck.recordingState.active_name ?? "No active sequence"}
-              {deck.recordingState.mode === "recording"
-                ? ` • ${deck.recordingState.event_count} events`
-                : ""}
-            </span>
+            {deck.recordingState.mode === "recording" ? (
+              <span>{deck.recordingState.event_count} events captured</span>
+            ) : deck.recordingState.mode === "replaying" ? (
+              <span>{deck.recordingState.active_name ?? "Playback active"}</span>
+            ) : null}
           </div>
         </div>
       </div>
 
       <div className={styles.controls}>
         <button
-          className={`${styles.actionButton} ${styles.recordAction}`}
+          className={`${styles.actionButton} ${styles.recordAction} ${styles.iconButton}`}
           type="button"
           disabled={busy || deck.recordingState.mode === "replaying"}
+          aria-label={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
+          title={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
           onClick={async () => {
             setBusy(true);
             try {
@@ -141,12 +210,14 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             }
           }}
         >
-          {deck.recordingState.mode === "recording" ? "Stop and Save" : "Start Recording"}
+          <ActionIcon kind={deck.recordingState.mode === "recording" ? "stop" : "record"} />
         </button>
         <button
-          className={styles.actionButton}
+          className={`${styles.actionButton} ${styles.iconButton}`}
           type="button"
           disabled={busy || !selected || deck.recordingState.mode === "recording"}
+          aria-label={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
+          title={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
           onClick={async () => {
             if (!selected) {
               return;
@@ -163,15 +234,17 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             }
           }}
         >
-          {deck.recordingState.mode === "replaying" ? "Stop Playback" : "Play Selected"}
+          <ActionIcon kind={deck.recordingState.mode === "replaying" ? "stop" : "play"} />
         </button>
         <button
-          className={styles.actionButton}
+          className={`${styles.actionButton} ${styles.iconButton}`}
           type="button"
           disabled={busy}
+          aria-label="Upload recording"
+          title="Upload recording"
           onClick={triggerUpload}
         >
-          Upload
+          <ActionIcon kind="upload" />
         </button>
         <input
           ref={inputRef}
@@ -212,7 +285,6 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             ) : null}
             {deck.recordings.items.map((item) => {
               const isSelected = selected?.id === item.id;
-              const isRenaming = renamingId === item.id;
               return (
                 <div
                   key={item.id}
@@ -229,85 +301,13 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                   }}
                 >
                   <div className={styles.itemTop}>
-                    {isRenaming ? (
-                      <input
-                        className={styles.renameInput}
-                        value={renameDraft}
-                        onChange={(event) => setRenameDraft(event.target.value)}
-                        onClick={(event) => event.stopPropagation()}
-                        onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            event.preventDefault();
-                            void commitRename();
-                          }
-                          if (event.key === "Escape") {
-                            setRenamingId(null);
-                            setRenameDraft("");
-                          }
-                        }}
-                      />
-                    ) : (
-                      <strong>{item.name}</strong>
-                    )}
+                    <strong>{item.name}</strong>
                     <span>{formatDuration(item.duration_ms)}</span>
                   </div>
                   <div className={styles.itemMeta}>
                     <span>{item.event_count} events</span>
                     <span>{formatTimestamp(item.updated_at)}</span>
                   </div>
-                  {isSelected ? (
-                    <div className={styles.inlineActions}>
-                      {isRenaming ? (
-                        <>
-                          <button
-                            className={styles.inlineButton}
-                            type="button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              void commitRename();
-                            }}
-                            disabled={busy || renameDraft.trim().length === 0}
-                          >
-                            Save
-                          </button>
-                          <button
-                            className={styles.inlineButton}
-                            type="button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              setRenamingId(null);
-                              setRenameDraft("");
-                            }}
-                            disabled={busy}
-                          >
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <a
-                            className={styles.inlineButton}
-                            href={deck.recordingDownloadUrl(item.id)}
-                            download={item.filename}
-                            onClick={(event) => event.stopPropagation()}
-                          >
-                            Download
-                          </a>
-                          <button
-                            className={styles.inlineButton}
-                            type="button"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              beginRename(item);
-                            }}
-                            disabled={busy || deck.recordingState.mode !== "idle"}
-                          >
-                            Rename
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  ) : null}
                 </div>
               );
             })}
@@ -321,45 +321,103 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
           </div>
           {selected ? (
             <div className={styles.detailCard}>
-              <div className={styles.detailRow}>
-                <span>Name</span>
-                <strong>{selected.name}</strong>
-              </div>
-              <div className={styles.detailRow}>
-                <span>Created</span>
-                <strong>{formatTimestamp(selected.created_at)}</strong>
-              </div>
-              <div className={styles.detailRow}>
-                <span>Updated</span>
-                <strong>{formatTimestamp(selected.updated_at)}</strong>
-              </div>
-              <div className={styles.detailRow}>
-                <span>Duration</span>
-                <strong>{formatDuration(selected.duration_ms)}</strong>
-              </div>
-              <div className={styles.detailRow}>
-                <span>Events</span>
-                <strong>{selected.event_count}</strong>
-              </div>
-              <div className={styles.detailRow}>
-                <span>File size</span>
-                <strong>{formatBytes(selected.size_bytes)}</strong>
+              {renamingId === selected.id ? (
+                <div className={styles.renameBlock}>
+                  <input
+                    className={styles.renameInput}
+                    value={renameDraft}
+                    onChange={(event) => setRenameDraft(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        void commitRename();
+                      }
+                      if (event.key === "Escape") {
+                        setRenamingId(null);
+                        setRenameDraft("");
+                      }
+                    }}
+                  />
+                  <div className={styles.inlineActions}>
+                    <button
+                      className={styles.inlineButton}
+                      type="button"
+                      onClick={() => {
+                        void commitRename();
+                      }}
+                      disabled={busy || renameDraft.trim().length === 0}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className={styles.inlineButton}
+                      type="button"
+                      onClick={() => {
+                        setRenamingId(null);
+                        setRenameDraft("");
+                      }}
+                      disabled={busy}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+              <div className={styles.detailTable}>
+                <div className={styles.detailRow}>
+                  <span>Name</span>
+                  <strong>{selected.name}</strong>
+                </div>
+                <div className={styles.detailRow}>
+                  <span>Created</span>
+                  <strong>{formatTimestamp(selected.created_at)}</strong>
+                </div>
+                <div className={styles.detailRow}>
+                  <span>Updated</span>
+                  <strong>{formatTimestamp(selected.updated_at)}</strong>
+                </div>
+                <div className={styles.detailRow}>
+                  <span>Duration</span>
+                  <strong>{formatDuration(selected.duration_ms)}</strong>
+                </div>
+                <div className={styles.detailRow}>
+                  <span>Events</span>
+                  <strong>{selected.event_count}</strong>
+                </div>
+                <div className={styles.detailRow}>
+                  <span>File size</span>
+                  <strong>{formatBytes(selected.size_bytes)}</strong>
+                </div>
               </div>
               <div className={styles.detailActions}>
                 <a
-                  className={styles.inlineButton}
+                  className={`${styles.inlineButton} ${styles.iconAction}`}
                   href={deck.recordingDownloadUrl(selected.id)}
                   download={selected.filename}
+                  aria-label="Download recording"
+                  title="Download recording"
                 >
-                  Download
+                  <ActionIcon kind="download" />
                 </a>
                 <button
-                  className={`${styles.inlineButton} ${styles.deleteButton}`}
+                  className={`${styles.inlineButton} ${styles.iconAction}`}
+                  type="button"
+                  disabled={busy || deck.recordingState.mode !== "idle"}
+                  onClick={() => beginRename(selected)}
+                  aria-label="Rename recording"
+                  title="Rename recording"
+                >
+                  <ActionIcon kind="rename" />
+                </button>
+                <button
+                  className={`${styles.inlineButton} ${styles.iconAction} ${styles.deleteButton}`}
                   type="button"
                   disabled={busy || deck.recordingState.mode !== "idle"}
                   onClick={() => onRequestDelete(selected)}
+                  aria-label="Delete recording"
+                  title="Delete recording"
                 >
-                  Delete
+                  <ActionIcon kind="delete" />
                 </button>
               </div>
             </div>

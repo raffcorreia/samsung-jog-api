@@ -49,7 +49,11 @@ def test_start_stop_recording_saves_observation_sequence(tmp_path: Path, monkeyp
         path = tmp_path / item["filename"]
         saved = json.loads(path.read_text())
         assert saved["source"] == "observation"
-        assert saved["events"][0]["type"] == "press"
+        assert saved["version"] == "V1"
+        assert "start_state" not in saved
+        assert "end_state" not in saved
+        assert saved["events"][0]["type"] == "hold"
+        assert saved["events"][1]["type"] == "release"
 
 
 def test_recordings_can_be_renamed_and_deleted(tmp_path: Path, monkeypatch) -> None:
@@ -91,17 +95,30 @@ def test_recording_websocket_sync_sends_state_and_library(tmp_path: Path, monkey
         assert ("recording", "library") in seen_types
 
 
+def test_recording_ignores_preheld_state_at_start(tmp_path: Path, monkeypatch) -> None:
+    with _build_client(tmp_path, monkeypatch) as client:
+        assert client.post("/api/v1/jog/hold", json={"action": "center"}).status_code == 200
+        assert client.post("/api/v1/recordings/start").status_code == 200
+        assert client.post("/api/v1/jog/release", json={"action": "center"}).status_code == 200
+        time.sleep(0.1)
+        item = client.post("/api/v1/recordings/stop").json()["item"]
+        body = json.loads((tmp_path / item["filename"]).read_text())
+        assert body["events"] == []
+
+
 def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None:
     payload = {
         "name": "Imported",
-        "version": 1,
+        "version": "V1",
         "source": "observation",
         "created_at": "2026-04-16T12:00:00Z",
         "updated_at": "2026-04-16T12:00:00Z",
         "duration_ms": 1250,
-        "start_state": {},
-        "end_state": {},
-        "events": [{"type": "press", "action": "up", "duration_ms": 80}],
+        "events": [
+            {"type": "hold", "action": "up"},
+            {"type": "delay", "duration_ms": 80},
+            {"type": "release", "action": "up"},
+        ],
     }
     with _build_client(tmp_path, monkeypatch) as client:
         uploaded = client.post(

@@ -10,10 +10,14 @@ from pydantic import BaseModel, Field
 from pi_deck.models.schemas import WsEventV1, utc_iso
 
 
-class PressEvent(BaseModel):
-    type: Literal["press"] = "press"
+class HoldEvent(BaseModel):
+    type: Literal["hold"] = "hold"
     action: Literal["up", "down", "left", "right", "center"]
-    duration_ms: int = Field(ge=1, le=60_000)
+
+
+class ReleaseEvent(BaseModel):
+    type: Literal["release"] = "release"
+    action: Literal["up", "down", "left", "right", "center"]
 
 
 class DelayEvent(BaseModel):
@@ -40,21 +44,19 @@ class WaitDdcEvent(BaseModel):
 
 
 RecordingEvent = Annotated[
-    PressEvent | DelayEvent | WaitLedEvent | WaitDdcEvent,
+    HoldEvent | ReleaseEvent | DelayEvent | WaitLedEvent | WaitDdcEvent,
     Field(discriminator="type"),
 ]
 
 
 class RecordingFile(BaseModel):
     name: str = Field(min_length=1, max_length=80)
-    version: Literal[1] = 1
+    version: Literal["V1", 1] = "V1"
     description: str | None = Field(default=None, max_length=240)
     source: Literal["observation"] = "observation"
     created_at: str
     updated_at: str
     duration_ms: int = Field(ge=0, le=3_600_000)
-    start_state: dict[str, Any] = Field(default_factory=dict)
-    end_state: dict[str, Any] = Field(default_factory=dict)
     events: list[RecordingEvent] = Field(default_factory=list)
 
 

@@ -11,12 +11,13 @@ from typing import Any
 
 from pi_deck.models.recordings import (
     DelayEvent,
-    PressEvent,
+    HoldEvent,
     RecordingFile,
     RecordingLibraryOut,
     RecordingRejectedReason,
     RecordingStateOut,
     RecordingSummary,
+    ReleaseEvent,
     WaitDdcEvent,
     WaitLedEvent,
     WaitLedMatch,
@@ -75,10 +76,9 @@ def _snapshot_from_payload(payload: dict[str, Any]) -> SignalSnapshot:
 class _RecordingSession:
     started_at: datetime
     base_name: str
-    start_snapshot: SignalSnapshot
     prev_snapshot: SignalSnapshot
     last_semantic_at: datetime
-    pending_presses: dict[str, datetime] = field(default_factory=dict)
+    ignored_held: set[str] = field(default_factory=set)
     events: list[object] = field(default_factory=list)
 
 
@@ -147,9 +147,9 @@ class RecordingService:
         self._session = _RecordingSession(
             started_at=now,
             base_name=base_name,
-            start_snapshot=current.model_copy(deep=True),
             prev_snapshot=current,
             last_semantic_at=now,
+            ignored_held={action for action, held in _signals_to_held(current).items() if held},
         )
         self._last_error = None
         await self._live_log.publish(level="info", source="recording", message=f"start - {base_name}")
@@ -165,15 +165,11 @@ class RecordingService:
             )
         self._session = None
         stop_at = datetime.now().astimezone()
-        for action, started_at in list(session.pending_presses.items()):
-            self._finalize_press(session, action, started_at, stop_at)
         recording = RecordingFile(
             name=session.base_name,
             created_at=session.started_at.isoformat().replace("+00:00", "Z"),
             updated_at=stop_at.isoformat().replace("+00:00", "Z"),
             duration_ms=max(0, int((stop_at - session.started_at).total_seconds() * 1000)),
-            start_state=session.start_snapshot.model_dump(mode="json"),
-            end_state=self._hardware.read_bus_snapshot().model_dump(mode="json"),
             events=session.events,
         )
         summary = self._store.write_new(recording, preferred_stem=session.base_name)
@@ -295,15 +291,23 @@ class RecordingService:
         next_held = _signals_to_held(snap)
         for action in _JOG_ACTIONS:
             if prev_held[action] and not next_held[action]:
-                started_at = session.pending_presses.pop(action, at)
-                self._finalize_press(session, action, started_at, at)
+                if action in session.ignored_held:
+                    session.ignored_held.discard(action)
+                    continue
+                self._append_delay_if_needed(session, at)
+                session.events.append(ReleaseEvent(action=action))
+                session.last_semantic_at = at
         for action in _JOG_ACTIONS:
             if not prev_held[action] and next_held[action]:
-                session.pending_presses[action] = at
+                self._append_delay_if_needed(session, at)
+                session.events.append(HoldEvent(action=action))
+                session.last_semantic_at = at
+                session.ignored_held.discard(action)
         session.prev_snapshot = snap
 
     def _handle_led_changed(self, session: _RecordingSession, payload: dict[str, Any]) -> None:
         at = _parse_ts(str(payload.get("ts")))
+        self._append_delay_if_needed(session, at)
         elapsed_ms = max(0, int((at - session.last_semantic_at).total_seconds() * 1000))
         timeout_ms = min(60_000, max(1_000, elapsed_ms + 800))
         active = bool((payload.get("data") or {}).get("key_led_active"))
@@ -315,18 +319,6 @@ class RecordingService:
             )
         )
         session.last_semantic_at = at
-
-    def _finalize_press(
-        self,
-        session: _RecordingSession,
-        action: str,
-        started_at: datetime,
-        released_at: datetime,
-    ) -> None:
-        self._append_delay_if_needed(session, started_at)
-        duration_ms = max(1, int((released_at - started_at).total_seconds() * 1000))
-        session.events.append(PressEvent(action=action, duration_ms=duration_ms))
-        session.last_semantic_at = released_at
 
     async def _run_playback(self, recording_id: str, recording: RecordingFile) -> None:
         try:
@@ -341,10 +333,15 @@ class RecordingService:
                 if isinstance(event, DelayEvent):
                     await self._sleep_or_stop(event.duration_ms / 1000.0)
                     continue
-                if isinstance(event, PressEvent):
-                    err = await self._deck.jog_press(event.action, event.duration_ms)
+                if isinstance(event, HoldEvent):
+                    err = await self._deck.jog_hold(event.action)
                     if err is not None:
-                        raise RuntimeError(f"hardware rejected press: {err.value}")
+                        raise RuntimeError(f"hardware rejected hold: {err.value}")
+                    continue
+                if isinstance(event, ReleaseEvent):
+                    err, _duration_ms = await self._deck.jog_release(event.action)
+                    if err is not None:
+                        raise RuntimeError(f"hardware rejected release: {err.value}")
                     continue
                 if isinstance(event, WaitLedEvent):
                     await self._wait_led(event)

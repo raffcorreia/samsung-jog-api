@@ -56,6 +56,10 @@ export function Popup({
       const target = e.target as Node;
       if (panelRef.current?.contains(target)) return;
       if (ignoreRef?.current?.contains(target)) return;
+      if (target instanceof Element) {
+        const otherPopup = target.closest("[data-popup-panel]");
+        if (otherPopup && otherPopup !== panelRef.current) return;
+      }
       onCloseRef.current();
     };
     document.addEventListener("pointerdown", handler, true);

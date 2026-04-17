@@ -121,6 +121,6 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: /open recording workspace/i }));
 
-    expect(await screen.findByText("Recording Workspace")).toBeInTheDocument();
+    expect(await screen.findByText("Library")).toBeInTheDocument();
   });
 });

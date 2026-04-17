@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 class KeyAdc1Observe:
     """KEY_ADC1: gpiozero ``DigitalInputDevice`` for levels + optional edge callbacks.
 
-    **Active-high at the Pi pin:** center assert reads ~3.3 V (GPIO HIGH); idle reads ~0 V (LOW).
+    The conditioned protoboard path is **idle-high / pressed-low** at the Pi pin:
+    idle reads ~3.3 V, center assert reads ~0 V.
     """
 
     def __init__(self, pins: ProtoboardPins | None = None, *, pull_up: bool | None = None) -> None:
@@ -24,7 +25,8 @@ class KeyAdc1Observe:
         self._bcm = self._pins.key_adc1_digital
         self._pull_up = pull_up if pull_up is not None else True
         self._edge_cb: Callable[[], None] | None = None
-        # ``active_state=None``: conditioned inputs are not "floating"; gpiozero infers active level.
+        # Keep gpiozero in raw input mode here; the wrapper inverts the idle-high/pressed-low
+        # conditioned signal into the project-level "pressed == active" meaning.
         self._dev = DigitalInputDevice(
             self._bcm,
             pull_up=self._pull_up,
@@ -34,7 +36,7 @@ class KeyAdc1Observe:
 
     @property
     def is_active(self) -> bool:
-        return self._dev.is_active
+        return not bool(self._dev.value)
 
     def enable_edge_detect(self, on_edge: Callable[[], None], *, _bouncetime_ms: int = 25) -> bool:
         """Fire ``on_edge`` on both edges (gpiozero helper thread → keep callback tiny)."""

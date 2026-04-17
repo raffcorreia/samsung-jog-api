@@ -762,7 +762,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 - enforce sequence timeout and no-runaway behavior
 - reject concurrent sequence execution
 - support immediate manual abort
-- support `press`, `delay`, `wait_led`, and `wait_ddc` events
+- support `hold`, `release`, `delay`, `wait_led`, and `wait_ddc` events
 - support polling interval and timeout behavior for wait events
 - store recordings in a writable local directory
 - use the observation bus as the recording source of truth so both deck-driven and physical JOG activity can be captured

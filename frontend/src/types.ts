@@ -39,10 +39,14 @@ export interface CommandRejectedBody {
   message: string;
 }
 
-export interface RecordingPressEvent {
-  type: "press";
+export interface RecordingHoldEvent {
+  type: "hold";
   action: JogAction;
-  duration_ms: number;
+}
+
+export interface RecordingReleaseEvent {
+  type: "release";
+  action: JogAction;
 }
 
 export interface RecordingDelayEvent {
@@ -65,7 +69,8 @@ export interface RecordingWaitDdcEvent {
 }
 
 export type RecordingEvent =
-  | RecordingPressEvent
+  | RecordingHoldEvent
+  | RecordingReleaseEvent
   | RecordingDelayEvent
   | RecordingWaitLedEvent
   | RecordingWaitDdcEvent;
