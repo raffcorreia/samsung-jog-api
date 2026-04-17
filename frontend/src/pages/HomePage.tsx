@@ -95,7 +95,7 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
         onClose={() => setRecordingsOpen(false)}
         position="right"
         ignoreRef={jogColRef}
-        title="Recordings"
+        title="Recordings (create and manage command macros)"
         size="workspace"
       >
         <RecordingWorkspace deck={deck} onRequestDelete={setPendingDelete} />

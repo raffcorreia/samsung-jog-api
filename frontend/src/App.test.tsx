@@ -41,6 +41,8 @@ vi.mock("./api/client", () => ({
   renameRecording: vi.fn(),
   deleteRecording: vi.fn(),
   uploadRecording: vi.fn(),
+  fetchRecordingContent: vi.fn(),
+  updateRecordingContent: vi.fn(),
   recordingDownloadUrl: vi.fn((id: string) => `/api/v1/recordings/${id}/download`),
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),

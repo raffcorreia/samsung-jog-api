@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { DeckEventsState } from "../hooks/useDeckEvents";
 import type { RecordingSummary } from "../types";
 
+import { ConfirmDialog } from "./ConfirmDialog";
 import styles from "./RecordingWorkspace.module.css";
 
 function formatTimestamp(ts: string): string {
@@ -75,7 +76,7 @@ function RecordingStatusIcon({
 function ActionIcon({
   kind,
 }: {
-  kind: "record" | "stop" | "play" | "upload" | "download" | "rename" | "delete";
+  kind: "record" | "stop" | "play" | "upload" | "download" | "rename" | "edit" | "delete";
 }) {
   if (kind === "record") {
     return <span className={styles.recordGlyph} aria-hidden="true" />;
@@ -112,6 +113,16 @@ function ActionIcon({
       </svg>
     );
   }
+  if (kind === "edit") {
+    return (
+      <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
+        <path d="M8 6h10" />
+        <path d="M8 12h8" />
+        <path d="M8 18h10" />
+        <path d="m4 19 1.1-3.9L12.8 7.4l2.8 2.8-7.7 7.7L4 19Z" />
+      </svg>
+    );
+  }
   return (
     <svg viewBox="0 0 24 24" className={styles.iconSvg} aria-hidden="true">
       <path d="M6 7h12" />
@@ -126,18 +137,28 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState("");
   const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editorOriginal, setEditorOriginal] = useState("");
+  const [editorDraft, setEditorDraft] = useState("");
+  const [closeEditorConfirmOpen, setCloseEditorConfirmOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const selected = useMemo(
     () => deck.recordings.items.find((item) => item.id === selectedId) ?? deck.recordings.items[0] ?? null,
     [deck.recordings.items, selectedId],
   );
+  const isEditorOpen = editingId !== null && selected?.id === editingId;
+  const editorDirty = isEditorOpen && editorDraft !== editorOriginal;
 
   useEffect(() => {
     if (!selected && selectedId !== null) {
       setSelectedId(null);
       setRenamingId(null);
       setRenameDraft("");
+      setEditingId(null);
+      setEditorOriginal("");
+      setEditorDraft("");
+      setCloseEditorConfirmOpen(false);
       return;
     }
     if (selected && selected.id !== selectedId) {
@@ -181,11 +202,115 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
     inputRef.current?.click();
   };
 
+  const beginEdit = async (item: RecordingSummary) => {
+    setBusy(true);
+    try {
+      const content = await deck.fetchRecordingContent(item.id);
+      if (content === null) {
+        return;
+      }
+      setSelectedId(item.id);
+      setEditingId(item.id);
+      setEditorOriginal(content);
+      setEditorDraft(content);
+      setRenamingId(null);
+      setRenameDraft("");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const saveEditor = async () => {
+    if (!selected || !isEditorOpen) {
+      return false;
+    }
+    setBusy(true);
+    try {
+      const ok = await deck.updateRecordingContent(selected.id, editorDraft);
+      if (!ok) {
+        return false;
+      }
+      const content = await deck.fetchRecordingContent(selected.id);
+      if (content !== null) {
+        setEditorOriginal(content);
+        setEditorDraft(content);
+      }
+      return true;
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const cancelEditorChanges = () => {
+    setEditorDraft(editorOriginal);
+  };
+
+  const closeEditor = () => {
+    setEditingId(null);
+    setEditorOriginal("");
+    setEditorDraft("");
+    setCloseEditorConfirmOpen(false);
+  };
+
   return (
     <div className={styles.workspace}>
       <div className={styles.hero}>
-        <div className={styles.heroHeading}>
-          <h2>Macros</h2>
+        <div className={styles.controls}>
+          <button
+            className={`${styles.actionButton} ${styles.recordAction} ${styles.iconButton}`}
+            type="button"
+            disabled={busy || deck.recordingState.mode === "replaying"}
+            aria-label={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
+            title={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
+            onClick={async () => {
+              setBusy(true);
+              try {
+                if (deck.recordingState.mode === "recording") {
+                  await deck.stopRecording();
+                } else {
+                  await deck.startRecording();
+                }
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            <ActionIcon kind={deck.recordingState.mode === "recording" ? "stop" : "record"} />
+          </button>
+          <button
+            className={`${styles.actionButton} ${styles.iconButton}`}
+            type="button"
+            disabled={busy || !selected || deck.recordingState.mode === "recording"}
+            aria-label={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
+            title={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
+            onClick={async () => {
+              if (!selected) {
+                return;
+              }
+              setBusy(true);
+              try {
+                if (deck.recordingState.mode === "replaying") {
+                  await deck.stopRecordingPlayback();
+                } else {
+                  await deck.playRecording(selected.id);
+                }
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            <ActionIcon kind={deck.recordingState.mode === "replaying" ? "stop" : "play"} />
+          </button>
+          <button
+            className={`${styles.actionButton} ${styles.iconButton}`}
+            type="button"
+            disabled={busy}
+            aria-label="Upload recording"
+            title="Upload recording"
+            onClick={triggerUpload}
+          >
+            <ActionIcon kind="upload" />
+          </button>
         </div>
         <div className={styles.statusCard} data-mode={deck.recordingState.mode}>
           <RecordingStatusIcon mode={deck.recordingState.mode} />
@@ -198,64 +323,6 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             ) : null}
           </div>
         </div>
-      </div>
-
-      <div className={styles.controls}>
-        <button
-          className={`${styles.actionButton} ${styles.recordAction} ${styles.iconButton}`}
-          type="button"
-          disabled={busy || deck.recordingState.mode === "replaying"}
-          aria-label={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
-          title={deck.recordingState.mode === "recording" ? "Stop and save recording" : "Start recording"}
-          onClick={async () => {
-            setBusy(true);
-            try {
-              if (deck.recordingState.mode === "recording") {
-                await deck.stopRecording();
-              } else {
-                await deck.startRecording();
-              }
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          <ActionIcon kind={deck.recordingState.mode === "recording" ? "stop" : "record"} />
-        </button>
-        <button
-          className={`${styles.actionButton} ${styles.iconButton}`}
-          type="button"
-          disabled={busy || !selected || deck.recordingState.mode === "recording"}
-          aria-label={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
-          title={deck.recordingState.mode === "replaying" ? "Stop playback" : "Play selected recording"}
-          onClick={async () => {
-            if (!selected) {
-              return;
-            }
-            setBusy(true);
-            try {
-              if (deck.recordingState.mode === "replaying") {
-                await deck.stopRecordingPlayback();
-              } else {
-                await deck.playRecording(selected.id);
-              }
-            } finally {
-              setBusy(false);
-            }
-          }}
-        >
-          <ActionIcon kind={deck.recordingState.mode === "replaying" ? "stop" : "play"} />
-        </button>
-        <button
-          className={`${styles.actionButton} ${styles.iconButton}`}
-          type="button"
-          disabled={busy}
-          aria-label="Upload recording"
-          title="Upload recording"
-          onClick={triggerUpload}
-        >
-          <ActionIcon kind="upload" />
-        </button>
         <input
           ref={inputRef}
           className={styles.hiddenInput}
@@ -295,6 +362,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             ) : null}
             {deck.recordings.items.map((item) => {
               const isSelected = selected?.id === item.id;
+              const isActiveReplay = deck.recordingState.mode === "replaying" && deck.recordingState.replaying_id === item.id;
               return (
                 <div
                   key={item.id}
@@ -302,17 +370,55 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                   data-selected={isSelected}
                   role="button"
                   tabIndex={0}
-                  onClick={() => setSelectedId(item.id)}
+                  onClick={() => {
+                    if (isEditorOpen) {
+                      return;
+                    }
+                    setSelectedId(item.id);
+                  }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
+                      if (isEditorOpen) {
+                        return;
+                      }
                       setSelectedId(item.id);
                     }
                   }}
                 >
                   <div className={styles.itemTop}>
                     <strong>{item.name}</strong>
-                    <span>{formatDuration(item.duration_ms)}</span>
+                    <div className={styles.itemActions}>
+                      <span>{formatDuration(item.duration_ms)}</span>
+                      <button
+                        className={`${styles.inlineButton} ${styles.iconAction}`}
+                        type="button"
+                        disabled={
+                          busy ||
+                          isEditorOpen ||
+                          deck.recordingState.mode === "recording" ||
+                          (deck.recordingState.mode === "replaying" && !isActiveReplay)
+                        }
+                        aria-label={isActiveReplay ? `Stop playback for ${item.name}` : `Play ${item.name}`}
+                        title={isActiveReplay ? "Stop playback" : "Play recording"}
+                        onClick={async (event) => {
+                          event.stopPropagation();
+                          setSelectedId(item.id);
+                          setBusy(true);
+                          try {
+                            if (isActiveReplay) {
+                              await deck.stopRecordingPlayback();
+                            } else {
+                              await deck.playRecording(item.id);
+                            }
+                          } finally {
+                            setBusy(false);
+                          }
+                        }}
+                      >
+                        <ActionIcon kind={isActiveReplay ? "stop" : "play"} />
+                      </button>
+                    </div>
                   </div>
                   <div className={styles.itemMeta}>
                     <span>{item.event_count} events</span>
@@ -331,7 +437,54 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
           </div>
           {selected ? (
             <div className={styles.detailCard}>
-              {renamingId === selected.id ? (
+              {isEditorOpen ? (
+                <>
+                  <div className={styles.editorMeta}>
+                    <span>{selected.filename}</span>
+                    <span>{editorDirty ? "Modified" : "Saved"}</span>
+                  </div>
+                  <textarea
+                    className={styles.editorText}
+                    value={editorDraft}
+                    spellCheck={false}
+                    onChange={(event) => setEditorDraft(event.target.value)}
+                  />
+                  <div className={styles.editorActions}>
+                    <button
+                      className={styles.inlineButton}
+                      type="button"
+                      onClick={() => {
+                        void saveEditor();
+                      }}
+                      disabled={busy}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className={styles.inlineButton}
+                      type="button"
+                      onClick={cancelEditorChanges}
+                      disabled={busy || !editorDirty}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className={styles.inlineButton}
+                      type="button"
+                      onClick={() => {
+                        if (editorDirty) {
+                          setCloseEditorConfirmOpen(true);
+                        } else {
+                          closeEditor();
+                        }
+                      }}
+                      disabled={busy}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              ) : renamingId === selected.id ? (
                 <div className={styles.renameBlock}>
                   <input
                     className={styles.renameInput}
@@ -399,43 +552,73 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                   <strong>{formatBytes(selected.size_bytes)}</strong>
                 </div>
               </div>
-              <div className={styles.detailActions}>
-                <a
-                  className={`${styles.inlineButton} ${styles.iconAction}`}
-                  href={deck.recordingDownloadUrl(selected.id)}
-                  download={selected.filename}
-                  aria-label="Download recording"
-                  title="Download recording"
-                >
-                  <ActionIcon kind="download" />
-                </a>
-                <button
-                  className={`${styles.inlineButton} ${styles.iconAction}`}
-                  type="button"
-                  disabled={busy || deck.recordingState.mode !== "idle"}
-                  onClick={() => beginRename(selected)}
-                  aria-label="Rename recording"
-                  title="Rename recording"
-                >
-                  <ActionIcon kind="rename" />
-                </button>
-                <button
-                  className={`${styles.inlineButton} ${styles.iconAction} ${styles.deleteButton}`}
-                  type="button"
-                  disabled={busy || deck.recordingState.mode !== "idle"}
-                  onClick={() => onRequestDelete(selected)}
-                  aria-label="Delete recording"
-                  title="Delete recording"
-                >
-                  <ActionIcon kind="delete" />
-                </button>
-              </div>
+              {!isEditorOpen ? (
+                <div className={styles.detailActions}>
+                  <button
+                    className={`${styles.inlineButton} ${styles.iconAction}`}
+                    type="button"
+                    disabled={busy || deck.recordingState.mode !== "idle"}
+                    onClick={() => {
+                      void beginEdit(selected);
+                    }}
+                    aria-label="Edit recording file"
+                    title="Edit recording file"
+                  >
+                    <ActionIcon kind="edit" />
+                  </button>
+                  <a
+                    className={`${styles.inlineButton} ${styles.iconAction}`}
+                    href={deck.recordingDownloadUrl(selected.id)}
+                    download={selected.filename}
+                    aria-label="Download recording"
+                    title="Download recording"
+                  >
+                    <ActionIcon kind="download" />
+                  </a>
+                  <button
+                    className={`${styles.inlineButton} ${styles.iconAction}`}
+                    type="button"
+                    disabled={busy || deck.recordingState.mode !== "idle"}
+                    onClick={() => beginRename(selected)}
+                    aria-label="Rename recording"
+                    title="Rename recording"
+                  >
+                    <ActionIcon kind="rename" />
+                  </button>
+                  <button
+                    className={`${styles.inlineButton} ${styles.iconAction} ${styles.deleteButton}`}
+                    type="button"
+                    disabled={busy || deck.recordingState.mode !== "idle"}
+                    onClick={() => onRequestDelete(selected)}
+                    aria-label="Delete recording"
+                    title="Delete recording"
+                  >
+                    <ActionIcon kind="delete" />
+                  </button>
+                </div>
+              ) : null}
             </div>
           ) : (
             <div className={styles.emptyDetail}>Select a recording to inspect or replay it.</div>
           )}
         </div>
       </div>
+      <ConfirmDialog
+        open={closeEditorConfirmOpen}
+        title="Close Editor"
+        message="Save changes before closing the editor?"
+        confirmLabel="Save"
+        cancelLabel="Discard"
+        busy={busy}
+        onConfirm={() => {
+          void saveEditor().then((saved) => {
+            if (saved) {
+              closeEditor();
+            }
+          });
+        }}
+        onCancel={closeEditor}
+      />
     </div>
   );
 }

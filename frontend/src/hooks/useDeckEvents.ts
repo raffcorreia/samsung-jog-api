@@ -10,6 +10,7 @@ import {
 import {
   deleteLiveLog,
   deleteRecording,
+  fetchRecordingContent,
   fetchRecordingLibrary,
   fetchRecordingState,
   fetchStatus,
@@ -20,6 +21,7 @@ import {
   startRecording,
   stopRecording,
   stopRecordingPlayback,
+  updateRecordingContent,
   uploadRecording,
   websocketEventsUrl,
 } from "../api/client";
@@ -99,6 +101,8 @@ export interface DeckEventsState {
   renameRecording: (recordingId: string, name: string) => Promise<boolean>;
   deleteRecording: (recordingId: string) => Promise<boolean>;
   uploadRecording: (file: File) => Promise<boolean>;
+  fetchRecordingContent: (recordingId: string) => Promise<string | null>;
+  updateRecordingContent: (recordingId: string, content: string) => Promise<boolean>;
   recordingDownloadUrl: (recordingId: string) => string;
 }
 
@@ -289,6 +293,38 @@ export function useDeckEvents(): DeckEventsState {
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         pushLogLine(`recording upload failed — ${msg}`);
+        return false;
+      }
+    },
+    [pushLogLine, refreshRecordings],
+  );
+
+  const fetchRecordingContentAction = useCallback(
+    async (recordingId: string) => {
+      try {
+        return await fetchRecordingContent(recordingId);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording content fetch failed — ${msg}`);
+        return null;
+      }
+    },
+    [pushLogLine],
+  );
+
+  const updateRecordingContentAction = useCallback(
+    async (recordingId: string, content: string) => {
+      try {
+        const r = await updateRecordingContent(recordingId, content);
+        if (!r.ok) {
+          pushLogLine(`recording edit rejected — ${r.body.message}`);
+          return false;
+        }
+        await refreshRecordings();
+        return true;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        pushLogLine(`recording edit failed — ${msg}`);
         return false;
       }
     },
@@ -496,6 +532,8 @@ export function useDeckEvents(): DeckEventsState {
       renameRecording: renameRecordingAction,
       deleteRecording: deleteRecordingAction,
       uploadRecording: uploadRecordingAction,
+      fetchRecordingContent: fetchRecordingContentAction,
+      updateRecordingContent: updateRecordingContentAction,
       recordingDownloadUrl,
     }),
     [
@@ -519,6 +557,8 @@ export function useDeckEvents(): DeckEventsState {
       renameRecordingAction,
       deleteRecordingAction,
       uploadRecordingAction,
+      fetchRecordingContentAction,
+      updateRecordingContentAction,
     ],
   );
 }

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, File, UploadFile, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import APIRouter, Depends, File, Request, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
 from pi_deck.api.deps import get_deck, get_recordings
 from pi_deck.models.recordings import (
@@ -219,6 +219,40 @@ def api_recordings_download(
     except RecordingServiceError as exc:
         return _recording_rejection_response(exc)
     return FileResponse(path, media_type="application/json", filename=path.name)
+
+
+@api_v1.get("/recordings/{recording_id}/content", response_model=None)
+def api_recordings_content(
+    recording_id: str,
+    recordings: RecordingService = Depends(get_recordings),
+):
+    try:
+        content = recordings.read_recording_text(recording_id)
+    except RecordingServiceError as exc:
+        return _recording_rejection_response(exc)
+    return PlainTextResponse(content, media_type="application/json")
+
+
+@api_v1.put("/recordings/{recording_id}/content")
+async def api_recordings_replace_content(
+    recording_id: str,
+    request: Request,
+    recordings: RecordingService = Depends(get_recordings),
+) -> JSONResponse:
+    try:
+        payload = (await request.body()).decode("utf-8")
+        summary = await recordings.update_recording_text(recording_id, payload)
+    except UnicodeDecodeError:
+        return _recording_rejection_response(
+            RecordingServiceError(
+                RecordingRejectedReason.INVALID_RECORDING,
+                "Invalid recording file",
+                status_code=400,
+            )
+        )
+    except RecordingServiceError as exc:
+        return _recording_rejection_response(exc)
+    return JSONResponse({"ok": True, "item": summary.model_dump(mode="json")})
 
 
 @api_v1.post("/recordings/upload")

@@ -236,6 +236,32 @@ export async function uploadRecording(file: File): Promise<RecordingResult<{ ok:
   throw new Error(`recording upload failed: ${r.status}`);
 }
 
+export async function fetchRecordingContent(recordingId: string): Promise<string> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/content`);
+  if (r.status === 200) {
+    return await r.text();
+  }
+  throw new Error(`recording content fetch failed: ${r.status}`);
+}
+
+export async function updateRecordingContent(
+  recordingId: string,
+  content: string,
+): Promise<RecordingResult<{ ok: true; item: RecordingSummary }>> {
+  const r = await fetch(`${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/content`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: content,
+  });
+  if (r.status === 200) {
+    return { ok: true, body: (await r.json()) as { ok: true; item: RecordingSummary } };
+  }
+  if (r.status === 400 || r.status === 404 || r.status === 409) {
+    return { ok: false, body: (await r.json()) as RecordingRejectedBody };
+  }
+  throw new Error(`recording content update failed: ${r.status}`);
+}
+
 export function recordingDownloadUrl(recordingId: string): string {
   return `${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/download`;
 }

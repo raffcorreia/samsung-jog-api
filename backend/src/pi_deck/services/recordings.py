@@ -215,6 +215,34 @@ class RecordingService:
         await self._broadcast_library()
         return summary
 
+    def read_recording_text(self, recording_id: str) -> str:
+        try:
+            return self._store.read_text(recording_id)
+        except FileNotFoundError as exc:
+            raise RecordingServiceError(
+                RecordingRejectedReason.NOT_FOUND,
+                f"Recording not found: {recording_id}",
+                status_code=404,
+            ) from exc
+
+    async def update_recording_text(self, recording_id: str, payload: str) -> RecordingSummary:
+        try:
+            summary = self._store.replace(recording_id, payload)
+        except FileNotFoundError as exc:
+            raise RecordingServiceError(
+                RecordingRejectedReason.NOT_FOUND,
+                f"Recording not found: {recording_id}",
+                status_code=404,
+            ) from exc
+        except Exception as exc:
+            raise RecordingServiceError(
+                RecordingRejectedReason.INVALID_RECORDING,
+                "Invalid recording file",
+                status_code=400,
+            ) from exc
+        await self._broadcast_library()
+        return summary
+
     async def play_recording(self, recording_id: str) -> RecordingStateOut:
         self._ensure_idle()
         try:
@@ -280,6 +308,8 @@ class RecordingService:
             )
 
     def _append_delay_if_needed(self, session: _RecordingSession, at: datetime) -> None:
+        if not session.events:
+            return
         elapsed_ms = max(0, int((at - session.last_semantic_at).total_seconds() * 1000))
         if elapsed_ms >= _MIN_DELAY_MS:
             session.events.append(DelayEvent(duration_ms=elapsed_ms))

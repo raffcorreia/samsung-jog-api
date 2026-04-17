@@ -7,24 +7,9 @@
 
 .hero {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
-}
-
-.heroHeading {
-  display: flex;
-  align-items: center;
-  min-height: 76px;
-}
-
-.heroHeading h2 {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.1;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text);
 }
 
 .statusCard {
@@ -208,6 +193,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  flex: 1 1 auto;
 }
 
 .actionButton {
@@ -296,7 +282,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(250px, 0.95fr);
+  grid-template-columns: minmax(270px, 1.05fr) minmax(0, 1.45fr);
   gap: 14px;
   min-height: 0;
   flex: 1 1 auto;
@@ -364,6 +350,7 @@
 }
 
 .itemTop,
+.itemActions,
 .itemMeta,
 .detailRow,
 .inlineActions {
@@ -383,6 +370,10 @@
 .itemMeta {
   color: var(--muted);
   font-size: 0.84rem;
+}
+
+.itemActions {
+  flex: 0 0 auto;
 }
 
 .inlineActions {
@@ -427,11 +418,39 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
+  min-height: 0;
 }
 
 .renameBlock {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.editorMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.editorText {
+  flex: 1 1 auto;
+  min-height: 340px;
+  width: 100%;
+  resize: none;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border-bright);
+  background: rgba(10, 16, 22, 0.82);
+  color: var(--text);
+  font: 0.85rem/1.45 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.editorActions {
+  display: flex;
+  justify-content: flex-end;
   gap: 10px;
 }
 

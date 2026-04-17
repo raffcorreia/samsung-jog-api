@@ -49,6 +49,9 @@ class RecordingStore:
         path = self._path_for(recording_id)
         return RecordingFile.model_validate_json(path.read_text())
 
+    def read_text(self, recording_id: str) -> str:
+        return self._path_for(recording_id).read_text()
+
     def list(self) -> RecordingLibraryOut:
         items: list[RecordingSummary] = []
         for path in sorted(self._base_dir.glob("*.json"), reverse=True):
@@ -117,3 +120,20 @@ class RecordingStore:
 
     def path_for_download(self, recording_id: str) -> Path:
         return self._path_for(recording_id)
+
+    def replace(self, recording_id: str, payload: str) -> RecordingSummary:
+        path = self._path_for(recording_id)
+        recording = RecordingFile.model_validate_json(payload)
+        updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        updated = recording.model_copy(update={"updated_at": updated_at})
+        path.write_text(json.dumps(updated.model_dump(mode="json"), indent=2) + "\n")
+        return RecordingSummary(
+            id=path.name,
+            filename=path.name,
+            name=updated.name,
+            created_at=updated.created_at,
+            updated_at=updated.updated_at,
+            event_count=len(updated.events),
+            duration_ms=updated.duration_ms,
+            size_bytes=path.stat().st_size,
+        )

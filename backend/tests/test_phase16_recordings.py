@@ -106,6 +106,20 @@ def test_recording_ignores_preheld_state_at_start(tmp_path: Path, monkeypatch) -
         assert body["events"] == []
 
 
+def test_recording_does_not_persist_initial_setup_delay(tmp_path: Path, monkeypatch) -> None:
+    with _build_client(tmp_path, monkeypatch) as client:
+        assert client.post("/api/v1/recordings/start").status_code == 200
+        time.sleep(0.12)
+        assert client.post("/api/v1/jog/hold", json={"action": "left"}).status_code == 200
+        assert client.post("/api/v1/jog/release", json={"action": "left"}).status_code == 200
+        _wait_for(lambda: client.get("/api/v1/recordings/state").json()["event_count"] >= 2)
+        item = client.post("/api/v1/recordings/stop").json()["item"]
+        body = json.loads((tmp_path / item["filename"]).read_text())
+        assert body["events"][0]["type"] == "hold"
+        assert body["events"][1]["type"] == "release"
+        assert all(event["type"] != "delay" for event in body["events"][:2])
+
+
 def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None:
     payload = {
         "name": "Imported",
@@ -132,3 +146,40 @@ def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None
         assert download.status_code == 200
         body = json.loads(download.text)
         assert body["name"] == "Imported"
+
+
+def test_recording_content_can_be_loaded_and_replaced(tmp_path: Path, monkeypatch) -> None:
+    payload = {
+        "name": "Editable",
+        "version": "V1",
+        "source": "observation",
+        "created_at": "2026-04-16T12:00:00Z",
+        "updated_at": "2026-04-16T12:00:00Z",
+        "duration_ms": 1250,
+        "events": [
+            {"type": "hold", "action": "up"},
+            {"type": "delay", "duration_ms": 80},
+            {"type": "release", "action": "up"},
+        ],
+    }
+    with _build_client(tmp_path, monkeypatch) as client:
+        uploaded = client.post(
+            "/api/v1/recordings/upload",
+            files={"file": ("editable.json", json.dumps(payload), "application/json")},
+        )
+        item = uploaded.json()["item"]
+
+        content = client.get(f"/api/v1/recordings/{item['id']}/content")
+        assert content.status_code == 200
+        assert '"name": "Editable"' in content.text
+
+        updated = {**payload, "name": "Edited Raw"}
+        replace = client.put(
+            f"/api/v1/recordings/{item['id']}/content",
+            content=json.dumps(updated),
+            headers={"Content-Type": "application/json"},
+        )
+        assert replace.status_code == 200
+        replaced_item = replace.json()["item"]
+        assert replaced_item["name"] == "Edited Raw"
+        assert replaced_item["filename"] == item["filename"]
