@@ -248,7 +248,8 @@ Sequences should be stored at the logical action layer, not at the low-level ana
 
 So recordings should represent things like:
 
-- `press`
+- `hold`
+- `release`
 - `delay`
 - `wait_led`
 - `wait_ddc`
@@ -276,7 +277,6 @@ Each recording should include:
 
 - metadata
 - ordered events
-- start and end state where known
 - `DDC` status snapshots or normalized status checks where useful
 - `LED` wait events where the next event should not continue until a matching `LED` cue is observed
 - `DDC` wait or check events with retry interval and timeout behavior
@@ -284,9 +284,9 @@ Each recording should include:
 
 Event behavior should support:
 
-- logical press or hold actions
+- logical hold and release actions
 - delays
-- `LED`-triggered continuation
+- `LED`-triggered continuation as a blocking wait, not an LED output command
 - `DDC` status checks and `DDC` wait loops
 - configurable polling interval where repeated checks are needed
 - timeout-based failure when an expected `LED` or `DDC` state never arrives
@@ -298,20 +298,20 @@ A representative shape for the recording model is:
 ```json
 {
   "name": "enable-pip",
-  "version": 1,
+  "version": "V1",
   "description": "Open OSD and enable PiP from OSD-closed state",
-  "start_state": {
-    "osd": "closed",
-    "mode": "ddc"
-  },
-  "end_state": {
-    "pip": "enabled"
-  },
   "events": [
     {
-      "type": "press",
-      "action": "center",
+      "type": "hold",
+      "action": "center"
+    },
+    {
+      "type": "delay",
       "duration_ms": 120
+    },
+    {
+      "type": "release",
+      "action": "center"
     },
     {
       "type": "delay",
@@ -326,9 +326,16 @@ A representative shape for the recording model is:
       "timeout_ms": 1500
     },
     {
-      "type": "press",
-      "action": "left",
+      "type": "hold",
+      "action": "left"
+    },
+    {
+      "type": "delay",
       "duration_ms": 100
+    },
+    {
+      "type": "release",
+      "action": "left"
     },
     {
       "type": "delay",

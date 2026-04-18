@@ -25,6 +25,14 @@ def test_websocket_replays_backend_log_history_on_connect() -> None:
             assert replay["data"]["message"] == "history before connect"
 
 
+def _receive_until_category(ws, category: str, limit: int = 12) -> dict:
+    for _ in range(limit):
+        msg = json.loads(ws.receive_text())
+        if msg.get("category") == category:
+            return msg
+    raise AssertionError(f"did not receive category={category!r}")
+
+
 def test_command_rejection_emits_log_entries_to_connected_clients() -> None:
     """Successful jog commands do not stream ``command/*``; rejections still do."""
     with TestClient(create_app()) as client:
@@ -51,12 +59,12 @@ def test_two_websocket_clients_receive_same_log_entry() -> None:
     with TestClient(create_app()) as client:
         with client.websocket_connect("/ws/events") as ws1:
             ws1.receive_text()  # control/connected
-            ws1.receive_text()  # log/entry for ws1 connection
+            _receive_until_category(ws1, "log")  # log/entry for ws1 connection
             with client.websocket_connect("/ws/events") as ws2:
                 ws2.receive_text()  # control/connected
-                ws2.receive_text()  # replayed ws1 connection log
-                ws2.receive_text()  # log/entry for ws2 connection
-                ws1.receive_text()  # log/entry for ws2 connection
+                _receive_until_category(ws2, "log")  # replayed ws1 connection log
+                _receive_until_category(ws2, "log")  # log/entry for ws2 connection
+                _receive_until_category(ws1, "log")  # log/entry for ws2 connection
 
                 assert client.post(
                     "/api/v1/log",
@@ -64,7 +72,7 @@ def test_two_websocket_clients_receive_same_log_entry() -> None:
                 ).status_code == 200
 
                 msg1 = json.loads(ws1.receive_text())
-                msg2 = json.loads(ws2.receive_text())
+                msg2 = _receive_until_category(ws2, "log")
 
                 assert msg1["category"] == "log"
                 assert msg2["category"] == "log"
@@ -85,6 +93,6 @@ def test_delete_log_clears_buffer_and_not_replayed() -> None:
 
         with client.websocket_connect("/ws/events") as ws:
             assert json.loads(ws.receive_text())["category"] == "control"
-            nxt = json.loads(ws.receive_text())
+            nxt = _receive_until_category(ws, "log")
             assert nxt["category"] == "log"
             assert "before clear" not in json.dumps(nxt)

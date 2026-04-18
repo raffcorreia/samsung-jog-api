@@ -17,8 +17,30 @@ vi.mock("../api/client", () => ({
       },
     }),
   ),
+  fetchRecordingLibrary: vi.fn(() => Promise.resolve({ items: [] })),
+  fetchRecordingState: vi.fn(() =>
+    Promise.resolve({
+      mode: "idle",
+      recording_started_at: null,
+      replaying_id: null,
+      active_name: null,
+      event_count: 0,
+      last_error: null,
+    }),
+  ),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
   postLogEntry: vi.fn(() => Promise.resolve()),
+  deleteLiveLog: vi.fn(() => Promise.resolve()),
+  startRecording: vi.fn(),
+  stopRecording: vi.fn(),
+  playRecording: vi.fn(),
+  stopRecordingPlayback: vi.fn(),
+  renameRecording: vi.fn(),
+  deleteRecording: vi.fn(),
+  uploadRecording: vi.fn(),
+  fetchRecordingContent: vi.fn(),
+  updateRecordingContent: vi.fn(),
+  recordingDownloadUrl: vi.fn((id: string) => `/api/v1/recordings/${id}/download`),
 }));
 
 describe("useDeckEvents hardwareHeld (bus/snapshot)", () => {

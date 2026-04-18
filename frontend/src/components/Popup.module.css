@@ -4,7 +4,14 @@
   inset: 0;
   z-index: 99;
   background: rgba(0, 0, 0, 0.4);
+}
+
+.backdropPassThrough {
   pointer-events: none;
+}
+
+.backdropModal {
+  pointer-events: auto;
 }
 
 .panel {
@@ -17,9 +24,22 @@
   display: flex;
   flex-direction: column;
   min-width: 280px;
+  overflow: hidden;
+}
+
+.sizeDefault {
   max-width: 600px;
   max-height: 80vh;
-  overflow: hidden;
+}
+
+.sizeWorkspace {
+  max-width: none;
+  max-height: none;
+}
+
+.sizeConfirm {
+  width: min(460px, calc(100vw - 32px));
+  max-height: min(320px, calc(100vh - 32px));
 }
 
 /* Position variants */
@@ -31,11 +51,10 @@
 
 /* Right — sits in the right panel, clear of the left JogPad column */
 .posRight {
-  top: calc(var(--deck-topbar-height, 48px) + 32px);
+  top: calc(var(--deck-topbar-height, 48px) + var(--pad));
   left: calc(var(--deck-left-col, 260px) + var(--pad));
   right: var(--pad);
-  max-width: none;
-  width: auto;
+  bottom: calc(var(--deck-log-height, 200px) + var(--pad));
 }
 
 .posLeft {
@@ -87,4 +106,9 @@
   flex: 1 1 auto;
   overflow: auto;
   padding: 14px;
+}
+
+.sizeWorkspace .body {
+  overflow: hidden;
+  min-height: 0;
 }

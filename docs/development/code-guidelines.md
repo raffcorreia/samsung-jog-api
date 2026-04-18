@@ -159,7 +159,7 @@ The kiosk may not expose browser controls, but the application should still beha
 
 ## Domain-model guidelines
 
-- prefer logical action names such as `press`, `wait_led`, and `wait_ddc`
+- prefer logical action names such as `hold`, `release`, `wait_led`, and `wait_ddc`
 - do not expose low-level bus names such as `KEY_ADC1` and `KEY_ADC2` in UI-facing sequence definitions unless truly necessary
 - keep logical actions separate from hardware mapping
 - keep start-state and end-state assumptions explicit where relevant

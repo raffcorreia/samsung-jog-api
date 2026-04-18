@@ -79,7 +79,7 @@ Purpose:
 
 Examples:
 
-- valid `press`, `delay`, `wait_led`, and `wait_ddc` events are accepted
+- valid `hold`, `release`, `delay`, `wait_led`, and `wait_ddc` events are accepted
 - missing required fields fail validation
 - unsupported event types fail validation
 - invalid timeout or polling values fail validation

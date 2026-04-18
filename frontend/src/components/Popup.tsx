@@ -4,6 +4,7 @@ import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 import styles from "./Popup.module.css";
 
 export type PopupPosition = "center" | "right" | "left";
+export type PopupSize = "default" | "workspace" | "confirm";
 
 export interface PopupProps {
   open: boolean;
@@ -18,6 +19,8 @@ export interface PopupProps {
    */
   ignoreRef?: RefObject<HTMLElement | null>;
   title?: string;
+  size?: PopupSize;
+  blockBackground?: boolean;
 }
 
 /**
@@ -39,6 +42,8 @@ export function Popup({
   position = "center",
   ignoreRef,
   title,
+  size = "default",
+  blockBackground = false,
 }: PopupProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   // Keep a stable ref to onClose so the effect doesn't need to re-register on every render.
@@ -51,6 +56,10 @@ export function Popup({
       const target = e.target as Node;
       if (panelRef.current?.contains(target)) return;
       if (ignoreRef?.current?.contains(target)) return;
+      if (target instanceof Element) {
+        const otherPopup = target.closest("[data-popup-panel]");
+        if (otherPopup && otherPopup !== panelRef.current) return;
+      }
       onCloseRef.current();
     };
     document.addEventListener("pointerdown", handler, true);
@@ -60,15 +69,16 @@ export function Popup({
   if (!open) return null;
 
   const posClass = styles[`pos${position.charAt(0).toUpperCase()}${position.slice(1)}`];
+  const sizeClass = styles[`size${size.charAt(0).toUpperCase()}${size.slice(1)}`];
+  const backdropClass = blockBackground ? styles.backdropModal : styles.backdropPassThrough;
 
   return createPortal(
     <>
-      {/* Visual backdrop — pointer-events:none so widgets behind remain interactive */}
-      <div className={styles.backdrop} aria-hidden="true" />
+      <div className={`${styles.backdrop} ${backdropClass}`} aria-hidden="true" />
 
       <div
         ref={panelRef}
-        className={`${styles.panel} ${posClass ?? ""}`}
+        className={`${styles.panel} ${posClass ?? ""} ${sizeClass ?? ""}`}
         data-popup-panel
         role="dialog"
         aria-modal="true"

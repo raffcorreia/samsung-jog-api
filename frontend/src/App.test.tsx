@@ -1,4 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
@@ -19,9 +20,30 @@ const { statusPayload } = vi.hoisted(() => ({
 
 vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
+  fetchRecordingLibrary: vi.fn(() => Promise.resolve({ items: [] })),
+  fetchRecordingState: vi.fn(() =>
+    Promise.resolve({
+      mode: "idle",
+      recording_started_at: null,
+      replaying_id: null,
+      active_name: null,
+      event_count: 0,
+      last_error: null,
+    }),
+  ),
   websocketEventsUrl: vi.fn(() => "ws://localhost/ws/events"),
   postLogEntry: vi.fn(() => Promise.resolve()),
   deleteLiveLog: vi.fn(() => Promise.resolve()),
+  startRecording: vi.fn(),
+  stopRecording: vi.fn(),
+  playRecording: vi.fn(),
+  stopRecordingPlayback: vi.fn(),
+  renameRecording: vi.fn(),
+  deleteRecording: vi.fn(),
+  uploadRecording: vi.fn(),
+  fetchRecordingContent: vi.fn(),
+  updateRecordingContent: vi.fn(),
+  recordingDownloadUrl: vi.fn((id: string) => `/api/v1/recordings/${id}/download`),
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
@@ -73,5 +95,34 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByRole("log")).toHaveTextContent("release - up 80ms");
     });
+  });
+
+  it("opens the recording workspace from the jog column button", async () => {
+    const user = userEvent.setup();
+    const instances: { onmessage: ((ev: MessageEvent) => void) | null }[] = [];
+
+    class MockSocket {
+      static OPEN = 1;
+      onopen: (() => void) | null = null;
+      onmessage: ((ev: MessageEvent) => void) | null = null;
+      onerror: (() => void) | null = null;
+      onclose: (() => void) | null = null;
+      constructor(_url: string) {
+        instances.push(this);
+        queueMicrotask(() => this.onopen?.());
+      }
+      send() {}
+      close() {}
+    }
+
+    vi.stubGlobal("WebSocket", MockSocket as unknown as typeof WebSocket);
+
+    render(<App />);
+
+    await screen.findByTestId("jog-pad");
+
+    await user.click(screen.getByRole("button", { name: /open recording workspace/i }));
+
+    expect(await screen.findByText("Library")).toBeInTheDocument();
   });
 });

@@ -100,4 +100,24 @@ describe("Popup", () => {
     );
     expect(screen.getByText("OSD")).toBeInTheDocument();
   });
+
+  it("does NOT close a parent popup when clicking inside a nested popup", () => {
+    const onParentClose = vi.fn();
+    const onChildClose = vi.fn();
+
+    render(
+      <>
+        <Popup open={true} onClose={onParentClose} title="Parent">
+          parent
+        </Popup>
+        <Popup open={true} onClose={onChildClose} title="Child">
+          <button type="button">Confirm</button>
+        </Popup>
+      </>,
+    );
+
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Confirm" }));
+    expect(onParentClose).not.toHaveBeenCalled();
+    expect(onChildClose).not.toHaveBeenCalled();
+  });
 });
