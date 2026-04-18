@@ -24,6 +24,12 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Why:** Input switching on the CJ791 is cycle-through-inputs only. DDC alone can't switch; JOG alone can't read state. Both are needed together.
 
+## Phase 7 Build Path
+
+The original Phase 7 intent was a home-built board using through-hole transistors, resistors, and capacitors (except the ADS1115 which was always SMD). That path is still valid. The KiCad/PCBWay route with SMD components and proper OpAmps is an exciting upgrade opportunity that emerged during design, not a replacement for the original plan. Either path closes Phase 7 — the choice depends on how far the PCBWay enthusiasm carries through layout completion.
+
+**Why:** Keeping the through-hole option alive avoids blocking the project on PCB fabrication if motivation or timeline shifts.
+
 ## Phase 7 Architecture (settled as of 2026-04-11)
 
 **Two-board design:**
