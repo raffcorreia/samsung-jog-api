@@ -1,6 +1,7 @@
 # Memory Index
 
-- [Project Overview](project_overview.md) — CJ791 JOG emulator: 2-board Phase 7 design (Controller + HDMI DDC), Pi 2B, GPIO map, connectors, power budget all settled; Phase 14 live log backend complete
+- [Project Overview](project_overview.md) — CJ791 JOG emulator: phases 0–16 code complete; Phase 16 hardware validation pending; Phase 7 KiCad in progress; Phase 17 next
+- [No cd feedback](feedback_no_cd.md) — Never use cd; pass paths directly to commands (e.g. `npm test --prefix frontend/`)
 
 **Deck UI (kiosk):** Phase 13 complete. Fixed widget geometry on **1280×800** — top bar `48px`, left JOG column `350px`, bottom log band `200px`. JOG and log regions do **not** resize each other when log text grows (scroll inside log). No portal/landing-page chrome; `pi-deck` naming lives in the status/version area, not duplicated as marketing chrome.
 

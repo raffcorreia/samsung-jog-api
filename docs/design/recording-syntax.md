@@ -221,4 +221,4 @@ Unsafe edits include:
 ## Compatibility
 
 - New files are written with `version: "V1"`.
-- Older numeric `version: 1` files are still accepted for compatibility during Phase 16.
+- Older numeric `version: 1` files are accepted for compatibility with files that predate the string format.

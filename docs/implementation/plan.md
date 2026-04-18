@@ -1069,7 +1069,8 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- begin Phase 16: recording and replay subsystem
+- complete Phase 16 hardware validation — record, replay, and abort sequences on the Pi; confirm `KEY_ADC2` stall visibility during long captures; write the Phase 16 execution record
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
+- begin Phase 17: DDC Capability Investigation once Phase 16 exit criteria are satisfied
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
