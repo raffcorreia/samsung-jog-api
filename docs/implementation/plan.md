@@ -746,6 +746,8 @@ Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt,
 
 ## Phase 16: Recording and Replay Subsystem
 
+**Status:** parked as of 2026-04-20 because hardware access is unavailable for validation.
+
 ### Goal
 
 Add the tooling needed to record, store, replay, edit, and promote monitor interaction sequences.
@@ -790,6 +792,8 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 
 ## Phase 17: Development Fixture
 
+**Status:** closed 2026-04-20 as a crude open support. See [Phase 17 execution record](./phase-17-execution.md).
+
 ### Goal
 
 Build a minimal open-frame structure that holds the Raspberry Pi, the Phase 6 protoboard, and the monitor harness in a repeatable, stable position for ongoing development, testing, and design validation.
@@ -828,6 +832,8 @@ Build a minimal open-frame structure that holds the Raspberry Pi, the Phase 6 pr
 - chosen Pi orientation is documented with reasoning
 
 ## Phase 18: Display and Touch Validation
+
+**Status:** active as of 2026-04-20. See [Phase 18 execution record](./phase-18-execution.md).
 
 ### Goal
 
@@ -1190,10 +1196,9 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- complete Phase 16 hardware validation — record, replay, and abort sequences on the Pi; confirm `KEY_ADC2` stall visibility during long captures; write the Phase 16 execution record
+- keep Phase 16 parked until hardware access is available for recording/replay validation
+- proceed with Phase 18 display and touch validation using the crude Phase 17 development support
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
-- begin Phase 17: Development Fixture once Phase 16 exit criteria are satisfied
-- begin Phase 18: Display and Touch Validation once Phase 17 is complete
 - begin Phase 19: DDC Capability Investigation once Phase 18 is complete
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state
