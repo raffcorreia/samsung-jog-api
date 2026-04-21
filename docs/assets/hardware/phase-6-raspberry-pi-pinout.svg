@@ -1,305 +1,181 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="760" viewBox="0 0 1600 760" role="img" aria-labelledby="title desc">
-  <title id="title">Phase 6 Raspberry Pi 40-pin GPIO wiring</title>
-  <desc id="desc">Raspberry Pi 40-pin header diagram for the Phase 6 protoboard. Used pins are highlighted and labeled with their connection targets.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
+  <title id="title">Phase 6 Raspberry Pi GPIO wiring</title>
+  <desc id="desc">Readable Raspberry Pi 40-pin header diagram for Phase 6. Only pins used by the protoboard are called out with connection targets.</desc>
   <defs>
     <style>
-      .bg { fill: #f7f8fa; }
-      .rail { fill: #9f3d2d; }
-      .pin { stroke: #1e293b; stroke-width: 2; }
-      .pin-text { font: 24px sans-serif; fill: #111827; text-anchor: middle; dominant-baseline: central; }
-      .label { font: 22px sans-serif; font-weight: 700; fill: #111827; text-anchor: middle; }
-      .sub { font: 15px sans-serif; fill: #475569; text-anchor: middle; }
-      .small { font: 14px sans-serif; fill: #334155; }
+      .bg { fill: #f8fafc; }
       .title { font: 34px sans-serif; font-weight: 800; fill: #111827; }
-      .note { font: 18px sans-serif; fill: #334155; }
-      .power { fill: #fee2e2; }
-      .ground { fill: #e5e7eb; }
-      .i2c { fill: #dbeafe; }
-      .observe { fill: #dcfce7; }
-      .drive { fill: #fef3c7; }
-      .reserved { fill: #ede9fe; }
-      .unused { fill: #f1f5f9; }
-      .legend-label { font: 17px sans-serif; fill: #111827; dominant-baseline: central; }
+      .subtitle { font: 18px sans-serif; fill: #475569; }
+      .header-body { fill: #9f3d2d; }
+      .row-bg { fill: #7f2f24; opacity: 0.28; }
+      .pin { stroke: #1e293b; stroke-width: 2; }
+      .pin-num { font: 22px sans-serif; fill: #111827; text-anchor: middle; dominant-baseline: middle; }
+      .pin-small { font: 15px sans-serif; fill: #64748b; text-anchor: middle; dominant-baseline: middle; }
+      .unused { fill: #e5e7eb; }
+      .power { fill: #fecaca; }
+      .ground { fill: #d1d5db; }
+      .i2c { fill: #bfdbfe; }
+      .observe { fill: #bbf7d0; }
+      .drive { fill: #fde68a; }
+      .reserved { fill: #ddd6fe; }
+      .callout { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .callout-title { font: 20px sans-serif; font-weight: 800; fill: #111827; }
+      .callout-sub { font: 15px sans-serif; fill: #334155; }
+      .wire { fill: none; stroke: #334155; stroke-width: 2.5; }
+      .wire-power { stroke: #dc2626; }
+      .wire-ground { stroke: #374151; }
+      .wire-i2c { stroke: #2563eb; }
+      .wire-observe { stroke: #16a34a; }
+      .wire-drive { stroke: #ca8a04; }
+      .section { font: 22px sans-serif; font-weight: 800; fill: #111827; }
+      .table-head { font: 16px sans-serif; font-weight: 800; fill: #111827; }
+      .table-text { font: 15px sans-serif; fill: #1f2937; }
+      .table-muted { font: 14px sans-serif; fill: #64748b; }
+      .legend-label { font: 16px sans-serif; fill: #111827; dominant-baseline: middle; }
     </style>
   </defs>
 
-  <rect class="bg" width="1600" height="760"/>
+  <rect class="bg" width="1600" height="960"/>
+  <text x="48" y="56" class="title">Phase 6 Raspberry Pi GPIO Wiring</text>
+  <text x="48" y="88" class="subtitle">Physical pin numbers. Used pins are highlighted; unused pins are intentionally left unlabeled except for their pin number.</text>
 
-  <text x="50" y="56" class="title">Phase 6 Raspberry Pi GPIO Wiring</text>
-  <text x="50" y="88" class="note">Physical pin numbering. Odd pins are on the lower row; even pins are on the upper row. Use the Pi DISPLAY/USB side orientation to verify before wiring.</text>
+  <!-- Header -->
+  <rect x="64" y="300" width="1472" height="184" rx="8" class="header-body"/>
+  <rect x="86" y="328" width="1428" height="54" rx="4" class="row-bg"/>
+  <rect x="86" y="402" width="1428" height="54" rx="4" class="row-bg"/>
 
-  <!-- Header body -->
-  <rect x="48" y="298" width="1504" height="188" rx="8" class="rail"/>
-  <rect x="72" y="324" width="1456" height="136" rx="3" fill="#1f2937" opacity="0.18"/>
-
-  <!-- Top labels: even physical pins -->
-  <g id="top-labels">
-    <g transform="translate(82 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="power"/>
-      <text class="label" transform="rotate(-90)">5V</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(156 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="power"/>
-      <text class="label" transform="rotate(-90)">5V</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(230 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">common ground</text>
-    </g>
-    <g transform="translate(304 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO14</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(378 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO15</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(452 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO18</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(526 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(600 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO23</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(674 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO24</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(748 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(822 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO25</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(896 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO8</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(970 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO7</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(1044 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="reserved"/>
-      <text class="label" transform="rotate(-90)">ID_SC</text>
-      <text class="sub" y="40" transform="rotate(-90)">reserved</text>
-    </g>
-    <g transform="translate(1118 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(1192 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO12</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(1266 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(1340 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO16</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(1414 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO20</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(1488 128)">
-      <rect x="-35" y="-44" width="70" height="138" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO21</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
+  <!-- Even row pin numbers and holes -->
+  <g id="even-row">
+    <circle cx="100" cy="356" r="27" class="pin unused"/><text x="100" y="356" class="pin-num">2</text>
+    <circle cx="174" cy="356" r="27" class="pin unused"/><text x="174" y="356" class="pin-num">4</text>
+    <circle cx="248" cy="356" r="27" class="pin ground"/><text x="248" y="356" class="pin-num">6</text>
+    <circle cx="322" cy="356" r="27" class="pin unused"/><text x="322" y="356" class="pin-num">8</text>
+    <circle cx="396" cy="356" r="27" class="pin unused"/><text x="396" y="356" class="pin-num">10</text>
+    <circle cx="470" cy="356" r="27" class="pin unused"/><text x="470" y="356" class="pin-num">12</text>
+    <circle cx="544" cy="356" r="27" class="pin unused"/><text x="544" y="356" class="pin-num">14</text>
+    <circle cx="618" cy="356" r="27" class="pin unused"/><text x="618" y="356" class="pin-num">16</text>
+    <circle cx="692" cy="356" r="27" class="pin unused"/><text x="692" y="356" class="pin-num">18</text>
+    <circle cx="766" cy="356" r="27" class="pin unused"/><text x="766" y="356" class="pin-num">20</text>
+    <circle cx="840" cy="356" r="27" class="pin unused"/><text x="840" y="356" class="pin-num">22</text>
+    <circle cx="914" cy="356" r="27" class="pin unused"/><text x="914" y="356" class="pin-num">24</text>
+    <circle cx="988" cy="356" r="27" class="pin unused"/><text x="988" y="356" class="pin-num">26</text>
+    <circle cx="1062" cy="356" r="27" class="pin reserved"/><text x="1062" y="356" class="pin-num">28</text>
+    <circle cx="1136" cy="356" r="27" class="pin unused"/><text x="1136" y="356" class="pin-num">30</text>
+    <circle cx="1210" cy="356" r="27" class="pin unused"/><text x="1210" y="356" class="pin-num">32</text>
+    <circle cx="1284" cy="356" r="27" class="pin unused"/><text x="1284" y="356" class="pin-num">34</text>
+    <circle cx="1358" cy="356" r="27" class="pin unused"/><text x="1358" y="356" class="pin-num">36</text>
+    <circle cx="1432" cy="356" r="27" class="pin unused"/><text x="1432" y="356" class="pin-num">38</text>
+    <circle cx="1506" cy="356" r="27" class="pin unused"/><text x="1506" y="356" class="pin-num">40</text>
   </g>
 
-  <!-- Bottom labels: odd physical pins -->
-  <g id="bottom-labels">
-    <g transform="translate(82 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="power"/>
-      <text class="label" transform="rotate(-90)">3.3V</text>
-      <text class="sub" y="40" transform="rotate(-90)">logic / ADS rail</text>
-    </g>
-    <g transform="translate(156 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="i2c"/>
-      <text class="label" transform="rotate(-90)">GPIO2</text>
-      <text class="sub" y="40" transform="rotate(-90)">ADS SDA</text>
-    </g>
-    <g transform="translate(230 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="i2c"/>
-      <text class="label" transform="rotate(-90)">GPIO3</text>
-      <text class="sub" y="40" transform="rotate(-90)">ADS SCL</text>
-    </g>
-    <g transform="translate(304 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO4</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(378 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(452 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="observe"/>
-      <text class="label" transform="rotate(-90)">GPIO17</text>
-      <text class="sub" y="40" transform="rotate(-90)">ADS ALERT/RDY</text>
-    </g>
-    <g transform="translate(526 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="observe"/>
-      <text class="label" transform="rotate(-90)">GPIO27</text>
-      <text class="sub" y="40" transform="rotate(-90)">KEY_ADC1 input</text>
-    </g>
-    <g transform="translate(600 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="observe"/>
-      <text class="label" transform="rotate(-90)">GPIO22</text>
-      <text class="sub" y="40" transform="rotate(-90)">KEY_LED input</text>
-    </g>
-    <g transform="translate(674 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="power"/>
-      <text class="label" transform="rotate(-90)">3.3V</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused spare rail</text>
-    </g>
-    <g transform="translate(748 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO10</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(822 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO9</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(896 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="unused"/>
-      <text class="label" transform="rotate(-90)">GPIO11</text>
-      <text class="sub" y="40" transform="rotate(-90)">unused</text>
-    </g>
-    <g transform="translate(970 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
-    <g transform="translate(1044 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="reserved"/>
-      <text class="label" transform="rotate(-90)">ID_SD</text>
-      <text class="sub" y="40" transform="rotate(-90)">reserved</text>
-    </g>
-    <g transform="translate(1118 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="drive"/>
-      <text class="label" transform="rotate(-90)">GPIO5</text>
-      <text class="sub" y="40" transform="rotate(-90)">CENTER drive</text>
-    </g>
-    <g transform="translate(1192 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="drive"/>
-      <text class="label" transform="rotate(-90)">GPIO6</text>
-      <text class="sub" y="40" transform="rotate(-90)">UP drive</text>
-    </g>
-    <g transform="translate(1266 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="drive"/>
-      <text class="label" transform="rotate(-90)">GPIO13</text>
-      <text class="sub" y="40" transform="rotate(-90)">DOWN drive</text>
-    </g>
-    <g transform="translate(1340 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="drive"/>
-      <text class="label" transform="rotate(-90)">GPIO19</text>
-      <text class="sub" y="40" transform="rotate(-90)">LEFT drive</text>
-    </g>
-    <g transform="translate(1414 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="drive"/>
-      <text class="label" transform="rotate(-90)">GPIO26</text>
-      <text class="sub" y="40" transform="rotate(-90)">RIGHT drive</text>
-    </g>
-    <g transform="translate(1488 640)">
-      <rect x="-35" y="-94" width="70" height="150" class="ground"/>
-      <text class="label" transform="rotate(-90)">GND</text>
-      <text class="sub" y="40" transform="rotate(-90)">spare common</text>
-    </g>
+  <!-- Odd row pin numbers and holes -->
+  <g id="odd-row">
+    <rect x="73" y="405" width="54" height="54" rx="3" class="pin power"/><text x="100" y="432" class="pin-num">1</text>
+    <circle cx="174" cy="432" r="27" class="pin i2c"/><text x="174" y="432" class="pin-num">3</text>
+    <circle cx="248" cy="432" r="27" class="pin i2c"/><text x="248" y="432" class="pin-num">5</text>
+    <circle cx="322" cy="432" r="27" class="pin unused"/><text x="322" y="432" class="pin-num">7</text>
+    <circle cx="396" cy="432" r="27" class="pin unused"/><text x="396" y="432" class="pin-num">9</text>
+    <circle cx="470" cy="432" r="27" class="pin observe"/><text x="470" y="432" class="pin-num">11</text>
+    <circle cx="544" cy="432" r="27" class="pin observe"/><text x="544" y="432" class="pin-num">13</text>
+    <circle cx="618" cy="432" r="27" class="pin observe"/><text x="618" y="432" class="pin-num">15</text>
+    <circle cx="692" cy="432" r="27" class="pin unused"/><text x="692" y="432" class="pin-num">17</text>
+    <circle cx="766" cy="432" r="27" class="pin unused"/><text x="766" y="432" class="pin-num">19</text>
+    <circle cx="840" cy="432" r="27" class="pin unused"/><text x="840" y="432" class="pin-num">21</text>
+    <circle cx="914" cy="432" r="27" class="pin unused"/><text x="914" y="432" class="pin-num">23</text>
+    <circle cx="988" cy="432" r="27" class="pin unused"/><text x="988" y="432" class="pin-num">25</text>
+    <circle cx="1062" cy="432" r="27" class="pin reserved"/><text x="1062" y="432" class="pin-num">27</text>
+    <circle cx="1136" cy="432" r="27" class="pin drive"/><text x="1136" y="432" class="pin-num">29</text>
+    <circle cx="1210" cy="432" r="27" class="pin drive"/><text x="1210" y="432" class="pin-num">31</text>
+    <circle cx="1284" cy="432" r="27" class="pin drive"/><text x="1284" y="432" class="pin-num">33</text>
+    <circle cx="1358" cy="432" r="27" class="pin drive"/><text x="1358" y="432" class="pin-num">35</text>
+    <circle cx="1432" cy="432" r="27" class="pin drive"/><text x="1432" y="432" class="pin-num">37</text>
+    <circle cx="1506" cy="432" r="27" class="pin unused"/><text x="1506" y="432" class="pin-num">39</text>
   </g>
 
-  <!-- Pin holes -->
-  <g id="pin-holes">
-    <circle cx="82" cy="354" r="30" class="pin power"/><text x="82" y="354" class="pin-text">2</text>
-    <circle cx="156" cy="354" r="30" class="pin power"/><text x="156" y="354" class="pin-text">4</text>
-    <circle cx="230" cy="354" r="30" class="pin ground"/><text x="230" y="354" class="pin-text">6</text>
-    <circle cx="304" cy="354" r="30" class="pin unused"/><text x="304" y="354" class="pin-text">8</text>
-    <circle cx="378" cy="354" r="30" class="pin unused"/><text x="378" y="354" class="pin-text">10</text>
-    <circle cx="452" cy="354" r="30" class="pin unused"/><text x="452" y="354" class="pin-text">12</text>
-    <circle cx="526" cy="354" r="30" class="pin ground"/><text x="526" y="354" class="pin-text">14</text>
-    <circle cx="600" cy="354" r="30" class="pin unused"/><text x="600" y="354" class="pin-text">16</text>
-    <circle cx="674" cy="354" r="30" class="pin unused"/><text x="674" y="354" class="pin-text">18</text>
-    <circle cx="748" cy="354" r="30" class="pin ground"/><text x="748" y="354" class="pin-text">20</text>
-    <circle cx="822" cy="354" r="30" class="pin unused"/><text x="822" y="354" class="pin-text">22</text>
-    <circle cx="896" cy="354" r="30" class="pin unused"/><text x="896" y="354" class="pin-text">24</text>
-    <circle cx="970" cy="354" r="30" class="pin unused"/><text x="970" y="354" class="pin-text">26</text>
-    <circle cx="1044" cy="354" r="30" class="pin reserved"/><text x="1044" y="354" class="pin-text">28</text>
-    <circle cx="1118" cy="354" r="30" class="pin ground"/><text x="1118" y="354" class="pin-text">30</text>
-    <circle cx="1192" cy="354" r="30" class="pin unused"/><text x="1192" y="354" class="pin-text">32</text>
-    <circle cx="1266" cy="354" r="30" class="pin ground"/><text x="1266" y="354" class="pin-text">34</text>
-    <circle cx="1340" cy="354" r="30" class="pin unused"/><text x="1340" y="354" class="pin-text">36</text>
-    <circle cx="1414" cy="354" r="30" class="pin unused"/><text x="1414" y="354" class="pin-text">38</text>
-    <circle cx="1488" cy="354" r="30" class="pin unused"/><text x="1488" y="354" class="pin-text">40</text>
+  <text x="100" y="500" class="pin-small">Pin 1 marker</text>
+  <text x="800" y="520" class="subtitle" text-anchor="middle">Header view: physical pins 1-40, matching the Raspberry Pi board pin numbering.</text>
 
-    <rect x="52" y="393" width="60" height="60" rx="3" class="pin power"/><text x="82" y="423" class="pin-text">1</text>
-    <circle cx="156" cy="423" r="30" class="pin i2c"/><text x="156" y="423" class="pin-text">3</text>
-    <circle cx="230" cy="423" r="30" class="pin i2c"/><text x="230" y="423" class="pin-text">5</text>
-    <circle cx="304" cy="423" r="30" class="pin unused"/><text x="304" y="423" class="pin-text">7</text>
-    <circle cx="378" cy="423" r="30" class="pin ground"/><text x="378" y="423" class="pin-text">9</text>
-    <circle cx="452" cy="423" r="30" class="pin observe"/><text x="452" y="423" class="pin-text">11</text>
-    <circle cx="526" cy="423" r="30" class="pin observe"/><text x="526" y="423" class="pin-text">13</text>
-    <circle cx="600" cy="423" r="30" class="pin observe"/><text x="600" y="423" class="pin-text">15</text>
-    <circle cx="674" cy="423" r="30" class="pin power"/><text x="674" y="423" class="pin-text">17</text>
-    <circle cx="748" cy="423" r="30" class="pin unused"/><text x="748" y="423" class="pin-text">19</text>
-    <circle cx="822" cy="423" r="30" class="pin unused"/><text x="822" y="423" class="pin-text">21</text>
-    <circle cx="896" cy="423" r="30" class="pin unused"/><text x="896" y="423" class="pin-text">23</text>
-    <circle cx="970" cy="423" r="30" class="pin ground"/><text x="970" y="423" class="pin-text">25</text>
-    <circle cx="1044" cy="423" r="30" class="pin reserved"/><text x="1044" y="423" class="pin-text">27</text>
-    <circle cx="1118" cy="423" r="30" class="pin drive"/><text x="1118" y="423" class="pin-text">29</text>
-    <circle cx="1192" cy="423" r="30" class="pin drive"/><text x="1192" y="423" class="pin-text">31</text>
-    <circle cx="1266" cy="423" r="30" class="pin drive"/><text x="1266" y="423" class="pin-text">33</text>
-    <circle cx="1340" cy="423" r="30" class="pin drive"/><text x="1340" y="423" class="pin-text">35</text>
-    <circle cx="1414" cy="423" r="30" class="pin drive"/><text x="1414" y="423" class="pin-text">37</text>
-    <circle cx="1488" cy="423" r="30" class="pin ground"/><text x="1488" y="423" class="pin-text">39</text>
-  </g>
+  <!-- Left-side callouts -->
+  <path d="M100 405 L100 246 L86 246" class="wire wire-power"/>
+  <rect x="48" y="188" width="300" height="82" rx="10" class="callout"/>
+  <text x="70" y="220" class="callout-title">Pin 1 - 3.3V</text>
+  <text x="70" y="246" class="callout-sub">Connect to protoboard logic rail and ADS1115 VDD.</text>
+
+  <path d="M248 356 L248 246 L392 246" class="wire wire-ground"/>
+  <rect x="376" y="188" width="290" height="82" rx="10" class="callout"/>
+  <text x="398" y="220" class="callout-title">Pin 6 - Ground</text>
+  <text x="398" y="246" class="callout-sub">Common ground with protoboard and monitor harness.</text>
+
+  <path d="M174 432 L174 590 L90 590" class="wire wire-i2c"/>
+  <path d="M248 432 L248 632 L90 632" class="wire wire-i2c"/>
+  <rect x="48" y="548" width="344" height="114" rx="10" class="callout"/>
+  <text x="70" y="580" class="callout-title">Pins 3 / 5 - ADS1115 I2C</text>
+  <text x="70" y="606" class="callout-sub">Pin 3: GPIO2 SDA to ADS1115 SDA.</text>
+  <text x="70" y="630" class="callout-sub">Pin 5: GPIO3 SCL to ADS1115 SCL.</text>
+
+  <path d="M470 432 L470 590 L444 590" class="wire wire-observe"/>
+  <path d="M544 432 L544 632 L444 632" class="wire wire-observe"/>
+  <path d="M618 432 L618 674 L444 674" class="wire wire-observe"/>
+  <rect x="420" y="548" width="430" height="150" rx="10" class="callout"/>
+  <text x="442" y="580" class="callout-title">Observation inputs</text>
+  <text x="442" y="606" class="callout-sub">Pin 11: GPIO17 from ADS1115 ALERT/RDY.</text>
+  <text x="442" y="630" class="callout-sub">Pin 13: GPIO27 from conditioned KEY_ADC1 input.</text>
+  <text x="442" y="654" class="callout-sub">Pin 15: GPIO22 from conditioned KEY_LED input.</text>
+  <text x="442" y="678" class="callout-sub">KEY_ADC2 analog voltage goes to ADS1115 AIN0.</text>
+
+  <!-- Right-side callouts -->
+  <path d="M1136 432 L1136 590 L904 590" class="wire wire-drive"/>
+  <path d="M1210 432 L1210 622 L904 622" class="wire wire-drive"/>
+  <path d="M1284 432 L1284 654 L904 654" class="wire wire-drive"/>
+  <path d="M1358 432 L1358 686 L904 686" class="wire wire-drive"/>
+  <path d="M1432 432 L1432 718 L904 718" class="wire wire-drive"/>
+  <rect x="880" y="548" width="544" height="196" rx="10" class="callout"/>
+  <text x="902" y="580" class="callout-title">JOG drive outputs</text>
+  <text x="902" y="606" class="callout-sub">Pin 29: GPIO5 CENTER drive to Q3 base resistor.</text>
+  <text x="902" y="630" class="callout-sub">Pin 31: GPIO6 UP drive to Q4 base resistor.</text>
+  <text x="902" y="654" class="callout-sub">Pin 33: GPIO13 DOWN drive to Q5 base resistor.</text>
+  <text x="902" y="678" class="callout-sub">Pin 35: GPIO19 LEFT drive to Q6 base resistor.</text>
+  <text x="902" y="702" class="callout-sub">Pin 37: GPIO26 RIGHT drive to Q7 base resistor.</text>
+  <text x="902" y="726" class="callout-sub">Each output enables one low-side 2N3904 resistor leg.</text>
+
+  <!-- Compact connection table -->
+  <text x="48" y="790" class="section">Connection Summary</text>
+  <rect x="48" y="808" width="1504" height="104" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="72" y="838" class="table-head">Power</text>
+  <text x="72" y="864" class="table-text">Pin 1 3.3V - logic / ADS1115 rail</text>
+  <text x="72" y="888" class="table-text">Pin 6 GND - common ground</text>
+
+  <text x="386" y="838" class="table-head">ADS1115</text>
+  <text x="386" y="864" class="table-text">Pin 3 GPIO2 SDA, Pin 5 GPIO3 SCL</text>
+  <text x="386" y="888" class="table-text">Pin 11 GPIO17 ALERT/RDY</text>
+
+  <text x="724" y="838" class="table-head">Observation</text>
+  <text x="724" y="864" class="table-text">Pin 13 GPIO27 KEY_ADC1 input</text>
+  <text x="724" y="888" class="table-text">Pin 15 GPIO22 KEY_LED input</text>
+
+  <text x="1044" y="838" class="table-head">Drive</text>
+  <text x="1044" y="864" class="table-text">Pins 29/31/33/35/37</text>
+  <text x="1044" y="888" class="table-text">CENTER / UP / DOWN / LEFT / RIGHT</text>
+
+  <text x="1328" y="838" class="table-head">Monitor harness</text>
+  <text x="1328" y="864" class="table-text">KEY_ADC2 to ADS1115 AIN0</text>
+  <text x="1328" y="888" class="table-muted">Never drive monitor lines directly.</text>
 
   <!-- Legend -->
-  <g transform="translate(50 700)">
+  <g transform="translate(48 140)">
     <rect x="0" y="-16" width="28" height="28" class="power" stroke="#94a3b8"/>
-    <text x="38" y="-2" class="legend-label">power rail</text>
-    <rect x="170" y="-16" width="28" height="28" class="ground" stroke="#94a3b8"/>
-    <text x="208" y="-2" class="legend-label">ground</text>
-    <rect x="310" y="-16" width="28" height="28" class="i2c" stroke="#94a3b8"/>
-    <text x="348" y="-2" class="legend-label">ADS1115 I2C</text>
-    <rect x="500" y="-16" width="28" height="28" class="observe" stroke="#94a3b8"/>
-    <text x="538" y="-2" class="legend-label">observation input</text>
-    <rect x="740" y="-16" width="28" height="28" class="drive" stroke="#94a3b8"/>
-    <text x="778" y="-2" class="legend-label">JOG drive output</text>
-    <rect x="960" y="-16" width="28" height="28" class="reserved" stroke="#94a3b8"/>
-    <text x="998" y="-2" class="legend-label">reserved ID EEPROM</text>
-    <rect x="1230" y="-16" width="28" height="28" class="unused" stroke="#94a3b8"/>
-    <text x="1268" y="-2" class="legend-label">unused in Phase 6</text>
+    <text x="38" y="-2" class="legend-label">power</text>
+    <rect x="120" y="-16" width="28" height="28" class="ground" stroke="#94a3b8"/>
+    <text x="158" y="-2" class="legend-label">ground</text>
+    <rect x="250" y="-16" width="28" height="28" class="i2c" stroke="#94a3b8"/>
+    <text x="288" y="-2" class="legend-label">I2C</text>
+    <rect x="350" y="-16" width="28" height="28" class="observe" stroke="#94a3b8"/>
+    <text x="388" y="-2" class="legend-label">observe</text>
+    <rect x="490" y="-16" width="28" height="28" class="drive" stroke="#94a3b8"/>
+    <text x="528" y="-2" class="legend-label">drive</text>
+    <rect x="600" y="-16" width="28" height="28" class="reserved" stroke="#94a3b8"/>
+    <text x="638" y="-2" class="legend-label">reserved</text>
+    <rect x="750" y="-16" width="28" height="28" class="unused" stroke="#94a3b8"/>
+    <text x="788" y="-2" class="legend-label">unused</text>
   </g>
 </svg>
