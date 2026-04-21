@@ -32,6 +32,8 @@ There is no `J2` or `J3` header in this phase.
 | `LEFT` drive | `GPIO19`, physical pin `35` |
 | `RIGHT` drive | `GPIO26`, physical pin `37` |
 
+![Phase 6 Raspberry Pi pinout](../assets/hardware/phase-6-raspberry-pi-pinout.svg)
+
 ## ADC Block
 
 | Ref | Value | Connection |
