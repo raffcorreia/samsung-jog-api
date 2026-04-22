@@ -417,7 +417,12 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   };
 
   return (
-    <div className={styles.workspace}>
+    <div className={styles.workspace} data-file-dragging={isDraggingFile}>
+      {isDraggingFile ? (
+        <div className={styles.dragOverlay} aria-hidden="true">
+          <span className={styles.dragOverlayLabel}>Drop V1 recording JSON to upload</span>
+        </div>
+      ) : null}
       <div className={styles.hero}>
         <div className={styles.controls}>
           <button

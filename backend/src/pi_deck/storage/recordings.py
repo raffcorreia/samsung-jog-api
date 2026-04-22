@@ -52,8 +52,7 @@ class RecordingStore:
 
     def read(self, recording_id: str) -> RecordingFile:
         path = self._path_for(recording_id)
-        recording = RecordingFile.model_validate_json(path.read_text())
-        return recording.model_copy(update={"duration_ms": recording_duration_ms(recording.events)})
+        return RecordingFile.model_validate_json(path.read_text())
 
     def read_text(self, recording_id: str) -> str:
         return self._path_for(recording_id).read_text()
@@ -69,7 +68,6 @@ class RecordingStore:
         return RecordingLibraryOut(items=items)
 
     def write_new(self, recording: RecordingFile, *, preferred_stem: str) -> RecordingSummary:
-        recording = recording.model_copy(update={"duration_ms": recording_duration_ms(recording.events)})
         stem = _safe_stem(preferred_stem)
         content = json.dumps(recording.model_dump(mode="json"), indent=2) + "\n"
         path = self._base_dir / f"{stem}.json"
@@ -92,7 +90,6 @@ class RecordingStore:
             update={
                 "name": new_name,
                 "updated_at": updated_at,
-                "duration_ms": recording_duration_ms(recording.events),
             }
         )
         content = json.dumps(updated.model_dump(mode="json"), indent=2) + "\n"
@@ -122,12 +119,7 @@ class RecordingStore:
         path = self._path_for(recording_id)
         recording = RecordingFile.model_validate_json(payload)
         updated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        updated = recording.model_copy(
-            update={
-                "updated_at": updated_at,
-                "duration_ms": recording_duration_ms(recording.events),
-            }
-        )
+        updated = recording.model_copy(update={"updated_at": updated_at})
         path.write_text(json.dumps(updated.model_dump(mode="json"), indent=2) + "\n")
         return self._summary_for(path, updated)
 

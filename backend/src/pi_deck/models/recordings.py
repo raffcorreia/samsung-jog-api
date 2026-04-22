@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from pi_deck.models.schemas import WsEventV1, utc_iso
 
@@ -73,14 +73,15 @@ def is_supported_upload_version(version: str | int) -> bool:
 
 
 class RecordingFile(BaseModel):
+    # Ignore extra fields so old files that have duration_ms still load cleanly.
+    model_config = ConfigDict(extra="ignore")
+
     name: str = Field(min_length=1, max_length=80)
     version: Literal["V1", 1] = CURRENT_RECORDING_VERSION
     description: str | None = Field(default=None, max_length=240)
     source: Literal["observation"] = "observation"
     created_at: str
     updated_at: str
-    # Always derived from events on load/save; the stored value is overwritten and never trusted.
-    duration_ms: int = Field(ge=0, le=3_600_000)
     events: list[RecordingEvent] = Field(default_factory=list)
 
 

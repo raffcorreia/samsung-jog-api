@@ -28,7 +28,6 @@ Current files use version `V1`.
   "source": "observation",
   "created_at": "2026-04-16T21:42:49Z",
   "updated_at": "2026-04-16T21:43:02Z",
-  "duration_ms": 13140,
   "events": [
     { "type": "hold", "action": "center" },
     { "type": "delay", "duration_ms": 88 },
@@ -54,8 +53,6 @@ Current files use version `V1`.
   Recording creation timestamp in ISO-8601 UTC form.
 - `updated_at`
   Last modification timestamp in ISO-8601 UTC form.
-- `duration_ms`
-  Derived playback length in milliseconds. Phase 16 derives this from the event list when files are loaded or rewritten.
 - `events`
   Ordered list of executable macro events.
 

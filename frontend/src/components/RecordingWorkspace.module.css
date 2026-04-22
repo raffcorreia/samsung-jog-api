@@ -4,6 +4,30 @@
   gap: 8px;
   min-height: 0;
   height: 100%;
+  position: relative;
+}
+
+/* Full-workspace drop overlay — visible as soon as any file drag starts */
+.dragOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 2px dashed color-mix(in srgb, var(--accent) 65%, var(--border-bright));
+  background: color-mix(in srgb, var(--accent) 6%, rgba(10, 16, 22, 0.72));
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+  animation: dropPulse 1.4s ease-in-out infinite;
+}
+
+.dragOverlayLabel {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.03em;
 }
 
 .hero {

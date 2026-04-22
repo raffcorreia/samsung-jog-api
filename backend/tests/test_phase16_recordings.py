@@ -56,7 +56,7 @@ def test_start_stop_recording_saves_observation_sequence(tmp_path: Path, monkeyp
         assert "end_state" not in saved
         assert saved["events"][0]["type"] == "hold"
         assert saved["events"][1]["type"] == "release"
-        assert saved["duration_ms"] == 0
+        assert "duration_ms" not in saved
 
 
 def test_led_changes_are_recorded_as_non_blocking_led_events(tmp_path: Path, monkeypatch) -> None:
@@ -141,7 +141,7 @@ def test_recording_does_not_persist_initial_setup_delay(tmp_path: Path, monkeypa
         assert body["events"][1]["type"] == "release"
         assert all(event["type"] != "delay" for event in body["events"][:2])
         assert item["duration_ms"] == 0
-        assert body["duration_ms"] == 0
+        assert "duration_ms" not in body
 
 
 def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None:
@@ -171,7 +171,7 @@ def test_upload_and_download_recording_file(tmp_path: Path, monkeypatch) -> None
         body = json.loads(download.text)
         assert body["name"] == "Imported"
         assert item["duration_ms"] == 80
-        assert body["duration_ms"] == 80
+        assert "duration_ms" not in body
 
 
 def test_recording_content_can_be_loaded_and_replaced(tmp_path: Path, monkeypatch) -> None:
@@ -294,7 +294,7 @@ def test_uploaded_stale_duration_is_ignored_in_favor_of_event_timing(tmp_path: P
         content = client.get(f"/api/v1/recordings/{item['id']}/content")
         assert content.status_code == 200
         saved = json.loads(content.text)
-        assert saved["duration_ms"] == 120
+        assert "duration_ms" not in saved
 
 
 def test_concurrent_operations_are_rejected_while_busy(tmp_path: Path, monkeypatch) -> None:
