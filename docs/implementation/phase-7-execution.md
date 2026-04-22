@@ -52,6 +52,29 @@ The Pi is powered by its own 3A micro-USB supply. Boards 1 and 2 draw from the P
 
 Consider adding a board-level power-enable / power-off control for the custom controller hardware, so a dedicated GPIO can disable the board completely when low if the design needs a hard off state.
 
+### Display 5V switching — PCB design requirement
+
+Phase 18/19 measurements established the display power breakdown:
+
+| State | Current | Notes |
+|-------|---------|-------|
+| Pi on, display disconnected | 0.32 A | Pi-only baseline |
+| Pi on, display software-off | 0.42 A | +0.10 A display always-on electronics |
+| Pi on, display at 30% brightness | 0.59 A | +0.17 A backlight LEDs |
+
+The Waveshare DSI display is currently powered directly from the Pi GPIO header's 5V pin. This creates two problems:
+
+1. **Software cannot cut the always-on 0.10 A draw** — the DSI controller, Goodix touch IC (`/dev/i2c-10`), and panel regulators are live as long as the 5V line is present, regardless of software state.
+2. **Hot-reconnection resets the Pi** — reconnecting the display power pin causes a voltage transient on the Pi's own 5V rail sufficient to trigger a brownout reset. Safe display power cycling is not possible with the current point-to-point wiring.
+
+**Requirement for the PCB:** route the display's 5V supply through a GPIO-controlled high-side switch rather than directly from the Pi header pin. A P-channel MOSFET driven by a Pi GPIO via an NPN transistor is the standard approach for 5V load switching. This would:
+
+- Allow software to fully cut display power (recovering the ~0.10 A always-on draw)
+- Isolate the Pi's 5V rail from display connection transients, eliminating the reset risk
+- Enable controlled power sequencing on startup and shutdown
+
+`GPIO26` (`RESERVED_GPIO`, physical pin 37) is available for this purpose.
+
 ### Power Budget
 
 | Consumer | Current |
@@ -212,6 +235,7 @@ Board 2 target: approximately **50 × 35 mm**. Dominated by two horizontal HDMI 
 - Define and document board mounting hole positions and mechanical constraints
 - Define inter-board cable length based on final physical enclosure layout
 - Decide whether the custom board should include a GPIO-controlled global power switch so the entire board can be forced off when an enable pin is low
+- **Add GPIO-controlled high-side switch for display 5V** — route the Waveshare DSI display 5V through a P-channel MOSFET (NPN-driven gate) controlled by `GPIO26`. Required to enable full software display power-off and to eliminate the Pi brownout-reset risk on display reconnection. See Power Architecture section for measurements and circuit rationale.
 
 ## Exit-Criteria Assessment
 
