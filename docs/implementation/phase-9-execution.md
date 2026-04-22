@@ -94,7 +94,7 @@ hostname: pi-deck
 
 **Review:** `get_throttled` is **`0x0`** (no under-voltage, frequency cap, or thermal throttle flags). Root filesystem **~8.8%** used. RAM available **0.57 GiB** of 0.90 GiB. SoC **~48°C** at idle with **`pi-deck`** and **`lightdm`** active.
 
-Later feature phases (**10–19**) should append a fresh snapshot to their execution records per the [Host health gate](plan.md#host-health-gate-feature-phases-1019).
+Later feature phases (**10–28**) should append a fresh snapshot to their execution records per the [Host health gate](plan.md#host-health-gate-feature-phases-1028).
 
 ## Deferred from Phase 9
 

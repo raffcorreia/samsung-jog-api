@@ -113,7 +113,7 @@ hostname: pi-deck
 
 Subjective “slow kiosk” or “fast on PC, slow on Pi HDMI” reports need a **fixed procedure** so regressions are comparable.
 
-**Canonical snapshot tool (same as [Host health gate](plan.md#host-health-gate-feature-phases-1019)):** run on the deck host:
+**Canonical snapshot tool (same as [Host health gate](plan.md#host-health-gate-feature-phases-1028)):** run on the deck host:
 
 ```bash
 python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py
