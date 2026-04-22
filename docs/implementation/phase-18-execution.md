@@ -8,6 +8,8 @@ Track **Phase 18: Display and Touch Validation** per [Implementation Plan](./pla
 
 **Started:** 2026-04-20.
 
+**Closed:** 2026-04-22.
+
 ## Working Goal
 
 Install the Waveshare 7" DSI display in the development fixture, validate touch input under Chromium kiosk mode, and confirm that the touch controller coexists with the existing ADS1115 and DDC/CI devices on the shared I2C bus.
@@ -58,6 +60,22 @@ dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch
 - 2026-04-20: Restored brightness to 100% by writing `255` to `/sys/class/backlight/10-0045/brightness`; `actual_brightness` reported `255`.
 - 2026-04-20: At 100% brightness the display grayed out. Immediately reducing brightness back to 20% (`51/255`) showed new `dmesg` undervoltage events around the brightness test. Keep brightness below full until the power path is improved and revalidated.
 - 2026-04-20: After the 100% brightness test, the panel showed high-frequency flicker even at reduced brightness. Display and touch remained detected (`DSI-1` connected at `1280x800`; Goodix touch input registered), but undervoltage events continued intermittently. Brightness was lowered to 5% (`13/255`) as a temporary stabilization test. Power path remains the leading suspect.
+- 2026-04-21: Final live boot config uses `/boot/firmware/config.txt` with `dtparam=i2c_arm=on`, `dtoverlay=vc4-kms-v3d`, and the Waveshare DSI overlay under `[all]`. `/boot/config.txt` is not the active file on this OS image.
+
+```ini
+dtparam=i2c_arm=on
+display_auto_detect=1
+dtoverlay=vc4-kms-v3d
+max_framebuffers=2
+
+[all]
+enable_uart=1
+# Phase 18 Waveshare 7inch DSI LCD (E) trial
+dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch
+```
+
+- 2026-04-21: Confirmed current runtime state with the display active: `DSI-1` connected at `1280x800`, HDMI disconnected, Goodix touch registered, `/sys/class/backlight/10-0045` present with `max_brightness=255`, current brightness `51/255`, and `vcgencmd get_throttled` reporting `0x0`.
+- 2026-04-21: Touch is accepted as working for now. No touch offset, inversion, dead-zone, or kiosk interaction issue has been observed during manual use.
 
 ## Brightness / Power Measurements
 
@@ -102,3 +120,99 @@ Initial interpretation:
 - However, `230/255` and `255/255` still produced block-blinking artifacts even at `5.12 V` and `throttled=0x0`. That means high-brightness artifacts are not explained solely by Raspberry Pi undervoltage; the panel/backlight driver, display power input path, DSI/panel timing, or Pi 2 compatibility may still be limiting full-brightness operation.
 - The `0x50005` throttle state contains active or historical undervoltage/throttle flags; use fresh boot measurements and `dmesg` timestamps when deciding whether a specific brightness level is currently safe.
 - With the improved supply/path, `220/255` is the highest tested artifact-free brightness. Keep the panel at or below `220/255` until the `230+` artifact threshold is understood.
+- Later practical testing revised the safe operating ceiling downward: use `170/255` as the current safest brightness value for normal Phase 18 work.
+
+## Pending DDC Check
+
+Next validation step: reconnect HDMI and run a read-only DDC/CI check against the monitor while the DSI display and touch path remain active. This is only a coexistence check for Phase 18, not the broader DDC capability investigation planned for the next phase.
+
+Result:
+
+- 2026-04-21: HDMI was connected while the DSI display and touch stack were active. Kernel DRM reported both `DSI-1` connected at `1280x800` and `HDMI-A-1` connected with monitor modes visible.
+- 2026-04-21: After HDMI hotplug and a `lightdm` restart, the app appeared on the HDMI monitor and the DSI panel went black. `lightdm`, `labwc`, and Chromium were all running. Treat this as an output-selection/compositor profile issue, not as display hardware failure. A future kiosk output profile should force the app to the DSI panel and keep HDMI available for monitor/DDC testing.
+- 2026-04-21: Even with the DSI panel visually black, the DSI touch device still worked. Touches on the physical DSI panel controlled the app visible on the HDMI monitor. This confirms the touch controller remains active and also proves the current problem is display output mapping, not touch failure.
+- 2026-04-21: Attempted to use `kanshi` to clone `DSI-1` and `HDMI-A-1` at `1280x800`. Kanshi reported the clone profile applied, but only HDMI showed the app. A DSI-preferred profile then left both displays black; after `lightdm` restart, the DSI panel came back upside down/cut off/blinking while HDMI behavior changed. The active kanshi config was reverted to empty and the bad profile was saved as `~/.config/kanshi/config.phase18-bad-profile`. Do not use this kanshi clone/force approach as the Phase 18 solution.
+- 2026-04-21: Read-only DDC/CI check succeeded on HDMI DDC bus `/dev/i2c-2`. A Get VCP Feature request for `0x60` returned a valid response with current value `0x0004`.
+- 2026-04-22: Added `video=HDMI-A-1:d` to `/boot/firmware/cmdline.txt` to disable HDMI as a Linux display output while keeping the HDMI connector electrically present for DDC. With that option active, DRM reported `HDMI-A-1` disconnected, but `/dev/i2c-2` remained present and the same read-only DDC/CI Get VCP `0x60` request still succeeded. This confirms the preferred operating model for this hardware: DSI panel for the kiosk UI; HDMI used for DDC/CI communication only, not for visual output.
+- 2026-04-22: HDMI will be physically disconnected after the DDC-only check. Keep the `cmdline.txt` backup `/boot/firmware/cmdline.txt.phase18-before-hdmi-disable.bak` until the DSI-only boot path is considered stable.
+- 2026-04-22: DSI-only operation was confirmed after HDMI was disconnected. The kiosk display path is considered stable enough to close Phase 18 with HDMI reserved for DDC/CI only.
+- 2026-04-22: Safe maximum display brightness is `170/255`. Higher values may work intermittently, but `170/255` is the current validated safe ceiling for normal operation.
+- 2026-04-22: ADS observation remained working after the Phase 6 `R20` `100 kOhm` `KEY_ADC2` isolation fix.
+- 2026-04-21: Runtime I2C/device map during coexistence test:
+  - `/dev/i2c-1`: Raspberry Pi GPIO2/GPIO3 project I2C bus
+  - `/dev/i2c-2`: HDMI DDC bus used for DDC/CI test
+  - `/dev/i2c-10`: DSI panel/touch mux channel containing `10-0014 -> gt911` Goodix touch and `10-0045 -> 8.0inch-panel`
+  - `/dev/i2c-11`: parent DSI I2C controller / mux
+- 2026-04-21: Backend status while DSI/touch and HDMI/DDC were active: `hardware=live`, `operating_mode=jog`, `control_state=idle`, `key_adc1_active=false`, `key_led_active=false`, and `key_adc2_direction=null`. This confirms the ADS1115 observation path was still returning an idle decoded state rather than a false key direction.
+- 2026-04-21: Host health after HDMI/DDC coexistence check: `pi-deck.service` active, `lightdm.service` active, HTTP health OK, temperature about `44.4 C`, and `vcgencmd get_throttled` returned `0x0`.
+
+## Exit Criteria Review
+
+| Criterion | Status |
+|-----------|--------|
+| Display produces correct `1280x800` output under Chromium kiosk mode | Done. DSI panel works as the kiosk display. HDMI visual output is intentionally disabled with `video=HDMI-A-1:d`. |
+| Touch input is recognized and coordinates are accurate across the screen | Done for Phase 18. Manual use found no offset, inversion, dead-zone, or kiosk interaction issue. |
+| ADS1115 ADC polling, DDC/CI communication, and touch I2C traffic coexist without address conflicts or interference | Done. ADS observation works; DDC/CI Get VCP `0x60` succeeds on `/dev/i2c-2`; touch/panel remain on the DSI I2C mux path. |
+| Confirmed device address map is recorded | Done. DSI touch/panel path and HDMI DDC bus are recorded above. The project I2C bus remains `/dev/i2c-1`; HDMI DDC uses `/dev/i2c-2`; DSI touch/panel use `/dev/i2c-10` via `/dev/i2c-11`. |
+
+## Final Operating Policy
+
+- Use the Waveshare DSI panel as the only kiosk visual output.
+- Keep `video=HDMI-A-1:d` in `/boot/firmware/cmdline.txt` so HDMI does not become a Wayland/DRM display target.
+- Use HDMI only for DDC/CI communication when needed.
+- Do not use the attempted `kanshi` clone/force profiles for this hardware. They destabilized DSI scanout on the Pi 2/labwc stack.
+- Keep brightness at or below `170/255` until a later display/power hardening phase revisits the panel behavior.
+- Treat the 7" 1280x800 readability and high-brightness artifact issues as follow-up work, not Phase 18 blockers.
+
+## Final Host Health Snapshot
+
+Run on the deck host:
+
+```bash
+python3 scripts/pi-deck-host-health.py
+```
+
+Captured after final DSI-only validation:
+
+```text
+pi-deck host health  |  2026-04-22T04:06:45.331245+00:00
+hostname: pi-deck
+
+[python]
+  executable: /usr/bin/python3
+  version:    3.13.5
+  platform:   Linux-6.18.18-v7+-armv7l-with-glibc2.41
+  pi_deck:    importable=True  package_version=0.1.0
+
+[cpu]
+  model: ARMv7 Processor rev 5 (v7l)
+  logical cpus: 4
+  load average (1 / 5 / 15 min): 0.13  0.39  0.29
+
+[memory]
+  RAM:  total 0.90 GiB  available 0.57 GiB  (MemTotal/MemAvailable KiB: 942120 / 602076)
+  swap: total 0.90 GiB  free 0.90 GiB  (KiB: 942076 / 942076)
+
+[disk]  mount /
+  size 56.49 GiB  used 5.04 GiB  avail 49.11 GiB  (8.93% used)
+
+[thermal]  sysfs zones
+  thermal_zone0  cpu-thermal  39.0 °C
+
+[raspberry_pi]  vcgencmd (SoC voltage / throttling)
+  temperature: temp=39.0'C
+  voltage core: volt=1.3125V
+  voltage sdram_c: volt=1.2000V
+  voltage sdram_i: volt=1.2000V
+  voltage sdram_p: volt=1.2250V
+  get_throttled: throttled=0x0
+  flags set: (none)
+
+[systemd]
+  pi-deck.service: active
+  lightdm.service: active
+
+[pi-deck HTTP]
+  GET http://127.0.0.1:8756/health
+  ok: True  body: '{"status":"ok","version":"0.1.0"}'
+```

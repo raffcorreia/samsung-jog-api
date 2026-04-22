@@ -32,7 +32,7 @@ Current state of the repository:
 - completed: `Phase 15: Observation Bus and Hardware Interface` — [execution record](docs/implementation/phase-15-execution.md) (interrupt-driven ADS1115 + GPIO observation bus, single websocket authority for holds/releases/LED)
 - parked, hardware access pending: `Phase 16: Recording and Replay Subsystem` — recording workspace, sequence runner, upload/download/edit/replay UI complete; on-device validation is blocked until hardware access is available
 - completed: `Phase 17: Development Fixture` — [execution record](docs/implementation/phase-17-execution.md) (crude open support to hold monitor/control-deck hardware together for development)
-- active: `Phase 18: Display and Touch Validation` — [execution record](docs/implementation/phase-18-execution.md)
+- completed: `Phase 18: Display and Touch Validation` — [execution record](docs/implementation/phase-18-execution.md) (Waveshare DSI display/touch working; HDMI disabled as a display and retained for DDC/CI only; safe brightness ceiling `170/255`)
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

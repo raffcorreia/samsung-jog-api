@@ -833,7 +833,7 @@ Build a minimal open-frame structure that holds the Raspberry Pi, the Phase 6 pr
 
 ## Phase 18: Display and Touch Validation
 
-**Status:** active as of 2026-04-20. See [Phase 18 execution record](./phase-18-execution.md).
+**Status:** closed 2026-04-22. See [Phase 18 execution record](./phase-18-execution.md).
 
 ### Goal
 
@@ -1197,7 +1197,7 @@ When the project reaches a more stable feature state, consider:
 ## Immediate Next Steps
 
 - keep Phase 16 parked until hardware access is available for recording/replay validation
-- proceed with Phase 18 display and touch validation using the crude Phase 17 development support
+- add a follow-up display usability/power/output-policy phase before continuing broader DDC capability work
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
 - begin Phase 19: DDC Capability Investigation once Phase 18 is complete
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
