@@ -157,6 +157,18 @@ The current design target is the `Waveshare 7inch DSI LCD (E)` (`7"`, `1280x800`
 
 The UI should remain responsive for other screen sizes, but the layout and interaction density should be optimized for the selected deck display first.
 
+#### Minimum font size
+
+The panel is ~215 PPI at 7 inches. Viewed at ~50 cm desk distance, the comfortable legibility threshold is approximately **24 px physical**. At the validated kiosk configuration (Chromium via Xwayland at 1:1 scale, `html { font-size: 20px }`), this maps to **1.2 rem**.
+
+**1.2 rem is the enforced minimum font size for all readable UI text on this panel.** This was validated on the physical display during Phase 19 and applies to all components — labels, values, buttons, log content, metadata, and widget text. Elements that are intentionally non-readable (e.g. decorative badges, OSD mock simulation) are exempt.
+
+Implementation anchors:
+- `html { font-size: 20px }` — sets 1 rem = 20 px physical at 1:1 Xwayland scale
+- `font-weight: 500` on `:root` — improves stroke visibility on the high-PPI panel
+- Chromium launched with `--ozone-platform=x11` (Xwayland) — enables subpixel (LCD) font rendering, which native Wayland disables
+- fontconfig RGB subpixel rendering enabled via `10-sub-pixel-rgb.conf` (installed by `scripts/host/install_pi_deck_kiosk_autostart.sh`)
+
 ### Deck shell and widget geometry
 
 The deck is a **single-screen appliance**, not a marketing site, portal, or landing page: content stays **contained in the viewport** with no gratuitous page chrome.
