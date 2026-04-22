@@ -142,6 +142,9 @@ vite.config.ts.timestamp-*
 .DS_Store
 **/.DS_Store
 
+# Claude Code local config
+.claude/
+
 # Python caches, test output, and virtual environments
 __pycache__/
 *.py[cod]
