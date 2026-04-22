@@ -157,12 +157,12 @@
 .statusText strong {
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 1.0rem;
+  font-size: 1.2rem;
 }
 
 .statusText span {
   color: var(--muted);
-  font-size: 1.0rem;
+  font-size: 1.2rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -376,7 +376,7 @@
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 .list {
@@ -490,7 +490,7 @@
 
 .itemMeta {
   color: var(--muted);
-  font-size: 1.0rem;
+  font-size: 1.2rem;
 }
 
 .itemActions {
@@ -554,7 +554,7 @@
   justify-content: space-between;
   gap: 12px;
   color: var(--muted);
-  font-size: 1.0rem;
+  font-size: 1.2rem;
 }
 
 .editorText {
