@@ -108,6 +108,7 @@ Additional baseline / off-state measurements:
 | Pi off, display connected | `5.04 V` | `0.21 A` | Display/backlight path still draws some standby/off-state current. |
 | Pi off, display disconnected | `5.10 V` | `0.07 A` | Pi off-state / supply path baseline without display load. |
 | Pi and display disconnected | `5.12 V` | `0.00 A` | Open/no-load supply measurement. |
+| Pi on, display disconnected | — | `0.32 A` | Pi-only running cost (no display attached). Confirms display hardware accounts for 0.10 A always-on draw (0.42 A software-off state minus 0.32 A) and 0.27 A at 30% brightness (0.59 A minus 0.32 A). |
 
 Initial interpretation:
 
