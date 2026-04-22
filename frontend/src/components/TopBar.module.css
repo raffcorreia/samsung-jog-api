@@ -65,7 +65,7 @@
 /* Clock */
 .clock {
   font-family: "Deck Clock", monospace;
-  font-size: 2.38rem;
+  font-size: 1.9rem;
   font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--text);

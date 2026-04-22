@@ -11,7 +11,7 @@
 }
 
 .header {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--muted);
   text-transform: uppercase;
@@ -27,7 +27,7 @@
 }
 
 .dayLabel {
-  font-size: 0.62rem;
+  font-size: 1.2rem;
   text-align: center;
   color: var(--muted);
   font-weight: 500;
@@ -36,7 +36,7 @@
 }
 
 .day {
-  font-size: 0.72rem;
+  font-size: 1.2rem;
   text-align: center;
   padding: 3px 2px;
   border-radius: 4px;
@@ -83,13 +83,13 @@
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-size: 0.72rem;
+  font-size: 1.2rem;
 }
 
 .eventTime {
   color: var(--accent);
   font-family: monospace;
-  font-size: 0.68rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
 }
 

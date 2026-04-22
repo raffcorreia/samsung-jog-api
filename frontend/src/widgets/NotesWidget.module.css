@@ -11,7 +11,7 @@
 }
 
 .header {
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--muted);
   text-transform: uppercase;
@@ -42,7 +42,7 @@
 }
 
 .noteTitle {
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
@@ -51,7 +51,7 @@
 }
 
 .noteBody {
-  font-size: 0.68rem;
+  font-size: 1.2rem;
   color: var(--muted);
   font-family: "SF Mono", "Fira Mono", "Consolas", monospace;
   white-space: nowrap;
