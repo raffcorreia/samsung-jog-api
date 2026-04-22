@@ -140,12 +140,36 @@ Health is clean. `get_throttled=0x0`, no flags, temperature within normal range.
 
 ## Display Power-Off Behavior
 
-- Powering off the DSI display writes `0` to `/sys/class/backlight/10-0045/brightness`.
-- The DSI panel goes dark; the `DSI-1` connector and kernel DRM state remain intact.
-- Touch input remains active while the display is off (the Goodix touch controller on `/dev/i2c-10` is not affected by the backlight state).
-- Touch being independently active while the display is off is documented here; it is not a problem for the current use-case (operator can still tap the physical screen to power on via the remote browser or can physically reconnect).
-- Display is powered back on by restoring the last non-zero brightness to `/sys/class/backlight/10-0045/brightness`.
-- Power-off does not save meaningful system power: the Pi SoC, RAM, and DSI hardware all remain active. Only the backlight draw is eliminated (roughly 0.07–0.10 A depending on prior brightness).
+Software display-off does two things in sequence (`DisplayService.power_off()`):
+
+1. Saves the current sysfs brightness, then writes `0` to `/sys/class/backlight/10-0045/brightness` — cuts the physical backlight LEDs (saves ~0.17 A).
+2. Runs `wlr-randr --output DSI-1 --off` — tells the labwc Wayland compositor to disable the DSI-1 output, stopping all rendering to the panel.
+
+The panel goes dark and receives no framebuffer updates. Touch input remains active (the Goodix touch controller on `/dev/i2c-10` is on the display's own I2C mux, powered by the 5V line regardless of software state).
+
+### Power breakdown (from Phase 18 + Phase 19 measurements)
+
+| State | Current | Delta |
+|-------|---------|-------|
+| Pi on, display disconnected | 0.32 A | Pi-only baseline |
+| Pi on, display on (30% brightness) | 0.59 A | +0.27 A total display draw |
+| Pi on, display software-off | 0.42 A | −0.17 A (backlight LEDs cut) |
+| Display always-on electronics | ~0.10 A | 0.42 − 0.32; not software-controllable |
+
+The remaining ~0.10 A at software-off is the display's always-on electronics (DSI controller, Goodix touch IC, panel regulators). These are powered directly from the Pi header's 5V pin and cannot be gated by software in the current wiring.
+
+### Hardware limitation: display 5V is not software-switchable
+
+The display's 5V supply comes directly from the Pi GPIO header. Physical disconnection of the display power pin causes a voltage transient on the Pi's own 5V rail, which resets the Pi — making hot-disconnect/reconnect unsafe in the current wiring.
+
+**PCB design feedback:** To enable full display power-off (recovering the remaining ~0.10 A and allowing complete panel shutdown), the display's 5V line should be routed through a GPIO-controlled high-side switch on the PCB — a P-channel MOSFET driven by a Pi GPIO via an NPN transistor is the standard approach for 5V load switching. This would:
+
+- Allow `write_power_on()` in `display_power.py` to toggle a GPIO instead of (or in addition to) `wlr-randr`
+- Eliminate the Pi-reset risk on display power cycle
+- Recover the full ~0.10 A always-on draw when the display is not needed
+- Keep the Pi's own 5V rail isolated from display connection transients
+
+This is a PCB-phase concern; no software workaround exists with the current point-to-point wiring.
 
 ## Phase 19 Extended Work (Post-Close)
 
