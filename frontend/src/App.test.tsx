@@ -47,6 +47,15 @@ vi.mock("./api/client", () => ({
   jogHold: vi.fn(() => Promise.resolve({ ok: true })),
   releaseJog: vi.fn(() => Promise.resolve({ ok: true, duration_ms: 0 })),
   jogPress: vi.fn(),
+  fetchDisplayPower: vi.fn(() => Promise.resolve({ on: true, brightness_pct: 30 })),
+  setDisplayPower: vi.fn(() => Promise.resolve({ on: true, brightness_pct: 30 })),
+  fetchDisplayBrightness: vi.fn(() =>
+    Promise.resolve({ brightness_pct: 30, brightness_raw: 51, max_raw: 170 }),
+  ),
+  setDisplayBrightness: vi.fn(() =>
+    Promise.resolve({ brightness_pct: 30, brightness_raw: 51, max_raw: 170 }),
+  ),
+  requestShutdown: vi.fn(() => Promise.resolve({ ok: true, message: "Shutdown initiated" })),
 }));
 
 describe("App", () => {

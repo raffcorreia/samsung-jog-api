@@ -10,7 +10,10 @@
 
 :root {
   color-scheme: dark;
-  /* 7" DSI kiosk: 1280×800 — layout is single-screen; widgets use fixed geometry */
+  /* 7" DSI kiosk: 1280×800 physical — Chromium runs via Xwayland at 1:1 scale.
+     Base font-size raised to 20px (from browser default 16px) so that UI text
+     at 1rem = 20px physical matches the ~24px threshold for desk-distance legibility.
+     Layout variables are in px and remain anchored to the full 1280×800 viewport. */
   --deck-viewport-w: 1280px;
   --deck-viewport-h: 800px;
   /* Top bar height (px) — shared between TopBar component and VersionBadge positioning. */
@@ -38,6 +41,8 @@
     system-ui,
     -apple-system,
     sans-serif;
+  /* Medium weight improves stroke visibility on the small high-PPI DSI panel. */
+  font-weight: 500;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   background: var(--bg);
@@ -49,6 +54,9 @@
 }
 
 html {
+  /* 20px base so 1rem = 20px physical on the 1280×800 DSI panel viewed at desk distance.
+     At 50 cm, ~24px physical is the comfortable reading threshold; 1.2rem now hits it. */
+  font-size: 20px;
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;

@@ -21,6 +21,7 @@ if [[ "${SERVICE_USER}" == "root" ]]; then
   exit 1
 fi
 SERVICE_HOME="$(getent passwd "${SERVICE_USER}" | cut -d: -f6)"
+SERVICE_UID="$(id -u "${SERVICE_USER}")"
 
 if [[ ! -f "${UNIT_SRC}" ]]; then
   echo "Missing unit template: ${UNIT_SRC}" >&2
@@ -56,6 +57,7 @@ sed \
   -e "s|@REPO_ROOT@|${REPO_ROOT}|g" \
   -e "s|@SERVICE_USER@|${SERVICE_USER}|g" \
   -e "s|@SERVICE_HOME@|${SERVICE_HOME}|g" \
+  -e "s|@SERVICE_UID@|${SERVICE_UID}|g" \
   "${UNIT_SRC}" | sudo tee "${UNIT_DST}" >/dev/null
 sudo systemctl daemon-reload
 sudo systemctl enable pi-deck.service

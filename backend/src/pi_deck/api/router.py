@@ -5,7 +5,9 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, File, Request, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
-from pi_deck.api.deps import get_deck, get_recordings
+import asyncio
+
+from pi_deck.api.deps import get_deck, get_display, get_recordings, get_system
 from pi_deck.models.recordings import (
     RecordingLibraryOut,
     RecordingRejectedOut,
@@ -15,14 +17,21 @@ from pi_deck.models.recordings import (
 from pi_deck.models.schemas import (
     CommandRejectedOut,
     CommandRejectedReason,
+    DisplayBrightnessIn,
+    DisplayBrightnessOut,
+    DisplayPowerIn,
+    DisplayPowerOut,
     JogHoldIn,
     JogPressIn,
     JogReleaseIn,
     LogIn,
     OperatingModeIn,
     StatusOut,
+    SystemShutdownOut,
     ws_status_connected,
 )
+from pi_deck.services.display_service import DisplayService
+from pi_deck.services.system_service import SystemService
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.recordings import RecordingService, RecordingServiceError
@@ -266,6 +275,55 @@ async def api_recordings_upload(
     except RecordingServiceError as exc:
         return _recording_rejection_response(exc)
     return JSONResponse({"ok": True, "item": summary.model_dump(mode="json")})
+
+
+@api_v1.get("/display/brightness", response_model=DisplayBrightnessOut)
+def api_display_brightness_get(display: DisplayService = Depends(get_display)) -> DisplayBrightnessOut:
+    from pi_deck.hardware.display_power import BRIGHTNESS_RAW_MAX
+
+    return DisplayBrightnessOut(
+        brightness_pct=display.get_brightness_pct(),
+        brightness_raw=display.get_brightness_raw(),
+        max_raw=BRIGHTNESS_RAW_MAX,
+    )
+
+
+@api_v1.put("/display/brightness", response_model=DisplayBrightnessOut)
+def api_display_brightness_set(
+    body: DisplayBrightnessIn,
+    display: DisplayService = Depends(get_display),
+) -> DisplayBrightnessOut:
+    from pi_deck.hardware.display_power import BRIGHTNESS_RAW_MAX
+
+    display.set_brightness_pct(body.brightness_pct)
+    return DisplayBrightnessOut(
+        brightness_pct=display.get_brightness_pct(),
+        brightness_raw=display.get_brightness_raw(),
+        max_raw=BRIGHTNESS_RAW_MAX,
+    )
+
+
+@api_v1.get("/display/power", response_model=DisplayPowerOut)
+def api_display_power_get(display: DisplayService = Depends(get_display)) -> DisplayPowerOut:
+    return DisplayPowerOut(on=display.is_on, brightness_pct=display.get_brightness_pct())
+
+
+@api_v1.post("/display/power", response_model=DisplayPowerOut)
+def api_display_power_set(
+    body: DisplayPowerIn,
+    display: DisplayService = Depends(get_display),
+) -> DisplayPowerOut:
+    if body.on:
+        display.power_on()
+    else:
+        display.power_off()
+    return DisplayPowerOut(on=display.is_on, brightness_pct=display.get_brightness_pct())
+
+
+@api_v1.post("/system/shutdown", response_model=SystemShutdownOut)
+async def api_system_shutdown(system: SystemService = Depends(get_system)) -> SystemShutdownOut:
+    asyncio.create_task(system.shutdown())
+    return SystemShutdownOut(ok=True, message="Shutdown initiated")
 
 
 async def websocket_events(ws: WebSocket) -> None:

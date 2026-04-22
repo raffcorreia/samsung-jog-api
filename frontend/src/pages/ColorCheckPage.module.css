@@ -1,0 +1,152 @@
+/* Full-screen color/edge validation page */
+
+.page {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Edge lines — 6px and z-index:1 so they're always on top of inner content.
+   Placed at the absolute viewport edge to confirm no panel cropping. */
+.edgeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #fff;
+  z-index: 1;
+}
+
+.edgeBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #fff;
+  z-index: 1;
+}
+
+.edgeLeft {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 6px;
+  background: #fff;
+  z-index: 1;
+}
+
+.edgeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 6px;
+  background: #fff;
+  z-index: 1;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(900px, 95vw);
+  padding: 16px;
+  cursor: default;
+}
+
+.hint {
+  font-size: 1.1rem;
+  color: #fff;
+  margin: 0;
+  text-align: center;
+  user-select: none;
+}
+
+/* Swatch grid */
+.swatchGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  height: 80px;
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+.swatchLabel {
+  pointer-events: none;
+}
+
+/* Grayscale gradient */
+.gradientBand {
+  height: 24px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #000, #fff);
+}
+
+.gradientSteps {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 2px;
+  height: 40px;
+}
+
+.gradientStep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+/* Readability samples — six labelled size rows */
+.readabilitySample {
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #111;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sizeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* Label column: fixed rem so it stays legible regardless of row size */
+.sizeLabel {
+  flex-shrink: 0;
+  width: 4.5rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: #aaa;
+}
+
+/* Text columns — one class per size band */
+.sz1 { font-size: 0.70rem; color: #fff; line-height: 1.5; }
+.sz2 { font-size: 0.85rem; color: #fff; line-height: 1.5; }
+.sz3 { font-size: 1.00rem; color: #fff; line-height: 1.5; }
+.sz4 { font-size: 1.20rem; color: #fff; line-height: 1.5; }
+.sz5 { font-size: 1.50rem; color: #fff; line-height: 1.5; }
+.sz6 { font-size: 1.90rem; color: #fff; line-height: 1.5; }

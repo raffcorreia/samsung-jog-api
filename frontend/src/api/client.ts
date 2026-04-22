@@ -266,6 +266,57 @@ export function recordingDownloadUrl(recordingId: string): string {
   return `${apiBase()}/api/v1/recordings/${encodeURIComponent(recordingId)}/download`;
 }
 
+// ── Phase 19: display brightness / power / shutdown ───────────────────────
+
+export interface DisplayBrightness {
+  brightness_pct: number;
+  brightness_raw: number;
+  max_raw: number;
+}
+
+export interface DisplayPower {
+  on: boolean;
+  brightness_pct: number;
+}
+
+export async function fetchDisplayBrightness(): Promise<DisplayBrightness> {
+  const r = await fetch(`${apiBase()}/api/v1/display/brightness`);
+  if (!r.ok) throw new Error(`display brightness fetch failed: ${r.status}`);
+  return (await r.json()) as DisplayBrightness;
+}
+
+export async function setDisplayBrightness(brightnessPct: number): Promise<DisplayBrightness> {
+  const r = await fetch(`${apiBase()}/api/v1/display/brightness`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ brightness_pct: brightnessPct }),
+  });
+  if (!r.ok) throw new Error(`display brightness set failed: ${r.status}`);
+  return (await r.json()) as DisplayBrightness;
+}
+
+export async function fetchDisplayPower(): Promise<DisplayPower> {
+  const r = await fetch(`${apiBase()}/api/v1/display/power`);
+  if (!r.ok) throw new Error(`display power fetch failed: ${r.status}`);
+  return (await r.json()) as DisplayPower;
+}
+
+export async function setDisplayPower(on: boolean): Promise<DisplayPower> {
+  const r = await fetch(`${apiBase()}/api/v1/display/power`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ on }),
+  });
+  if (!r.ok) throw new Error(`display power set failed: ${r.status}`);
+  return (await r.json()) as DisplayPower;
+}
+
+export async function requestShutdown(): Promise<{ ok: boolean; message: string }> {
+  const r = await fetch(`${apiBase()}/api/v1/system/shutdown`, { method: "POST" });
+  if (!r.ok) throw new Error(`shutdown request failed: ${r.status}`);
+  return (await r.json()) as { ok: boolean; message: string };
+}
+
 export function websocketEventsUrl(): string {
   const base = apiBase();
   if (base.startsWith("http://") || base.startsWith("https://")) {

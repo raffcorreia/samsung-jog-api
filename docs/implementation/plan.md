@@ -873,6 +873,8 @@ Install the Waveshare 7" DSI display, validate the touch controller, and confirm
 
 ## Phase 19: Display Usability and Power Hardening
 
+**Status:** closed 2026-04-22. See [Phase 19 Execution Record](./phase-19-execution.md).
+
 ### Goal
 
 Harden the Waveshare DSI display experience after Phase 18 bring-up by adding operator-facing display power and brightness controls, preserving the DSI-only kiosk policy, and adding a visual test screen for panel readability/color/edge validation.
@@ -1253,8 +1255,7 @@ When the project reaches a more stable feature state, consider:
 ## Immediate Next Steps
 
 - keep Phase 16 parked until hardware access is available for recording/replay validation
-- begin Phase 19: Display Usability and Power Hardening
+- begin Phase 20: DDC Capability Investigation
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
-- begin Phase 20: DDC Capability Investigation after Phase 19 hardening is complete
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

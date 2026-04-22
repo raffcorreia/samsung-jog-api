@@ -210,3 +210,39 @@ def ws_log_cleared() -> WsEventV1:
         ts=utc_iso(),
         data={},
     )
+
+
+# ── Phase 19: display brightness / power ──────────────────────────────────────
+
+class DisplayBrightnessOut(BaseModel):
+    """Current and capped brightness state (Phase 19)."""
+
+    brightness_pct: int = Field(ge=0, le=100)
+    brightness_raw: int = Field(ge=0, le=255)
+    max_raw: int = Field(default=170)
+
+
+class DisplayBrightnessIn(BaseModel):
+    """Set display brightness by percentage."""
+
+    brightness_pct: int = Field(ge=0, le=100)
+
+
+class DisplayPowerOut(BaseModel):
+    """Current display power state (Phase 19)."""
+
+    on: bool
+    brightness_pct: int = Field(ge=0, le=100)
+
+
+class DisplayPowerIn(BaseModel):
+    """Set display power state."""
+
+    on: bool
+
+
+class SystemShutdownOut(BaseModel):
+    """Shutdown acknowledgement (Phase 19)."""
+
+    ok: bool
+    message: str

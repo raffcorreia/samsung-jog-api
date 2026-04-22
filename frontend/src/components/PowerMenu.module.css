@@ -1,0 +1,114 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 2px;
+}
+
+.choiceBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-elevated);
+  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.choiceBtn:hover {
+  background: var(--surface);
+  border-color: var(--accent-dim);
+}
+
+.choiceBtn:active {
+  background: var(--border);
+}
+
+.choiceBtn.cancel {
+  justify-content: center;
+  color: var(--muted);
+  background: none;
+  border-color: transparent;
+  font-weight: 400;
+}
+
+.choiceBtn.cancel:hover {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Shutdown confirm panel */
+.shutdownBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 0 2px;
+}
+
+.countdownText {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text);
+  text-align: center;
+}
+
+.countdownText strong {
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--danger);
+  display: block;
+  margin-top: 4px;
+}
+
+.shutdownActions {
+  display: flex;
+  gap: 8px;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 10px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.shutdownNowBtn {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.1s;
+}
+
+.shutdownNowBtn:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.shutdownNowBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

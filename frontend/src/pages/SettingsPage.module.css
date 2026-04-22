@@ -16,7 +16,7 @@
 }
 
 .sectionTitle {
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--muted);
   text-transform: uppercase;
@@ -39,11 +39,84 @@
 }
 
 .rowLabel {
-  font-size: 0.88rem;
+  font-size: 1.2rem;
   color: var(--text);
 }
 
 .rowValue {
-  font-size: 0.82rem;
+  font-size: 1.0rem;
   color: var(--muted);
+}
+
+/* Phase 19: brightness slider */
+.sliderRow {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sliderLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.sliderValue {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.0rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.busyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
+}
+
+.slider {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.slider:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sliderNote {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Phase 19: action button (e.g. Open color check) */
+.actionBtn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.actionBtn:hover {
+  background: rgba(108, 182, 255, 0.1);
 }

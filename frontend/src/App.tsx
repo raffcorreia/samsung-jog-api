@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import { TopBar } from "./components/TopBar";
 import { useDeckEvents } from "./hooks/useDeckEvents";
+import { ColorCheckPage } from "./pages/ColorCheckPage";
 import { HomePage } from "./pages/HomePage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { DeckShell } from "./widgets/DeckShell";
@@ -22,6 +23,8 @@ function AppInner() {
       <Routes>
         <Route path="/" element={<HomePage deck={deck} />} />
         <Route path="/settings" element={<SettingsPage />} />
+        {/* Full-screen, no top-bar chrome — renders over DeckShell */}
+        <Route path="/color-check" element={<ColorCheckPage />} />
       </Routes>
     </DeckShell>
   );

@@ -16,6 +16,9 @@ Group=@SERVICE_USER@
 WorkingDirectory=@REPO_ROOT@/backend
 # Explicit HOME avoids rare cases where User= is set but HOME is still root for the process.
 Environment=HOME=@SERVICE_HOME@
+# Wayland compositor access — required for wlr-randr display power control.
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/@SERVICE_UID@
 # 0.0.0.0: listen on all interfaces so the same UI is reachable from the LAN (trusted network).
 Environment=PI_DECK_HOST=0.0.0.0
 Environment=PI_DECK_PORT=8756

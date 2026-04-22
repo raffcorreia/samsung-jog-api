@@ -82,6 +82,12 @@ elif [[ -n "${WAYLAND_DISPLAY:-}" ]] && command -v wlrctl >/dev/null 2>&1; then
   wlrctl pointer hide 2>/dev/null || true
 fi
 
+# Reset compositor scale to 1:1 — Chromium runs via Xwayland (X11 mode) which
+# handles its own DPI and does not use the Wayland output scale.
+if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
+  wlr-randr --output DSI-1 --scale 1.0 2>/dev/null || true
+fi
+
 CHROME_ARGS=(
   --password-store=basic
   --kiosk
@@ -96,6 +102,10 @@ CHROME_ARGS=(
   --disable-http-cache
   # Appliance UX: no translate bar on first load; kiosk is a known single origin.
   --disable-features=Translate
+  # X11 mode via Xwayland: enables subpixel (LCD) font rendering which is disabled
+  # on native Wayland. labwc starts Xwayland on demand; DISPLAY=:0 is the socket
+  # labwc pre-creates at /tmp/.X11-unix/X0.
+  --ozone-platform=x11
 )
 
 # Optional extra flags (e.g. --js-flags=--max-old-space-size=256); split on spaces — avoid spaces inside one flag.
@@ -107,13 +117,12 @@ fi
 CHROME_ARGS+=("${URL}")
 
 run_chromium() {
-  if [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-    set -- --ozone-platform=wayland "$@"
-  fi
+  # Run under Xwayland: set DISPLAY, clear WAYLAND_DISPLAY so Chromium uses X11.
+  # labwc pre-creates /tmp/.X11-unix/X0 and starts Xwayland on first connection.
   if [[ -n "${PI_DECK_KIOSK_NICE:-}" ]]; then
-    exec nice -n "${PI_DECK_KIOSK_NICE}" "${BROWSER[@]}" "$@"
+    exec nice -n "${PI_DECK_KIOSK_NICE}" env DISPLAY=:0 WAYLAND_DISPLAY= "${BROWSER[@]}" "$@"
   fi
-  exec "${BROWSER[@]}" "$@"
+  exec env DISPLAY=:0 WAYLAND_DISPLAY= "${BROWSER[@]}" "$@"
 }
 
 run_chromium "${CHROME_ARGS[@]}"

@@ -15,11 +15,14 @@ from starlette.requests import Request
 
 from pi_deck import __version__
 from pi_deck.api.router import api_v1, websocket_events
+from pi_deck.hardware.display_power import build_display_power
 from pi_deck.services.deck_control import DeckControlService
+from pi_deck.services.display_service import DisplayService
 from pi_deck.services.hardware_facade import build_hardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.observation_bus import ObservationBusService
 from pi_deck.services.recordings import RecordingService
+from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 from pi_deck.storage.recordings import RecordingStore
 
@@ -80,12 +83,17 @@ async def lifespan(app: FastAPI):
     observation = ObservationBusService(ws_hub=hub, live_log=live_log, hardware=hw)
     observation.add_listener(recordings.observe_event)
     observation.start(asyncio.get_running_loop())
+    display_hw = build_display_power(hw.kind)
+    display = DisplayService(display_hw)
+    system = SystemService(hw.kind)
     app.state.ws_hub = hub
     app.state.live_log = live_log
     app.state.deck = deck
     app.state.hw = hw
     app.state.observation = observation
     app.state.recordings = recordings
+    app.state.display = display
+    app.state.system = system
     logger.info("pi-deck hardware mode: %s  version: %s", hw.kind, version)
     yield
     await observation.stop()

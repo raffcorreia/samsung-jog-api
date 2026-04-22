@@ -18,7 +18,7 @@
   justify-content: space-between;
   gap: 0.35rem 0.75rem;
   padding: 0.32rem var(--pad);
-  font-size: 0.68rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   color: var(--muted);
@@ -83,7 +83,7 @@
   margin: 0;
   padding: var(--pad);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: clamp(0.65rem, 1.8vw, 0.8rem);
+  font-size: clamp(0.9rem, 1.8vw, 1.0rem);
   line-height: 1.35;
   overflow: auto;
   flex: 1 1 auto;

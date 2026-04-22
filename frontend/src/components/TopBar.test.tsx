@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { TopBar } from "./TopBar";
+
+// Stub display API so tests don't hit the network.
+vi.mock("../api/client", () => ({
+  fetchDisplayPower: vi.fn().mockResolvedValue({ on: true, brightness_pct: 30 }),
+  setDisplayPower: vi.fn().mockResolvedValue({ on: true, brightness_pct: 30 }),
+}));
 
 function renderTopBar(title?: string, initialPath = "/") {
   return render(
@@ -16,9 +22,13 @@ function renderTopBar(title?: string, initialPath = "/") {
 }
 
 describe("TopBar", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("renders the power button", () => {
     renderTopBar();
-    expect(screen.getByRole("button", { name: /power/i })).toBeInTheDocument();
+    expect(screen.getByTestId("top-bar-power")).toBeInTheDocument();
   });
 
   it("renders a clock in HH:MM format", () => {
@@ -49,7 +59,6 @@ describe("TopBar", () => {
 
   it("navigates to /settings when cog is clicked", async () => {
     const user = userEvent.setup();
-    let path = "/";
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Routes>
@@ -69,6 +78,15 @@ describe("TopBar", () => {
     );
     await user.click(screen.getByTestId("top-bar-settings"));
     expect(screen.queryByTestId("settings-page")).toBeInTheDocument();
-    void path; // suppress unused warning
+  });
+
+  it("opens the power menu when the power button is clicked and display is on", async () => {
+    const user = userEvent.setup();
+    renderTopBar();
+    // Wait for the initial fetchDisplayPower to resolve.
+    await screen.findByTestId("top-bar-power");
+    await user.click(screen.getByTestId("top-bar-power"));
+    // PowerMenu should be visible.
+    expect(screen.getByTestId("power-menu-display")).toBeInTheDocument();
   });
 });
