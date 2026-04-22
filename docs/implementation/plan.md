@@ -2,7 +2,7 @@
 
 ## Phase Index
 
-- [Host health gate (feature phases 10–26)](#host-health-gate-feature-phases-1026)
+- [Host health gate (feature phases 10–27)](#host-health-gate-feature-phases-1027)
 - [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
 - [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
 - [Phase 2: Hardware Validation](#phase-2-hardware-validation)
@@ -22,14 +22,15 @@
 - [Phase 16: Recording and Replay Subsystem](#phase-16-recording-and-replay-subsystem)
 - [Phase 17: Development Fixture](#phase-17-development-fixture)
 - [Phase 18: Display and Touch Validation](#phase-18-display-and-touch-validation)
-- [Phase 19: DDC Capability Investigation](#phase-19-ddc-capability-investigation)
-- [Phase 20: LED Feedback Characterization](#phase-20-led-feedback-characterization)
-- [Phase 21: State Investigation and Sequence Cleanup](#phase-21-state-investigation-and-sequence-cleanup)
-- [Phase 22: Recording Workspace Settings and Block Editor](#phase-22-recording-workspace-settings-and-block-editor)
-- [Phase 23: Productized Monitor Features](#phase-23-productized-monitor-features)
-- [Phase 24: Dashboard Data-Source Spike](#phase-24-dashboard-data-source-spike)
-- [Phase 25: Dashboard Widgets](#phase-25-dashboard-widgets)
-- [Phase 26: Stabilization](#phase-26-stabilization)
+- [Phase 19: Display Usability and Power Hardening](#phase-19-display-usability-and-power-hardening)
+- [Phase 20: DDC Capability Investigation](#phase-20-ddc-capability-investigation)
+- [Phase 21: LED Feedback Characterization](#phase-21-led-feedback-characterization)
+- [Phase 22: State Investigation and Sequence Cleanup](#phase-22-state-investigation-and-sequence-cleanup)
+- [Phase 23: Recording Workspace Settings and Block Editor](#phase-23-recording-workspace-settings-and-block-editor)
+- [Phase 24: Productized Monitor Features](#phase-24-productized-monitor-features)
+- [Phase 25: Dashboard Data-Source Spike](#phase-25-dashboard-data-source-spike)
+- [Phase 26: Dashboard Widgets](#phase-26-dashboard-widgets)
+- [Phase 27: Stabilization](#phase-27-stabilization)
 - [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
 
 ## Summary
@@ -50,9 +51,9 @@ The overall strategy is:
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
-## Host health gate (feature phases 10–26)
+## Host health gate (feature phases 10–27)
 
-Phases **10–26** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
+Phases **10–27** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
 
 **Procedure (run on the deck host):**
 
@@ -60,7 +61,7 @@ Phases **10–26** introduce or expand product behavior on the **Raspberry Pi co
 2. Paste the **full default (text) output** into that phase’s **Markdown execution record** under a heading such as `## Host health snapshot` (a fenced code block is fine), with the **date** and **host** clear from the output or a one-line note.
 3. Briefly **review** the snapshot: e.g. `get_throttled` flags should not show sustained under-voltage or active throttling under normal idle/deck workload; root filesystem use should remain in a safe band for the SD card. Exact numeric thresholds are project judgment — the point is **documented evidence** each phase.
 
-Phases **10–26** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
+Phases **10–27** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
 
 ## Deferred integrated-board GPIO and software migration
 
@@ -88,7 +89,7 @@ The implementation is expected to grow these testing layers over time:
 
 Detailed test design still needs its own document, but no phase should be treated as complete without the relevant tests for that phase.
 
-For **Phases 10–26**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in the phase execution record.
+For **Phases 10–27**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in the phase execution record.
 
 ## Phase 0: Documentation and Evidence Capture
 
@@ -532,7 +533,7 @@ Define and implement the local backend command surface that all UI and control f
 ### Exit criteria
 
 - the frontend can drive low-level control and receive live state from the backend
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
 ## Phase 11: Low-Level JOG Console UI
 
@@ -575,7 +576,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions **on the deck host with live hardware** (not mock-only)
 - no unvalidated high-level monitor feature UI is exposed yet
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
 ## Phase 12: Deployment and Version Tracking
 
@@ -611,7 +612,7 @@ Establish a single, agent-authorizable deploy script that pushes the latest code
 ### Exit criteria
 
 - running the deploy script from the dev machine results in the Pi running the latest code with a freshly reloaded kiosk and an incremented version number visible in the UI
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase's execution record
 
 ## Phase 13: Full-Screen UI Layout with Placeholders
 
@@ -653,7 +654,7 @@ Build the target UI shell at `1280×800` with correct proportions, real function
 
 - the deck display shows the complete intended layout with correct proportions
 - no real feature work is blocked waiting on this layout
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase's execution record
 
 ## Phase 14: Log Architecture Refactor
 
@@ -690,7 +691,7 @@ Move log ownership from the browser to the backend so logs are durable across se
 - opening a new browser tab shows recent log history immediately without any action from the user
 - two simultaneous browser clients see the same log stream in sync
 - no log state lives in the browser
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase's execution record
 
 ## Phase 15: Observation Bus and Hardware Interface
 
@@ -734,7 +735,7 @@ Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt,
 - pressing the physical monitor JOG is reflected in the deck UI ring
 - `KEY_LED` state changes appear as domain events in the WebSocket stream
 - no duplicate held/released events when a deck tap triggers a GPIO drive
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase's execution record
 
 ### Open Defects Carried Forward
 
@@ -788,7 +789,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 ### Exit criteria
 
 - sequences can be recorded, replayed, stopped, and validated reliably
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
 ## Phase 17: Development Fixture
 
@@ -870,7 +871,62 @@ Install the Waveshare 7" DSI display, validate the touch controller, and confirm
 - ADS1115 ADC polling, DDC/CI communication, and touch I²C traffic coexist without address conflicts or interference
 - the confirmed device address map is recorded in the execution record
 
-## Phase 19: DDC Capability Investigation
+## Phase 19: Display Usability and Power Hardening
+
+### Goal
+
+Harden the Waveshare DSI display experience after Phase 18 bring-up by adding operator-facing display power and brightness controls, preserving the DSI-only kiosk policy, and adding a visual test screen for panel readability/color/edge validation.
+
+### Scope
+
+- display power control from the existing top-bar power button
+- Raspberry Pi shutdown flow from the same power menu
+- display brightness control in Settings, capped at the validated safe maximum
+- color/edge validation screen for the 7-inch DSI panel
+- follow-up documentation for display usability, power draw, and unsafe output modes discovered in Phase 18
+- validation of whether the panel/backlight firmware already persists brightness across reboot before adding application persistence code
+
+### Tasks
+
+- make the top-bar power button functional
+- when the display is on, pressing the power button opens the standard popup component with three choices:
+  - `Display`: power off the DSI display immediately, starting with the conservative backlight-off path; only disable/suspend touch if the driver exposes a safe and repeatable control path
+  - `Pi`: open a second confirmation popup with a 5-second shutdown countdown, a `Now` button to shut down immediately, and a `Cancel` button to abort
+  - `Cancel`: close the popup without action
+- use a Raspberry Pi symbol/icon for the `Pi` shutdown choice
+- when the display is off, pressing the power button from a remote browser session should power the DSI display back on
+- add backend API endpoints/service boundaries for display brightness, display power state, and Pi shutdown; UI code must not manipulate sysfs or system commands directly
+- keep display power/brightness state backend-managed so the kiosk browser and any remote browser see consistent state
+- add a Settings brightness slider
+- map slider `0%` through `100%` onto backlight values `0` through `170`, because `170/255` is the current validated safe ceiling
+- show a Settings note explaining that brightness is capped below hardware maximum because higher values caused artifacts/power/display instability during Phase 18; include both `170/255` and the approximate hardware percentage
+- test whether the selected brightness survives reboot before implementing any extra application-level brightness persistence
+- if the display does not reliably preserve brightness, restore the selected brightness from the backend at service/app startup rather than relying on browser state
+- add a Settings color-check control that opens a full-screen validation page
+- the color-check page should include solid red/green/blue/white/black/gray, grayscale bands, small-text/readability samples, and visible top, bottom, left, and right edge lines to confirm panel alignment/cropping
+- preserve the Phase 18 HDMI policy: DSI is the only kiosk visual output; HDMI remains DDC/CI-only via `video=HDMI-A-1:d`
+- document whether display power-off actually saves meaningful power and whether touch is disabled, still active, or separately controllable
+- benchmark/document power and throttle behavior at representative brightness points after the software cap is implemented, including `0`, the chosen comfortable/default value, and `170`
+
+### Deliverables
+
+- functional display/Pi power menu from the top bar
+- brightness control in Settings capped to the safe Phase 18 maximum
+- full-screen display color/edge validation page
+- documented display power-off behavior, including whether touch is also disabled
+- updated runbook/execution notes for the final brightness default, reboot persistence finding, and any boot-time restore mechanism if one is actually needed
+
+### Exit criteria
+
+- display can be powered off and back on from the UI/API without destabilizing the kiosk session
+- Pi shutdown flow requires explicit confirmation or countdown completion and can be cancelled
+- brightness behavior after reboot is explicitly tested and documented; if panel persistence is unreliable, the backend restores brightness predictably after service/app startup
+- brightness cannot exceed `170/255` through the UI/API
+- color/edge validation page renders correctly on the DSI panel
+- power/throttle measurements are recorded for the capped brightness range
+- host health gate passes with the new display controls installed
+
+## Phase 20: DDC Capability Investigation
 
 ### Goal
 
@@ -902,9 +958,9 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 ### Exit criteria
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 20: LED Feedback Characterization
+## Phase 21: LED Feedback Characterization
 
 ### Goal
 
@@ -933,9 +989,9 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 ### Exit criteria
 
 - the project knows when LED feedback can be trusted as part of sequence execution
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 21: State Investigation and Sequence Cleanup
+## Phase 22: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -966,9 +1022,9 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 ### Exit criteria
 
 - important monitor workflows are represented by stable, reusable, named sequence files
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 22: Recording Workspace Settings and Block Editor
+## Phase 23: Recording Workspace Settings and Block Editor
 
 ### Goal
 
@@ -1007,9 +1063,9 @@ Make recordings easier to configure and inspect without requiring raw JSON editi
 - operators can configure minimum click time and default LED timeout through the recording workspace
 - sequences can be inspected and edited in block mode without touching raw JSON
 - text mode and block mode produce identical JSON output for the same sequence
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase's execution record
 
-## Phase 23: Productized Monitor Features
+## Phase 24: Productized Monitor Features
 
 ### Goal
 
@@ -1039,9 +1095,9 @@ Turn validated monitor workflows into real user-facing features.
 ### Exit criteria
 
 - the deck supports the intended monitor-control feature set beyond raw `JOG` commands
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 24: Dashboard Data-Source Spike
+## Phase 25: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -1071,9 +1127,9 @@ Decide how dashboard data will be sourced before widget implementation expands.
 ### Exit criteria
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 25: Dashboard Widgets
+## Phase 26: Dashboard Widgets
 
 ### Goal
 
@@ -1103,9 +1159,9 @@ Implement the dashboard side of the product using the data-source decisions from
 ### Exit criteria
 
 - the dashboard is useful and stable without compromising the monitor-control surface
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
-## Phase 26: Stabilization
+## Phase 27: Stabilization
 
 ### Goal
 
@@ -1137,7 +1193,7 @@ Harden the system for regular use.
 ### Exit criteria
 
 - the system is stable enough for regular daily use
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1026) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1027) in this phase’s execution record
 
 ## Later Extensions
 
@@ -1197,8 +1253,8 @@ When the project reaches a more stable feature state, consider:
 ## Immediate Next Steps
 
 - keep Phase 16 parked until hardware access is available for recording/replay validation
-- add a follow-up display usability/power/output-policy phase before continuing broader DDC capability work
+- begin Phase 19: Display Usability and Power Hardening
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
-- begin Phase 19: DDC Capability Investigation once Phase 18 is complete
+- begin Phase 20: DDC Capability Investigation after Phase 19 hardening is complete
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)
 - update the `README.md` status section as implementation milestones are completed, and remove that section once the repository is no longer primarily in planning or scaffolding state

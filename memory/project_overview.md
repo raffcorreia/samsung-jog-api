@@ -8,7 +8,7 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Deck UI:** Phase 13 complete. Single-screen kiosk layout (**1280×800** target). Widgets use **fixed layout bands** so panels do not reflow when the log grows (log scrolls internally). Final Phase 13 geometry: top bar `48px`, left JOG column `350px`, bottom log band `200px`. Optional widget visibility is user-driven later — not implicit layout shift. Identity ("pi-deck") stays in the status/version area, not duplicated as nested marketing chrome around each control.
 
-**Phase structure (20 phases, 0–19). Phases 0–6, 8–15, and 17–18 are closed. Phase 16 is parked because hardware access is unavailable for validation. Phase 7 KiCad/layout remains in progress. Phase 19 has not started.**
+**Phase structure (28 phases, 0–27). Phases 0–6, 8–15, and 17–18 are closed. Phase 16 is parked because hardware access is unavailable for validation. Phase 7 KiCad/layout remains in progress. Phase 19 has not started.**
 
 **Phase 13 UI state:** Full-screen deck shell is implemented and deployed (`0.1.0+r20`). The real JogPad remains the priority control and lives in the fixed left column. The clock uses `DSEG7 Classic` seven-segment font, enlarged and vertically centered without increasing the `48px` top bar. Settings cog is top-right. LED is an 8mm-style gray default indicator and should turn blue only for future blink/feedback events, not for steady backend `key_led_active`. Record control exists as a visual/logging stub in the upper-right of the JOG column. Calendar, notes, settings, and OSD popup are realistic stubs/placeholders for later phases.
 
@@ -19,6 +19,8 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 **Phase 17 state:** Closed on 2026-04-20 with a crude open support to hold the monitor/control-deck hardware together. This is intentionally not a polished enclosure or detailed mechanical design.
 
 **Phase 18 state:** Closed on 2026-04-22. Waveshare 7" DSI display and touch are working on the Pi 2 deck host. Safe maximum brightness is `170/255`. HDMI visual output destabilized DSI scanout on this stack, so HDMI is disabled as a Linux display with `video=HDMI-A-1:d` and retained for DDC/CI communication only. DDC/CI Get VCP `0x60` succeeded on HDMI DDC while DSI/touch and ADS observation remained active.
+
+**Phase 19 state:** Planned next. Display usability and power hardening: functional display/Pi power menu, capped brightness control, display color/edge validation page, and documentation of display power-off behavior.
 
 **Log / event hygiene (backlog):** WebSocket and derived log traffic may feel excessive or not representative of what operators care about (duplicate `bus/snapshot` with `deck_control`, telemetry poll cadence, verbosity of `command`/`control` lines). Plan a later pass to coalesce, filter, or re-level categories so the live log stays readable without losing auditability.
 

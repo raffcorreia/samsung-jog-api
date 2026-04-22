@@ -33,6 +33,7 @@ Current state of the repository:
 - parked, hardware access pending: `Phase 16: Recording and Replay Subsystem` — recording workspace, sequence runner, upload/download/edit/replay UI complete; on-device validation is blocked until hardware access is available
 - completed: `Phase 17: Development Fixture` — [execution record](docs/implementation/phase-17-execution.md) (crude open support to hold monitor/control-deck hardware together for development)
 - completed: `Phase 18: Display and Touch Validation` — [execution record](docs/implementation/phase-18-execution.md) (Waveshare DSI display/touch working; HDMI disabled as a display and retained for DDC/CI only; safe brightness ceiling `170/255`)
+- next: `Phase 19: Display Usability and Power Hardening`
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
@@ -42,7 +43,7 @@ Current state of the repository:
 - repository now includes completed Phase 6 protoboard validation documentation, schematic, BOM, and execution record
 - hardware findings for the `JOG` board and DDC behavior
 - requirements, design, test strategy, and implementation planning for a Raspberry Pi kiosk-style control deck
-- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TypeScript UI; `npm run build` copies assets into `backend/src/pi_deck/static/`; **`npm run test:e2e`** in `frontend/` builds the UI, runs Playwright against mock `pi-deck` on 8756, or set `E2E_BASE_URL` for a live Pi); protoboard GPIO helpers live under `backend/src/pi_deck/hardware/`. Bring-up script: `scripts/pi-deck-gpio-probe` (see [runbook](docs/runbooks/gpio-bench-probe.md)) — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md). Host metrics / Pi baseline: `scripts/pi-deck-host-health.py` (see [Phase 9 execution](docs/implementation/phase-9-execution.md) and [Host health gate](docs/implementation/plan.md#host-health-gate-feature-phases-1019)).
+- Application code layout: [`backend/`](backend/) (Python package **`pi_deck`**: `api`, `services`, `hardware`, … per [Architecture](docs/architecture.md)), [`frontend/`](frontend/) (React/TypeScript UI; `npm run build` copies assets into `backend/src/pi_deck/static/`; **`npm run test:e2e`** in `frontend/` builds the UI, runs Playwright against mock `pi-deck` on 8756, or set `E2E_BASE_URL` for a live Pi); protoboard GPIO helpers live under `backend/src/pi_deck/hardware/`. Bring-up script: `scripts/pi-deck-gpio-probe` (see [runbook](docs/runbooks/gpio-bench-probe.md)) — see [Phase 8 Execution Record](docs/implementation/phase-8-execution.md). Host metrics / Pi baseline: `scripts/pi-deck-host-health.py` (see [Phase 9 execution](docs/implementation/phase-9-execution.md) and [Host health gate](docs/implementation/plan.md#host-health-gate-feature-phases-1027)).
 
 ## Why this project exists
 
