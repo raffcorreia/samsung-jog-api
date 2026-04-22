@@ -1,7 +1,7 @@
 .workspace {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 8px;
   min-height: 0;
   height: 100%;
 }
@@ -10,15 +10,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px;
 }
 
 .statusCard {
   min-width: 230px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 6px 10px;
   border: 1px solid var(--border-bright);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
@@ -193,14 +193,14 @@
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px;
   flex: 1 1 auto;
 }
 
 .actionButton {
   min-width: 64px;
-  min-height: 48px;
-  padding: 0 16px;
+  min-height: 40px;
+  padding: 0 14px;
   border-radius: 12px;
   border: 1px solid var(--border-bright);
   background: rgba(255, 255, 255, 0.04);
@@ -351,7 +351,7 @@
 .grid {
   display: grid;
   grid-template-columns: minmax(270px, 1.05fr) minmax(0, 1.45fr);
-  gap: 14px;
+  gap: 8px;
   min-height: 0;
   flex: 1 1 auto;
 }
@@ -370,8 +370,8 @@
 .sectionHeader {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  padding: 12px 14px;
+  gap: 8px;
+  padding: 7px 12px;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
   text-transform: uppercase;
@@ -383,10 +383,10 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
-  padding: 12px;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .libraryDropZone {
@@ -455,13 +455,13 @@
   text-align: left;
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
-  padding: 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   cursor: pointer;
 }
 
@@ -537,8 +537,8 @@
 .detailCard {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px;
+  gap: 8px;
+  padding: 10px 12px;
   min-height: 0;
   flex: 1 1 auto;
 }
@@ -546,7 +546,7 @@
 .renameBlock {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .editorMeta {
@@ -567,7 +567,7 @@
   border: 1px solid var(--border-bright);
   background: rgba(10, 16, 22, 0.82);
   color: var(--text);
-  font: 0.85rem/1.45 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font: 1.2rem/1.4 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
 .editorActions {
@@ -601,18 +601,18 @@
 .detailTable {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .detailActions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding-top: 8px;
+  gap: 8px;
+  padding-top: 4px;
 }
 
 .detailRow {
-  padding-bottom: 10px;
+  padding-bottom: 6px;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
   min-width: 0;
 }
