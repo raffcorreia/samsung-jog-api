@@ -198,7 +198,6 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const [editorOriginal, setEditorOriginal] = useState("");
   const [editorDraft, setEditorDraft] = useState("");
   const [closeEditorConfirmOpen, setCloseEditorConfirmOpen] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
   const [isDraggingFile, setIsDraggingFile] = useState(false);
   const [errorDismissed, setErrorDismissed] = useState(false);
   const prevErrorRef = useRef<string | null>(null);
@@ -333,17 +332,8 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
     }
   };
 
-  const handleLibraryDrag = (event: DragEvent<HTMLDivElement>) => {
+  const handleWorkspaceDrop = async (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (busy) {
-      return;
-    }
-    setDragActive(true);
-  };
-
-  const handleLibraryDrop = async (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragActive(false);
     if (busy) {
       return;
     }
@@ -417,7 +407,12 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   };
 
   return (
-    <div className={styles.workspace} data-file-dragging={isDraggingFile}>
+    <div
+      className={styles.workspace}
+      data-file-dragging={isDraggingFile}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => { void handleWorkspaceDrop(e); }}
+    >
       {isDraggingFile ? (
         <div className={styles.dragOverlay} aria-hidden="true">
           <span className={styles.dragOverlayLabel}>Drop V1 recording JSON to upload</span>
@@ -531,22 +526,7 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
             <span>Library</span>
             <span>{deck.recordings.items.length} items</span>
           </div>
-          <div
-            className={styles.libraryDropZone}
-            data-drag-active={dragActive}
-            data-file-dragging={isDraggingFile && !dragActive}
-            onDragEnter={handleLibraryDrag}
-            onDragOver={handleLibraryDrag}
-            onDragLeave={(event) => {
-              if (event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                return;
-              }
-              setDragActive(false);
-            }}
-            onDrop={(event) => {
-              void handleLibraryDrop(event);
-            }}
-          >
+          <div className={styles.libraryDropZone}>
             <div className={styles.list} role="list">
             {deck.recordings.items.length === 0 ? (
               <div className={styles.emptyState}>
@@ -627,7 +607,6 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
               );
             })}
             </div>
-            {dragActive ? <div className={styles.dropHint}>Drop a V1 recording JSON file to upload</div> : null}
           </div>
         </div>
 

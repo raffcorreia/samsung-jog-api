@@ -18,9 +18,7 @@
   border-radius: 16px;
   border: 2px dashed color-mix(in srgb, var(--accent) 65%, var(--border-bright));
   background: color-mix(in srgb, var(--accent) 6%, rgba(10, 16, 22, 0.72));
-  backdrop-filter: blur(2px);
   pointer-events: none;
-  animation: dropPulse 1.4s ease-in-out infinite;
 }
 
 .dragOverlayLabel {
@@ -421,50 +419,7 @@
   flex-direction: column;
 }
 
-.libraryDropZone[data-file-dragging="true"] {
-  background: color-mix(in srgb, var(--accent) 4%, transparent);
-}
 
-.libraryDropZone[data-file-dragging="true"]::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: 14px;
-  border: 1px dashed color-mix(in srgb, var(--accent) 38%, var(--border-bright));
-  pointer-events: none;
-  animation: dropPulse 1.4s ease-in-out infinite;
-}
-
-@keyframes dropPulse {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
-}
-
-.libraryDropZone[data-drag-active="true"] {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.libraryDropZone[data-drag-active="true"]::after {
-  content: "";
-  position: absolute;
-  inset: 10px;
-  border-radius: 14px;
-  border: 1px dashed color-mix(in srgb, var(--accent) 65%, var(--border-bright));
-  pointer-events: none;
-  animation: none;
-}
-
-.dropHint {
-  position: absolute;
-  inset: auto 20px 18px 20px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border-bright));
-  background: color-mix(in srgb, var(--accent) 12%, rgba(10, 16, 22, 0.92));
-  color: var(--text);
-  text-align: center;
-  pointer-events: none;
-}
 
 .emptyState,
 .emptyDetail {
