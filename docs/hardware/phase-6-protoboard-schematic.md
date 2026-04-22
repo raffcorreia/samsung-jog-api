@@ -38,11 +38,14 @@ There is no `J2` or `J3` header in this phase.
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `U1` | `ADS1115` | `AIN0 -> MON_KEY_ADC2`, `SDA -> GPIO2`, `SCL -> GPIO3`, `ALERT/RDY -> GPIO17`, `VDD -> 3.3V`, `GND -> GND` |
+| `U1` | `ADS1115` | `AIN0 -> R20`, `SDA -> GPIO2`, `SCL -> GPIO3`, `ALERT/RDY -> GPIO17`, `VDD -> 3.3V`, `GND -> GND` |
+| `R20` | `100 kOhm` | `MON_KEY_ADC2 -> ADS1115 AIN0` series isolation resistor |
 | `C1` | `100 nF` | `3.3V` to `GND` near `U1` |
 | `C2` | `1 uF` | `3.3V` to `GND` near `U1` |
 
 `AIN1`, `AIN2`, and `AIN3` are unused in this phase. `ADDR` is strapped to `GND`.
+
+`R20` was added after display bring-up exposed a power-sequencing defect: with the Pi off, the unpowered `ADS1115` input could load `MON_KEY_ADC2` and pull the monitor line near a valid key state. The `100 kOhm` series resistor prevents the unpowered ADC from disturbing the monitor. Bench check: with the Pi off, and even with Pi power disconnected, the monitor no longer sees a false `KEY_ADC2` action.
 
 ## Observation Channels
 

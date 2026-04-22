@@ -124,6 +124,20 @@ Interpretation:
 
 Note: this sensitivity is specific to the Phase 6 transistor-based observation path. Phase 3 uses a high-impedance op-amp buffer (`TLV9064`) as the first stage, with `10 kOhm` parts serving only as series input protection resistors. The op-amp input impedance is in the megaohm range, so bus loading in Phase 3 is negligible regardless of the protection resistor value.
 
+### `KEY_ADC2` ADC isolation — added `100 kOhm` series resistor
+
+During Phase 18 display/power bring-up, a Phase 6 power-sequencing defect was found: when the Raspberry Pi was powered off, the `ADS1115` also lost power, but `MON_KEY_ADC2` remained connected directly to `ADS1115 AIN0`. The unpowered ADC input loaded/clamped the monitor key line to about `1.3V`, which is close to the measured `KEY_ADC2 down` state and caused the monitor to see a false key action.
+
+The protoboard was updated with a `100 kOhm` series isolation resistor (`R20`) between `MON_KEY_ADC2` and `ADS1115 AIN0`.
+
+Validation result:
+
+- with the Pi off, the monitor is no longer disturbed
+- with the Pi disconnected from power, the monitor is still no longer disturbed
+- the unpowered `ADS1115` no longer appears to force `KEY_ADC2` into a false key state
+
+This confirms that Phase 6 must not connect monitor key lines directly to unpowered silicon. Later integrated-board designs should preserve a high-impedance or power-safe observation path for `KEY_ADC2`.
+
 ## Exit Criteria
 
 - the protoboard can generate all required low-level `JOG` actions reliably
