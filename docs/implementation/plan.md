@@ -748,7 +748,7 @@ Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt,
 
 ## Phase 16: Recording and Replay Subsystem
 
-**Status:** parked as of 2026-04-20 because hardware access is unavailable for validation.
+**Status:** **closed** 2026-04-23. [Phase 16 Execution Record](./phase-16-execution.md) (host health gate satisfied).
 
 ### Goal
 
@@ -1320,7 +1320,6 @@ When the project reaches a more stable feature state, consider:
 
 ## Immediate Next Steps
 
-- keep Phase 16 parked until hardware access is available for recording/replay validation
 - begin Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation
 - investigate the intermittent `KEY_ADC2` observation-stall defect before treating long-running recording/replay capture as trustworthy
 - keep `pi_deck.hardware` as the only GPIO/`DDC` touchpoint per [Code Guidelines](../development/code-guidelines.md)

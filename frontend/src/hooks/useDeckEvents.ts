@@ -231,7 +231,11 @@ export function useDeckEvents(): DeckEventsState {
           return false;
         }
         setRecordingState(r.body);
-        await refreshRecordingState();
+        // Do NOT poll refreshRecordingState here — for fast recordings the WS
+        // "idle" event can arrive before a polled HTTP response, and the stale
+        // "replaying" HTTP response would then overwrite the correct idle state.
+        // The WS broadcast from _run_playback's finally block is the reliable
+        // source of truth for the idle transition.
         return true;
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);

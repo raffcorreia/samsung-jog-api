@@ -413,6 +413,29 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
     setCloseEditorConfirmOpen(false);
   };
 
+  const saveAndPlay = async () => {
+    if (!selected || !isEditorOpen) {
+      return;
+    }
+    setBusy(true);
+    try {
+      if (editorDirty) {
+        const ok = await deck.updateRecordingContent(selected.id, editorDraft);
+        if (!ok) {
+          return;
+        }
+        const content = await deck.fetchRecordingContent(selected.id);
+        if (content !== null) {
+          setEditorOriginal(content);
+          setEditorDraft(content);
+        }
+      }
+      await deck.playRecording(selected.id);
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div
       className={styles.workspace}
@@ -641,6 +664,18 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
                     onChange={(event) => setEditorDraft(event.target.value)}
                   />
                   <div className={styles.editorActions}>
+                    <button
+                      className={`${styles.inlineButton} ${styles.iconAction}`}
+                      type="button"
+                      onClick={() => {
+                        void saveAndPlay();
+                      }}
+                      disabled={busy || deck.recordingState.mode !== "idle"}
+                      aria-label={editorDirty ? "Save and play" : "Play recording"}
+                      title={editorDirty ? "Save and play" : "Play recording"}
+                    >
+                      <ActionIcon kind="play" />
+                    </button>
                     <button
                       className={`${styles.inlineButton} ${styles.iconAction}`}
                       type="button"

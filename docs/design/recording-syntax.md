@@ -97,6 +97,17 @@ Notes:
 - `duration_ms` is derived from explicit event timing, so removing a leading delay reduces the recording length.
 - If a macro intentionally needs an initial wait before doing anything, add a leading `delay` event manually to the JSON file.
 
+## Timing Guidance
+
+Observed on the Samsung CJ791 JOG hardware during Phase 16 validation:
+
+- **Minimum hold duration:** 50 ms. Holds shorter than 50 ms are not reliably registered by the monitor firmware.
+- **Minimum delay between events:** 50 ms. Delays shorter than 50 ms between a release and the next hold risk the firmware treating them as a single gesture or missing the second input.
+
+The recorder's internal threshold (`_MIN_DELAY_MS = 25 ms`) only controls whether a delay event is emitted in the file; it does not guarantee the monitor will respond. Always use at least 50 ms for any delay intended to separate two distinct inputs.
+
+When editing recordings manually, use 50 ms as the lower bound for any `delay.duration_ms` value that separates a `release` from the next `hold`. Shorter values are syntactically valid but may produce unreliable playback on the monitor.
+
 ### `led`
 
 Represents an observed LED state transition from the observation bus.
