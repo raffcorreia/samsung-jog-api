@@ -211,7 +211,10 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
   const editorDirty = isEditorOpen && editorDraft !== editorOriginal;
   const [nowMs, setNowMs] = useState(() => Date.now());
 
-  // Document-level drag detection: light up the drop zone as soon as a drag starts anywhere.
+  // Document-level drag detection: own all file drags while this workspace is mounted.
+  // Preventing default on dragover/drop at document level stops the browser from opening
+  // dropped files in a new tab when the user misses the workspace drop target.
+  // The workspace onDrop fires first (element before document), so valid drops still upload.
   useEffect(() => {
     let count = 0;
     const onEnter = () => {
@@ -225,17 +228,21 @@ export function RecordingWorkspace({ deck, onRequestDelete }: RecordingWorkspace
         setIsDraggingFile(false);
       }
     };
-    const onEnd = () => {
+    const onEnd = (e: Event) => {
+      e.preventDefault();
       count = 0;
       setIsDraggingFile(false);
     };
+    const onDragOver = (e: Event) => e.preventDefault();
     document.addEventListener("dragenter", onEnter);
     document.addEventListener("dragleave", onLeave);
+    document.addEventListener("dragover", onDragOver);
     document.addEventListener("drop", onEnd);
     document.addEventListener("dragend", onEnd);
     return () => {
       document.removeEventListener("dragenter", onEnter);
       document.removeEventListener("dragleave", onLeave);
+      document.removeEventListener("dragover", onDragOver);
       document.removeEventListener("drop", onEnd);
       document.removeEventListener("dragend", onEnd);
     };
