@@ -1092,77 +1092,101 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 - important monitor workflows are represented by stable, reusable, named sequence files
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1028) in this phase’s execution record
 
-## Phase 24: Recording Workspace Settings and Block Editor
+## Phase 24: Deck Settings, Block Editor, and Recording Visualisation
 
 ### Goal
 
-Make recordings easier to configure and inspect without requiring raw JSON editing.
+Introduce system-wide deck configuration and give operators a visual way to inspect and edit recordings without touching raw JSON. Settings live at the system level — not inside the recording workspace — so they are available to any feature that executes JOG sequences, including productized monitor features in later phases.
+
+### Background
+
+Phase 16 validated that the Samsung CJ791 requires a minimum hold duration of **50 ms** and a minimum inter-event gap of **50 ms** for reliable input registration. Values below 40 ms caused intermittent failures. These thresholds must be stored as system-wide configuration so that every sequence execution path (manual playback, productized feature buttons, future DDC sequences) reads the same values.
 
 ### Scope
 
-- recording settings stored per deck
-- block-mode visual editor as an alternative to the existing raw text editor
+- system-wide deck settings (minimum click duration, default LED wait timeout) stored in a writable local config and exposed through the main Settings page
+- block-mode visual editor as an alternative to the raw text editor in the recording workspace
+- both editors round-trip through the canonical V1 JSON format without data loss
 
 ### Tasks
 
-- add recording settings: minimum click duration (ms) and default LED wait timeout (ms)
-- persist settings via a dedicated backend endpoint and writable local config
-- expose settings in a settings panel within the recording workspace
-- implement a block-mode editor that renders the event sequence as a vertical list of typed blocks
-- support the following block types:
-  - `Click` — a hold followed immediately by a release within the minimum click duration; represented as a single operator-friendly unit
-  - `Hold` — press and hold a JOG action
-  - `Release` — release a held JOG action
-  - `Wait for time` — a timed delay between events
-  - `Wait for LED` — pause until the observed LED state matches the expected condition
-- allow switching between text mode and block mode in the recording workspace; both views must round-trip through the canonical V1 JSON format without data loss
-- block edits must produce valid V1 recordings on save
-- parallel blocks are out of scope — the current event model has no parallel commands; defer to a later phase if DDC introduces them
-- add tests for settings persistence and block-to-JSON round-trip fidelity
+**Deck settings (system-wide)**
+
+- add a `DeckSettings` model: `min_click_ms` (default 50), `led_timeout_ms` (default 1800)
+- persist settings in a writable local config file (alongside recordings dir or a dedicated path)
+- expose via REST: `GET /api/v1/settings` and `PUT /api/v1/settings`
+- add a **Settings** section to the existing Settings page (Phase 13 layout) — same location as brightness — not inside the recording workspace
+- the sequence runner reads `min_click_ms` and `led_timeout_ms` from the live settings on every playback; no hardcoded thresholds in the runner
+- add tests for settings persistence, defaults, and validation (e.g. `min_click_ms` must be ≥ 1)
+
+**Block-mode editor**
+
+- implement a block-mode view that renders a recording’s event sequence as a vertical list of typed blocks; each block shows its type and editable parameters
+- support the following block types, mapping directly to V1 events:
+  - `Click` — a `hold` immediately followed by a `release` within `min_click_ms`; displayed as a single operator-friendly unit; expands to `hold` + `delay(min_click_ms)` + `release` on save if no explicit delay is present in the source
+  - `Hold` — a `hold` event for a JOG direction
+  - `Release` — a `release` event for a JOG direction
+  - `Wait for time` — a `delay` event with an editable duration
+  - `Wait for LED` — a `wait_led` or blocking `led` event with editable match condition, poll interval, and timeout
+- text mode and block mode are toggleable within the recording detail pane; existing text mode is unchanged
+- block edits produce valid V1 JSON on save, identical to what text mode would produce for the same sequence
+- parallel blocks are out of scope — no parallel commands exist in the current event model; defer if DDC introduces them
+- add tests for block-to-JSON round-trip fidelity and `Click` expansion correctness
 
 ### Deliverables
 
-- recording settings panel (minimum click time, default LED timeout)
-- block-mode editor with type-safe block rendering and editing
-- text/block mode toggle in the recording workspace
+- system Settings page section: minimum click time (ms), default LED timeout (ms), persisted globally
+- block-mode editor with typed blocks and inline parameter editing
+- text/block mode toggle in the recording workspace detail pane
 
 ### Exit criteria
 
-- operators can configure minimum click time and default LED timeout through the recording workspace
+- `min_click_ms` and `led_timeout_ms` are readable and writable through the Settings page and the REST API
+- the sequence runner uses the live settings values on every playback; changing a setting takes effect on the next play without restarting the service
 - sequences can be inspected and edited in block mode without touching raw JSON
-- text mode and block mode produce identical JSON output for the same sequence
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1028) in this phase's execution record
+- text mode and block mode produce identical V1 JSON for the same sequence
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1028) in this phase’s execution record
 
 ## Phase 25: Productized Monitor Features
 
 ### Goal
 
-Turn validated monitor workflows into real user-facing features.
+Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 24.
+
+### Background
+
+The recording subsystem (Phase 16) and the deck settings (Phase 24) together provide the full execution stack for monitor control. Phase 25 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 25 promotes them to named, always-accessible UI controls.
 
 ### Scope
 
-- input switching
-- `PiP`
-- related OSD-driven monitor features
+- assigned recordings: a recording from the library can be assigned to a named feature slot
+- feature slots: input switching, PIP, and related OSD-driven monitor features
+- feature buttons in the main UI that run the assigned recording via the sequence runner
+- `DDC` mode and `Blind` mode support where applicable
 
 ### Tasks
 
-- implement source switching in `DDC` mode and `Blind` mode
-- productize validated `PiP` workflows
-- add user-facing controls for named features
-- expose proper error handling and failure states
-- keep feature behavior aligned with validated sequence assumptions
-- evolve the UI from raw `JOG`-only control into the richer `DDC` and `Blind` mode control surface
-- preserve access to the raw `JOG` controller behind a manual-control entry point
-- add integration tests for source switching, `PiP`, and other productized monitor workflows
+- define a `FeatureSlot` model: a named slot (e.g. `pip_enable`, `pip_disable`, `input_hdmi`, `input_dp`) with an optional assigned recording ID
+- persist slot assignments via REST: `GET /api/v1/features` and `PUT /api/v1/features/{slot}`
+- add feature slot assignment UI to the recording workspace: each recording can be assigned to a slot from its detail view
+- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 24; unassigned slots show as inactive
+- implement source switching in `DDC` mode and `Blind` mode where DDC commands exist; fall back to recording-backed blind mode otherwise
+- expose proper error handling and failure states (recording not found, playback busy, sequence error)
+- preserve access to the raw JOG controller behind a manual-control entry point
+- add integration tests for slot assignment, recording execution via slot, and unassigned-slot behaviour
+- evolve the UI from raw JOG-only control into a richer named-feature control surface
 
 ### Deliverables
 
-- user-facing monitor features built on validated sequences
+- feature slot assignment per recording
+- named feature buttons in the main UI backed by recordings
+- user-facing monitor features (PIP, input switching) that run without raw JOG interaction
 
 ### Exit criteria
 
-- the deck supports the intended monitor-control feature set beyond raw `JOG` commands
+- operators can assign a recording to a named feature slot and run it from the main UI with a single button press
+- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 24
+- the deck supports the intended monitor-control feature set beyond raw JOG commands
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1028) in this phase’s execution record
 
 ## Phase 26: Dashboard Data-Source Spike
