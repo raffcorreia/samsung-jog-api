@@ -2,7 +2,7 @@
 
 ## Phase Index
 
-- [Host health gate (feature phases 10–29)](#host-health-gate-feature-phases-1029)
+- [Host health gate (feature phases 10–30)](#host-health-gate-feature-phases-1030)
 - [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
 - [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
 - [Phase 2: Hardware Validation](#phase-2-hardware-validation)
@@ -25,14 +25,15 @@
 - [Phase 19: Display Usability and Power Hardening](#phase-19-display-usability-and-power-hardening)
 - [Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation)
 - [Phase 21: Display Power Control Circuit](#phase-21-display-power-control-circuit)
-- [Phase 22: DDC Capability Investigation](#phase-22-ddc-capability-investigation)
-- [Phase 23: LED Feedback Characterization](#phase-23-led-feedback-characterization)
-- [Phase 24: State Investigation and Sequence Cleanup](#phase-24-state-investigation-and-sequence-cleanup)
-- [Phase 25: Deck Settings, Block Editor, and Recording Visualisation](#phase-25-deck-settings-block-editor-and-recording-visualisation)
-- [Phase 26: Productized Monitor Features](#phase-26-productized-monitor-features)
-- [Phase 27: Dashboard Data-Source Spike](#phase-27-dashboard-data-source-spike)
-- [Phase 28: Dashboard Widgets](#phase-28-dashboard-widgets)
-- [Phase 29: Stabilization](#phase-29-stabilization)
+- [Phase 22: Documentation Reorganization](#phase-22-documentation-reorganization)
+- [Phase 23: DDC Capability Investigation](#phase-23-ddc-capability-investigation)
+- [Phase 24: LED Feedback Characterization](#phase-24-led-feedback-characterization)
+- [Phase 25: State Investigation and Sequence Cleanup](#phase-25-state-investigation-and-sequence-cleanup)
+- [Phase 26: Deck Settings, Block Editor, and Recording Visualisation](#phase-26-deck-settings-block-editor-and-recording-visualisation)
+- [Phase 27: Productized Monitor Features](#phase-27-productized-monitor-features)
+- [Phase 28: Dashboard Data-Source Spike](#phase-28-dashboard-data-source-spike)
+- [Phase 29: Dashboard Widgets](#phase-29-dashboard-widgets)
+- [Phase 30: Stabilization](#phase-30-stabilization)
 - [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
 
 ## Summary
@@ -53,9 +54,9 @@ The overall strategy is:
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
-## Host health gate (feature phases 10–29)
+## Host health gate (feature phases 10–30)
 
-Phases **10–29** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
+Phases **10–30** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
 
 **Procedure (run on the deck host):**
 
@@ -63,7 +64,7 @@ Phases **10–29** introduce or expand product behavior on the **Raspberry Pi co
 2. Paste the **full default (text) output** into that phase’s **Markdown execution record** under a heading such as `## Host health snapshot` (a fenced code block is fine), with the **date** and **host** clear from the output or a one-line note.
 3. Briefly **review** the snapshot: e.g. `get_throttled` flags should not show sustained under-voltage or active throttling under normal idle/deck workload; root filesystem use should remain in a safe band for the SD card. Exact numeric thresholds are project judgment — the point is **documented evidence** each phase.
 
-Phases **10–29** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
+Phases **10–30** inherit this gate unless a phase is explicitly documentation-only (then note *N/A* in the execution record).
 
 ## Deferred integrated-board GPIO and software migration
 
@@ -91,7 +92,7 @@ The implementation is expected to grow these testing layers over time:
 
 Detailed test design still needs its own document, but no phase should be treated as complete without the relevant tests for that phase.
 
-For **Phases 10–28**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in the phase execution record.
+For **Phases 10–30**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in the phase execution record.
 
 ## Phase 0: Documentation and Evidence Capture
 
@@ -535,7 +536,7 @@ Define and implement the local backend command surface that all UI and control f
 ### Exit criteria
 
 - the frontend can drive low-level control and receive live state from the backend
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
 ## Phase 11: Low-Level JOG Console UI
 
@@ -578,7 +579,7 @@ At this stage, this raw `JOG` controller should be the only monitor-control UI e
 
 - a user can directly control the monitor through the deck UI using low-level `JOG` actions **on the deck host with live hardware** (not mock-only)
 - no unvalidated high-level monitor feature UI is exposed yet
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
 ## Phase 12: Deployment and Version Tracking
 
@@ -614,7 +615,7 @@ Establish a single, agent-authorizable deploy script that pushes the latest code
 ### Exit criteria
 
 - running the deploy script from the dev machine results in the Pi running the latest code with a freshly reloaded kiosk and an incremented version number visible in the UI
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
 
 ## Phase 13: Full-Screen UI Layout with Placeholders
 
@@ -656,7 +657,7 @@ Build the target UI shell at `1280×800` with correct proportions, real function
 
 - the deck display shows the complete intended layout with correct proportions
 - no real feature work is blocked waiting on this layout
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
 
 ## Phase 14: Log Architecture Refactor
 
@@ -693,7 +694,7 @@ Move log ownership from the browser to the backend so logs are durable across se
 - opening a new browser tab shows recent log history immediately without any action from the user
 - two simultaneous browser clients see the same log stream in sync
 - no log state lives in the browser
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
 
 ## Phase 15: Observation Bus and Hardware Interface
 
@@ -737,7 +738,7 @@ Complete the hardware observation loop: `ADS1115 ALERT/RDY` as a real interrupt,
 - pressing the physical monitor JOG is reflected in the deck UI ring
 - `KEY_LED` state changes appear as domain events in the WebSocket stream
 - no duplicate held/released events when a deck tap triggers a GPIO drive
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
 
 ### Open Defects Carried Forward
 
@@ -791,7 +792,7 @@ Add the tooling needed to record, store, replay, edit, and promote monitor inter
 ### Exit criteria
 
 - sequences can be recorded, replayed, stopped, and validated reliably
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
 ## Phase 17: Development Fixture
 
@@ -1041,9 +1042,67 @@ Phases 19 and 20 confirmed that hot-plugging the display's 5V line while the Pi 
 - soft-start limits inrush: no visible voltage sag on the Pi 5V rail during turn-on
 - repeated on/off cycles (≥ 10) complete without Pi instability
 - `DisplayService.power_on()` and `power_off()` coordinate backlight, wlr-randr, and `GPIO24` in the correct sequence
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase's execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
 
-## Phase 22: DDC Capability Investigation
+## Phase 22: Documentation Reorganization
+
+### Goal
+
+Reorganize project documentation and repository artifact structure so durable reference material is named, placed, and linked by what it is, while phase-specific history remains isolated to execution records.
+
+### Background
+
+The repository has accumulated a mix of **historical** and **living** documents, plus a mix of **code**, **hardware artifacts**, and **documentation assets** at the top level. Execution records are correctly phase-scoped, but several shared hardware and reference documents still carry phase-based names from when they were first created. The repository also mixes folder organization by technical layer (`frontend/`, `backend/`), by reader purpose (`docs/...`), and by project history (`hardware/.../phase-*`).
+
+This creates two problems:
+
+- readers cannot easily tell whether a document is the current reference or a frozen phase artifact
+- the repository structure becomes harder to navigate because folder purpose and source-of-truth boundaries are not stated explicitly
+
+The project should follow the same rule already used successfully in code: implementation history may be tracked by phase, but reusable artifacts should be named by purpose.
+
+### Scope
+
+- documentation naming policy for phase records versus living reference documents
+- repository organization policy for code, hardware artifacts, and documentation support assets
+- renaming shared docs whose current names are phase-scoped but whose role is not
+- clarifying the purpose of top-level and major subfolders
+- documentation indexes and inbound links for discoverability
+- reference updates across the repo so renamed docs remain easy to find
+
+### Tasks
+
+- define and document the naming rule: phase names are for execution/history documents; descriptive names are for living reference documents, runbooks, schemas, BOMs, and shared hardware notes
+- define and document the repository-organization rule: code trees are organized by implementation boundary, hardware trees by artifact/board, and docs by reader purpose
+- identify documentation files whose names describe the phase that created them rather than the artifact they contain
+- rename those files to artifact-based names
+- decide and document the role of `hardware/` versus `docs/hardware/`
+- decide and document where explanatory images belong versus artifact images generated from hardware work
+- add a top-level repository structure section or document that explains what each major folder is for
+- add local README/index files where needed so important directories explain themselves in place
+- update links and textual references throughout the repo so all renamed docs resolve cleanly
+- add a `docs/hardware/README.md` or equivalent index that lists the hardware reference documents and what each one covers
+- ensure every important document has at least one obvious inbound link from the plan, README, an index page, or the relevant execution record
+- preserve provenance inside document content where useful, without using the filename itself as the historical record
+- confirm that later phases reference the renamed living docs rather than phase-scoped filenames
+
+### Deliverables
+
+- documented repository rule for documentation naming and organization
+- documented repository structure guide describing the purpose of each major folder
+- renamed living reference documents using artifact-based names
+- hardware/documentation index pages that make the structure navigable
+- updated links across README, plan, execution records, and reference docs
+
+### Exit criteria
+
+- readers can distinguish phase history from current reference material by document name alone
+- shared docs are named by artifact or purpose, not by the phase that first created them
+- the role of `backend/`, `frontend/`, `hardware/`, `docs/`, and other major folders is explicitly documented
+- important docs are reachable through obvious links rather than requiring directory browsing
+- later phases can continue adding documentation without reintroducing phase-scoped names for living artifacts
+
+## Phase 23: DDC Capability Investigation
 
 ### Goal
 
@@ -1075,9 +1134,9 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 ### Exit criteria
 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 23: LED Feedback Characterization
+## Phase 24: LED Feedback Characterization
 
 ### Goal
 
@@ -1106,9 +1165,9 @@ Determine how useful `KEY_LED` is as a control-feedback signal.
 ### Exit criteria
 
 - the project knows when LED feedback can be trusted as part of sequence execution
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 24: State Investigation and Sequence Cleanup
+## Phase 25: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -1139,9 +1198,9 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 ### Exit criteria
 
 - important monitor workflows are represented by stable, reusable, named sequence files
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 25: Deck Settings, Block Editor, and Recording Visualisation
+## Phase 26: Deck Settings, Block Editor, and Recording Visualisation
 
 ### Goal
 
@@ -1194,17 +1253,17 @@ Phase 16 validated that the Samsung CJ791 requires a minimum hold duration of **
 - the sequence runner uses the live settings values on every playback; changing a setting takes effect on the next play without restarting the service
 - sequences can be inspected and edited in block mode without touching raw JSON
 - text mode and block mode produce identical V1 JSON for the same sequence
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 26: Productized Monitor Features
+## Phase 27: Productized Monitor Features
 
 ### Goal
 
-Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 25.
+Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 26.
 
 ### Background
 
-The recording subsystem (Phase 16) and the deck settings (Phase 25) together provide the full execution stack for monitor control. Phase 26 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 26 promotes them to named, always-accessible UI controls.
+The recording subsystem (Phase 16) and the deck settings (Phase 26) together provide the full execution stack for monitor control. Phase 27 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 27 promotes them to named, always-accessible UI controls.
 
 ### Scope
 
@@ -1218,7 +1277,7 @@ The recording subsystem (Phase 16) and the deck settings (Phase 25) together pro
 - define a `FeatureSlot` model: a named slot (e.g. `pip_enable`, `pip_disable`, `input_hdmi`, `input_dp`) with an optional assigned recording ID
 - persist slot assignments via REST: `GET /api/v1/features` and `PUT /api/v1/features/{slot}`
 - add feature slot assignment UI to the recording workspace: each recording can be assigned to a slot from its detail view
-- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 25; unassigned slots show as inactive
+- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 26; unassigned slots show as inactive
 - implement source switching in `DDC` mode and `Blind` mode where DDC commands exist; fall back to recording-backed blind mode otherwise
 - expose proper error handling and failure states (recording not found, playback busy, sequence error)
 - preserve access to the raw JOG controller behind a manual-control entry point
@@ -1234,11 +1293,11 @@ The recording subsystem (Phase 16) and the deck settings (Phase 25) together pro
 ### Exit criteria
 
 - operators can assign a recording to a named feature slot and run it from the main UI with a single button press
-- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 25
+- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 26
 - the deck supports the intended monitor-control feature set beyond raw JOG commands
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 27: Dashboard Data-Source Spike
+## Phase 28: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -1268,9 +1327,9 @@ Decide how dashboard data will be sourced before widget implementation expands.
 ### Exit criteria
 
 - the project knows how dashboard data will be sourced before deeper widget work begins
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 28: Dashboard Widgets
+## Phase 29: Dashboard Widgets
 
 ### Goal
 
@@ -1300,9 +1359,9 @@ Implement the dashboard side of the product using the data-source decisions from
 ### Exit criteria
 
 - the dashboard is useful and stable without compromising the monitor-control surface
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 29: Stabilization
+## Phase 30: Stabilization
 
 ### Goal
 
@@ -1334,7 +1393,7 @@ Harden the system for regular use.
 ### Exit criteria
 
 - the system is stable enough for regular daily use
-- satisfy the [Host health gate](#host-health-gate-feature-phases-1029) in this phase’s execution record
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
 ## Later Extensions
 
@@ -1359,13 +1418,14 @@ Worth addressing before significant UI expansion (Phase 13 onward) adds more bui
 
 ### Documentation reorganization
 
-As the project grows, some documentation file names and locations have become misleading or hard to navigate:
+This concern is now tracked explicitly as [Phase 22: Documentation Reorganization](#phase-22-documentation-reorganization).
 
-- **Phase-scoped names on shared artifacts.** `docs/hardware/phase-6-protoboard-schematic.md` and `docs/hardware/phase-6-protoboard-bom.md` are named after the phase that created them, but later phases (e.g. Phase 21) extend the same protoboard and reference these files directly. The name implies the files belong to Phase 6 when they are actually the living reference for the entire protoboard build. Consider renaming to names that reflect what the file *is*, not what phase first created it — e.g. `protoboard-schematic.md`, `protoboard-bom.md`, `pi5-gpio-schema.md`.
+The key rule is:
 
-- **Orphaned or weakly linked documents.** Several files under `docs/hardware/` and `docs/implementation/` are not explicitly linked from any other document that a reader would naturally arrive at. Every document should have at least one inbound link — from the relevant phase execution record, from the plan, or from a hardware index page. Before this is addressed, adding a `docs/hardware/README.md` (or an index section in an existing file) that lists every hardware reference document and what it covers would make the structure navigable.
+- phase names belong to execution/history records
+- living reference documents should be named by artifact or purpose
 
-A dedicated documentation-tidy phase or a pre-stabilization pass should address both issues. No phase should be blocked waiting on this, but the rename should happen before the protoboard wiring is handed off or the project reaches Phase 28/29 stabilization.
+That phase should run before later documentation growth compounds misleading filenames or weak navigation.
 
 ### CI/CD and update strategy
 
