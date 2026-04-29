@@ -1008,7 +1008,7 @@ Phases 19 and 20 confirmed that hot-plugging the display's 5V line while the Pi 
 
 ### Scope
 
-- PNP high-side switch (`S8550`) controlled by a GPIO-driven NPN stage (`2N3904` / `2N2222`)
+- PNP high-side switch (`S8550`) controlled by a GPIO-driven NPN stage (`2N3904`)
 - RC soft-start network on the PNP base to limit inrush on turn-on
 - bulk output capacitor for load transient smoothing
 - GPIO24 as the display power control output

@@ -124,8 +124,8 @@ This block is added in Phase 21. It switches the display's 5V supply via a PNP h
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `Q8` | `S8550` PNP | emitter → Pi 5V rail (pin 2 or 4), collector → `DISP_5V`, base → `R23`/`R24`/`C3` junction |
-| `Q9` | `2N3904` or `2N2222` NPN | base → `R21`, collector → `R24` → Q8 base junction, emitter → `GND` |
+| `Q8` | `S8550` PNP | emitter → Pi 5V rail (pin 2), collector → `DISP_5V`, base → `R23`/`R24`/`C3` junction |
+| `Q9` | `2N3904` NPN | base → `R21`, collector → `R24` → Q8 base junction, emitter → `GND` |
 | `R21` | `1 kΩ` | `GPIO24` (physical pin 18) → Q9 base |
 | `R22` | `10 kΩ` | Q9 base → `GND` (default-off pull-down; holds display off during boot and reset) |
 | `R23` | `10 kΩ` | Pi 5V → Q8 base (default-off pull-up; keeps Q8 off when Q9 is off) |
@@ -147,7 +147,7 @@ The display's 5V supply wire is disconnected from the Pi 5V header and reconnect
 | Pi Function | Raspberry Pi Pin |
 | --- | --- |
 | `display_power_en` output | `GPIO24`, physical pin `18` |
-| `5V power rail for display branch` | physical pin `2` or `4` |
+| `5V power rail for display branch` | physical pin `2` |
 
 ## Important Interpretation
 

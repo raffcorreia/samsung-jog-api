@@ -69,7 +69,7 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 The Waveshare DSI display path is not part of the 40-pin GPIO signal map, but it is part of Phase 20 validation:
 
 - connect the display data ribbon to the appropriate Raspberry Pi 5 DSI connector using the correct Pi 5-compatible ribbon/adapter for the panel
-- power the display from the Pi 5 `5V` header pins only if the Waveshare wiring expects header power; use physical pin `2` or `4` for `5V` and a nearby `GND`
+- power the display from the Pi 5 `5V` header pin only if the Waveshare wiring expects header power; use physical pin `2` for `5V` and a nearby `GND`
 - do not connect display power to the `3.3V` logic rail
 - do not hot-plug the display 5V line while the Pi is powered; Phase 18/19 showed display power transients can reset or destabilize the host
 - keep the project I2C bus on `GPIO2/GPIO3`; the DSI touch/panel devices should appear on the DSI controller/mux path, not as extra devices on the project I2C bus

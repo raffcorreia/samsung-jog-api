@@ -22,10 +22,10 @@ Additionally, Phase 20 confirmed that the Pi 5 continues to draw 1.73 W (5.09 V 
 
 ### Topology
 
-A PNP transistor (`Q8`, `S8550`) acts as the high-side 5V switch. A GPIO-driven NPN stage (`Q9`, `2N3904` or `2N2222`) inverts the active-high GPIO signal and drives the PNP base. An RC network on the PNP base provides a soft-start that limits inrush on every turn-on event.
+A PNP transistor (`Q8`, `S8550`) acts as the high-side 5V switch. A GPIO-driven NPN stage (`Q9`, `2N3904`) inverts the active-high GPIO signal and drives the PNP base. An RC network on the PNP base provides a soft-start that limits inrush on every turn-on event.
 
 ```
-Pi 5V (pin 2 or 4) ──── Q8 emitter
+Pi 5V (pin 2) ──── Q8 emitter
                          Q8 collector ──── Display 5V+
                          Q8 base ──┬── R23 (10 kΩ) ──── Pi 5V   ← default-off pull-up
                                    ├── C3  (10 µF)  ──── Pi 5V   ← soft-start capacitor
@@ -60,7 +60,7 @@ Q8 collector current ramps up over ~100 ms (≈3τ), limiting the inrush to a gr
 | Part | Why |
 |------|-----|
 | `S8550` PNP | Available; 1.5 A Ic — well above the display's ~0.3–0.5 A draw; handles soft-start dissipation at low duty cycle; Vce(sat) ≈ 0.2 V → display sees 4.8 V, within spec |
-| `2N3904` / `2N2222` NPN | Available; both are ideal for this low-current base-drive application; either works |
+| `2N3904` NPN | Already on the protoboard (Q1–Q7); ideal for this low-current base-drive application |
 | `R21` 1 kΩ | Limits GPIO24 base current to ~3 mA into Q9 — well within GPIO source capability |
 | `R22` 10 kΩ | Holds Q9 base at GND when GPIO24 is floating (boot, reset) so display stays off |
 | `R23` 10 kΩ | Holds Q8 base at 5V (off) when Q9 is off; forms one leg of the voltage divider |
@@ -81,7 +81,7 @@ Q8 collector current ramps up over ~100 ms (≈3τ), limiting the inrush to a gr
 
 The Phase 21 circuit extends the existing Phase 6 protoboard. Add a new section of the board for the display power block:
 
-1. **5V supply tap:** run a wire from Pi physical pin 2 or 4 to the board's 5V power rail (separate from the 3.3V logic rail already present).
+1. **5V supply tap:** run a wire from Pi physical pin 2 to the board's 5V power rail (separate from the 3.3V logic rail already present).
 2. **Q8 (S8550 PNP):**
    - emitter → 5V power rail
    - collector → a new node `DISP_5V` (which feeds the display's 5V input wire)
@@ -89,7 +89,7 @@ The Phase 21 circuit extends the existing Phase 6 protoboard. Add a new section 
 3. **R23 (10 kΩ):** from 5V rail to Q8 base junction.
 4. **C3 (10 µF, electrolytic, + toward 5V):** from 5V rail to Q8 base junction (positive terminal to 5V).
 5. **R24 (4.7 kΩ):** from Q8 base junction to Q9 collector.
-6. **Q9 (2N3904 or 2N2222 NPN):**
+6. **Q9 (2N3904 NPN):**
    - collector → R24 → Q8 base junction
    - base → R21 junction
    - emitter → GND rail
@@ -109,7 +109,7 @@ These designators continue the Phase 6 schematic numbering (last used: R20, Q7, 
 | Ref | Value | Function |
 |-----|-------|----------|
 | `Q8` | `S8550` PNP | Display 5V high-side switch |
-| `Q9` | `2N3904` or `2N2222` NPN | GPIO24 driver / PNP base inverter |
+| `Q9` | `2N3904` NPN | GPIO24 driver / PNP base inverter |
 | `R21` | 1 kΩ | GPIO24 → Q9 base current limit |
 | `R22` | 10 kΩ | Q9 base default-off pull-down |
 | `R23` | 10 kΩ | Q8 base default-off pull-up to 5V |
@@ -121,28 +121,13 @@ These designators continue the Phase 6 schematic numbering (last used: R20, Q7, 
 
 `GPIO24`, BCM 24, physical pin 18 → `display_power_en` (active HIGH = display on).
 
-Add to `backend/src/pi_deck/hardware/protoboard_pins.py`:
-```python
-display_power_en: int = 24
-```
-
 ## Software Integration
 
-`DisplayService.power_on()` and `power_off()` must coordinate GPIO24 with the existing backlight and wlr-randr steps.
+Implemented in `DisplayService` (`display_service.py`) and `LiveDisplayPower` (`display_power.py`).
 
-**Power-off sequence (GPIO24 last):**
-1. Save current brightness (already done)
-2. Write brightness = 0 to LP8557 (backlight off)
-3. `wlr-randr --off` (compositor stops sending frames)
-4. Assert GPIO24 LOW → Q8 off → display 5V removed
+**Power-off sequence (GPIO24 last):** save brightness → backlight 0 → `wlr-randr --off` → GPIO24 LOW
 
-**Power-on sequence (GPIO24 first):**
-1. Assert GPIO24 HIGH → Q8 soft-starts → display 5V rises over ~100 ms
-2. Wait ~150 ms for display to stabilize (LP8557 re-init)
-3. `wlr-randr --on` (compositor resumes frames)
-4. Restore saved brightness to LP8557
-
-This ordering ensures the panel has stable power before the compositor attempts to send frames, and the backlight is off before power is cut so the LP8557 does not see a mid-state shutdown.
+**Power-on sequence (GPIO24 first):** GPIO24 HIGH → 150 ms → `wlr-randr --on` → restore brightness
 
 ## Validation Plan
 
