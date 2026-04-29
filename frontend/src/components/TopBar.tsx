@@ -88,7 +88,7 @@ export function TopBar({ title }: { title?: string }) {
       <header className={styles.bar} data-testid="top-bar">
         <div className={styles.left}>
           <button
-            className={styles.powerBtn}
+            className={`${styles.powerBtn}${displayOn ? "" : ` ${styles.powerBtnOff}`}`}
             type="button"
             aria-label={displayOn ? "Power menu" : "Turn display on"}
             data-testid="top-bar-power"
