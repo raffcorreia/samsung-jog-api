@@ -118,6 +118,37 @@ Each drive channel uses:
 | `Q7` | `2N3904` | emitter `-> GND`, collector `-> R14` |
 | `R14` | `10 kOhm` | `MON_KEY_ADC2 -> Q7 collector` |
 
+## Display Power Control Block (Phase 21)
+
+This block is added in Phase 21. It switches the display's 5V supply via a PNP high-side transistor driven by a GPIO-controlled NPN stage, with an RC soft-start network to limit inrush.
+
+| Ref | Value | Connection |
+| --- | --- | --- |
+| `Q8` | `S8550` PNP | emitter → Pi 5V rail (pin 2 or 4), collector → `DISP_5V`, base → `R23`/`R24`/`C3` junction |
+| `Q9` | `2N3904` or `2N2222` NPN | base → `R21`, collector → `R24` → Q8 base junction, emitter → `GND` |
+| `R21` | `1 kΩ` | `GPIO24` (physical pin 18) → Q9 base |
+| `R22` | `10 kΩ` | Q9 base → `GND` (default-off pull-down; holds display off during boot and reset) |
+| `R23` | `10 kΩ` | Pi 5V → Q8 base (default-off pull-up; keeps Q8 off when Q9 is off) |
+| `R24` | `4.7 kΩ` | Q9 collector → Q8 base junction (base drive resistor; forms voltage divider with R23) |
+| `C3` | `10 µF` electrolytic, + toward 5V | Q8 base junction → Pi 5V (soft-start: delays base pull-down, ramps collector current over ~100 ms, τ ≈ 32 ms) |
+| `C4` | `100 µF` electrolytic, + toward display | `DISP_5V` → `GND` (bulk output capacitor; smooths load transients) |
+
+### Net: `DISP_5V`
+
+The display's 5V supply wire is disconnected from the Pi 5V header and reconnected to the `DISP_5V` node (Q8 collector). Display GND remains directly wired to Pi GND — only the 5V supply side is switched.
+
+### GPIO24 logic
+
+- **GPIO24 LOW** (boot default): Q9 off → Q8 base held at 5V by R23 → Q8 off → `DISP_5V` = 0 V → display unpowered.
+- **GPIO24 HIGH**: Q9 saturated → Q8 base pulled to ~1.7 V via R23/R24 divider → Q8 on → `DISP_5V` rises to ~4.8 V (Vce(sat) ≈ 0.2 V drop).
+
+### Raspberry Pi pin additions (Phase 21)
+
+| Pi Function | Raspberry Pi Pin |
+| --- | --- |
+| `display_power_en` output | `GPIO24`, physical pin `18` |
+| `5V power rail for display branch` | physical pin `2` or `4` |
+
 ## Important Interpretation
 
 - The observation transistors `Q1` and `Q2` are simple inverting open-collector buffers into Pi GPIO: `C` goes to the GPIO input and `E` goes to `GND`.

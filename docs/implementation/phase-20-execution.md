@@ -112,6 +112,12 @@ Measured on Pi 5 (`pi-deck5`) with the active cooler (fan) **off**. Display brig
 
 **Delta:** software display-off saves **0.38 A / 1.91 W** on Pi 5 at capped brightness.
 
+| State | Voltage | Current | Power | Notes |
+|-------|---------|---------|-------|-------|
+| Pi halted (`sudo shutdown -h now`), no display, USB-C still connected | 5.09 V | 0.34 A | 1.73 W | Pi powered off but supply connected |
+
+**Standby concern:** the Pi 5 has no hardware power switch. After a software halt the board draws **0.34 A / 1.73 W** continuously as long as the USB-C supply is connected. There is no idle-zero state without physically unplugging the supply. For a desk installation that runs 24/7 this is a long-term energy concern; for a device left unattended for days it is also a thermal concern. A hardware power switch or a smart-plug arrangement will be required for a fully power-managed installation — noted as a future hardware consideration.
+
 ### Pi 2 vs Pi 5 comparison
 
 | State | Pi 2 (Phase 18) | Pi 5 (Phase 20) |
