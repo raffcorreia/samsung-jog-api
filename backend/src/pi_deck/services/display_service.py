@@ -11,8 +11,8 @@ Brightness and power are independent hardware knobs that must both be touched:
               panel image (compositor stops sending frames), but does NOT touch
               the backlight hardware — hence we also zero brightness on off.
 
-Power-off sequence: save brightness → write 0 → wlr-randr --off
-Power-on  sequence: wlr-randr --on → restore saved brightness
+Power-off sequence: save brightness → write 0 → wlr-randr --off → GPIO24 low (rail off)
+Power-on  sequence: GPIO24 high (rail on) → 150 ms stabilise → wlr-randr --on → restore brightness
 
 Brightness is persisted to ~/.pi-deck-brightness (raw int) so it survives reboots.
 The labwc autostart re-applies it after the DRM driver resets the backlight on takeover.
@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from pathlib import Path
 
 from pi_deck.hardware.display_power import BRIGHTNESS_RAW_MAX, DisplayPowerControl
@@ -105,24 +106,34 @@ class DisplayService:
     def power_off(self) -> None:
         """Power off the display.
 
-        Saves the current backlight level, zeros the backlight LED, then signals
-        the compositor to disable the DSI-1 output.
+        Saves the current backlight level, zeros the backlight LED, signals the
+        compositor to disable the DSI output, then cuts the 5V rail via GPIO24.
+        Rail is last so the panel always loses its compositor feed before power.
         """
         self._saved_raw = self._hw.read_brightness_raw()
         _persist_raw(self._saved_raw)
         self._hw.write_brightness_raw(0)
         self._hw.write_power_on(False)
-        logger.info("display: power off (brightness saved=%d raw, backlight=0, wlr-randr --off)",
-                    self._saved_raw)
+        self._hw.write_rail_on(False)
+        logger.info(
+            "display: power off (saved=%d raw, backlight=0, wlr-randr --off, rail off)",
+            self._saved_raw,
+        )
 
     def power_on(self) -> None:
         """Power on the display.
 
-        Signals the compositor to re-enable the DSI-1 output, then restores the
-        backlight to the level that was active before the last power_off().
+        Raises the 5V rail via GPIO24 first so the panel has stable power before
+        the compositor starts sending frames.  150 ms covers the Phase 21 soft-start
+        RC ramp (~100 ms) plus panel init margin.
         """
+        self._hw.write_rail_on(True)
+        time.sleep(0.15)
         self._hw.write_power_on(True)
         restore = self._saved_raw if self._saved_raw is not None else _DEFAULT_RAW
         self._hw.write_brightness_raw(restore)
-        logger.info("display: power on (brightness restored=%d raw, wlr-randr --on)", restore)
+        logger.info(
+            "display: power on (rail on, 150 ms, wlr-randr --on, brightness restored=%d raw)",
+            restore,
+        )
         self._saved_raw = None

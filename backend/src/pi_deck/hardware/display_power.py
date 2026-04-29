@@ -1,16 +1,21 @@
 """Display backlight power and brightness control.
 
-Two independent mechanisms are used:
+Three independent mechanisms are used:
 
   brightness  /sys/class/backlight/<bus>-0045/brightness   (group video, writable)
-              0–255 raw; Phase 18 validated ceiling is 170.
+              0–255 raw; Phase 20 Pi 5 validated full 255/255 range.
               Bus number differs by host: 10 on Pi 2, 11 on Pi 5 — auto-discovered.
 
   power       wlr-randr --output <DSI-N> --off / --on
-              Routes through the labwc Wayland compositor, which is the only
-              mechanism that actually cuts panel power on this Pi/Waveshare setup.
-              bl_power sysfs accepts writes but does not physically power the panel.
+              Routes through the labwc Wayland compositor, which stops/starts
+              sending frames.  bl_power sysfs accepts writes but does not
+              physically power the panel.
               DSI output name differs by host: DSI-1 on Pi 2, DSI-2 on Pi 5 — auto-discovered.
+
+  rail        GPIO24 → Phase 21 S8550 PNP high-side switch
+              Cuts the display's 5V supply rail.  Must be asserted BEFORE the
+              compositor sends frames (power-on) and de-asserted AFTER the
+              compositor stops (power-off) to avoid panel transients.
 """
 
 from __future__ import annotations
@@ -83,13 +88,21 @@ class DisplayPowerControl(Protocol):
     def write_power_on(self, on: bool) -> None:
         """Enable or disable the display output."""
 
+    def write_rail_on(self, on: bool) -> None:
+        """Assert or de-assert the display 5V supply rail via GPIO24."""
+
 
 class LiveDisplayPower:
     """Backlight driver for the Waveshare DSI panel.
 
     brightness writes go directly via sysfs file (group video, no sudo needed).
     power on/off goes via wlr-randr through the labwc Wayland compositor.
+    rail on/off drives GPIO24 → Phase 21 S8550 high-side switch.
     """
+
+    def __init__(self, display_rail_pin: int) -> None:
+        from gpiozero import OutputDevice  # noqa: PLC0415 — lazy: not available on non-Pi hosts
+        self._rail = OutputDevice(display_rail_pin, active_high=True, initial_value=False)
 
     @property
     def kind(self) -> str:
@@ -159,6 +172,15 @@ class LiveDisplayPower:
         except Exception:
             logger.exception("display_power: write power %s failed", "on" if on else "off")
 
+    def write_rail_on(self, on: bool) -> None:
+        try:
+            if on:
+                self._rail.on()
+            else:
+                self._rail.off()
+        except Exception:
+            logger.exception("display_power: write rail %s failed", "on" if on else "off")
+
 
 class MockDisplayPower:
     """In-memory backlight mock for dev hosts and tests."""
@@ -166,6 +188,7 @@ class MockDisplayPower:
     def __init__(self, initial_raw: int = 51) -> None:
         self._raw = max(BRIGHTNESS_RAW_MIN, min(BRIGHTNESS_RAW_MAX, initial_raw))
         self._power_on = True
+        self._rail_on = False
 
     @property
     def kind(self) -> str:
@@ -183,9 +206,14 @@ class MockDisplayPower:
     def write_power_on(self, on: bool) -> None:
         self._power_on = on
 
+    def write_rail_on(self, on: bool) -> None:
+        self._rail_on = on
 
-def build_display_power(hw_mode: str) -> DisplayPowerControl:
+
+def build_display_power(hw_mode: str, pins: "ProtoboardPins | None" = None) -> DisplayPowerControl:
     """Return a live or mock display power controller matching hw_mode."""
     if hw_mode == "live":
-        return LiveDisplayPower()
+        from pi_deck.hardware.protoboard_pins import ProtoboardPins  # noqa: PLC0415
+        p = pins or ProtoboardPins()
+        return LiveDisplayPower(display_rail_pin=p.display_power_en)
     return MockDisplayPower()
