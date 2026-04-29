@@ -61,7 +61,6 @@ Q8 collector current ramps up over ~100 ms (≈3τ), limiting the inrush to a gr
 |------|-----|
 | `S8550` PNP | Available; 1.5 A Ic — well above the display's ~0.3–0.5 A draw; handles soft-start dissipation at low duty cycle; Vce(sat) ≈ 0.2 V → display sees 4.8 V, within spec |
 | `2N3904` / `2N2222` NPN | Available; both are ideal for this low-current base-drive application; either works |
-| `IRFZ44N` N-channel MOSFET | **Not used.** This is a 49 A / 55 V motor-drive part; not logic-level at 3.3 V Vgs; N-channel high-side would require a charge pump. Retained for future motor-drive work |
 | `R21` 1 kΩ | Limits GPIO24 base current to ~3 mA into Q9 — well within GPIO source capability |
 | `R22` 10 kΩ | Holds Q9 base at GND when GPIO24 is floating (boot, reset) so display stays off |
 | `R23` 10 kΩ | Holds Q8 base at 5V (off) when Q9 is off; forms one leg of the voltage divider |
