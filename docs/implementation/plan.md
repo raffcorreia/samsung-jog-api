@@ -1059,6 +1059,8 @@ This creates two problems:
 - readers cannot easily tell whether a document is the current reference or a frozen phase artifact
 - the repository structure becomes harder to navigate because folder purpose and source-of-truth boundaries are not stated explicitly
 
+This phase must treat renames and moves as **compatibility-sensitive changes**. Hardware project files, generated artifacts, scripts, and Markdown links may already depend on current paths. A cleanup that breaks `KiCad` project references, fabrication outputs, or existing documentation links would make the repository cleaner in appearance while making it less usable in practice.
+
 The project should follow the same rule already used successfully in code: implementation history may be tracked by phase, but reusable artifacts should be named by purpose.
 
 ### Scope
@@ -1080,11 +1082,14 @@ The project should follow the same rule already used successfully in code: imple
 - decide and document where explanatory images belong versus artifact images generated from hardware work
 - add a top-level repository structure section or document that explains what each major folder is for
 - add local README/index files where needed so important directories explain themselves in place
+- inventory rename/move risks before changing paths, especially for `KiCad` projects, generated outputs, scripts, and Markdown references
+- update any affected `KiCad` project references, helper scripts, generated-file expectations, and document links as part of the same change
 - update links and textual references throughout the repo so all renamed docs resolve cleanly
 - add a `docs/hardware/README.md` or equivalent index that lists the hardware reference documents and what each one covers
 - ensure every important document has at least one obvious inbound link from the plan, README, an index page, or the relevant execution record
 - preserve provenance inside document content where useful, without using the filename itself as the historical record
 - confirm that later phases reference the renamed living docs rather than phase-scoped filenames
+- verify after each rename/move that `KiCad` projects still open correctly and that existing Markdown references still resolve
 
 ### Deliverables
 
@@ -1101,6 +1106,7 @@ The project should follow the same rule already used successfully in code: imple
 - the role of `backend/`, `frontend/`, `hardware/`, `docs/`, and other major folders is explicitly documented
 - important docs are reachable through obvious links rather than requiring directory browsing
 - later phases can continue adding documentation without reintroducing phase-scoped names for living artifacts
+- no repository cleanup in this phase leaves broken `KiCad` references, broken scripts, or broken Markdown links behind
 
 ## Phase 23: DDC Capability Investigation
 
