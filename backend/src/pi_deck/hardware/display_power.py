@@ -91,6 +91,9 @@ class DisplayPowerControl(Protocol):
     def write_rail_on(self, on: bool) -> None:
         """Assert or de-assert the display 5V supply rail via GPIO24."""
 
+    def reinit_panel(self) -> None:
+        """Re-initialize panel controller registers after a 5V power cycle."""
+
 
 class LiveDisplayPower:
     """Backlight driver for the Waveshare DSI panel.
@@ -181,6 +184,36 @@ class LiveDisplayPower:
         except Exception:
             logger.exception("display_power: write rail %s failed", "on" if on else "off")
 
+    def reinit_panel(self) -> None:
+        """Re-initialize the Waveshare panel controller after a 5V power cycle.
+
+        The ws_touchscreen driver writes these registers in probe() and enable(),
+        but probe() only runs at boot — it won't re-run after the panel loses power.
+        Force-writing via i2c -f bypasses the driver ownership lock so the panel
+        controller comes back without needing a reboot.
+
+        Registers (I2C bus 11, address 0x45):
+          0xc0, 0xc2, 0xac = panel init  (written in probe)
+          0xad = display enable          (written in enable)
+        """
+        cmds = [
+            ["i2cset", "-y", "-f", "11", "0x45", "0xc0", "0x01"],
+            ["i2cset", "-y", "-f", "11", "0x45", "0xc2", "0x01"],
+            ["i2cset", "-y", "-f", "11", "0x45", "0xac", "0x01"],
+            ["i2cset", "-y", "-f", "11", "0x45", "0xad", "0x01"],
+        ]
+        for cmd in cmds:
+            try:
+                result = subprocess.run(cmd, capture_output=True, timeout=3)
+                if result.returncode != 0:
+                    logger.warning(
+                        "display_power: reinit_panel %s failed (rc=%d)",
+                        cmd[5],
+                        result.returncode,
+                    )
+            except Exception:
+                logger.exception("display_power: reinit_panel %s failed", cmd[5])
+
 
 class MockDisplayPower:
     """In-memory backlight mock for dev hosts and tests."""
@@ -208,6 +241,9 @@ class MockDisplayPower:
 
     def write_rail_on(self, on: bool) -> None:
         self._rail_on = on
+
+    def reinit_panel(self) -> None:
+        pass
 
 
 def build_display_power(hw_mode: str, pins: "ProtoboardPins | None" = None) -> DisplayPowerControl:
