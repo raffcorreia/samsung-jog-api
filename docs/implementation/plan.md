@@ -996,6 +996,10 @@ Run the validation in this order so differences are attributable and the prior p
 - earlier infrastructure/preparation phase assumptions are either confirmed current or corrected in the relevant runbooks
 - host health gate passes on the Pi 5 after sustained kiosk use
 
+### Findings
+
+- **Click duration on Pi 5:** the Pi 5's faster CPU causes browser click events to complete too quickly for the monitor's JOG key debounce logic to register them. A brief hold (~100–200 ms) is required for the monitor to recognise a click. This was not observed on the Pi 2. Root cause is likely that the Pi 5 dispatches and resolves the pointer event faster than the Pi 2, shortening the effective contact time seen by the JOG drive circuit. Needs investigation to determine whether the fix is a software-side click duration floor, a pulse duration adjustment in the drive code, or both.
+
 ## Phase 21: Display Power Control Circuit
 
 ### Goal
