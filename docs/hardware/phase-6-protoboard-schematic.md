@@ -131,8 +131,8 @@ This block is added in Phase 21. It switches the display's 5V supply via a PNP h
 | `R21` | `1 kΩ` | `GPIO24` (physical pin 18) → Q9 base |
 | `R22` | `10 kΩ` | Q9 base → `GND` (default-off pull-down; holds display off during boot and reset) |
 | `R23` | `10 kΩ` | Pi 5V → Q8 base (default-off pull-up; keeps Q8 off when Q9 is off) |
-| `R24` | `4.7 kΩ` | Q9 collector → Q8 base junction (base drive resistor; forms voltage divider with R23) |
-| `C3` | `10 µF` electrolytic, + toward 5V | Q8 base junction → Pi 5V (soft-start: delays base pull-down, ramps collector current over ~100 ms, τ ≈ 32 ms) |
+| `R24` | `4.7 kΩ` | Q8 base junction → Q9 collector (base drive resistor; forms voltage divider with R23) |
+| `C3` | `10 µF` electrolytic, + toward 5V | Pi 5V → Q8 base junction (soft-start: delays base pull-down, ramps collector current over ~100 ms, τ ≈ 32 ms) |
 | `C4` | `100 µF` electrolytic, + toward display | `DISP_5V` → `GND` (bulk output capacitor; smooths load transients) |
 
 ### Net: `DISP_5V`
