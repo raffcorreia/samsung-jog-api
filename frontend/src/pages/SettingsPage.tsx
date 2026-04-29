@@ -1,9 +1,44 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fetchDisplayBrightness, setDisplayBrightness } from "../api/client";
+import { fetchDisplayBrightness, fetchNetworkInfo, setDisplayBrightness } from "../api/client";
+import type { NetworkInfo } from "../api/client";
 import { DECK_WIDGETS } from "../widgets/deckWidgets";
 import styles from "./SettingsPage.module.css";
+
+function NetworkPanel() {
+  const [info, setInfo] = useState<NetworkInfo | null>(null);
+
+  useEffect(() => {
+    fetchNetworkInfo()
+      .then(setInfo)
+      .catch(() => { /* non-critical */ });
+  }, []);
+
+  if (!info) return null;
+
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>Network</h2>
+      <div className={styles.row}>
+        <span className={styles.rowLabel}>Hostname</span>
+        <span className={styles.rowValue}>{info.hostname}</span>
+      </div>
+      {info.interfaces.map((iface) => (
+        <div className={styles.row} key={iface.name}>
+          <span className={styles.rowLabel}>
+            <span
+              className={iface.connected ? styles.dotOn : styles.dotOff}
+              aria-hidden="true"
+            />
+            {iface.name}
+          </span>
+          <span className={styles.rowValue}>{iface.ip ?? "—"}</span>
+        </div>
+      ))}
+    </section>
+  );
+}
 
 /** Debounce helper — only the last call within ``delay`` ms fires. */
 function useDebounce<T>(value: T, delay: number): T {
@@ -17,7 +52,6 @@ function useDebounce<T>(value: T, delay: number): T {
 
 function BrightnessSlider() {
   const [pct, setPct] = useState<number | null>(null);
-  const [busy, setBusy] = useState(false);
   const debouncedPct = useDebounce(pct, 250);
   const lastSentRef = useRef<number | null>(null);
 
@@ -35,10 +69,7 @@ function BrightnessSlider() {
     if (debouncedPct === null) return;
     if (debouncedPct === lastSentRef.current) return;
     lastSentRef.current = debouncedPct;
-    setBusy(true);
-    setDisplayBrightness(debouncedPct)
-      .then(() => setBusy(false))
-      .catch(() => setBusy(false));
+    setDisplayBrightness(debouncedPct).catch(() => {});
   }, [debouncedPct]);
 
   const displayPct = pct ?? 0;
@@ -49,7 +80,6 @@ function BrightnessSlider() {
         <span>Brightness</span>
         <span className={styles.sliderValue} data-testid="brightness-value">
           {pct === null ? "—" : `${displayPct}%`}
-          {busy && <span className={styles.busyDot} aria-hidden="true" />}
         </span>
       </div>
       <input
@@ -65,8 +95,8 @@ function BrightnessSlider() {
         onChange={(e) => setPct(Number(e.target.value))}
       />
       <p className={styles.sliderNote}>
-        Brightness is capped below the hardware maximum because values above 170/255 (≈ 67% of
-        hardware max) caused display artifacts during Phase 18 power testing.
+        Full 0–100% range is available. On Raspberry Pi 2 the safe ceiling was 170/255 due to
+        power-path limitations; Raspberry Pi 5 is stable at full brightness.
       </p>
     </div>
   );
@@ -80,6 +110,7 @@ export function SettingsPage() {
 
   return (
     <div className={styles.page} data-widget={DECK_WIDGETS.settings}>
+      <NetworkPanel />
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Appearance</h2>
         <div className={styles.row}>

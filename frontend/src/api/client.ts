@@ -311,6 +311,25 @@ export async function setDisplayPower(on: boolean): Promise<DisplayPower> {
   return (await r.json()) as DisplayPower;
 }
 
+// ── Phase 20: network info ────────────────────────────────────────────────
+
+export interface NetworkInterface {
+  name: string;
+  connected: boolean;
+  ip: string | null;
+}
+
+export interface NetworkInfo {
+  hostname: string;
+  interfaces: NetworkInterface[];
+}
+
+export async function fetchNetworkInfo(): Promise<NetworkInfo> {
+  const r = await fetch(`${apiBase()}/api/v1/system/network`);
+  if (!r.ok) throw new Error(`network info fetch failed: ${r.status}`);
+  return (await r.json()) as NetworkInfo;
+}
+
 export async function requestShutdown(): Promise<{ ok: boolean; message: string }> {
   const r = await fetch(`${apiBase()}/api/v1/system/shutdown`, { method: "POST" });
   if (!r.ok) throw new Error(`shutdown request failed: ${r.status}`);

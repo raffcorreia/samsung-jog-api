@@ -225,6 +225,44 @@ The following checks passed after cleanup:
 - `cloud-init` had clearly been used to bootstrap this image and left both configuration and state behind.
 - `bluez-firmware` remains installed even though `bluez` was removed. This is acceptable for the current conservative cleanup pass.
 
+## Pi 5 Host Differences (Phase 20 findings — 2026-04-28)
+
+When repeating Phase 1 on a Raspberry Pi 5 (`pi-deck5`, Debian 13 Trixie, kernel 6.12.75+rpt-rpi-2712 aarch64), the following differences apply:
+
+### IPv6 absent — apt fails before any operation
+
+The Pi 5 on this network has no IPv6 connectivity. `apt-get update` attempts IPv6 first and hangs. Fix this before any apt operation:
+
+```bash
+echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
+```
+
+This file must exist before running any `apt` command, including the initial cleanup.
+
+### Package baseline
+
+- Pi 5 starting package count: **645** (vs Pi 2 baseline not captured; Pi 2 was ~595 post-cleanup)
+- Pi 5 post-cleanup count: **583**
+- `rpi-connect-lite` was present on the Pi 5 image and was included in the purge set. If it is absent on a given image, omit it from the purge command.
+
+### Packages purged on Pi 5
+
+```bash
+sudo apt-get purge -y avahi-daemon bluez modemmanager rpi-connect-lite udisks2 cloud-init cloud-guest-utils rpi-cloud-init-mods
+sudo apt-get autoremove -y --purge
+```
+
+### EEPROM bootloader update (Pi 5 only)
+
+The Pi 5 EEPROM bootloader should be updated during host preparation. The Pi 2 does not have an EEPROM bootloader:
+
+```bash
+sudo rpi-eeprom-update -a
+# Then reboot to apply.
+```
+
+On this bring-up the bootloader was updated from `1746713597` (2025-05-08) to `1765222194` (2025-12-08).
+
 ## Open Issues
 
 - A backup image still needs to be created after this cleaned baseline is accepted.

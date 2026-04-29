@@ -2,13 +2,15 @@
 
 Two independent mechanisms are used:
 
-  brightness  /sys/class/backlight/10-0045/brightness   (group video, writable)
+  brightness  /sys/class/backlight/<bus>-0045/brightness   (group video, writable)
               0–255 raw; Phase 18 validated ceiling is 170.
+              Bus number differs by host: 10 on Pi 2, 11 on Pi 5 — auto-discovered.
 
-  power       wlr-randr --output DSI-1 --off / --on
+  power       wlr-randr --output <DSI-N> --off / --on
               Routes through the labwc Wayland compositor, which is the only
               mechanism that actually cuts panel power on this Pi/Waveshare setup.
               bl_power sysfs accepts writes but does not physically power the panel.
+              DSI output name differs by host: DSI-1 on Pi 2, DSI-2 on Pi 5 — auto-discovered.
 """
 
 from __future__ import annotations
@@ -21,11 +23,35 @@ from typing import Protocol, runtime_checkable
 
 logger = logging.getLogger(__name__)
 
-# Phase 18 validated safe brightness ceiling — do not raise without new testing.
-BRIGHTNESS_RAW_MAX = 170
+# Phase 18 cap was 170/255 (Pi 2 power-path limit). Phase 20 Pi 5 validation
+# confirmed full 255/255 is stable — cap lifted to hardware maximum.
+BRIGHTNESS_RAW_MAX = 255
 BRIGHTNESS_RAW_MIN = 0
 
-_SYSFS_BRIGHTNESS = Path("/sys/class/backlight/10-0045/brightness")
+_BACKLIGHT_DIR = Path("/sys/class/backlight")
+
+
+def _find_backlight_path() -> Path:
+    # Waveshare panel backlight controller is always at I2C address 0x45;
+    # the bus number varies by host (10 on Pi 2, 11 on Pi 5).
+    for candidate in sorted(_BACKLIGHT_DIR.iterdir()):
+        if candidate.name.endswith("-0045"):
+            return candidate / "brightness"
+    return _BACKLIGHT_DIR / "10-0045" / "brightness"  # legacy fallback
+
+
+def _find_dsi_output() -> str:
+    # DSI output name varies by host: DSI-1 on Pi 2, DSI-2 on Pi 5.
+    try:
+        result = subprocess.run(
+            ["wlr-randr"], capture_output=True, timeout=3, env=_WAYLAND_ENV
+        )
+        for line in result.stdout.decode(errors="replace").splitlines():
+            if line.startswith("DSI-"):
+                return line.split()[0]
+    except Exception:
+        pass
+    return "DSI-1"  # legacy fallback
 
 # Wayland compositor env — hardcoded because the API server may start without
 # a graphical session (e.g. via systemd user service or SSH).
@@ -71,7 +97,7 @@ class LiveDisplayPower:
 
     def read_brightness_raw(self) -> int:
         try:
-            return int(_SYSFS_BRIGHTNESS.read_text().strip())
+            return int(_find_backlight_path().read_text().strip())
         except Exception:
             logger.exception("display_power: read brightness failed")
             return 0
@@ -86,7 +112,7 @@ class LiveDisplayPower:
                 BRIGHTNESS_RAW_MAX,
             )
         try:
-            _SYSFS_BRIGHTNESS.write_text(str(clamped))
+            _find_backlight_path().write_text(str(clamped))
         except Exception:
             logger.exception("display_power: write brightness %d failed", clamped)
 
@@ -101,8 +127,9 @@ class LiveDisplayPower:
             output = result.stdout.decode(errors="replace")
             # Find the DSI-1 block and check "Enabled: yes"
             in_dsi = False
+            dsi_name = _find_dsi_output()
             for line in output.splitlines():
-                if line.startswith("DSI-1"):
+                if line.startswith(dsi_name):
                     in_dsi = True
                 elif in_dsi and not line.startswith(" "):
                     break
@@ -117,7 +144,7 @@ class LiveDisplayPower:
         flag = "--on" if on else "--off"
         try:
             result = subprocess.run(
-                ["wlr-randr", "--output", "DSI-1", flag],
+                ["wlr-randr", "--output", _find_dsi_output(), flag],
                 capture_output=True,
                 timeout=5,
                 env=_WAYLAND_ENV,

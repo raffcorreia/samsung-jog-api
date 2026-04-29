@@ -96,6 +96,51 @@ hostname: pi-deck
 
 Later feature phases (**10–28**) should append a fresh snapshot to their execution records per the [Host health gate](plan.md#host-health-gate-feature-phases-1028).
 
+## Pi 5 Differences (Phase 20 findings — 2026-04-28)
+
+When repeating Phase 9 on a Raspberry Pi 5 running `rpd-labwc` (Raspberry Pi Desktop Wayland session), the following differences apply:
+
+### lgpio build dependencies
+
+`lgpio` (the GPIO backend) requires native code to compile. On Pi 5 the pip build fails unless these are installed first:
+
+```bash
+sudo apt-get install -y swig python3-dev liblgpio-dev
+```
+
+Run this before `install_pi_deck_systemd.sh` or any `pip install` step.
+
+### Venv root ownership after install script
+
+`install_pi_deck_systemd.sh` must be run with `sudo` to install the systemd unit. On Pi 5 this leaves the virtualenv owned by root. After the install script completes, fix ownership:
+
+```bash
+sudo chown -R rafael:rafael ~/samsung-jog-api/backend/.venv
+```
+
+Without this, subsequent `pip install` calls in the venv fail with permission errors.
+
+### Kiosk autostart location — labwc, not XDG
+
+The `rpd-labwc` desktop session does **not** process `~/.config/autostart/` (XDG autostart). The install script (`install_pi_deck_kiosk_autostart.sh`) writes the `.desktop` file to that path, which is ignored. On Pi 5 the kiosk launcher must be placed in the labwc autostart file instead:
+
+```bash
+cat > ~/.config/labwc/autostart << 'EOF'
+#!/bin/sh
+# DSI panel backlight resets to 0 when DRM/labwc takes over.
+# Re-apply the persisted brightness value 4s after compositor init.
+(sleep 4 && brightness=$(cat ~/.pi-deck-brightness 2>/dev/null || echo 170) && bl=$(ls /sys/class/backlight/*-0045/brightness 2>/dev/null | head -1) && [ -n "$bl" ] && echo "$brightness" > "$bl") &
+/home/rafael/samsung-jog-api/scripts/kiosk/pi-deck-chromium-kiosk.sh &
+EOF
+chmod +x ~/.config/labwc/autostart
+```
+
+The brightness restore line (line 4) is also required — see Phase 19 Pi 5 differences.
+
+### Install script writes .desktop to root's home
+
+When `install_pi_deck_kiosk_autostart.sh` runs under sudo, it writes `pi-deck-kiosk.desktop` to root's home directory instead of the user's. On Pi 5 the labwc autostart approach above replaces the `.desktop` file mechanism entirely, so this is not a blocking issue — but be aware the `.desktop` file at `~/.config/autostart/pi-deck-kiosk.desktop` under the user account will not be auto-created.
+
 ## Deferred from Phase 9
 
 - **Kiosk pointer hiding:** the visible cursor on Wayland (labwc) was intentionally not finalized here; see [Phase 11 — Low-Level JOG Console UI](./plan.md#phase-11-low-level-jog-console-ui) (touch / kiosk polish).

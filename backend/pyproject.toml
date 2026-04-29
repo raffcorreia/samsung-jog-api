@@ -6,7 +6,6 @@ build-backend = "hatchling.build"
 name = "pi-deck"
 version = "0.1.0"
 description = "pi-deck: Raspberry Pi control deck backend (CJ791 JOG project)"
-readme = "../README.md"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.115",

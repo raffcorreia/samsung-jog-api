@@ -156,6 +156,74 @@ Result:
 | ADS1115 ADC polling, DDC/CI communication, and touch I2C traffic coexist without address conflicts or interference | Done. ADS observation works; DDC/CI Get VCP `0x60` succeeds on `/dev/i2c-2`; touch/panel remain on the DSI I2C mux path. |
 | Confirmed device address map is recorded | Done. DSI touch/panel path and HDMI DDC bus are recorded above. The project I2C bus remains `/dev/i2c-1`; HDMI DDC uses `/dev/i2c-2`; DSI touch/panel use `/dev/i2c-10` via `/dev/i2c-11`. |
 
+## Pi 5 Differences (Phase 20 findings — 2026-04-28)
+
+When repeating Phase 18 on a Raspberry Pi 5 (`pi-deck5`), the following differences apply. All code differences have already been fixed via auto-discovery — the notes below explain what to expect and what manual steps are still needed.
+
+### DSI connector name is DSI-2, not DSI-1
+
+The Pi 5 reports the DSI connector as `DSI-2` in DRM/KMS. Any script that references `DSI-1` by name will fail silently. The application code (`display_power.py`, `pi-deck-chromium-kiosk.sh`) now auto-discovers the DSI output name by parsing `wlr-randr` output at runtime, so no code change is needed. Expect `DSI-2` in `wlr-randr` output and in any compositor logs on Pi 5.
+
+### i2c-dev kernel module not loaded by default
+
+On Pi 5, `dtparam=i2c_arm=on` in `/boot/firmware/config.txt` enables the I2C hardware but does **not** load the `i2c-dev` kernel module that creates `/dev/i2c-*` devices. Without this module, `i2cdetect` finds nothing and the ADS1115 observation path fails silently.
+
+Fix (run once; survives reboot):
+
+```bash
+sudo modprobe i2c-dev
+echo 'i2c-dev' | sudo tee -a /etc/modules
+```
+
+Verify:
+
+```bash
+sudo /usr/sbin/i2cdetect -y 1   # expect ADS1115 at 0x48
+```
+
+Note: `i2cdetect` is at `/usr/sbin/i2cdetect` on Pi 5. It is not in the default SSH PATH — use the full path or `sudo i2cdetect`.
+
+### config.txt changes for Pi 5
+
+Under `[all]` in `/boot/firmware/config.txt`:
+
+```ini
+dtparam=i2c_arm=on
+dtoverlay=vc4-kms-dsi-waveshare-panel,8_0_inch
+```
+
+Do **not** add the `dsi0` parameter — same as Pi 2.
+
+### cmdline.txt — both HDMI ports must be disabled
+
+Pi 5 has two HDMI ports. To prevent either from becoming a compositor output and stealing the kiosk display, disable both in `/boot/firmware/cmdline.txt`:
+
+```
+video=HDMI-A-1:d video=HDMI-A-2:d
+```
+
+Pi 2 only needs `video=HDMI-A-1:d`.
+
+### Backlight sysfs path is 11-0045, not 10-0045
+
+The LP8557 backlight controller is at I2C address `0x45`. The bus number differs by host:
+
+| Host | Path |
+|------|------|
+| Pi 2 | `/sys/class/backlight/10-0045/brightness` |
+| Pi 5 | `/sys/class/backlight/11-0045/brightness` |
+
+The application code auto-discovers the correct path by scanning `/sys/class/backlight/` for any entry ending in `-0045`, so no manual change is needed.
+
+### I2C device map on Pi 5
+
+| Bus | Device | Notes |
+|-----|--------|-------|
+| `/dev/i2c-1` | ADS1115 at `0x48` | Project GPIO2/GPIO3 bus — same as Pi 2 |
+| `/dev/i2c-11` | Goodix touch at `0x14` (`UU`), backlight at `0x45` (`UU`) | DSI display bus — kernel owns these drivers |
+
+There is no separate `/dev/i2c-10` as on Pi 2. The HDMI DDC bus numbering is not fixed; it may change between reboots on Pi 5 depending on which devices enumerate.
+
 ## Final Operating Policy
 
 - Use the Waveshare DSI panel as the only kiosk visual output.

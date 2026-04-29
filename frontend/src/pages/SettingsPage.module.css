@@ -73,18 +73,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.busyDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse 0.8s ease-in-out infinite alternate;
-}
-
-@keyframes pulse {
-  from { opacity: 0.4; }
-  to   { opacity: 1; }
-}
 
 .slider {
   width: 100%;
@@ -102,6 +90,27 @@
   color: var(--muted);
   margin: 0;
   line-height: 1.5;
+}
+
+/* Phase 20: network status dots */
+.dotOn,
+.dotOff {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.dotOn {
+  background: #4caf50;
+}
+
+.dotOff {
+  background: var(--muted);
+  opacity: 0.5;
 }
 
 /* Phase 19: action button (e.g. Open color check) */

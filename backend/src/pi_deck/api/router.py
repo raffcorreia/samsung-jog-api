@@ -25,6 +25,8 @@ from pi_deck.models.schemas import (
     JogPressIn,
     JogReleaseIn,
     LogIn,
+    NetworkInfoOut,
+    NetworkInterfaceOut,
     OperatingModeIn,
     StatusOut,
     SystemShutdownOut,
@@ -318,6 +320,50 @@ def api_display_power_set(
     else:
         display.power_off()
     return DisplayPowerOut(on=display.is_on, brightness_pct=display.get_brightness_pct())
+
+
+@api_v1.get("/system/network", response_model=NetworkInfoOut)
+def api_system_network() -> NetworkInfoOut:
+    import socket
+    import subprocess
+    from pathlib import Path
+
+    hostname = socket.gethostname()
+    net_root = Path("/sys/class/net")
+    interfaces: list[NetworkInterfaceOut] = []
+
+    if net_root.exists():
+        for iface_path in sorted(net_root.iterdir()):
+            name = iface_path.name
+            if name == "lo":
+                continue
+            try:
+                operstate = (iface_path / "operstate").read_text().strip()
+                connected = operstate == "up"
+            except OSError:
+                connected = False
+
+            ip: str | None = None
+            try:
+                result = subprocess.run(
+                    ["ip", "-4", "-o", "addr", "show", name],
+                    capture_output=True,
+                    timeout=3,
+                )
+                for line in result.stdout.decode(errors="replace").splitlines():
+                    parts = line.split()
+                    for i, part in enumerate(parts):
+                        if part == "inet" and i + 1 < len(parts):
+                            ip = parts[i + 1].split("/")[0]
+                            break
+                    if ip:
+                        break
+            except Exception:
+                pass
+
+            interfaces.append(NetworkInterfaceOut(name=name, connected=connected, ip=ip))
+
+    return NetworkInfoOut(hostname=hostname, interfaces=interfaces)
 
 
 @api_v1.post("/system/shutdown", response_model=SystemShutdownOut)

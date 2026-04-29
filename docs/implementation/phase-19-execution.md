@@ -281,13 +281,49 @@ hostname: pi-deck
 
 Xwayland overhead is negligible: 560 MB RAM available (vs 540 MB at r89 baseline), swap still unused, temperature 47 °C (well inside 85 °C throttle ceiling), `get_throttled=0x0`.
 
+## Pi 5 Differences (Phase 20 findings — 2026-04-28)
+
+When repeating Phase 19 on a Raspberry Pi 5, several critical differences apply. These have all been fixed in the codebase, but understanding them is required to bring up a fresh Pi 5.
+
+### Brightness is NOT persisted by panel firmware on Pi 5
+
+On Pi 2, the Waveshare panel/LP8557 firmware retains the last written brightness value across a full reboot (sysfs value survives without any application restore). **This is not true on Pi 5.** The DRM/KMS driver resets the LP8557 backlight register to `0` when labwc takes over the display from the boot framebuffer. The panel goes black after every boot.
+
+The application now handles this entirely:
+
+- `DisplayService.set_brightness_pct()` persists the raw value to `~/.pi-deck-brightness` on every set.
+- `DisplayService.power_off()` persists the saved value before zeroing the backlight.
+- `~/.config/labwc/autostart` re-applies the persisted value 4 seconds after compositor init (required because the DRM reset happens during labwc startup, after the service is already running).
+
+The autostart brightness restore line (see Phase 9 Pi 5 notes) is mandatory on Pi 5. Without it, the display comes up black after every reboot regardless of what `DisplayService` persisted.
+
+### Sysfs cache/hardware mismatch after DRM reset
+
+After labwc takes over DRM, the sysfs file `/sys/class/backlight/11-0045/brightness` briefly retains its kernel-cached value from before the reset. Reading it reports the old number while the screen is physically black. Writing any value to the sysfs file sends a fresh I2C command to the LP8557 and immediately wakes the backlight. The autostart delay of 4 seconds is enough for the DRM takeover to settle before the write.
+
+### Chromium black screen — disable-gpu-vsync required
+
+On Pi 5 under Xwayland (labwc + Chromium in X11 mode), Chromium logs repeated `GetVSyncParametersIfAvailable() failed` errors and never commits any frames. The screen stays black even though the Chromium process is running. Fix: `--disable-gpu-vsync` in the Chromium args in `pi-deck-chromium-kiosk.sh`. This flag is already present in the kiosk script as of Phase 20.
+
+### wlr-randr targets DSI-2 on Pi 5
+
+`wlr-randr --output DSI-2 --off/--on` is required on Pi 5 (vs `DSI-1` on Pi 2). `display_power.py` now auto-discovers the DSI output name by parsing `wlr-randr` output, so no manual change is needed.
+
+### _raw_to_pct() clamping — fixed
+
+Before Phase 20, `_raw_to_pct()` could return values over 100% if the raw sysfs value exceeded `BRIGHTNESS_RAW_MAX` (e.g. `255` raw → `150%`). This caused a Pydantic `ValidationError` when the display was at hardware-default brightness on Pi 5. Fixed: the function now clamps to `min(100, ...)`.
+
+### Pi reset on display 5V power reconnect
+
+The same behavior observed on Pi 2: disconnecting and reconnecting the display's 5V power while the Pi is running causes a Pi reset. This is confirmed on Pi 5 as well. Do not hot-reconnect the display power. Backlight-only power-off (`brightness=0`) remains the practical power-saving mechanism.
+
 ## Exit Criteria Review
 
 | Criterion | Status |
 |-----------|--------|
 | Display can be powered off and back on from the UI/API without destabilizing the kiosk session | Done. Power off/on via `/api/v1/display/power` verified live. Kiosk session unaffected. |
 | Pi shutdown flow requires explicit confirmation or countdown completion and can be cancelled | Done. Power menu → Pi → 5-second countdown with Now/Cancel. Cancel returns to menu; Now calls `/api/v1/system/shutdown`. |
-| Brightness behavior after reboot is explicitly tested and documented | Done. Panel firmware persists brightness; no app-level restore needed. |
+| Brightness behavior after reboot is explicitly tested and documented | Done (Pi 2). Panel firmware persists brightness on Pi 2; no app-level restore needed. On Pi 5 the DRM reset clears the backlight — app-level persistence via `~/.pi-deck-brightness` and labwc autostart restore is required. See Pi 5 Differences section. |
 | Brightness cannot exceed 170/255 through the UI/API | Done. `BRIGHTNESS_RAW_MAX = 170` enforced in `LiveDisplayPower.write_brightness_raw()` and `MockDisplayPower.write_brightness_raw()`. API validates `brightness_pct ∈ [0, 100]`; raw is derived as `round(pct × 170 / 100)`. |
 | Color/edge validation page renders correctly on the DSI panel | Done. Route `/color-check` deployed; page contains solid swatches, grayscale gradient, small/normal/large text, and 1px edge lines at all four corners. |
 | Power/throttle measurements recorded for the capped brightness range | Done. See benchmark table above. |

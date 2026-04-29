@@ -246,3 +246,18 @@ class SystemShutdownOut(BaseModel):
 
     ok: bool
     message: str
+
+
+class NetworkInterfaceOut(BaseModel):
+    """Single network interface entry."""
+
+    name: str
+    connected: bool
+    ip: str | None
+
+
+class NetworkInfoOut(BaseModel):
+    """Hostname and all non-loopback network interfaces (Phase 20)."""
+
+    hostname: str
+    interfaces: list[NetworkInterfaceOut]

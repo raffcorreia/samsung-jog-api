@@ -43,7 +43,23 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
           title="Open recording workspace"
           onClick={() => setRecordingsOpen(true)}
         >
-          <span className={styles.recordGlyph} aria-hidden="true" />
+          <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"
+            style={{ filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.4))" }}
+          >
+            {/* Outer ring — stroke only, no fill gradient */}
+            <circle cx="24" cy="24" r="22"
+              fill="rgba(18,24,32,0.72)"
+              stroke="rgba(255,100,90,0.65)"
+              strokeWidth="1.25"
+            />
+            {/* Inner red dot — flat fill */}
+            <circle cx="24" cy="24" r="9"
+              fill="#e05a52"
+              style={{ filter: "drop-shadow(0 0 5px rgba(255,80,70,0.8))" }}
+            />
+            {/* Specular */}
+            <ellipse cx="20.5" cy="19.5" rx="3.5" ry="2.2" fill="rgba(255,255,255,0.25)" />
+          </svg>
         </button>
 
         <JogWidget>
