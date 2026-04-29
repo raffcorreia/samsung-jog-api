@@ -4896,7 +4896,7 @@
 	)
 	(text "Phase 21: Display Power Control"
 		(exclude_from_sim no)
-		(at 210 82 0)
+		(at 213 85 0)
 		(effects
 			(font
 				(size 1.8 1.8)
@@ -4906,7 +4906,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:S8550")
-		(at 230 100 0)
+		(at 254 104.14 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4916,7 +4916,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007001")
 		(property "Reference" "Q8"
-			(at 235.08 105.08 0)
+			(at 259.08 109.22 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4927,7 +4927,7 @@
 			)
 		)
 		(property "Value" "S8550"
-			(at 235.08 93.65 0)
+			(at 259.08 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4938,7 +4938,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
-			(at 230 100 0)
+			(at 254 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4949,7 +4949,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 230 100 0)
+			(at 254 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4960,7 +4960,7 @@
 			)
 		)
 		(property "Description" "Display 5V high-side switch"
-			(at 230 100 0)
+			(at 254 104.14 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4990,7 +4990,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:2N3904")
-		(at 230 150 0)
+		(at 228.6 129.54 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5000,7 +5000,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007002")
 		(property "Reference" "Q9"
-			(at 235.08 155.08 0)
+			(at 233.68 134.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5011,7 +5011,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 235.08 143.65 0)
+			(at 233.68 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5022,7 +5022,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
-			(at 230 150 0)
+			(at 228.6 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5033,7 +5033,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 230 150 0)
+			(at 228.6 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5044,7 +5044,7 @@
 			)
 		)
 		(property "Description" "GPIO24 driver NPN"
-			(at 230 150 0)
+			(at 228.6 129.54 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5074,7 +5074,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 213 150 90)
+		(at 213.36 129.54 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5084,7 +5084,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007003")
 		(property "Reference" "R21"
-			(at 210.46 152.54 0)
+			(at 210.82 132.08 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5095,7 +5095,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 210.46 148.73 0)
+			(at 210.82 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5106,7 +5106,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 213 150 90)
+			(at 213.36 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5117,7 +5117,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 213 150 90)
+			(at 213.36 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5128,7 +5128,7 @@
 			)
 		)
 		(property "Description" "GPIO24 base resistor"
-			(at 213 150 90)
+			(at 213.36 129.54 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5155,7 +5155,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 224.92 163 0)
+		(at 218.44 134.62 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5165,7 +5165,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007004")
 		(property "Reference" "R22"
-			(at 227.46 161.98 0)
+			(at 220.98 133.6 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5176,7 +5176,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 227.46 164.01 0)
+			(at 220.98 135.63 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5187,7 +5187,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 224.92 163 0)
+			(at 218.44 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5198,7 +5198,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 224.92 163 0)
+			(at 218.44 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5209,7 +5209,7 @@
 			)
 		)
 		(property "Description" "Q9 base default-off pull-down"
-			(at 224.92 163 0)
+			(at 218.44 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5236,7 +5236,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 215 95 0)
+		(at 231.14 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5246,7 +5246,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007005")
 		(property "Reference" "R23"
-			(at 217.54 93.98 0)
+			(at 233.68 98.04 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5257,7 +5257,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 217.54 96.01 0)
+			(at 233.68 100.07 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5268,7 +5268,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 215 95 0)
+			(at 231.14 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5279,7 +5279,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 215 95 0)
+			(at 231.14 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5290,7 +5290,7 @@
 			)
 		)
 		(property "Description" "Q8 base pull-up to +5V"
-			(at 215 95 0)
+			(at 231.14 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5317,7 +5317,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:R")
-		(at 232.54 128 0)
+		(at 231.14 109.22 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5327,7 +5327,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007006")
 		(property "Reference" "R24"
-			(at 235.08 126.98 0)
+			(at 233.68 108.2 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5338,7 +5338,7 @@
 			)
 		)
 		(property "Value" "4.7k"
-			(at 235.08 129.01 0)
+			(at 233.68 110.23 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5349,7 +5349,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal"
-			(at 232.54 128 0)
+			(at 231.14 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5360,7 +5360,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 232.54 128 0)
+			(at 231.14 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5371,7 +5371,7 @@
 			)
 		)
 		(property "Description" "Q9 collector to Q8 base drive"
-			(at 232.54 128 0)
+			(at 231.14 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5398,7 +5398,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:C_Polarized")
-		(at 222 95 0)
+		(at 238.76 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5408,7 +5408,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007007")
 		(property "Reference" "C3"
-			(at 224.54 96.27 0)
+			(at 241.3 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5419,7 +5419,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 224.54 93.73 0)
+			(at 241.3 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5430,7 +5430,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm"
-			(at 222 95 0)
+			(at 238.76 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5441,7 +5441,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 222 95 0)
+			(at 238.76 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5452,7 +5452,7 @@
 			)
 		)
 		(property "Description" "Soft-start cap: Q8 base to +5V, tau~32ms"
-			(at 222 95 0)
+			(at 238.76 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5479,7 +5479,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:C_Polarized")
-		(at 244 115 0)
+		(at 265.43 114.3 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5489,7 +5489,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007008")
 		(property "Reference" "C4"
-			(at 246.54 116.27 0)
+			(at 267.97 115.57 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5500,7 +5500,7 @@
 			)
 		)
 		(property "Value" "100u"
-			(at 246.54 113.73 0)
+			(at 267.97 113.03 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5511,7 +5511,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
-			(at 244 115 0)
+			(at 265.43 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5522,7 +5522,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 244 115 0)
+			(at 265.43 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5533,7 +5533,7 @@
 			)
 		)
 		(property "Description" "Bulk output cap: DISP_5V to GND"
-			(at 244 115 0)
+			(at 265.43 114.3 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5560,7 +5560,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.08 150) (xy 224.92 150)
+			(xy 231.14 104.14) (xy 248.92 104.14)
 		)
 		(stroke
 			(width 0)
@@ -5570,7 +5570,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.92 157.92) (xy 224.92 150)
+			(xy 238.76 102.87) (xy 238.76 104.14)
 		)
 		(stroke
 			(width 0)
@@ -5580,7 +5580,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.54 133.08) (xy 232.54 144.92)
+			(xy 231.14 114.3) (xy 231.14 124.46)
 		)
 		(stroke
 			(width 0)
@@ -5588,14 +5588,36 @@
 		)
 		(uuid "66666666-0000-4000-8000-000000007093")
 	)
-	(junction
-		(at 224.92 150)
-		(diameter 0)
-		(color 0 0 0 0)
+	(wire
+		(pts
+			(xy 218.44 129.54) (xy 223.52 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
 		(uuid "66666666-0000-4000-8000-000000007094")
 	)
+	(junction
+		(at 231.14 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "66666666-0000-4000-8000-000000007095")
+	)
+	(junction
+		(at 238.76 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "66666666-0000-4000-8000-000000007096")
+	)
+	(junction
+		(at 218.44 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "66666666-0000-4000-8000-000000007097")
+	)
 	(label "+5V"
-		(at 232.54 94.92 0)
+		(at 231.14 93.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5605,7 +5627,7 @@
 		(uuid "66666666-0000-4000-8000-0000000070a1")
 	)
 	(label "+5V"
-		(at 215 89.92 0)
+		(at 256.54 99.06 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5615,7 +5637,7 @@
 		(uuid "66666666-0000-4000-8000-0000000070a2")
 	)
 	(label "+5V"
-		(at 222 91.19 0)
+		(at 238.76 95.25 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5625,7 +5647,7 @@
 		(uuid "66666666-0000-4000-8000-0000000070a3")
 	)
 	(label "DISP_5V"
-		(at 232.54 105.08 0)
+		(at 256.54 109.22 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5635,7 +5657,7 @@
 		(uuid "66666666-0000-4000-8000-0000000070a4")
 	)
 	(label "DISP_5V"
-		(at 244 111.19 0)
+		(at 265.43 110.49 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5644,8 +5666,8 @@
 		)
 		(uuid "66666666-0000-4000-8000-0000000070a5")
 	)
-	(label "DISP_GATE"
-		(at 224.92 100 0)
+	(label "GND"
+		(at 231.14 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5654,8 +5676,8 @@
 		)
 		(uuid "66666666-0000-4000-8000-0000000070a6")
 	)
-	(label "DISP_GATE"
-		(at 215 100.08 0)
+	(label "GND"
+		(at 218.44 139.7 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5664,8 +5686,8 @@
 		)
 		(uuid "66666666-0000-4000-8000-0000000070a7")
 	)
-	(label "DISP_GATE"
-		(at 222 98.81 0)
+	(label "GND"
+		(at 265.43 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5674,8 +5696,8 @@
 		)
 		(uuid "66666666-0000-4000-8000-0000000070a8")
 	)
-	(label "DISP_GATE"
-		(at 232.54 122.92 0)
+	(label "GPIO24"
+		(at 208.28 129.54 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5683,46 +5705,6 @@
 			(justify left bottom)
 		)
 		(uuid "66666666-0000-4000-8000-0000000070a9")
-	)
-	(label "GPIO24"
-		(at 207.92 150 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070aa")
-	)
-	(label "GND"
-		(at 232.54 155.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070ab")
-	)
-	(label "GND"
-		(at 224.92 168.08 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070ac")
-	)
-	(label "GND"
-		(at 244 118.81 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070ad")
 	)
 	(sheet_instances
 		(path "/"
