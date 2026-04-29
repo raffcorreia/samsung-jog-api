@@ -609,6 +609,139 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Phase6:C_Polarized"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 2.032 1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "C"
+				(at 2.032 -1.016 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Polarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_Polarized_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 2.032 -0.762)
+					(mid 0 -1.397)
+					(end -2.032 -0.762)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(text "+"
+					(at -1.524 1.778 0)
+					(effects
+						(font
+							(size 0.762 0.762)
+						)
+					)
+				)
+			)
+			(symbol "C_Polarized_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 3.048)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 3.048)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Phase6:Conn_01x04"
 			(pin_names
 				(offset 1.016)
@@ -1075,110 +1208,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:PWR_FLAG"
-			(power global)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "#FLG"
-				(at 0 1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "PWR_FLAG"
-				(at 0 3.81 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Special symbol for telling ERC where power comes from"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "PWR_FLAG_0_0"
-				(pin power_out line
-					(at 0 0 90)
-					(length 0)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "PWR_FLAG_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Phase6:S8550"
 			(pin_names
 				(offset 0)
@@ -1375,24 +1404,33 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Phase6:C_Polarized"
+		(symbol "power:PWR_FLAG"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "C"
-				(at 2.032 1.016 0)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
 				(show_name no)
 				(do_not_autoplace no)
+				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "C"
-				(at 2.032 -1.016 0)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1412,7 +1450,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "~"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1423,7 +1461,7 @@
 					)
 				)
 			)
-			(property "Description" "Polarized capacitor"
+			(property "Description" "Special symbol for telling ERC where power comes from"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1434,45 +1472,11 @@
 					)
 				)
 			)
-			(symbol "C_Polarized_0_1"
-				(polyline
-					(pts
-						(xy -2.032 0.762) (xy 2.032 0.762)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -2.032 -0.762)
-					(mid 0 -1.397)
-					(end 2.032 -0.762)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(text "+"
-					(at -1.524 1.778 0)
-					(effects
-						(font
-							(size 0.762 0.762)
-						)
-					)
-				)
-			)
-			(symbol "C_Polarized_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 3.048)
-					(name "~"
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1487,22 +1491,18 @@
 						)
 					)
 				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 3.048)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
 					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
 					)
 				)
 			)
@@ -1579,6 +1579,28 @@
 		)
 		(uuid "66666666-0000-4000-8000-000000004007")
 	)
+	(text "Phase 21: Display Power Control"
+		(exclude_from_sim no)
+		(at 213 85 0)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070ae")
+	)
+	(junction
+		(at 231.14 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "66666666-0000-4000-8000-000000007095")
+	)
+	(junction
+		(at 218.44 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "66666666-0000-4000-8000-000000007097")
+	)
 	(junction
 		(at 53.34 27.94)
 		(diameter 0)
@@ -1590,6 +1612,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8c68099e-f281-4cf3-b637-eacacc947343")
+	)
+	(junction
+		(at 242.57 104.14)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c7b999ac-3ccb-456d-a37f-2bd98c00a200")
 	)
 	(no_connect
 		(at 91.44 36.83)
@@ -1612,6 +1640,26 @@
 			(type default)
 		)
 		(uuid "019298d2-93db-44a7-9598-5531a98a3668")
+	)
+	(wire
+		(pts
+			(xy 255.27 115.57) (xy 255.27 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "378fcbbd-647f-4ee7-8676-5efab5a34c61")
+	)
+	(wire
+		(pts
+			(xy 255.27 128.27) (xy 255.27 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5696398e-644d-4ada-be01-8c5a471dca20")
 	)
 	(wire
 		(pts
@@ -1975,6 +2023,56 @@
 	)
 	(wire
 		(pts
+			(xy 231.14 104.14) (xy 242.57 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000007091")
+	)
+	(wire
+		(pts
+			(xy 242.57 102.87) (xy 242.57 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000007092")
+	)
+	(wire
+		(pts
+			(xy 231.14 114.3) (xy 231.14 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000007093")
+	)
+	(wire
+		(pts
+			(xy 218.44 129.54) (xy 223.52 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66666666-0000-4000-8000-000000007094")
+	)
+	(wire
+		(pts
+			(xy 242.57 104.14) (xy 248.92 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "88ffa86e-2804-4fe9-8f9b-8d123cb75a50")
+	)
+	(wire
+		(pts
 			(xy 53.34 31.75) (xy 53.34 27.94)
 		)
 		(stroke
@@ -1982,6 +2080,16 @@
 			(type default)
 		)
 		(uuid "8d459525-af44-4366-94e1-c8fb7e3fa1d4")
+	)
+	(wire
+		(pts
+			(xy 196.85 129.54) (xy 208.28 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d565e025-0d9f-45da-9259-037da5c4cda3")
 	)
 	(label "GND"
 		(at 38.1 49.53 0)
@@ -2412,6 +2520,96 @@
 			(justify left bottom)
 		)
 		(uuid "66666666-0000-4000-8000-000000003046")
+	)
+	(label "+5V"
+		(at 231.14 93.98 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a1")
+	)
+	(label "+5V"
+		(at 256.54 99.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a2")
+	)
+	(label "+5V"
+		(at 242.57 95.25 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a3")
+	)
+	(label "DISP_5V"
+		(at 256.54 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a4")
+	)
+	(label "DISP_5V"
+		(at 255.27 115.57 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a5")
+	)
+	(label "GND"
+		(at 231.14 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a6")
+	)
+	(label "GND"
+		(at 218.44 139.7 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a7")
+	)
+	(label "GND"
+		(at 255.27 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a8")
+	)
+	(label "GPIO24"
+		(at 196.85 129.54 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "66666666-0000-4000-8000-0000000070a9")
 	)
 	(symbol
 		(lib_id "Phase6:Conn_01x04")
@@ -4894,16 +5092,6 @@
 			)
 		)
 	)
-	(text "Phase 21: Display Power Control"
-		(exclude_from_sim no)
-		(at 213 85 0)
-		(effects
-			(font
-				(size 1.8 1.8)
-			)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070ae")
-	)
 	(symbol
 		(lib_id "Phase6:S8550")
 		(at 254 104.14 0)
@@ -4927,7 +5115,7 @@
 			)
 		)
 		(property "Value" "S8550"
-			(at 259.08 97.79 0)
+			(at 259.334 102.108 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5011,7 +5199,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 233.68 123.19 0)
+			(at 234.188 127.508 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5084,7 +5272,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007003")
 		(property "Reference" "R21"
-			(at 210.82 132.08 0)
+			(at 212.344 128.016 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5095,7 +5283,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 210.82 128.27 0)
+			(at 214.376 127.254 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5398,7 +5586,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:C_Polarized")
-		(at 238.76 99.06 0)
+		(at 242.57 99.06 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5408,7 +5596,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007007")
 		(property "Reference" "C3"
-			(at 241.3 100.33 0)
+			(at 245.11 100.33 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5419,7 +5607,7 @@
 			)
 		)
 		(property "Value" "10u"
-			(at 241.3 97.79 0)
+			(at 245.11 97.79 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5430,7 +5618,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_THT:CP_Radial_D5.0mm_P2.50mm"
-			(at 238.76 99.06 0)
+			(at 242.57 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5441,7 +5629,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 238.76 99.06 0)
+			(at 242.57 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5452,7 +5640,7 @@
 			)
 		)
 		(property "Description" "Soft-start cap: Q8 base to +5V, tau~32ms"
-			(at 238.76 99.06 0)
+			(at 242.57 99.06 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5479,7 +5667,7 @@
 	)
 	(symbol
 		(lib_id "Phase6:C_Polarized")
-		(at 265.43 114.3 0)
+		(at 255.27 121.92 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5489,7 +5677,7 @@
 		(dnp no)
 		(uuid "66666666-0000-4000-8000-000000007008")
 		(property "Reference" "C4"
-			(at 267.97 115.57 0)
+			(at 257.81 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5500,7 +5688,7 @@
 			)
 		)
 		(property "Value" "100u"
-			(at 267.97 113.03 0)
+			(at 257.81 120.65 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5511,7 +5699,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
-			(at 265.43 114.3 0)
+			(at 255.27 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5522,7 +5710,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 265.43 114.3 0)
+			(at 255.27 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5533,7 +5721,7 @@
 			)
 		)
 		(property "Description" "Bulk output cap: DISP_5V to GND"
-			(at 265.43 114.3 0)
+			(at 255.27 121.92 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5557,154 +5745,6 @@
 				)
 			)
 		)
-	)
-	(wire
-		(pts
-			(xy 231.14 104.14) (xy 248.92 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66666666-0000-4000-8000-000000007091")
-	)
-	(wire
-		(pts
-			(xy 238.76 102.87) (xy 238.76 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66666666-0000-4000-8000-000000007092")
-	)
-	(wire
-		(pts
-			(xy 231.14 114.3) (xy 231.14 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66666666-0000-4000-8000-000000007093")
-	)
-	(wire
-		(pts
-			(xy 218.44 129.54) (xy 223.52 129.54)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66666666-0000-4000-8000-000000007094")
-	)
-	(junction
-		(at 231.14 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "66666666-0000-4000-8000-000000007095")
-	)
-	(junction
-		(at 238.76 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "66666666-0000-4000-8000-000000007096")
-	)
-	(junction
-		(at 218.44 129.54)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "66666666-0000-4000-8000-000000007097")
-	)
-	(label "+5V"
-		(at 231.14 93.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a1")
-	)
-	(label "+5V"
-		(at 256.54 99.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a2")
-	)
-	(label "+5V"
-		(at 238.76 95.25 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a3")
-	)
-	(label "DISP_5V"
-		(at 256.54 109.22 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a4")
-	)
-	(label "DISP_5V"
-		(at 265.43 110.49 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a5")
-	)
-	(label "GND"
-		(at 231.14 134.62 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a6")
-	)
-	(label "GND"
-		(at 218.44 139.7 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a7")
-	)
-	(label "GND"
-		(at 265.43 118.11 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a8")
-	)
-	(label "GPIO24"
-		(at 208.28 129.54 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "66666666-0000-4000-8000-0000000070a9")
 	)
 	(sheet_instances
 		(path "/"

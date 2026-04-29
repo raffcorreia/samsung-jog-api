@@ -85,6 +85,7 @@ async def lifespan(app: FastAPI):
     observation.start(asyncio.get_running_loop())
     display_hw = build_display_power(hw.kind)
     display = DisplayService(display_hw)
+    display.power_on()
     system = SystemService(hw.kind)
     app.state.ws_hub = hub
     app.state.live_log = live_log
