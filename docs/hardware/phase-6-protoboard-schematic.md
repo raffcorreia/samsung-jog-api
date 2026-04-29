@@ -31,6 +31,8 @@ There is no `J2` or `J3` header in this phase.
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
 | `RIGHT` drive | `GPIO26`, physical pin `37` |
+| `display_power_en` output (Phase 21) | `GPIO24`, physical pin `18` |
+| `5V power rail for display branch` (Phase 21) | physical pin `2` |
 
 ![Phase 6 Raspberry Pi pinout](../assets/hardware/phase-6-raspberry-pi-pinout.svg)
 
@@ -141,13 +143,6 @@ The display's 5V supply wire is disconnected from the Pi 5V header and reconnect
 
 - **GPIO24 LOW** (boot default): Q9 off → Q8 base held at 5V by R23 → Q8 off → `DISP_5V` = 0 V → display unpowered.
 - **GPIO24 HIGH**: Q9 saturated → Q8 base pulled to ~1.7 V via R23/R24 divider → Q8 on → `DISP_5V` rises to ~4.8 V (Vce(sat) ≈ 0.2 V drop).
-
-### Raspberry Pi pin additions (Phase 21)
-
-| Pi Function | Raspberry Pi Pin |
-| --- | --- |
-| `display_power_en` output | `GPIO24`, physical pin `18` |
-| `5V power rail for display branch` | physical pin `2` |
 
 ## Important Interpretation
 
