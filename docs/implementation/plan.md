@@ -1357,6 +1357,16 @@ A cleaner structure would emit the build to a dedicated directory outside `src/`
 
 Worth addressing before significant UI expansion (Phase 13 onward) adds more build output assumptions on top of the current layout.
 
+### Documentation reorganization
+
+As the project grows, some documentation file names and locations have become misleading or hard to navigate:
+
+- **Phase-scoped names on shared artifacts.** `docs/hardware/phase-6-protoboard-schematic.md` and `docs/hardware/phase-6-protoboard-bom.md` are named after the phase that created them, but later phases (e.g. Phase 21) extend the same protoboard and reference these files directly. The name implies the files belong to Phase 6 when they are actually the living reference for the entire protoboard build. Consider renaming to names that reflect what the file *is*, not what phase first created it — e.g. `protoboard-schematic.md`, `protoboard-bom.md`, `pi5-gpio-schema.md`.
+
+- **Orphaned or weakly linked documents.** Several files under `docs/hardware/` and `docs/implementation/` are not explicitly linked from any other document that a reader would naturally arrive at. Every document should have at least one inbound link — from the relevant phase execution record, from the plan, or from a hardware index page. Before this is addressed, adding a `docs/hardware/README.md` (or an index section in an existing file) that lists every hardware reference document and what it covers would make the structure navigable.
+
+A dedicated documentation-tidy phase or a pre-stabilization pass should address both issues. No phase should be blocked waiting on this, but the rename should happen before the protoboard wiring is handed off or the project reaches Phase 28/29 stabilization.
+
 ### CI/CD and update strategy
 
 The current deploy model (`scripts/deploy.sh`: build → rsync → restart → reload) is intentional for Phase 12 but has known limitations as the project matures:
