@@ -90,7 +90,7 @@ export function TopBar({ title }: { title?: string }) {
           <button
             className={`${styles.powerBtn}${displayOn ? "" : ` ${styles.powerBtnOff}`}`}
             type="button"
-            aria-label={displayOn ? "Power menu" : "Turn display on"}
+            aria-label={displayOn ? "Deck display menu" : "Turn deck display on"}
             data-testid="top-bar-power"
             onClick={() => void handlePowerClick()}
           >
@@ -105,8 +105,8 @@ export function TopBar({ title }: { title?: string }) {
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <path d="M12 2v10" />
-              <path d="M8.56 5a8 8 0 1 0 6.88 0" />
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <path d="M8 21h8M12 17v4" />
             </svg>
           </button>
 

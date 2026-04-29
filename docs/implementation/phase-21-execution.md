@@ -127,7 +127,22 @@ Implemented in `DisplayService` (`display_service.py`) and `LiveDisplayPower` (`
 
 **Power-off sequence (GPIO24 last):** save brightness → backlight 0 → `wlr-randr --off` → GPIO24 LOW
 
-**Power-on sequence (GPIO24 first):** GPIO24 HIGH → 150 ms → `wlr-randr --on` → restore brightness
+**Power-on sequence (GPIO24 first):** GPIO24 HIGH → 150 ms → `reinit_panel()` → `wlr-randr --on` → restore brightness
+
+The `reinit_panel()` step was added after discovering that the Waveshare panel controller (I2C bus 11, address 0x45) loses its register state on every 5V power cycle. The Linux driver (`ws_touchscreen`) only writes init registers in `probe()`, which runs once at boot and never again. After a power cycle the panel stays blank even after `wlr-randr --on`. Fix: force-write the same registers via `i2cset -y -f` before the compositor resumes — the `-f` flag bypasses the driver's ownership lock.
+
+Registers written on every power-on (sourced from `panel-waveshare-dsi.c` `probe()` and `enable()`):
+
+| Register | Value | Origin | Purpose |
+|----------|-------|--------|---------|
+| `0xc0` | `0x01` | `probe()` | Panel init — exact function undocumented; part of Waveshare proprietary MCU init sequence |
+| `0xc2` | `0x01` | `probe()` | Panel init — as above |
+| `0xac` | `0x01` | `probe()` | Panel init — as above |
+| `0xad` | `0x01` | `enable()` | Display enable (0x00 = off, 0x01 = on) |
+
+The Waveshare MCU controller at 0x45 does not have a public datasheet. The three probe registers (`0xc0`, `0xc2`, `0xac`) have no documented meaning; skipping any of them is untested and not recommended — they are written as a unit in the kernel driver. The `0xad` register is the display on/off control and is clearly required.
+
+Tested: `power_off()` → 5V disconnect → reconnect → `power_on()` — image and backlight restored fully. Validated twice in succession.
 
 ## Validation Plan
 
@@ -145,12 +160,39 @@ Implemented in `DisplayService` (`display_service.py`) and `LiveDisplayPower` (`
 - `DisplayService` power sequences use GPIO24 in the correct order
 - host health gate passes after sustained cycling
 
+## Wiring Findings (Protoboard Assembly)
+
+### Display 5V wiring error
+
+During initial assembly the display's 5V input was connected to the Pi's **3.3V** rail (physical pin 1) instead of the 5V rail (physical pin 2). Symptoms:
+
+- Display backlight turned on but image was dim and colours were washed out.
+- Maximum brightness was limited (raw 170 appeared to cap at reduced output).
+- Phase 21 transistor circuit (Q8/Q9) produced unexpected collector voltages due to the wrong supply reference.
+
+After rewiring to the correct 5V rail:
+- Colours improved noticeably.
+- Full brightness range (`0–255 raw`, `0–100%`) is now accessible.
+- Power draw: **5.06 V / 0.60 A** (display on), **5.07 V / 0.48 A** (display 5V disconnected) — ~120 mA / ~610 mW saved with display off.
+
+### Q9 (2N3904) transistor issue
+
+Q9's emitter and collector are swapped on the protoboard. The 2N3904 was operating in reverse-active mode with near-zero current gain:
+
+- With GPIO24 HIGH and Q9 E-C swapped: base of Q8 measured 4.3 V instead of the expected 1.7 V pull-down.
+- Q8 (S8550) remained off; collector held at 2.7 V rather than switching to near-0 V.
+
+The 0.7 V signature (4.3 V = 5 V − 0.7 V base-emitter drop in reverse) confirmed E-C reversal. The circuit was **bypassed** for Phase 21 testing: display connected directly to Pi 5V. GPIO24 control via the transistor circuit remains to be validated after correcting Q9's pinout.
+
 ## Evidence Checklist
 
-- ⬜ Circuit assembled on protoboard per wiring instructions above
-- ⬜ Turn-on voltage ramp measured and documented (DISP_5V rise time)
+- ✅ Circuit assembled on protoboard (bypassed — display on Pi 5V directly; Q9 pinout needs correction)
+- ✅ Software power-off/on sequence validated with manual 5V disconnect (2 × confirmed)
+- ✅ `reinit_panel()` confirmed to restore image after 5V power cycle
+- ✅ Boot-state confirmed: display on at service startup via `display.power_on()` in lifespan
+- ✅ API endpoints tested end-to-end
+- ⬜ Q9 (2N3904) pinout corrected and GPIO24 circuit validated
+- ⬜ Turn-on voltage ramp measured and documented (DISP_5V rise time via transistor circuit)
 - ⬜ Pi 5V rail measured during turn-on (no sag)
-- ⬜ ≥ 10 on/off cycles validated without Pi instability
-- ⬜ Boot-state confirmed: display off until software enables
-- ⬜ API endpoints tested end-to-end
+- ⬜ ≥ 10 on/off cycles validated via GPIO24 circuit without Pi instability
 - ⬜ Host health snapshot recorded after cycling
