@@ -189,18 +189,16 @@ class LiveDisplayPower:
 
         The ws_touchscreen driver writes these registers in probe() and enable(),
         but probe() only runs at boot — it won't re-run after the panel loses power.
-        Force-writing via i2c -f bypasses the driver ownership lock so the panel
-        controller comes back without needing a reboot.
+        Force-writing via i2cset -y -f bypasses the driver ownership lock so the
+        panel controller comes back without needing a reboot.
 
-        Registers (I2C bus 11, address 0x45):
-          0xc0, 0xc2, 0xac = panel init  (written in probe)
-          0xad = display enable          (written in enable)
+        Validated registers (I2C bus 11, address 0x45):
+          0xc0, 0xc2 = both required; writing either alone is not sufficient.
+          0xac, 0xad = not needed for image recovery (tested and confirmed).
         """
         cmds = [
             ["i2cset", "-y", "-f", "11", "0x45", "0xc0", "0x01"],
             ["i2cset", "-y", "-f", "11", "0x45", "0xc2", "0x01"],
-            ["i2cset", "-y", "-f", "11", "0x45", "0xac", "0x01"],
-            ["i2cset", "-y", "-f", "11", "0x45", "0xad", "0x01"],
         ]
         for cmd in cmds:
             try:

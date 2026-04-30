@@ -133,16 +133,16 @@ The `reinit_panel()` step was added after discovering that the Waveshare panel c
 
 Registers written on every power-on (sourced from `panel-waveshare-dsi.c` `probe()` and `enable()`):
 
-| Register | Value | Origin | Purpose |
-|----------|-------|--------|---------|
-| `0xc0` | `0x01` | `probe()` | Panel init — exact function undocumented; part of Waveshare proprietary MCU init sequence |
-| `0xc2` | `0x01` | `probe()` | Panel init — as above |
-| `0xac` | `0x01` | `probe()` | Panel init — as above |
-| `0xad` | `0x01` | `enable()` | Display enable (0x00 = off, 0x01 = on) |
+| Register | Value | Required | Notes |
+|----------|-------|----------|-------|
+| `0xc0` | `0x01` | ✅ yes | Neither `0xc0` nor `0xc2` works alone — both must be written together |
+| `0xc2` | `0x01` | ✅ yes | As above |
+| `0xac` | `0x01` | ❌ no | Tested: omitting it does not prevent image recovery |
+| `0xad` | `0x01` | ❌ no | Tested: omitting it does not prevent image recovery |
 
-The Waveshare MCU controller at 0x45 does not have a public datasheet. The three probe registers (`0xc0`, `0xc2`, `0xac`) have no documented meaning; skipping any of them is untested and not recommended — they are written as a unit in the kernel driver. The `0xad` register is the display on/off control and is clearly required.
+Register requirements validated by systematic per-register testing (each register tested individually and in combination after a clean 5V power cycle). The minimum sequence to recover the panel is `0xc0=0x01` followed by `0xc2=0x01`.
 
-Tested: `power_off()` → 5V disconnect → reconnect → `power_on()` — image and backlight restored fully. Validated twice in succession.
+Tested: `power_off()` → 5V disconnect → reconnect → `power_on()` — image and backlight restored fully. Confirmed multiple times.
 
 ## Validation Plan
 
