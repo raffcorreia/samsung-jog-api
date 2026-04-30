@@ -411,6 +411,12 @@ Combine the validated outputs of Phase 3 observation, Phase 4 drive, Phase 5 `HD
   - Raspberry Pi interface
   - display power or related host-side power connections if required
   - any `HDMI` / `DDC` transport-related interfaces required by the chosen communication design
+  - **expansion header**: break out all unused GPIO pins to a dedicated through-hole or JST header so future features can be wired without a board respin
+- include hardware slots for **rotary encoder knobs** (infinite-turn, no end-stop, e.g. EC11 or panel-mount equivalent):
+  - each encoder requires 2 GPIO lines (A + B quadrature) plus optional push-button (1 GPIO per encoder)
+  - reserve footprints for at least 2 encoders (4–6 GPIO); leave pads for a 3rd
+  - add 100 nF debounce capacitors on A and B lines per encoder
+  - assign GPIO from the unused pool in the Phase 20 GPIO schema
 - define board dimensions and mechanical constraints
 - define mounting holes, screw usage, and cable-routing assumptions
 - define the PCB stack-up and board-level layout constraints
