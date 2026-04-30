@@ -137,8 +137,8 @@ Registers written on every power-on (sourced from `panel-waveshare-dsi.c` `probe
 |----------|-------|----------|-------|
 | `0xc0` | `0x01` | ✅ yes | Neither `0xc0` nor `0xc2` works alone — both must be written together |
 | `0xc2` | `0x01` | ✅ yes | As above |
-| `0xac` | `0x01` | ❌ no | Tested: omitting it does not prevent image recovery |
-| `0xad` | `0x01` | ❌ no | Tested: omitting it does not prevent image recovery |
+| `0xac` | `0x01` | ❌ no | Not needed for image or touch recovery via reinit — omitted |
+| `0xad` | `0x01` | ❌ no | As above — omitted |
 
 Register requirements validated by systematic per-register testing (each register tested individually and in combination after a clean 5V power cycle). The minimum sequence to recover the panel is `0xc0=0x01` followed by `0xc2=0x01`.
 
@@ -175,24 +175,52 @@ After rewiring to the correct 5V rail:
 - Full brightness range (`0–255 raw`, `0–100%`) is now accessible.
 - Power draw: **5.06 V / 0.60 A** (display on), **5.07 V / 0.48 A** (display 5V disconnected) — ~120 mA / ~610 mW saved with display off.
 
-### Q9 (2N3904) transistor issue
+### Q9 (2N3904) transistor issue — resolved
 
-Q9's emitter and collector are swapped on the protoboard. The 2N3904 was operating in reverse-active mode with near-zero current gain:
+Q9's emitter and collector were swapped on the protoboard. The 2N3904 was operating in reverse-active mode with near-zero current gain:
 
 - With GPIO24 HIGH and Q9 E-C swapped: base of Q8 measured 4.3 V instead of the expected 1.7 V pull-down.
 - Q8 (S8550) remained off; collector held at 2.7 V rather than switching to near-0 V.
 
-The 0.7 V signature (4.3 V = 5 V − 0.7 V base-emitter drop in reverse) confirmed E-C reversal. The circuit was **bypassed** for Phase 21 testing: display connected directly to Pi 5V. GPIO24 control via the transistor circuit remains to be validated after correcting Q9's pinout.
+The 0.7 V signature (4.3 V = 5 V − 0.7 V base-emitter drop in reverse) confirmed E-C reversal. **Fixed:** Q9 rewired with correct orientation. Confirmed: collector reads 0 V / 5 V for GPIO24 HIGH / LOW — correct NPN switching behaviour.
+
+### Q8 (S8550) transistor issue — resolved
+
+Q8's emitter and collector were also swapped on the protoboard. Measurements before fix:
+
+- Q8 base = 4.3 V when GPIO24 HIGH (= 5 V − 0.7 V Vbe clamp) — transistor in reverse active mode.
+- Q8 collector = 5 V when GPIO24 LOW — the pin labelled "collector" was physically the emitter.
+
+**Fixed:** Q8 rewired with correct orientation (emitter → Pi 5V rail, collector → DISP_5V). Confirmed: collector reads 5 V / 0.02 V for GPIO24 HIGH / LOW with no display load — correct PNP switching behaviour.
+
+**Note on R23 during diagnosis:** R23 was temporarily changed from 10 kΩ to 100 Ω during diagnosis in an attempt to increase Q8 base drive. This was incorrect for the voltage-divider topology (R23/R24): 100 Ω shifts Q8 base to ~4.9 V (Veb = 0.1 V — barely on). R23 must be **10 kΩ** for the divider to set Q8 base at 1.6 V (Veb = 3.4 V — firmly on).
+
+### Panel board green LED — power-on indicator
+
+The Waveshare DSI panel board has a **green LED** on the back. Observed behaviour:
+
+- **Display 5V disconnected / off:** LED is completely off.
+- **Display 5V connected, panel initialising (insufficient voltage):** LED blinks rapidly.
+- **Display 5V connected, panel powered on correctly:** LED should be solid green.
+
+The blinking state was observed when DISP_5V was ~2.7 V (Q8 not saturating due to 100 Ω R23 / E-C swap issues). This LED is a reliable first-pass indicator of whether the panel is receiving adequate power before checking for an image.
 
 ## Evidence Checklist
 
-- ✅ Circuit assembled on protoboard (bypassed — display on Pi 5V directly; Q9 pinout needs correction)
+- ✅ Circuit assembled on protoboard
 - ✅ Software power-off/on sequence validated with manual 5V disconnect (2 × confirmed)
 - ✅ `reinit_panel()` confirmed to restore image after 5V power cycle
 - ✅ Boot-state confirmed: display on at service startup via `display.power_on()` in lifespan
 - ✅ API endpoints tested end-to-end
-- ⬜ Q9 (2N3904) pinout corrected and GPIO24 circuit validated
-- ⬜ Turn-on voltage ramp measured and documented (DISP_5V rise time via transistor circuit)
+- ✅ Q9 (2N3904) E-C swap corrected — collector 0 V / 5 V for GPIO24 HIGH / LOW confirmed
+- ✅ Q8 (S8550) E-C swap corrected — collector 5 V / 0.02 V for GPIO24 HIGH / LOW (no load) confirmed
+- ✅ Panel board green LED behaviour documented
+- ✅ R23 restored to 10 kΩ; R24 reduced to 220 Ω for sufficient base drive (Ib ≈ 19 mA → Ic_max ≈ 2 A)
+- ✅ DISP_5V confirmed 4.7 V under load (Vce_sat ≈ 0.3 V at 120 mA — within display ±10% spec)
+- ✅ Display power-on via GPIO24 confirmed: solid green LED + image at 4.7 V
+- ✅ Touch recovery confirmed: gpio=24=op,dh in config.txt keeps DISP_5V on during Pi boot so Goodix-TS probe() succeeds and persists across power cycles
+- ✅ Minimum reinit delay confirmed: 200 ms after GPIO24 HIGH before i2cset — no image without it
+- ✅ Power measurements: display on = 1.14 A; display off via GPIO24 = 0.50 A (saves 3.2 W vs 1.14 A on)
 - ⬜ Pi 5V rail measured during turn-on (no sag)
 - ⬜ ≥ 10 on/off cycles validated via GPIO24 circuit without Pi instability
 - ⬜ Host health snapshot recorded after cycling

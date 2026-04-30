@@ -130,13 +130,14 @@ class DisplayService:
         RC ramp (~100 ms) plus panel init margin.
         """
         self._hw.write_rail_on(True)
+        time.sleep(0.2)
         self._hw.reinit_panel()
         self._hw.write_power_on(True)
         self._power_on = True
         restore = self._saved_raw if self._saved_raw is not None else _DEFAULT_RAW
         self._hw.write_brightness_raw(restore)
         logger.info(
-            "display: power on (rail on, 150 ms, reinit panel, wlr-randr --on, brightness restored=%d raw)",
+            "display: power on (rail on, 200 ms, reinit panel, wlr-randr --on, brightness restored=%d raw)",
             restore,
         )
         self._saved_raw = None

@@ -113,7 +113,7 @@ class LiveDisplayPower:
 
     def __init__(self, display_rail_pin: int) -> None:
         from gpiozero import OutputDevice  # noqa: PLC0415 — lazy: not available on non-Pi hosts
-        self._rail = OutputDevice(display_rail_pin, active_high=True, initial_value=False)
+        self._rail = OutputDevice(display_rail_pin, active_high=True, initial_value=True)
 
     @property
     def kind(self) -> str:
@@ -201,7 +201,10 @@ class LiveDisplayPower:
 
         Validated registers (I2C bus 11, address 0x45):
           0xc0, 0xc2 = both required; writing either alone is not sufficient.
-          0xac, 0xad = not needed for image recovery (tested and confirmed).
+          0xac, 0xad = not needed for image or touch recovery via reinit.
+                       Touch is restored via gpio=24=op,dh in config.txt,
+                       which keeps DISP_5V on during boot so Goodix-TS probe()
+                       succeeds and persists across subsequent power cycles.
         """
         cmds = [
             ["i2cset", "-y", "-f", "11", "0x45", "0xc0", "0x01"],

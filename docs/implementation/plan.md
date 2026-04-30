@@ -1546,6 +1546,7 @@ Harden the system for regular use.
 - document known limitations and unsafe operating conditions
 - refine the API and runtime boundaries based on real usage
 - run end-to-end and endurance testing before treating the system as ready for regular use
+- **Boot screen suppression and custom splash**: suppress kernel boot messages and Pi rainbow splash (`quiet logo.nologo loglevel=0` in cmdline.txt, `disable_splash=1` in config.txt); replace with a custom pi-deck logo/splash using Plymouth. Note: `gpio=24=op,dh` in config.txt keeps the deck display powered throughout boot so the touch driver (Goodix-TS) initialises correctly — the splash should account for the display being on from power-up.
 
 ### Deliverables
 
