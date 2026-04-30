@@ -25,8 +25,8 @@
 - [Phase 19: Display Usability and Power Hardening](#phase-19-display-usability-and-power-hardening)
 - [Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation)
 - [Phase 21: Display Power Control Circuit](#phase-21-display-power-control-circuit)
-- [Phase 22: Documentation Reorganization](#phase-22-documentation-reorganization)
-- [Phase 23: Physical Display and Pi Power Button](#phase-23-physical-display-and-pi-power-button)
+- [Phase 22: Physical Display and Pi Power Button](#phase-22-physical-display-and-pi-power-button)
+- [Phase 23: Documentation Reorganization](#phase-23-documentation-reorganization)
 - [Phase 24: DDC Capability Investigation](#phase-24-ddc-capability-investigation)
 - [Phase 25: LED Feedback Characterization](#phase-25-led-feedback-characterization)
 - [Phase 26: State Investigation and Sequence Cleanup](#phase-26-state-investigation-and-sequence-cleanup)
@@ -1054,7 +1054,7 @@ Phases 19 and 20 confirmed that hot-plugging the display's 5V line while the Pi 
 - `DisplayService.power_on()` and `power_off()` coordinate backlight, wlr-randr, and `GPIO24` in the correct sequence
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1032) in this phase's execution record
 
-## Phase 22: Documentation Reorganization
+## Phase 23: Documentation Reorganization
 
 ### Goal
 
@@ -1118,7 +1118,7 @@ The project should follow the same rule already used successfully in code: imple
 - later phases can continue adding documentation without reintroducing phase-scoped names for living artifacts
 - no repository cleanup in this phase leaves broken `KiCad` references, broken scripts, or broken Markdown links behind
 
-## Phase 23: Physical Display and Pi Power Button
+## Phase 22: Physical Display and Pi Power Button
 
 ### Goal
 
