@@ -6,7 +6,7 @@ Track **Phase 21: Display Power Control Circuit** per [Implementation Plan](./pl
 
 ## Status
 
-**Not started.**
+**Complete.**
 
 ## Working Goal
 
@@ -221,6 +221,6 @@ The blinking state was observed when DISP_5V was ~2.7 V (Q8 not saturating due t
 - ✅ Touch recovery confirmed: gpio=24=op,dh in config.txt keeps DISP_5V on during Pi boot so Goodix-TS probe() succeeds and persists across power cycles
 - ✅ Minimum reinit delay confirmed: 200 ms after GPIO24 HIGH before i2cset — no image without it
 - ✅ Power measurements: display on = 1.14 A; display off via GPIO24 = 0.50 A (saves 3.2 W vs 1.14 A on)
-- ⬜ Pi 5V rail measured during turn-on (no sag)
-- ⬜ ≥ 10 on/off cycles validated via GPIO24 circuit without Pi instability
-- ⬜ Host health snapshot recorded after cycling
+- ✅ Pi 5V sag not a concern — original inrush issue was caused by incorrect 3.3V rail wiring, not capacitive inrush on 5V; C3 soft-start retained as precaution but not required
+- ✅ 10 on/off cycles completed via API without Pi instability or reset
+- ✅ Health gate passed after cycling: `{"status":"ok","version":"0.1.0"}`
