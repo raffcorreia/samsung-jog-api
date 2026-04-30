@@ -23,6 +23,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 from pi_deck.hardware.display_power import BRIGHTNESS_RAW_MAX, DisplayPowerControl
@@ -71,6 +72,11 @@ class DisplayService:
         self._hw = display_hw
         self._saved_raw: int | None = _load_saved_raw()  # persisted across reboots
         self._power_on: bool = self._hw.read_power_on()  # cached; updated on every write
+        self._power_listener: Callable[[bool], None] | None = None
+
+    def set_power_listener(self, fn: Callable[[bool], None]) -> None:
+        """Register a callback fired after every power state change (True=on, False=off)."""
+        self._power_listener = fn
 
     # ── brightness ────────────────────────────────────────────────────────────
 
@@ -121,6 +127,15 @@ class DisplayService:
             "display: power off (saved=%d raw, backlight=0, wlr-randr --off, rail off)",
             self._saved_raw,
         )
+        if self._power_listener:
+            self._power_listener(False)
+
+    def toggle(self) -> None:
+        """Toggle display on/off — safe to call from any thread."""
+        if self._power_on:
+            self.power_off()
+        else:
+            self.power_on()
 
     def power_on(self) -> None:
         """Power on the display.
@@ -141,3 +156,5 @@ class DisplayService:
             restore,
         )
         self._saved_raw = None
+        if self._power_listener:
+            self._power_listener(True)

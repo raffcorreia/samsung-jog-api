@@ -21,6 +21,8 @@ dependencies = [
     "uvicorn>=0.32",
     # WebSocket /ws/events — uvicorn needs websockets or wsproto; we pin websockets (wheels on arm).
     "websockets>=12",
+    # WS2812B addressable LED via SPI (GPIO10 / spidev).  Linux-only.
+    "spidev>=3.6; sys_platform == 'linux'",
 ]
 
 [project.scripts]

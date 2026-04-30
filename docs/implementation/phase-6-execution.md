@@ -56,18 +56,24 @@ Out of scope:
 
 ## Raspberry Pi Pin Map
 
-- `3.3V rail`: physical pin `1`
-- `GND`: physical pin `6`
-- `I2C SDA`: `GPIO2`, physical pin `3`
-- `I2C SCL`: `GPIO3`, physical pin `5`
-- `ADS1115 ALERT/RDY`: `GPIO17`, physical pin `11`
-- `KEY_ADC1` digital input: `GPIO27`, physical pin `13`
-- `KEY_LED` digital input: `GPIO22`, physical pin `15`
-- `CENTER` drive: `GPIO5`, physical pin `29`
-- `UP` drive: `GPIO6`, physical pin `31`
-- `DOWN` drive: `GPIO13`, physical pin `33`
-- `LEFT` drive: `GPIO19`, physical pin `35`
-- `RIGHT` drive: `GPIO26`, physical pin `37`
+| Function | GPIO (BCM) | Physical pin | Direction | Added |
+|----------|-----------|--------------|-----------|-------|
+| 3.3V rail | — | 1 | Power | Ph. 6 |
+| 5V rail | — | 2 | Power | Ph. 21 |
+| GND | — | 6 | Ground | Ph. 6 |
+| I2C SDA (ADS1115) | GPIO2 | 3 | I2C | Ph. 6 |
+| I2C SCL (ADS1115) | GPIO3 | 5 | I2C | Ph. 6 |
+| ADS1115 ALERT/RDY | GPIO17 | 11 | Input | Ph. 6 |
+| KEY_ADC1 digital input | GPIO27 | 13 | Input | Ph. 6 |
+| KEY_LED digital input | GPIO22 | 15 | Input | Ph. 6 |
+| CENTER drive | GPIO5 | 29 | Output | Ph. 6 |
+| UP drive | GPIO6 | 31 | Output | Ph. 6 |
+| DOWN drive | GPIO13 | 33 | Output | Ph. 6 |
+| LEFT drive | GPIO19 | 35 | Output | Ph. 6 |
+| RIGHT drive | GPIO26 | 37 | Output | Ph. 6 |
+| `display_power_en` (Q9 base via R21) | GPIO24 | 18 | Output | Ph. 21 |
+| Display toggle button (SW1, active-low) | GPIO4 | 7 | Input | Ph. 22 |
+| WS2812B LED data SPI MOSI (via U1 level shifter) | GPIO10 | 19 | Output | Ph. 22 |
 
 ## Target Deliverables
 

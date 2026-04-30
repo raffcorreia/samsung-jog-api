@@ -91,11 +91,20 @@ def test_power_on_after_off(client: TestClient) -> None:
     assert body["on"] is True
 
 
-# ── shutdown ──────────────────────────────────────────────────────────────────
+# ── shutdown / restart ────────────────────────────────────────────────────────
 
 def test_shutdown_returns_ok(client: TestClient) -> None:
     # Mock mode — no actual shutdown.
     r = client.post("/api/v1/system/shutdown")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "message" in body
+
+
+def test_restart_returns_ok(client: TestClient) -> None:
+    # Mock mode — no actual restart.
+    r = client.post("/api/v1/system/restart")
     assert r.status_code == 200
     body = r.json()
     assert body["ok"] is True

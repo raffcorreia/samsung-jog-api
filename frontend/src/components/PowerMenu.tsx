@@ -1,22 +1,24 @@
 /**
  * Power menu — opened from the TopBar power button.
  *
- * Phase 19 scope:
- *   Display: power off the DSI backlight immediately.
- *   Pi:      open a secondary confirmation with a 5-second countdown.
- *   Cancel:  close without action.
+ * Phase 22 scope:
+ *   Display: power off/on the DSI backlight immediately.
+ *   Reset:   10-second countdown → reboot.
+ *   Power off: confirmation screen → 10-second countdown → halt.
+ *   Cancel: close without action.
  *
  * When the display is already off the power button (pressed from a remote
  * browser) powers it back on instead of opening this menu.
  */
 import { useEffect, useRef, useState } from "react";
 
-import { requestShutdown, setDisplayPower } from "../api/client";
+import { requestRestart, requestShutdown, setDisplayPower } from "../api/client";
+import { ConfirmDialog } from "./ConfirmDialog";
 import { Popup } from "./Popup";
 
 import styles from "./PowerMenu.module.css";
 
-const SHUTDOWN_COUNTDOWN_S = 5;
+const COUNTDOWN_S = 10;
 
 interface PowerMenuProps {
   open: boolean;
@@ -26,20 +28,21 @@ interface PowerMenuProps {
   onDisplayToggled?: () => void;
 }
 
-type View = "menu" | "shutdown_confirm";
+type View = "menu" | "poweroff_confirm" | "countdown";
+type CountdownAction = "reset" | "poweroff";
 
 export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerMenuProps) {
   const [view, setView] = useState<View>("menu");
-  const [countdown, setCountdown] = useState(SHUTDOWN_COUNTDOWN_S);
-  const [shutdownBusy, setShutdownBusy] = useState(false);
+  const [countdownAction, setCountdownAction] = useState<CountdownAction>("poweroff");
+  const [countdown, setCountdown] = useState(COUNTDOWN_S);
+  const [busy, setBusy] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Reset internal state whenever the popup opens/closes.
   useEffect(() => {
     if (!open) {
       setView("menu");
-      setCountdown(SHUTDOWN_COUNTDOWN_S);
-      setShutdownBusy(false);
+      setCountdown(COUNTDOWN_S);
+      setBusy(false);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -47,17 +50,16 @@ export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerM
     }
   }, [open]);
 
-  // Start countdown when shutdown confirm view is shown.
   useEffect(() => {
-    if (view !== "shutdown_confirm" || !open) return;
+    if (view !== "countdown" || !open) return;
 
-    setCountdown(SHUTDOWN_COUNTDOWN_S);
+    setCountdown(COUNTDOWN_S);
     intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(intervalRef.current!);
           intervalRef.current = null;
-          void doShutdown();
+          void executeAction();
           return 0;
         }
         return prev - 1;
@@ -79,33 +81,40 @@ export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerM
       await setDisplayPower(!displayOn);
       onDisplayToggled?.();
     } catch {
-      // Best-effort; log is already server-side
+      // Best-effort; error is already logged server-side
     }
   }
 
-  function handlePiChoice() {
-    setView("shutdown_confirm");
+  function startCountdown(action: CountdownAction) {
+    setCountdownAction(action);
+    setView("countdown");
   }
 
-  async function doShutdown() {
-    if (shutdownBusy) return;
-    setShutdownBusy(true);
+  async function executeAction() {
+    if (busy) return;
+    setBusy(true);
     try {
-      await requestShutdown();
+      if (countdownAction === "reset") {
+        await requestRestart();
+      } else {
+        await requestShutdown();
+      }
     } catch {
-      // Pi will go offline; network error is expected
+      // Pi going offline causes a network error — expected
     }
     onClose();
   }
 
-  function handleCancelShutdown() {
+  function cancelCountdown() {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
     setView("menu");
-    setCountdown(SHUTDOWN_COUNTDOWN_S);
+    setCountdown(COUNTDOWN_S);
   }
+
+  const isReset = countdownAction === "reset";
 
   return (
     <>
@@ -142,24 +151,24 @@ export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerM
             <span>{displayOn ? "Display off" : "Display on"}</span>
           </button>
 
-          <button
-            className={styles.choiceBtn}
-            data-testid="power-menu-pi"
-            type="button"
-            onClick={handlePiChoice}
-          >
-            {/* Raspberry Pi logo simplified */}
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              fill="currentColor"
-              aria-hidden="true"
+          <div className={styles.smallActions}>
+            <button
+              className={styles.smallBtn}
+              data-testid="power-menu-reset"
+              type="button"
+              onClick={() => startCountdown("reset")}
             >
-              <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 3a7 7 0 1 1 0 14A7 7 0 0 1 12 5zm0 2a5 5 0 1 0 0 10A5 5 0 0 0 12 7zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
-            </svg>
-            <span>Shut down Pi</span>
-          </button>
+              Restart
+            </button>
+            <button
+              className={`${styles.smallBtn} ${styles.smallBtnDanger}`}
+              data-testid="power-menu-poweroff"
+              type="button"
+              onClick={() => setView("poweroff_confirm")}
+            >
+              Power off
+            </button>
+          </div>
 
           <button
             className={`${styles.choiceBtn} ${styles.cancel}`}
@@ -172,37 +181,49 @@ export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerM
         </div>
       </Popup>
 
-      {/* Secondary shutdown confirmation */}
+      {/* Power off danger confirmation */}
+      <ConfirmDialog
+        open={open && view === "poweroff_confirm"}
+        title="Power off?"
+        message="The deck cannot be restored without physically unplugging and replugging the power cable."
+        confirmLabel="Continue"
+        cancelLabel="Cancel"
+        onConfirm={() => startCountdown("poweroff")}
+        onCancel={() => setView("menu")}
+      />
+
+      {/* Shared countdown screen — used by both Reset and Power off */}
       <Popup
-        open={open && view === "shutdown_confirm"}
-        onClose={handleCancelShutdown}
+        open={open && view === "countdown"}
+        onClose={cancelCountdown}
         position="center"
         size="confirm"
-        title="Shut down Pi?"
+        title={isReset ? "Restart Pi?" : "Shut down Pi?"}
         blockBackground
       >
         <div className={styles.shutdownBody}>
           <p className={styles.countdownText}>
-            Shutting down in <strong data-testid="shutdown-countdown">{countdown}</strong>…
+            {isReset ? "Restarting in" : "Shutting down in"}{" "}
+            <strong data-testid="action-countdown">{countdown}</strong>…
           </p>
           <div className={styles.shutdownActions}>
             <button
               className={styles.cancelBtn}
               type="button"
-              disabled={shutdownBusy}
-              onClick={handleCancelShutdown}
-              data-testid="shutdown-cancel"
+              disabled={busy}
+              onClick={cancelCountdown}
+              data-testid="countdown-cancel"
             >
               Cancel
             </button>
             <button
               className={styles.shutdownNowBtn}
               type="button"
-              disabled={shutdownBusy}
-              onClick={() => void doShutdown()}
-              data-testid="shutdown-now"
+              disabled={busy}
+              onClick={() => void executeAction()}
+              data-testid="countdown-now"
             >
-              Now
+              {isReset ? "Restart now" : "Shut down now"}
             </button>
           </div>
         </div>

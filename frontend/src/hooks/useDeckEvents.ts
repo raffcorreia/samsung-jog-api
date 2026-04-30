@@ -88,6 +88,7 @@ export interface DeckEventsState {
   wsReleaseTick: number;
   wsReleasedActions: readonly JogAction[];
   wsSessionEpoch: number;
+  openPowerMenuTick: number;
   logLines: readonly string[];
   recordingState: RecordingState;
   recordings: RecordingLibrary;
@@ -137,6 +138,7 @@ export function useDeckEvents(): DeckEventsState {
   const [wsReleaseTick, setWsReleaseTick] = useState(0);
   const [wsReleasedActions, setWsReleasedActions] = useState<readonly JogAction[]>([]);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
+  const [openPowerMenuTick, setOpenPowerMenuTick] = useState(0);
   const [logLines, setLogLines] = useState<string[]>([]);
   const [recordingState, setRecordingState] = useState<RecordingState>(EMPTY_RECORDING_STATE);
   const [recordings, setRecordings] = useState<RecordingLibrary>({ items: [] });
@@ -508,6 +510,10 @@ export function useDeckEvents(): DeckEventsState {
             );
           });
         }
+
+        if (parsed.category === "display" && parsed.type === "open_power_menu") {
+          setOpenPowerMenuTick((n) => n + 1);
+        }
       };
 
       ws.onerror = () => {
@@ -545,6 +551,7 @@ export function useDeckEvents(): DeckEventsState {
       wsReleaseTick,
       wsReleasedActions,
       wsSessionEpoch,
+      openPowerMenuTick,
       logLines,
       recordingState,
       recordings,
@@ -570,6 +577,7 @@ export function useDeckEvents(): DeckEventsState {
       wsReleaseTick,
       wsReleasedActions,
       wsSessionEpoch,
+      openPowerMenuTick,
       logLines,
       recordingState,
       recordings,

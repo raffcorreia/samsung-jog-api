@@ -23,7 +23,7 @@ export interface StatusPayload {
   signals: SignalSnapshot;
 }
 
-export type WsCategory = "command" | "bus" | "control" | "log" | "ddc" | "recording";
+export type WsCategory = "command" | "bus" | "control" | "log" | "ddc" | "recording" | "display";
 
 export interface WsEventV1 {
   v: 1;

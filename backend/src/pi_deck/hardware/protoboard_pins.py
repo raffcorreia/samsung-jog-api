@@ -44,6 +44,7 @@ class ProtoboardPins:
     drive_left: int = 19
     drive_right: int = 26
     display_power_en: int = 24
+    display_btn: int = 4
 
     def drive_bcm(self, action: JogAction) -> int:
         return _DRIVE_BCM[action]

@@ -5,10 +5,10 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { PowerMenu } from "./PowerMenu";
 
-// Stub API calls so tests don't hit the network.
 vi.mock("../api/client", () => ({
   setDisplayPower: vi.fn().mockResolvedValue({ on: false, brightness_pct: 0 }),
   requestShutdown: vi.fn().mockResolvedValue({ ok: true, message: "Shutdown initiated" }),
+  requestRestart: vi.fn().mockResolvedValue({ ok: true, message: "Restart initiated" }),
 }));
 
 function renderMenu(props: Partial<Parameters<typeof PowerMenu>[0]> = {}) {
@@ -30,10 +30,11 @@ describe("PowerMenu", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the three choice buttons when open", () => {
+  it("renders the choice buttons when open", () => {
     renderMenu();
     expect(screen.getByTestId("power-menu-display")).toBeInTheDocument();
-    expect(screen.getByTestId("power-menu-pi")).toBeInTheDocument();
+    expect(screen.getByTestId("power-menu-reset")).toBeInTheDocument();
+    expect(screen.getByTestId("power-menu-poweroff")).toBeInTheDocument();
     expect(screen.getByTestId("power-menu-cancel")).toBeInTheDocument();
   });
 
@@ -54,34 +55,62 @@ describe("PowerMenu", () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  it("opens shutdown confirm when Pi is clicked", async () => {
+  it("goes to countdown when Reset is clicked", async () => {
     renderMenu();
-    await userEvent.click(screen.getByTestId("power-menu-pi"));
-    expect(screen.getByTestId("shutdown-countdown")).toBeInTheDocument();
-    expect(screen.getByTestId("shutdown-now")).toBeInTheDocument();
-    expect(screen.getByTestId("shutdown-cancel")).toBeInTheDocument();
+    await userEvent.click(screen.getByTestId("power-menu-reset"));
+    expect(screen.getByTestId("action-countdown")).toBeInTheDocument();
+    expect(screen.getByTestId("countdown-now")).toHaveTextContent("Restart now");
+
   });
 
-  it("shows countdown starting at 5", async () => {
+  it("shows countdown starting at 10 for reset", async () => {
     renderMenu();
-    await userEvent.click(screen.getByTestId("power-menu-pi"));
-    expect(screen.getByTestId("shutdown-countdown").textContent).toBe("5");
+    await userEvent.click(screen.getByTestId("power-menu-reset"));
+    expect(screen.getByTestId("action-countdown").textContent).toBe("10");
   });
 
-  it("calls requestShutdown when Now is clicked", async () => {
+  it("calls requestRestart when countdown-now is clicked after Reset", async () => {
+    const { requestRestart } = await import("../api/client");
+    renderMenu();
+    await userEvent.click(screen.getByTestId("power-menu-reset"));
+    await userEvent.click(screen.getByTestId("countdown-now"));
+    expect(requestRestart).toHaveBeenCalled();
+  });
+
+  it("shows confirmation dialog when Power off is clicked", async () => {
+    renderMenu();
+    await userEvent.click(screen.getByTestId("power-menu-poweroff"));
+    expect(screen.getByText(/cannot be restored/i)).toBeInTheDocument();
+  });
+
+  it("goes to countdown after confirming power off", async () => {
+    renderMenu();
+    await userEvent.click(screen.getByTestId("power-menu-poweroff"));
+    await userEvent.click(screen.getByText("Continue"));
+    expect(screen.getByTestId("action-countdown")).toBeInTheDocument();
+    expect(screen.getByTestId("countdown-now")).toHaveTextContent("Shut down now");
+  });
+
+  it("calls requestShutdown when countdown-now is clicked after Power off", async () => {
     const { requestShutdown } = await import("../api/client");
     renderMenu();
-    await userEvent.click(screen.getByTestId("power-menu-pi"));
-    await userEvent.click(screen.getByTestId("shutdown-now"));
+    await userEvent.click(screen.getByTestId("power-menu-poweroff"));
+    await userEvent.click(screen.getByText("Continue"));
+    await userEvent.click(screen.getByTestId("countdown-now"));
     expect(requestShutdown).toHaveBeenCalled();
   });
 
-  it("returns to menu when Cancel is clicked on shutdown confirm", async () => {
+  it("returns to menu when Cancel is clicked in confirmation", async () => {
     renderMenu();
-    await userEvent.click(screen.getByTestId("power-menu-pi"));
-    expect(screen.getByTestId("shutdown-countdown")).toBeInTheDocument();
-    await userEvent.click(screen.getByTestId("shutdown-cancel"));
-    // Should return to power menu choices
+    await userEvent.click(screen.getByTestId("power-menu-poweroff"));
+    await userEvent.click(screen.getByText("Cancel"));
+    expect(screen.getByTestId("power-menu-display")).toBeInTheDocument();
+  });
+
+  it("returns to menu when countdown-cancel is clicked", async () => {
+    renderMenu();
+    await userEvent.click(screen.getByTestId("power-menu-reset"));
+    await userEvent.click(screen.getByTestId("countdown-cancel"));
     expect(screen.getByTestId("power-menu-display")).toBeInTheDocument();
   });
 

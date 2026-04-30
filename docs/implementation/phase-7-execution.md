@@ -120,7 +120,8 @@ All 17 signals mapped to BCM GPIO numbers. I2C is fixed at GPIO2/GPIO3. UART pin
 | 38 | GPIO20 | PIN18_STAT | Pi input | TPS2113A mux status |
 | 40 | GPIO21 | HPD_SENSE | Pi input | HPD state sense |
 
-Free GPIO pins (not allocated): GPIO4, GPIO7, GPIO8, GPIO9, GPIO10, GPIO11, GPIO14, GPIO15, GPIO18 (9 free).
+Free GPIO pins (not allocated): GPIO7, GPIO8, GPIO9, GPIO11, GPIO14, GPIO15, GPIO18 (7 free).
+Note: GPIO4 (display toggle button, Ph.22) and GPIO10 (WS2812B LED SPI MOSI, Ph.22) are now assigned; GPIO24 (display_power_en, Ph.21) was already assigned.
 
 ## Connector Strategy
 

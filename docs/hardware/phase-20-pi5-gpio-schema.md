@@ -46,13 +46,13 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 | `1` | `3.3V` | logic / ADC rail | `2` | `5V` | display 5V only, if header-powered |
 | `3` | `GPIO2 / SDA1` | project I2C SDA | `4` | `5V` | display 5V only, if header-powered |
 | `5` | `GPIO3 / SCL1` | project I2C SCL | `6` | `GND` | common ground |
-| `7` | `GPIO4` | unused | `8` | `GPIO14` | unused |
+| `7` | `GPIO4` | display toggle button SW1 (Phase 22) | `8` | `GPIO14` | unused |
 | `9` | `GND` | common ground | `10` | `GPIO15` | unused |
 | `11` | `GPIO17` | `ADS1115 ALERT/RDY` | `12` | `GPIO18` | unused |
 | `13` | `GPIO27` | `KEY_ADC1` input | `14` | `GND` | common ground |
 | `15` | `GPIO22` | `KEY_LED` input | `16` | `GPIO23` | unused |
 | `17` | `3.3V` | optional logic / ADC rail | `18` | `GPIO24` | `display_power_en` (Phase 21) |
-| `19` | `GPIO10` | unused | `20` | `GND` | common ground |
+| `19` | `GPIO10` | WS2812B LED SPI0 MOSI via level shifter (Phase 22) | `20` | `GND` | common ground |
 | `21` | `GPIO9` | unused | `22` | `GPIO25` | unused |
 | `23` | `GPIO11` | unused | `24` | `GPIO8` | unused |
 | `25` | `GND` | common ground | `26` | `GPIO7` | unused |

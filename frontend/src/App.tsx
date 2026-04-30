@@ -19,7 +19,7 @@ function AppInner() {
 
   return (
     <DeckShell>
-      <TopBar title={title} />
+      <TopBar title={title} openPowerMenuTick={deck.openPowerMenuTick} />
       <Routes>
         <Route path="/" element={<HomePage deck={deck} />} />
         <Route path="/settings" element={<SettingsPage />} />

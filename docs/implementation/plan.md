@@ -412,6 +412,7 @@ Combine the validated outputs of Phase 3 observation, Phase 4 drive, Phase 5 `HD
   - display power or related host-side power connections if required
   - any `HDMI` / `DDC` transport-related interfaces required by the chosen communication design
   - **expansion header**: break out all unused GPIO pins to a dedicated through-hole or JST header so future features can be wired without a board respin
+  - **Phase 22 protoboard GPIO already confirmed:** GPIO4 (display toggle button via SW1/R25/C5) and GPIO10 (WS2812B LED data via SPI0 MOSI and SN74AHCT125 level shifter, physical pin 19) must be carried over to the integrated board; reserve footprints for both. GPIO24 (display_power_en, Phase 21) is also already assigned.
 - include hardware slots for **rotary encoder knobs** (infinite-turn, no end-stop, e.g. EC11 or panel-mount equivalent):
   - each encoder requires 2 GPIO lines (A + B quadrature) plus optional push-button (1 GPIO per encoder)
   - reserve footprints for at least 2 encoders (4–6 GPIO); leave pads for a 3rd
@@ -1150,6 +1151,8 @@ The outcome must be explicit, because the integrated controller board (Phase 7) 
 - physical wake / power-on strategy for Raspberry Pi 2, or an explicit decision that a different path is required
 - relationship between physical button behavior and software shutdown behavior
 - any additional always-on circuitry, latch, supervisor, or header-level wiring needed to support physical wake/power-on
+- PowerMenu redesign: add Restart option and restructure power-action screens
+- status LED: one WS2812B (or equivalent WS28xx) on GPIO10 (SPI0 MOSI, pin 19) via 3.3V→5V level shifter; chain-expandable
 
 ### Tasks
 
@@ -1165,6 +1168,18 @@ The outcome must be explicit, because the integrated controller board (Phase 7) 
 - verify that the chosen physical-button design does not conflict with existing display-power control circuitry or Raspberry Pi power integrity
 - update the integrated-board assumptions so Phase 7 and later hardware work include the chosen button behavior
 - document any model-specific limitations clearly if Pi 2 and Pi 5 cannot share the same exact implementation
+- redesign the PowerMenu action dialog and power-action screens:
+  - action dialog: **Display only** (normal size), **Reset** (small), **Power off** (small, marked dangerous)
+  - **Reset path:** action dialog → shared countdown screen (10 s) → reboot
+  - **Power off path:** action dialog → confirmation screen (warn: deck cannot be restored without physically unplugging and replugging power) → shared countdown screen (10 s) → halt
+  - countdown screen must be a single reusable component, parameterized by duration and on-complete action — no duplicate countdown screens
+  - use existing `ConfirmDialog` component for the power-off confirmation screen
+- wire one WS2812B LED (or equivalent WS28xx form factor) to GPIO10 (SPI0 MOSI, physical pin 19) via a 3.3V→5V level shifter on the data line:
+  - level shifter data-in from GPIO10; data-out to LED DIN
+  - LED powered from 5V rail; GND shared with Pi GND
+  - chain-expandable: additional LEDs connect to DOUT of the first
+  - implement `StatusLedService` using `spidev` at 3.2 MHz (4 SPI bits per WS2812B bit); Pi 5 RP1 does not support rpi_ws281x DMA
+  - define at least one initial LED state (e.g. solid green = system healthy) to validate the circuit end-to-end
 
 ### Deliverables
 
@@ -1173,6 +1188,9 @@ The outcome must be explicit, because the integrated controller board (Phase 7) 
 - chosen Raspberry Pi 2 wake / power-on integration approach, or documented reason it must differ
 - defined hardware requirements for the integrated board and harnessing
 - execution record with electrical and practical decision rationale
+- updated PowerMenu: action dialog with Display / Reset / Power off; reusable countdown and confirmation screens
+- status LED circuit: WS2812B on GPIO10 (SPI0 MOSI, pin 19) via level shifter, wired and validated
+- `StatusLedService` with at least one defined state (healthy = solid green)
 
 ### Exit criteria
 
@@ -1180,6 +1198,11 @@ The outcome must be explicit, because the integrated controller board (Phase 7) 
 - the project has a clear and documented answer for how Pi 5 is physically woken or powered on
 - the project has a clear and documented answer for how Pi 2 is physically woken or powered on, or an explicit limitation if exact parity is not practical
 - later hardware phases no longer need to guess what the physical local power button is supposed to do
+- PowerMenu action dialog has Display / Reset / Power off options; Reset and Power off are visually smaller
+- Power off flows through a confirmation screen before the countdown
+- countdown screen is a single shared component used by both Reset and Power off paths
+- status LED wired on GPIO10 (SPI0 MOSI, pin 19) via level shifter and lights solid green on healthy system
+- `StatusLedService` integrated into the service lifecycle
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1032) in this phase’s execution record
 
 ## Phase 24: DDC Capability Investigation

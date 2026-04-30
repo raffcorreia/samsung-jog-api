@@ -8,23 +8,26 @@
 .choiceBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   width: 100%;
-  padding: 12px 16px;
+  padding: 22px 16px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--surface-elevated);
-  color: var(--text);
+  background: color-mix(in srgb, #22c55e 15%, var(--surface-elevated));
+  border-color: color-mix(in srgb, #22c55e 40%, var(--border));
+  color: #86efac;
   font-size: 1.2rem;
   font-weight: 500;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
   transition: background 0.12s, border-color 0.12s;
 }
 
 .choiceBtn:hover {
-  background: var(--surface);
-  border-color: var(--accent-dim);
+  background: color-mix(in srgb, #22c55e 25%, var(--surface-elevated));
+  border-color: #22c55e;
+  color: #bbf7d0;
 }
 
 .choiceBtn:active {
@@ -45,7 +48,43 @@
   color: var(--text);
 }
 
-/* Shutdown confirm panel */
+/* Small secondary action row (Reset + Power off) */
+.smallActions {
+  display: flex;
+  gap: 8px;
+}
+
+.smallBtn {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-elevated);
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.smallBtn:hover {
+  background: var(--surface);
+  border-color: var(--accent-dim);
+  color: var(--text);
+}
+
+.smallBtnDanger {
+  border-color: color-mix(in srgb, var(--danger) 50%, var(--border));
+  color: color-mix(in srgb, var(--danger) 80%, var(--muted));
+}
+
+.smallBtnDanger:hover {
+  background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* Countdown / shutdown confirm panel */
 .shutdownBody {
   display: flex;
   flex-direction: column;

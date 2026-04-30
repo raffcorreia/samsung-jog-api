@@ -35,7 +35,7 @@ function Clock() {
  *   - If display is on  → opens PowerMenu (Display off / Pi shutdown / Cancel).
  *   - If display is off → powers the display back on immediately (remote browser use-case).
  */
-export function TopBar({ title }: { title?: string }) {
+export function TopBar({ title, openPowerMenuTick = 0 }: { title?: string; openPowerMenuTick?: number }) {
   const navigate = useNavigate();
   const isHome = !title;
 
@@ -51,6 +51,12 @@ export function TopBar({ title }: { title?: string }) {
         /* best-effort; display on is the safe default */
       });
   }, []);
+
+  // Physical button short-press → open the power menu (display is already on when this fires).
+  useEffect(() => {
+    if (openPowerMenuTick === 0) return;
+    setMenuOpen(true);
+  }, [openPowerMenuTick]);
 
   async function handlePowerClick() {
     // Always fetch fresh state before acting — avoids stale-cache opening the

@@ -104,7 +104,7 @@ class WsEventV1(BaseModel):
     """Versioned websocket envelope (category + type + payload)."""
 
     v: Literal[1] = 1
-    category: Literal["command", "bus", "control", "log", "ddc", "recording"]
+    category: Literal["command", "bus", "control", "log", "ddc", "recording", "display"]
     type: str
     ts: str
     data: dict[str, Any] = Field(default_factory=dict)
@@ -207,6 +207,16 @@ def ws_log_cleared() -> WsEventV1:
     return WsEventV1(
         category="log",
         type="cleared",
+        ts=utc_iso(),
+        data={},
+    )
+
+
+def ws_display_open_power_menu() -> WsEventV1:
+    """Tell the UI to open the power menu (physical button short-press)."""
+    return WsEventV1(
+        category="display",
+        type="open_power_menu",
         ts=utc_iso(),
         data={},
     )

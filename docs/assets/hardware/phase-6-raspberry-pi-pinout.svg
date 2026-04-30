@@ -1,181 +1,230 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
-  <title id="title">Phase 6 Raspberry Pi GPIO wiring</title>
-  <desc id="desc">Readable Raspberry Pi 40-pin header diagram for Phase 6. Only pins used by the protoboard are called out with connection targets.</desc>
+  <title id="title">Phase 6 / 21 / 22 — Raspberry Pi GPIO wiring</title>
+  <desc id="desc">Raspberry Pi 40-pin header diagram for Phase 6, 21, and 22. Used pins are highlighted and called out with their connection targets.</desc>
   <defs>
     <style>
-      .bg { fill: #f8fafc; }
-      .title { font: 34px sans-serif; font-weight: 800; fill: #111827; }
-      .subtitle { font: 18px sans-serif; fill: #475569; }
-      .header-body { fill: #9f3d2d; }
-      .row-bg { fill: #7f2f24; opacity: 0.28; }
-      .pin { stroke: #1e293b; stroke-width: 2; }
-      .pin-num { font: 22px sans-serif; fill: #111827; text-anchor: middle; dominant-baseline: middle; }
-      .pin-small { font: 15px sans-serif; fill: #64748b; text-anchor: middle; dominant-baseline: middle; }
-      .unused { fill: #e5e7eb; }
-      .power { fill: #fecaca; }
-      .ground { fill: #d1d5db; }
-      .i2c { fill: #bfdbfe; }
-      .observe { fill: #bbf7d0; }
-      .drive { fill: #fde68a; }
-      .reserved { fill: #ddd6fe; }
-      .callout { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
-      .callout-title { font: 20px sans-serif; font-weight: 800; fill: #111827; }
-      .callout-sub { font: 15px sans-serif; fill: #334155; }
-      .wire { fill: none; stroke: #334155; stroke-width: 2.5; }
-      .wire-power { stroke: #dc2626; }
-      .wire-ground { stroke: #374151; }
-      .wire-i2c { stroke: #2563eb; }
-      .wire-observe { stroke: #16a34a; }
-      .wire-drive { stroke: #ca8a04; }
-      .section { font: 22px sans-serif; font-weight: 800; fill: #111827; }
-      .table-head { font: 16px sans-serif; font-weight: 800; fill: #111827; }
-      .table-text { font: 15px sans-serif; fill: #1f2937; }
-      .table-muted { font: 14px sans-serif; fill: #64748b; }
-      .legend-label { font: 16px sans-serif; fill: #111827; dominant-baseline: middle; }
+      .bg            { fill: #f8fafc; }
+      .title         { font: 32px sans-serif; font-weight: 800; fill: #111827; }
+      .subtitle      { font: 16px sans-serif; fill: #475569; }
+      .header-body   { fill: #9f3d2d; }
+      .row-bg        { fill: #7f2f24; opacity: 0.28; }
+      .pin           { stroke: #1e293b; stroke-width: 2; }
+      .pin-num       { font: 20px sans-serif; fill: #111827; text-anchor: middle; dominant-baseline: middle; }
+      .unused        { fill: #e5e7eb; }
+      .power         { fill: #fecaca; }
+      .ground        { fill: #d1d5db; }
+      .i2c           { fill: #bfdbfe; }
+      .observe       { fill: #bbf7d0; }
+      .drive         { fill: #fde68a; }
+      .reserved      { fill: #ddd6fe; }
+      .control       { fill: #fed7aa; }
+      .callout       { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2; }
+      .callout-title { font: 18px sans-serif; font-weight: 800; fill: #111827; }
+      .callout-sub   { font: 14px sans-serif; fill: #334155; }
+      .callout-dim   { font: 13px sans-serif; fill: #64748b; }
+      .callout-rule  { stroke: #e2e8f0; stroke-width: 1; }
+      .wire          { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+      .wire-power    { stroke: #dc2626; }
+      .wire-ground   { stroke: #6b7280; }
+      .wire-i2c      { stroke: #2563eb; }
+      .wire-observe  { stroke: #16a34a; }
+      .wire-drive    { stroke: #ca8a04; }
+      .wire-control  { stroke: #ea580c; }
+      .section       { font: 20px sans-serif; font-weight: 800; fill: #111827; }
+      .table-head    { font: 15px sans-serif; font-weight: 800; fill: #111827; }
+      .table-text    { font: 14px sans-serif; fill: #1f2937; }
+      .table-muted   { font: 13px sans-serif; fill: #64748b; }
+      .legend-label  { font: 15px sans-serif; fill: #111827; dominant-baseline: middle; }
     </style>
   </defs>
 
   <rect class="bg" width="1600" height="960"/>
-  <text x="48" y="56" class="title">Phase 6 Raspberry Pi GPIO Wiring</text>
-  <text x="48" y="88" class="subtitle">Physical pin numbers. Used pins are highlighted; unused pins are intentionally left unlabeled except for their pin number.</text>
 
-  <!-- Header -->
-  <rect x="64" y="300" width="1472" height="184" rx="8" class="header-body"/>
-  <rect x="86" y="328" width="1428" height="54" rx="4" class="row-bg"/>
-  <rect x="86" y="402" width="1428" height="54" rx="4" class="row-bg"/>
-
-  <!-- Even row pin numbers and holes -->
-  <g id="even-row">
-    <circle cx="100" cy="356" r="27" class="pin unused"/><text x="100" y="356" class="pin-num">2</text>
-    <circle cx="174" cy="356" r="27" class="pin unused"/><text x="174" y="356" class="pin-num">4</text>
-    <circle cx="248" cy="356" r="27" class="pin ground"/><text x="248" y="356" class="pin-num">6</text>
-    <circle cx="322" cy="356" r="27" class="pin unused"/><text x="322" y="356" class="pin-num">8</text>
-    <circle cx="396" cy="356" r="27" class="pin unused"/><text x="396" y="356" class="pin-num">10</text>
-    <circle cx="470" cy="356" r="27" class="pin unused"/><text x="470" y="356" class="pin-num">12</text>
-    <circle cx="544" cy="356" r="27" class="pin unused"/><text x="544" y="356" class="pin-num">14</text>
-    <circle cx="618" cy="356" r="27" class="pin unused"/><text x="618" y="356" class="pin-num">16</text>
-    <circle cx="692" cy="356" r="27" class="pin unused"/><text x="692" y="356" class="pin-num">18</text>
-    <circle cx="766" cy="356" r="27" class="pin unused"/><text x="766" y="356" class="pin-num">20</text>
-    <circle cx="840" cy="356" r="27" class="pin unused"/><text x="840" y="356" class="pin-num">22</text>
-    <circle cx="914" cy="356" r="27" class="pin unused"/><text x="914" y="356" class="pin-num">24</text>
-    <circle cx="988" cy="356" r="27" class="pin unused"/><text x="988" y="356" class="pin-num">26</text>
-    <circle cx="1062" cy="356" r="27" class="pin reserved"/><text x="1062" y="356" class="pin-num">28</text>
-    <circle cx="1136" cy="356" r="27" class="pin unused"/><text x="1136" y="356" class="pin-num">30</text>
-    <circle cx="1210" cy="356" r="27" class="pin unused"/><text x="1210" y="356" class="pin-num">32</text>
-    <circle cx="1284" cy="356" r="27" class="pin unused"/><text x="1284" y="356" class="pin-num">34</text>
-    <circle cx="1358" cy="356" r="27" class="pin unused"/><text x="1358" y="356" class="pin-num">36</text>
-    <circle cx="1432" cy="356" r="27" class="pin unused"/><text x="1432" y="356" class="pin-num">38</text>
-    <circle cx="1506" cy="356" r="27" class="pin unused"/><text x="1506" y="356" class="pin-num">40</text>
-  </g>
-
-  <!-- Odd row pin numbers and holes -->
-  <g id="odd-row">
-    <rect x="73" y="405" width="54" height="54" rx="3" class="pin power"/><text x="100" y="432" class="pin-num">1</text>
-    <circle cx="174" cy="432" r="27" class="pin i2c"/><text x="174" y="432" class="pin-num">3</text>
-    <circle cx="248" cy="432" r="27" class="pin i2c"/><text x="248" y="432" class="pin-num">5</text>
-    <circle cx="322" cy="432" r="27" class="pin unused"/><text x="322" y="432" class="pin-num">7</text>
-    <circle cx="396" cy="432" r="27" class="pin unused"/><text x="396" y="432" class="pin-num">9</text>
-    <circle cx="470" cy="432" r="27" class="pin observe"/><text x="470" y="432" class="pin-num">11</text>
-    <circle cx="544" cy="432" r="27" class="pin observe"/><text x="544" y="432" class="pin-num">13</text>
-    <circle cx="618" cy="432" r="27" class="pin observe"/><text x="618" y="432" class="pin-num">15</text>
-    <circle cx="692" cy="432" r="27" class="pin unused"/><text x="692" y="432" class="pin-num">17</text>
-    <circle cx="766" cy="432" r="27" class="pin unused"/><text x="766" y="432" class="pin-num">19</text>
-    <circle cx="840" cy="432" r="27" class="pin unused"/><text x="840" y="432" class="pin-num">21</text>
-    <circle cx="914" cy="432" r="27" class="pin unused"/><text x="914" y="432" class="pin-num">23</text>
-    <circle cx="988" cy="432" r="27" class="pin unused"/><text x="988" y="432" class="pin-num">25</text>
-    <circle cx="1062" cy="432" r="27" class="pin reserved"/><text x="1062" y="432" class="pin-num">27</text>
-    <circle cx="1136" cy="432" r="27" class="pin drive"/><text x="1136" y="432" class="pin-num">29</text>
-    <circle cx="1210" cy="432" r="27" class="pin drive"/><text x="1210" y="432" class="pin-num">31</text>
-    <circle cx="1284" cy="432" r="27" class="pin drive"/><text x="1284" y="432" class="pin-num">33</text>
-    <circle cx="1358" cy="432" r="27" class="pin drive"/><text x="1358" y="432" class="pin-num">35</text>
-    <circle cx="1432" cy="432" r="27" class="pin drive"/><text x="1432" y="432" class="pin-num">37</text>
-    <circle cx="1506" cy="432" r="27" class="pin unused"/><text x="1506" y="432" class="pin-num">39</text>
-  </g>
-
-  <text x="100" y="500" class="pin-small">Pin 1 marker</text>
-  <text x="800" y="520" class="subtitle" text-anchor="middle">Header view: physical pins 1-40, matching the Raspberry Pi board pin numbering.</text>
-
-  <!-- Left-side callouts -->
-  <path d="M100 405 L100 246 L86 246" class="wire wire-power"/>
-  <rect x="48" y="188" width="300" height="82" rx="10" class="callout"/>
-  <text x="70" y="220" class="callout-title">Pin 1 - 3.3V</text>
-  <text x="70" y="246" class="callout-sub">Connect to protoboard logic rail and ADS1115 VDD.</text>
-
-  <path d="M248 356 L248 246 L392 246" class="wire wire-ground"/>
-  <rect x="376" y="188" width="290" height="82" rx="10" class="callout"/>
-  <text x="398" y="220" class="callout-title">Pin 6 - Ground</text>
-  <text x="398" y="246" class="callout-sub">Common ground with protoboard and monitor harness.</text>
-
-  <path d="M174 432 L174 590 L90 590" class="wire wire-i2c"/>
-  <path d="M248 432 L248 632 L90 632" class="wire wire-i2c"/>
-  <rect x="48" y="548" width="344" height="114" rx="10" class="callout"/>
-  <text x="70" y="580" class="callout-title">Pins 3 / 5 - ADS1115 I2C</text>
-  <text x="70" y="606" class="callout-sub">Pin 3: GPIO2 SDA to ADS1115 SDA.</text>
-  <text x="70" y="630" class="callout-sub">Pin 5: GPIO3 SCL to ADS1115 SCL.</text>
-
-  <path d="M470 432 L470 590 L444 590" class="wire wire-observe"/>
-  <path d="M544 432 L544 632 L444 632" class="wire wire-observe"/>
-  <path d="M618 432 L618 674 L444 674" class="wire wire-observe"/>
-  <rect x="420" y="548" width="430" height="150" rx="10" class="callout"/>
-  <text x="442" y="580" class="callout-title">Observation inputs</text>
-  <text x="442" y="606" class="callout-sub">Pin 11: GPIO17 from ADS1115 ALERT/RDY.</text>
-  <text x="442" y="630" class="callout-sub">Pin 13: GPIO27 from conditioned KEY_ADC1 input.</text>
-  <text x="442" y="654" class="callout-sub">Pin 15: GPIO22 from conditioned KEY_LED input.</text>
-  <text x="442" y="678" class="callout-sub">KEY_ADC2 analog voltage goes to ADS1115 AIN0.</text>
-
-  <!-- Right-side callouts -->
-  <path d="M1136 432 L1136 590 L904 590" class="wire wire-drive"/>
-  <path d="M1210 432 L1210 622 L904 622" class="wire wire-drive"/>
-  <path d="M1284 432 L1284 654 L904 654" class="wire wire-drive"/>
-  <path d="M1358 432 L1358 686 L904 686" class="wire wire-drive"/>
-  <path d="M1432 432 L1432 718 L904 718" class="wire wire-drive"/>
-  <rect x="880" y="548" width="544" height="196" rx="10" class="callout"/>
-  <text x="902" y="580" class="callout-title">JOG drive outputs</text>
-  <text x="902" y="606" class="callout-sub">Pin 29: GPIO5 CENTER drive to Q3 base resistor.</text>
-  <text x="902" y="630" class="callout-sub">Pin 31: GPIO6 UP drive to Q4 base resistor.</text>
-  <text x="902" y="654" class="callout-sub">Pin 33: GPIO13 DOWN drive to Q5 base resistor.</text>
-  <text x="902" y="678" class="callout-sub">Pin 35: GPIO19 LEFT drive to Q6 base resistor.</text>
-  <text x="902" y="702" class="callout-sub">Pin 37: GPIO26 RIGHT drive to Q7 base resistor.</text>
-  <text x="902" y="726" class="callout-sub">Each output enables one low-side 2N3904 resistor leg.</text>
-
-  <!-- Compact connection table -->
-  <text x="48" y="790" class="section">Connection Summary</text>
-  <rect x="48" y="808" width="1504" height="104" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
-  <text x="72" y="838" class="table-head">Power</text>
-  <text x="72" y="864" class="table-text">Pin 1 3.3V - logic / ADS1115 rail</text>
-  <text x="72" y="888" class="table-text">Pin 6 GND - common ground</text>
-
-  <text x="386" y="838" class="table-head">ADS1115</text>
-  <text x="386" y="864" class="table-text">Pin 3 GPIO2 SDA, Pin 5 GPIO3 SCL</text>
-  <text x="386" y="888" class="table-text">Pin 11 GPIO17 ALERT/RDY</text>
-
-  <text x="724" y="838" class="table-head">Observation</text>
-  <text x="724" y="864" class="table-text">Pin 13 GPIO27 KEY_ADC1 input</text>
-  <text x="724" y="888" class="table-text">Pin 15 GPIO22 KEY_LED input</text>
-
-  <text x="1044" y="838" class="table-head">Drive</text>
-  <text x="1044" y="864" class="table-text">Pins 29/31/33/35/37</text>
-  <text x="1044" y="888" class="table-text">CENTER / UP / DOWN / LEFT / RIGHT</text>
-
-  <text x="1328" y="838" class="table-head">Monitor harness</text>
-  <text x="1328" y="864" class="table-text">KEY_ADC2 to ADS1115 AIN0</text>
-  <text x="1328" y="888" class="table-muted">Never drive monitor lines directly.</text>
+  <!-- Title -->
+  <text x="48" y="46" class="title">Phase 6 / 21 / 22 — Raspberry Pi GPIO Wiring</text>
+  <text x="48" y="72" class="subtitle">Physical pin numbers. Highlighted pins are in use; all others are unused.</text>
 
   <!-- Legend -->
-  <g transform="translate(48 140)">
-    <rect x="0" y="-16" width="28" height="28" class="power" stroke="#94a3b8"/>
-    <text x="38" y="-2" class="legend-label">power</text>
-    <rect x="120" y="-16" width="28" height="28" class="ground" stroke="#94a3b8"/>
-    <text x="158" y="-2" class="legend-label">ground</text>
-    <rect x="250" y="-16" width="28" height="28" class="i2c" stroke="#94a3b8"/>
-    <text x="288" y="-2" class="legend-label">I2C</text>
-    <rect x="350" y="-16" width="28" height="28" class="observe" stroke="#94a3b8"/>
-    <text x="388" y="-2" class="legend-label">observe</text>
-    <rect x="490" y="-16" width="28" height="28" class="drive" stroke="#94a3b8"/>
-    <text x="528" y="-2" class="legend-label">drive</text>
-    <rect x="600" y="-16" width="28" height="28" class="reserved" stroke="#94a3b8"/>
-    <text x="638" y="-2" class="legend-label">reserved</text>
-    <rect x="750" y="-16" width="28" height="28" class="unused" stroke="#94a3b8"/>
-    <text x="788" y="-2" class="legend-label">unused</text>
+  <g transform="translate(48 100)">
+    <rect x="0"    y="-14" width="24" height="24" class="power"    stroke="#94a3b8"/>
+    <text x="32"  y="0" class="legend-label">power</text>
+    <rect x="110"  y="-14" width="24" height="24" class="ground"   stroke="#94a3b8"/>
+    <text x="142" y="0" class="legend-label">ground</text>
+    <rect x="230"  y="-14" width="24" height="24" class="i2c"      stroke="#94a3b8"/>
+    <text x="262" y="0" class="legend-label">I2C</text>
+    <rect x="320"  y="-14" width="24" height="24" class="observe"  stroke="#94a3b8"/>
+    <text x="352" y="0" class="legend-label">observe / input</text>
+    <rect x="490"  y="-14" width="24" height="24" class="drive"    stroke="#94a3b8"/>
+    <text x="522" y="0" class="legend-label">drive / output</text>
+    <rect x="650"  y="-14" width="24" height="24" class="control"  stroke="#94a3b8"/>
+    <text x="682" y="0" class="legend-label">control input</text>
+    <rect x="810"  y="-14" width="24" height="24" class="reserved" stroke="#94a3b8"/>
+    <text x="842" y="0" class="legend-label">reserved</text>
+    <rect x="950"  y="-14" width="24" height="24" class="unused"   stroke="#94a3b8"/>
+    <text x="982" y="0" class="legend-label">unused</text>
   </g>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ABOVE-HEADER CALLOUT: Power + GND (pins 1, 2, 6)
+  ══════════════════════════════════════════════════════════════ -->
+  <!-- wires going up from pins into the callout -->
+  <path d="M100 405 L100 286" class="wire wire-power"/>   <!-- pin 1 (cy=432) + pin 2 (cy=356) share column -->
+  <path d="M248 329 L248 286" class="wire wire-ground"/>  <!-- pin 6 (cy=356) -->
+  <rect x="48"  y="144" width="330" height="140" rx="10" class="callout"/>
+  <text x="70"  y="172" class="callout-title">Power and Ground</text>
+  <line x1="62" y1="180" x2="364" y2="180" class="callout-rule"/>
+  <text x="70"  y="199" class="callout-sub">Pin 1  3.3V  logic rail, ADS1115 VDD, R25 pull-up</text>
+  <text x="70"  y="221" class="callout-sub">Pin 2  5V    U2 VCC, LED VCC, Q8 emitter rail</text>
+  <text x="70"  y="243" class="callout-sub">Pin 6  GND   common: protoboard, ADS1115, U2, LED</text>
+  <text x="70"  y="265" class="callout-dim">Pin 1 square = pin-1 marker on board</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════════ -->
+  <rect x="64" y="300" width="1472" height="184" rx="8" class="header-body"/>
+  <rect x="86" y="328" width="1428" height="54"  rx="4" class="row-bg"/>
+  <rect x="86" y="402" width="1428" height="54"  rx="4" class="row-bg"/>
+
+  <!-- Even row (top, cy=356) -->
+  <circle cx="100"  cy="356" r="27" class="pin power"   /><text x="100"  y="356" class="pin-num">2</text>
+  <circle cx="174"  cy="356" r="27" class="pin unused"  /><text x="174"  y="356" class="pin-num">4</text>
+  <circle cx="248"  cy="356" r="27" class="pin ground"  /><text x="248"  y="356" class="pin-num">6</text>
+  <circle cx="322"  cy="356" r="27" class="pin unused"  /><text x="322"  y="356" class="pin-num">8</text>
+  <circle cx="396"  cy="356" r="27" class="pin unused"  /><text x="396"  y="356" class="pin-num">10</text>
+  <circle cx="470"  cy="356" r="27" class="pin unused"  /><text x="470"  y="356" class="pin-num">12</text>
+  <circle cx="544"  cy="356" r="27" class="pin unused"  /><text x="544"  y="356" class="pin-num">14</text>
+  <circle cx="618"  cy="356" r="27" class="pin unused"  /><text x="618"  y="356" class="pin-num">16</text>
+  <circle cx="692"  cy="356" r="27" class="pin drive"   /><text x="692"  y="356" class="pin-num">18</text>
+  <circle cx="766"  cy="356" r="27" class="pin unused"  /><text x="766"  y="356" class="pin-num">20</text>
+  <circle cx="840"  cy="356" r="27" class="pin unused"  /><text x="840"  y="356" class="pin-num">22</text>
+  <circle cx="914"  cy="356" r="27" class="pin unused"  /><text x="914"  y="356" class="pin-num">24</text>
+  <circle cx="988"  cy="356" r="27" class="pin unused"  /><text x="988"  y="356" class="pin-num">26</text>
+  <circle cx="1062" cy="356" r="27" class="pin reserved"/><text x="1062" y="356" class="pin-num">28</text>
+  <circle cx="1136" cy="356" r="27" class="pin unused"  /><text x="1136" y="356" class="pin-num">30</text>
+  <circle cx="1210" cy="356" r="27" class="pin unused"  /><text x="1210" y="356" class="pin-num">32</text>
+  <circle cx="1284" cy="356" r="27" class="pin unused"  /><text x="1284" y="356" class="pin-num">34</text>
+  <circle cx="1358" cy="356" r="27" class="pin unused"  /><text x="1358" y="356" class="pin-num">36</text>
+  <circle cx="1432" cy="356" r="27" class="pin unused"  /><text x="1432" y="356" class="pin-num">38</text>
+  <circle cx="1506" cy="356" r="27" class="pin unused"  /><text x="1506" y="356" class="pin-num">40</text>
+
+  <!-- Odd row (bottom, cy=432) -->
+  <rect   x="73"   y="405" width="54" height="54" rx="3" class="pin power"  /><text x="100"  y="432" class="pin-num">1</text>
+  <circle cx="174"  cy="432" r="27" class="pin i2c"    /><text x="174"  y="432" class="pin-num">3</text>
+  <circle cx="248"  cy="432" r="27" class="pin i2c"    /><text x="248"  y="432" class="pin-num">5</text>
+  <circle cx="322"  cy="432" r="27" class="pin control"/><text x="322"  y="432" class="pin-num">7</text>
+  <circle cx="396"  cy="432" r="27" class="pin unused" /><text x="396"  y="432" class="pin-num">9</text>
+  <circle cx="470"  cy="432" r="27" class="pin observe"/><text x="470"  y="432" class="pin-num">11</text>
+  <circle cx="544"  cy="432" r="27" class="pin observe"/><text x="544"  y="432" class="pin-num">13</text>
+  <circle cx="618"  cy="432" r="27" class="pin observe"/><text x="618"  y="432" class="pin-num">15</text>
+  <circle cx="692"  cy="432" r="27" class="pin unused" /><text x="692"  y="432" class="pin-num">17</text>
+  <circle cx="766"  cy="432" r="27" class="pin drive"  /><text x="766"  y="432" class="pin-num">19</text>
+  <circle cx="840"  cy="432" r="27" class="pin unused" /><text x="840"  y="432" class="pin-num">21</text>
+  <circle cx="914"  cy="432" r="27" class="pin unused" /><text x="914"  y="432" class="pin-num">23</text>
+  <circle cx="988"  cy="432" r="27" class="pin unused" /><text x="988"  y="432" class="pin-num">25</text>
+  <circle cx="1062" cy="432" r="27" class="pin reserved"/><text x="1062" y="432" class="pin-num">27</text>
+  <circle cx="1136" cy="432" r="27" class="pin drive"  /><text x="1136" y="432" class="pin-num">29</text>
+  <circle cx="1210" cy="432" r="27" class="pin drive"  /><text x="1210" y="432" class="pin-num">31</text>
+  <circle cx="1284" cy="432" r="27" class="pin drive"  /><text x="1284" y="432" class="pin-num">33</text>
+  <circle cx="1358" cy="432" r="27" class="pin drive"  /><text x="1358" y="432" class="pin-num">35</text>
+  <circle cx="1432" cy="432" r="27" class="pin drive"  /><text x="1432" y="432" class="pin-num">37</text>
+  <circle cx="1506" cy="432" r="27" class="pin unused" /><text x="1506" y="432" class="pin-num">39</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BELOW-HEADER WIRES
+  ══════════════════════════════════════════════════════════════ -->
+  <!-- I2C: pins 3 (cx=174) and 5 (cx=248) -->
+  <path d="M174 459 L174 522" class="wire wire-i2c"/>
+  <path d="M248 459 L248 522" class="wire wire-i2c"/>
+  <!-- Button: pin 7 (cx=322) -->
+  <path d="M322 459 L322 522" class="wire wire-control"/>
+  <!-- Observation: pins 11,13,15 -->
+  <path d="M470 459 L470 522" class="wire wire-observe"/>
+  <path d="M544 459 L544 522" class="wire wire-observe"/>
+  <path d="M618 459 L618 522" class="wire wire-observe"/>
+  <!-- Phase 21/22: pin 18 (cx=692, even row), pin 19 (cx=766, odd row) -->
+  <path d="M692 383 L692 682" class="wire wire-drive"/>
+  <path d="M766 459 L766 682" class="wire wire-drive"/>
+  <!-- JOG drive: pins 29,31,33,35,37 -->
+  <path d="M1136 459 L1136 522" class="wire wire-drive"/>
+  <path d="M1210 459 L1210 522" class="wire wire-drive"/>
+  <path d="M1284 459 L1284 522" class="wire wire-drive"/>
+  <path d="M1358 459 L1358 522" class="wire wire-drive"/>
+  <path d="M1432 459 L1432 522" class="wire wire-drive"/>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALLOUT: I2C + Button  (pins 3, 5, 7)
+  ══════════════════════════════════════════════════════════════ -->
+  <rect x="48" y="520" width="370" height="162" rx="10" class="callout"/>
+  <text x="70" y="548" class="callout-title">I2C  /  Control button</text>
+  <line x1="62" y1="556" x2="404" y2="556" class="callout-rule"/>
+  <text x="70" y="575" class="callout-sub">Pin 3   GPIO2   SDA → ADS1115 SDA</text>
+  <text x="70" y="597" class="callout-sub">Pin 5   GPIO3   SCL → ADS1115 SCL</text>
+  <line x1="62" y1="608" x2="404" y2="608" class="callout-rule"/>
+  <text x="70" y="627" class="callout-sub">Pin 7   GPIO4   SW1 display toggle (active low)</text>
+  <text x="70" y="649" class="callout-dim">R25 10 kΩ pull-up, C5 100 nF debounce</text>
+  <text x="70" y="670" class="callout-dim">Ph.22</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALLOUT: Observation inputs  (pins 11, 13, 15)
+  ══════════════════════════════════════════════════════════════ -->
+  <rect x="432" y="520" width="252" height="140" rx="10" class="callout"/>
+  <text x="454" y="548" class="callout-title">Observation inputs</text>
+  <line x1="446" y1="556" x2="670" y2="556" class="callout-rule"/>
+  <text x="454" y="576" class="callout-sub">Pin 11  GPIO17   ADS1115 ALERT/RDY</text>
+  <text x="454" y="598" class="callout-sub">Pin 13  GPIO27   KEY_ADC1 input</text>
+  <text x="454" y="620" class="callout-sub">Pin 15  GPIO22   KEY_LED input</text>
+  <text x="454" y="646" class="callout-dim">KEY_ADC2 → ADS1115 AIN0 via R20 100 kΩ</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALLOUT: Phase 21 / 22 outputs  (pins 18, 19)
+  ══════════════════════════════════════════════════════════════ -->
+  <rect x="564" y="680" width="310" height="102" rx="10" class="callout"/>
+  <text x="586" y="708" class="callout-title">Phase 21 / 22 outputs</text>
+  <line x1="578" y1="716" x2="860" y2="716" class="callout-rule"/>
+  <text x="586" y="736" class="callout-sub">Pin 18  GPIO24   display_power_en → Q9/Q8</text>
+  <text x="586" y="758" class="callout-sub">Pin 19  GPIO10   SPI MOSI → U2 → WS2811 DIN</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CALLOUT: JOG drive outputs  (pins 29, 31, 33, 35, 37)
+  ══════════════════════════════════════════════════════════════ -->
+  <rect x="880" y="520" width="440" height="200" rx="10" class="callout"/>
+  <text x="902" y="548" class="callout-title">JOG drive outputs</text>
+  <line x1="894" y1="556" x2="1306" y2="556" class="callout-rule"/>
+  <text x="902" y="576" class="callout-sub">Pin 29  GPIO5    CENTER → Q3 base</text>
+  <text x="902" y="598" class="callout-sub">Pin 31  GPIO6    UP     → Q4 base</text>
+  <text x="902" y="620" class="callout-sub">Pin 33  GPIO13   DOWN   → Q5 base</text>
+  <text x="902" y="642" class="callout-sub">Pin 35  GPIO19   LEFT   → Q6 base</text>
+  <text x="902" y="664" class="callout-sub">Pin 37  GPIO26   RIGHT  → Q7 base</text>
+  <text x="902" y="706" class="callout-dim">Each output drives one 2N3904 low-side switch.</text>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SUMMARY TABLE
+  ══════════════════════════════════════════════════════════════ -->
+  <text x="48" y="814" class="section">Connection Summary</text>
+  <rect x="48" y="830" width="1504" height="112" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+
+  <text x="72"   y="860" class="table-head">Power / Ground</text>
+  <text x="72"   y="882" class="table-text">Pin 1  3.3V  logic / ADS1115 / R25</text>
+  <text x="72"   y="902" class="table-text">Pin 2  5V    U2 VCC / LED / Q8</text>
+  <text x="72"   y="922" class="table-text">Pin 6  GND   common ground</text>
+
+  <text x="310"  y="860" class="table-head">ADS1115 I2C</text>
+  <text x="310"  y="882" class="table-text">Pin 3  GPIO2   SDA</text>
+  <text x="310"  y="902" class="table-text">Pin 5  GPIO3   SCL</text>
+  <text x="310"  y="922" class="table-text">Pin 11 GPIO17  ALERT/RDY</text>
+
+  <text x="560"  y="860" class="table-head">Observation</text>
+  <text x="560"  y="882" class="table-text">Pin 13  GPIO27  KEY_ADC1</text>
+  <text x="560"  y="902" class="table-text">Pin 15  GPIO22  KEY_LED</text>
+  <text x="560"  y="922" class="table-muted">KEY_ADC2 → ADS1115 AIN0 (via R20)</text>
+
+  <text x="810"  y="860" class="table-head">Ph.22 Control</text>
+  <text x="810"  y="882" class="table-text">Pin 7   GPIO4   SW1 button</text>
+  <text x="810"  y="902" class="table-text">Pin 19  GPIO10  SPI MOSI → LED</text>
+  <text x="810"  y="922" class="table-text">Pin 18  GPIO24  display_power_en</text>
+
+  <text x="1100" y="860" class="table-head">JOG Drive (2N3904)</text>
+  <text x="1100" y="882" class="table-text">Pin 29/31/33/35/37</text>
+  <text x="1100" y="902" class="table-text">GPIO5 / GPIO6 / GPIO13 / GPIO19 / GPIO26</text>
+  <text x="1100" y="922" class="table-text">CENTER / UP / DOWN / LEFT / RIGHT</text>
 </svg>

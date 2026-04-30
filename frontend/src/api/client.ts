@@ -336,6 +336,12 @@ export async function requestShutdown(): Promise<{ ok: boolean; message: string 
   return (await r.json()) as { ok: boolean; message: string };
 }
 
+export async function requestRestart(): Promise<{ ok: boolean; message: string }> {
+  const r = await fetch(`${apiBase()}/api/v1/system/restart`, { method: "POST" });
+  if (!r.ok) throw new Error(`restart request failed: ${r.status}`);
+  return (await r.json()) as { ok: boolean; message: string };
+}
+
 export function websocketEventsUrl(): string {
   const base = apiBase();
   if (base.startsWith("http://") || base.startsWith("https://")) {

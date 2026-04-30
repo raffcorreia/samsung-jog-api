@@ -372,6 +372,12 @@ async def api_system_shutdown(system: SystemService = Depends(get_system)) -> Sy
     return SystemShutdownOut(ok=True, message="Shutdown initiated")
 
 
+@api_v1.post("/system/restart", response_model=SystemShutdownOut)
+async def api_system_restart(system: SystemService = Depends(get_system)) -> SystemShutdownOut:
+    asyncio.create_task(system.restart())
+    return SystemShutdownOut(ok=True, message="Restart initiated")
+
+
 async def websocket_events(ws: WebSocket) -> None:
     deck: DeckControlService = ws.app.state.deck
     hub: WsHub = ws.app.state.ws_hub
