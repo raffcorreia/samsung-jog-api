@@ -1142,35 +1142,68 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 24: LED Feedback Characterization
+## Phase 24: LED Feedback Characterization and Monitor State Model
 
 ### Goal
 
-Determine how useful `KEY_LED` is as a control-feedback signal.
+Determine how useful `KEY_LED` is as a control-feedback signal, fully characterise monitor power states from the existing observation bus, and update the UI to reflect those states.
 
 ### Scope
 
 - input-change feedback
 - idle behavior
 - OSD boundary cues
+- monitor state detection: **ON / IDLE / OFF / POWERED OFF**
+- UI representation of all four monitor states
+
+### Background
+
+Four observable monitor states need to be handled:
+
+- **ON** — monitor active; `KEY_LED` alternates on/off at idle; `KEY_ADC1` and `KEY_ADC2` produce valid JOG signals only on interaction.
+- **IDLE** — monitor in power-save / no-signal; `KEY_LED` blink pattern differs from ON; already partially visible in the UI via the live LED indicator.
+- **OFF** — monitor soft-powered off via its own power button (standby); DDC may or may not respond; bus signals settle.
+- **POWERED OFF** — monitor physically unplugged or hard power cut; no DDC response; characteristic bus fingerprint observed (see below).
+
+#### POWERED OFF bus fingerprint
+
+When the monitor loses power, the observation bus produces a distinctive and **unforgeable** transient:
+
+1. `KEY_ADC1` goes active (reads as pressed) — the monitor’s internal pull-up collapses, leaving the line at 0 V.
+2. `KEY_ADC2` sweeps through direction thresholds — the resistor-ladder voltage decays through each threshold as the supply drains.
+3. Both buses **stay held in those states indefinitely** — with no power to restore the pull-ups or the ladder reference, neither signal returns to neutral.
+
+This two-part signature (simultaneous transition + indefinite hold) is physically impossible during any valid JOG interaction: real presses are momentary and only one bus changes at a time. A timeout of 2–3 seconds of both buses stuck confirms POWERED OFF with no ambiguity.
+
+Recovery: when the monitor powers back on, pull-ups restore and the resistor ladder re-settles — the transition out of "both stuck" is the POWERED ON confirmation.
+
+#### Active probe for ON vs OFF/IDLE
+
+Send a known JOG command that reliably produces a `KEY_LED` blink. If the LED responds → monitor is ON. No LED response + clean bus → OFF or IDLE (distinguish further by signal levels and DDC if available).
 
 ### Tasks
 
 - use recording and replay to correlate `KEY_LED` behavior with repeated monitor actions
 - repeat controlled monitor sequences while observing `KEY_LED`
-- record blink patterns and timing
+- record blink patterns and timing across all four states
 - identify any repeatable LED cues that can be used to gate continuation
+- implement passive POWERED OFF detection from simultaneous + persistent bus hold
+- implement active probe (JOG → LED response) for ON vs OFF/IDLE discrimination
 - determine where LED feedback is useful and where it is too ambiguous
-- add verification coverage for `LED` event detection and timing assumptions
+- add verification coverage for LED event detection and timing assumptions
+- update the UI to surface monitor state (ON / IDLE / OFF / POWERED OFF) — IDLE is already partially represented via the live LED indicator
 
 ### Deliverables
 
-- validated `LED` behavior model
+- validated `LED` behavior model across all four monitor states
+- software monitor-state detector driven from the existing observation bus
+- UI updated to represent ON / IDLE / OFF / POWERED OFF
 - guidance on where `wait_led` events are meaningful
 
 ### Exit criteria
 
 - the project knows when LED feedback can be trusted as part of sequence execution
+- monitor state is reliably detected and surfaced in the UI
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
 ## Phase 25: State Investigation and Sequence Cleanup
