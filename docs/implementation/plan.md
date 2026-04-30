@@ -2,7 +2,7 @@
 
 ## Phase Index
 
-- [Host health gate (feature phases 10–30)](#host-health-gate-feature-phases-1030)
+- [Host health gate (feature phases 10–31)](#host-health-gate-feature-phases-1030)
 - [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
 - [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
 - [Phase 2: Hardware Validation](#phase-2-hardware-validation)
@@ -33,7 +33,8 @@
 - [Phase 27: Productized Monitor Features](#phase-27-productized-monitor-features)
 - [Phase 28: Dashboard Data-Source Spike](#phase-28-dashboard-data-source-spike)
 - [Phase 29: Dashboard Widgets](#phase-29-dashboard-widgets)
-- [Phase 30: Stabilization](#phase-30-stabilization)
+- [Phase 30: Custom Hardware Installation, DDC Migration, and Configuration Revert](#phase-30-custom-hardware-installation-ddc-migration-and-configuration-revert)
+- [Phase 31: Stabilization](#phase-31-stabilization)
 - [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
 
 ## Summary
@@ -54,7 +55,7 @@ The overall strategy is:
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
-## Host health gate (feature phases 10–30)
+## Host health gate (feature phases 10–31)
 
 Phases **10–30** introduce or expand product behavior on the **Raspberry Pi control deck**. Completing any of these phases (closing the phase in the implementation plan) requires a **host health snapshot** so regressions in power, thermals, storage, or runtime health are visible over time.
 
@@ -92,7 +93,7 @@ The implementation is expected to grow these testing layers over time:
 
 Detailed test design still needs its own document, but no phase should be treated as complete without the relevant tests for that phase.
 
-For **Phases 10–30**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in the phase execution record.
+For **Phases 10–31**, also satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in the phase execution record.
 
 ## Phase 0: Documentation and Evidence Capture
 
@@ -1122,6 +1123,12 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 - power-related behavior
 - `DDC` timing and reliability
 
+### Note on monitor configuration changes
+
+`DDC` investigation uses the `HDMI` connection as the transport. Supporting two monitors (e.g. the Samsung CJ791 alongside a development display) may require temporary monitor configuration changes — input source settings, display clone/extend mode, or EDID-related workarounds. These changes are investigation-phase workarounds only.
+
+When the custom hardware (Phase 7 integrated board) is installed, `DDC` communication will migrate to direct `I2C` and the `HDMI` connection will no longer be required for control. All monitor configuration changes forced during this phase must be reverted at that point. See [Phase 30](#phase-30-custom-hardware-installation-ddc-migration-and-configuration-revert).
+
 ### Tasks
 
 - repeat key monitor workflows while querying `DDC`
@@ -1131,11 +1138,13 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 - document `DDC` behavior during source cycling and related workflows
 - feed normalized `DDC` status into the control model
 - add verification coverage for supported `DDC` reads and writes
+- record all monitor configuration changes made during this phase so they can be cleanly reverted in Phase 30
 
 ### Deliverables
 
 - validated `DDC` behavior model
 - updated DDC notes and usable read/write rules
+- log of monitor configuration changes made during investigation
 
 ### Exit criteria
 
@@ -1400,7 +1409,54 @@ Implement the dashboard side of the product using the data-source decisions from
 - the dashboard is useful and stable without compromising the monitor-control surface
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase’s execution record
 
-## Phase 30: Stabilization
+## Phase 30: Custom Hardware Installation, DDC Migration, and Configuration Revert
+
+### Goal
+
+Install the Phase 7 integrated controller board, migrate `DDC` communication from `HDMI` to direct `I2C`, and revert all monitor configuration changes that were introduced as workarounds during Phase 23.
+
+### Background
+
+Phase 23 uses the `HDMI` connection as the `DDC` transport, which may require temporary monitor configuration changes (input source, display mode, EDID workarounds) to support investigation with two monitors. When the custom hardware is installed, the `I2C` bus on the controller board provides a direct `DDC/CI` path to the monitor — the `HDMI` connection is no longer needed for control. This phase removes all Phase 23 workarounds and migrates the software stack to the final hardware configuration.
+
+This phase also incorporates the deferred GPIO and software migration from the Phase 6 protoboard to the Phase 7 integrated board (previously tracked under [Deferred integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)).
+
+### Scope
+
+- physical installation of the Phase 7 integrated controller board
+- GPIO remapping from Phase 6 protoboard pinout to Phase 7 integrated board pinout
+- migration of `DDC` transport from `HDMI` to direct `I2C` via the controller board
+- revert all monitor configuration changes logged during Phase 23
+- re-validation of all features against the final hardware configuration
+
+### Tasks
+
+- install Phase 7 integrated controller board and validate power, GPIO, and I2C connectivity
+- remap all GPIO assignments from the Phase 6 baseline to the Phase 7 pinout
+- adapt and re-validate software, tests, and automation that assumed Phase 6 pins
+- migrate the `DDC` service from `HDMI`-based transport to direct `I2C` on the controller board
+- verify that all `DDC` features validated in Phase 23 function correctly over `I2C`
+- revert monitor configuration changes recorded during Phase 23 (input source, display mode, EDID workarounds)
+- confirm the `HDMI` connection is no longer required for `DDC` control
+- update operational docs and runbooks that reference Phase 6 BCM GPIO numbers or HDMI DDC paths
+- run full regression across JOG, LED observation, DDC, and productized features on final hardware
+
+### Deliverables
+
+- system running on Phase 7 hardware with no protoboard dependencies
+- `DDC` communicating over `I2C` without `HDMI`
+- monitor returned to its pre-investigation configuration
+- updated GPIO map and software references throughout
+
+### Exit criteria
+
+- Phase 7 integrated board is the sole hardware interface; Phase 6 protoboard is retired
+- `DDC` over `I2C` passes the same capability checks as Phase 23 `HDMI` DDC
+- monitor configuration is clean — no Phase 23 workarounds remain
+- all productized features from Phase 27 pass regression on final hardware
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1030) in this phase's execution record
+
+## Phase 31: Stabilization
 
 ### Goal
 
