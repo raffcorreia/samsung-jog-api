@@ -51,26 +51,19 @@
   flex-shrink: 0;
   transition: background 0.1s, opacity 0.1s, color 0.2s;
   opacity: 0.75;
+  color: var(--danger);
 }
 
 .powerBtn:hover {
-  background: rgba(255, 123, 114, 0.1);
   opacity: 1;
 }
 
 .powerBtn:active {
-  background: rgba(255, 123, 114, 0.2);
+  opacity: 0.6;
 }
 
-/* Display is off — dim the button to signal the state */
-.powerBtnOff {
-  color: var(--muted);
-  opacity: 0.4;
-}
-
-.powerBtnOff:hover {
-  background: var(--surface-elevated);
-  opacity: 0.8;
+.powerBtnOn {
+  color: #4ade80;
 }
 
 /* Clock */
