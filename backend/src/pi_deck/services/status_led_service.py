@@ -11,15 +11,14 @@ Encoding (4 SPI bits per WS2812B bit at 3.2 MHz → 312.5 ns per SPI bit):
 Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → SN74AHCT125 level shifter
 3.3 V → 5 V → WS2812B DIN.
 
-Color / state — last event wins, all terminal events fall to panel colour:
-  set_button_held(True)              → AMBER
-  set_button_held(False)             → panel colour
-  set_monitor_led(True),  panel on   → BLUE
-  set_monitor_led(True),  panel off  → OFF
-  set_monitor_led(False)             → panel colour
-  set_panel_on(True)                 → GREEN
-  set_panel_on(False)                → RED
-  correction thread (every 5 s)     → panel colour  (self-heals missed events)
+Color / state — priority reassert (button > monitor > panel):
+  button held                        → AMBER
+  monitor active,  panel on          → BLUE
+  monitor active,  panel off         → OFF
+  default,         panel on          → GREEN
+  default,         panel off         → RED
+  correction thread (every 5 s)     → reasserts full current state (self-heals missed events
+                                       without clobbering non-panel states)
 
 Threading:
   Each setter calls _send_frame() directly from the caller thread.
@@ -79,18 +78,26 @@ _FRAME_BLUE  = _make_frame(int(_BLUE[0]  * _BRIGHTNESS), int(_BLUE[1]  * _BRIGHT
 
 
 class StatusLedService:
-    """Single WS2812B status LED driven by last-event-wins state model.
+    """Single WS2812B status LED driven by tracked state with priority reassert.
 
     Setters call SPI directly from the caller thread — no polling, no queue.
-    A correction daemon re-asserts panel colour every 5 s to self-heal missed events.
+    A correction daemon re-asserts the full current state every 5 s to self-heal
+    missed events without clobbering non-panel states (e.g. blue during monitor active).
+
+    Priority (for reassert and terminal fallbacks):
+      button held  →  AMBER
+      monitor active  →  BLUE (panel on) / OFF (panel off)
+      default  →  GREEN (panel on) / RED (panel off)
     """
 
     def __init__(self, hw_mode: str) -> None:
         self._live = hw_mode == "live"
         self._spi = None
         self._panel_on = True
-        self._state_lock = threading.Lock()   # guards _panel_on reads/writes
-        self._spi_lock = threading.Lock()     # serialises concurrent SPI writes
+        self._monitor_active = False
+        self._button_held = False
+        self._state_lock = threading.Lock()
+        self._spi_lock = threading.Lock()
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
         if self._live:
@@ -103,7 +110,7 @@ class StatusLedService:
             target=self._correction_loop, name="status-led", daemon=True
         )
         self._thread.start()
-        self._send_panel_color()
+        self._reassert()
         logger.info("status-led: started")
 
     def stop(self) -> None:
@@ -122,34 +129,38 @@ class StatusLedService:
     def set_panel_on(self, on: bool) -> None:
         with self._state_lock:
             self._panel_on = on
-        self._send_frame(_FRAME_GREEN if on else _FRAME_RED)
+        self._reassert()
 
     def set_button_held(self, held: bool) -> None:
-        if held:
-            self._send_frame(_FRAME_AMBER)
-        else:
-            self._send_panel_color()
+        with self._state_lock:
+            self._button_held = held
+        self._reassert()
 
     def set_monitor_led(self, active: bool) -> None:
-        if active:
-            with self._state_lock:
-                panel_on = self._panel_on
-            self._send_frame(_FRAME_BLUE if panel_on else _FRAME_OFF)
-        else:
-            self._send_panel_color()
+        with self._state_lock:
+            self._monitor_active = active
+        self._reassert()
 
     # ── correction thread ─────────────────────────────────────────────────────
 
     def _correction_loop(self) -> None:
         while not self._stop.wait(timeout=5.0):
-            self._send_panel_color()
+            self._reassert()
 
     # ── internals ─────────────────────────────────────────────────────────────
 
-    def _send_panel_color(self) -> None:
+    def _reassert(self) -> None:
+        """Send the correct frame for the current tracked state."""
         with self._state_lock:
+            button_held = self._button_held
+            monitor_active = self._monitor_active
             panel_on = self._panel_on
-        self._send_frame(_FRAME_GREEN if panel_on else _FRAME_RED)
+        if button_held:
+            self._send_frame(_FRAME_AMBER)
+        elif monitor_active:
+            self._send_frame(_FRAME_BLUE if panel_on else _FRAME_OFF)
+        else:
+            self._send_frame(_FRAME_GREEN if panel_on else _FRAME_RED)
 
     def _send_frame(self, frame: list[int]) -> None:
         if self._spi is not None:
