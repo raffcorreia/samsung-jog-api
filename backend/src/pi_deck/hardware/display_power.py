@@ -45,15 +45,23 @@ def _find_backlight_path() -> Path:
     return _BACKLIGHT_DIR / "10-0045" / "brightness"  # legacy fallback
 
 
+_dsi_output_cache: str | None = None
+
+
 def _find_dsi_output() -> str:
     # DSI output name varies by host: DSI-1 on Pi 2, DSI-2 on Pi 5.
+    # Cached after first discovery — the output name never changes at runtime.
+    global _dsi_output_cache
+    if _dsi_output_cache is not None:
+        return _dsi_output_cache
     try:
         result = subprocess.run(
             ["wlr-randr"], capture_output=True, timeout=3, env=_WAYLAND_ENV
         )
         for line in result.stdout.decode(errors="replace").splitlines():
             if line.startswith("DSI-"):
-                return line.split()[0]
+                _dsi_output_cache = line.split()[0]
+                return _dsi_output_cache
     except Exception:
         pass
     return "DSI-1"  # legacy fallback
@@ -141,9 +149,8 @@ class LiveDisplayPower:
                 env=_WAYLAND_ENV,
             )
             output = result.stdout.decode(errors="replace")
-            # Find the DSI-1 block and check "Enabled: yes"
             in_dsi = False
-            dsi_name = _find_dsi_output()
+            dsi_name = _find_dsi_output()  # cached after first call — no extra subprocess
             for line in output.splitlines():
                 if line.startswith(dsi_name):
                     in_dsi = True

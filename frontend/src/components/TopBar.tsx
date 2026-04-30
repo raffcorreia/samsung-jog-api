@@ -41,6 +41,7 @@ export function TopBar({ title }: { title?: string }) {
 
   const [displayOn, setDisplayOn] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pending, setPending] = useState(false);
 
   // Fetch initial display power state once on mount.
   useEffect(() => {
@@ -65,11 +66,17 @@ export function TopBar({ title }: { title?: string }) {
 
     if (!on) {
       // Display is off — power it back on immediately.
+      setPending(true);
       try {
-        const result = await setDisplayPower(true);
-        setDisplayOn(result.on);
+        const [result] = await Promise.all([
+          setDisplayPower(true),
+          new Promise((r) => setTimeout(r, 3000)),
+        ]);
+        setDisplayOn((result as { on: boolean }).on);
       } catch {
         /* network error while display is off; nothing actionable */
+      } finally {
+        setPending(false);
       }
     } else {
       setMenuOpen(true);
@@ -94,20 +101,36 @@ export function TopBar({ title }: { title?: string }) {
             data-testid="top-bar-power"
             onClick={() => void handlePowerClick()}
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 2v10" />
-              <path d="M8.56 5a8 8 0 1 0 6.88 0" />
-            </svg>
+            {pending ? (
+              <svg
+                className={styles.spinner}
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M12 2a10 10 0 1 0 10 10" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 2v10" />
+                <path d="M8.56 5a8 8 0 1 0 6.88 0" />
+              </svg>
+            )}
           </button>
 
           <Clock />

@@ -70,6 +70,7 @@ class DisplayService:
     def __init__(self, display_hw: DisplayPowerControl) -> None:
         self._hw = display_hw
         self._saved_raw: int | None = _load_saved_raw()  # persisted across reboots
+        self._power_on: bool = self._hw.read_power_on()  # cached; updated on every write
 
     # ── brightness ────────────────────────────────────────────────────────────
 
@@ -79,7 +80,7 @@ class DisplayService:
         Returns the saved (pre-power-off) brightness when the display is off so
         callers see the intended level rather than the physical 0.
         """
-        if not self._hw.read_power_on() and self._saved_raw is not None:
+        if not self._power_on and self._saved_raw is not None:
             return _raw_to_pct(self._saved_raw)
         return _raw_to_pct(self._hw.read_brightness_raw())
 
@@ -101,7 +102,7 @@ class DisplayService:
     @property
     def is_on(self) -> bool:
         """True when the DSI output is enabled via wlr-randr."""
-        return self._hw.read_power_on()
+        return self._power_on
 
     def power_off(self) -> None:
         """Power off the display.
@@ -114,6 +115,7 @@ class DisplayService:
         _persist_raw(self._saved_raw)
         self._hw.write_brightness_raw(0)
         self._hw.write_power_on(False)
+        self._power_on = False
         self._hw.write_rail_on(False)
         logger.info(
             "display: power off (saved=%d raw, backlight=0, wlr-randr --off, rail off)",
@@ -128,9 +130,9 @@ class DisplayService:
         RC ramp (~100 ms) plus panel init margin.
         """
         self._hw.write_rail_on(True)
-        time.sleep(0.15)
         self._hw.reinit_panel()
         self._hw.write_power_on(True)
+        self._power_on = True
         restore = self._saved_raw if self._saved_raw is not None else _DEFAULT_RAW
         self._hw.write_brightness_raw(restore)
         logger.info(
