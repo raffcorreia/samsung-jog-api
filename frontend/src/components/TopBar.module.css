@@ -44,6 +44,7 @@
   height: 36px;
   padding: 0;
   border: none;
+  outline: none;
   border-radius: 8px;
   background: none;
   color: var(--danger);
@@ -51,7 +52,6 @@
   flex-shrink: 0;
   transition: background 0.1s, opacity 0.1s, color 0.2s;
   opacity: 0.75;
-  color: var(--danger);
 }
 
 .powerBtn:hover {
