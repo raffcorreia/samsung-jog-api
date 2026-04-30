@@ -6,7 +6,7 @@
 	(paper "A3")
 	(title_block
 		(title "Phase 6 Protoboard Validation")
-		(rev "A")
+		(rev "A.01")
 		(company "samsung-jog-api")
 		(comment 1 "Discrete-component protoboard using 2N3904 channels")
 		(comment 2 "ADS1115 observes KEY_ADC2 with ALERT/RDY to Raspberry Pi")
@@ -5525,7 +5525,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "4.7k"
+		(property "Value" "220"
 			(at 233.68 110.23 0)
 			(show_name no)
 			(do_not_autoplace no)
