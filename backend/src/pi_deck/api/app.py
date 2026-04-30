@@ -34,22 +34,6 @@ from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 from pi_deck.storage.recordings import RecordingStore
 
-# Path written by scripts/deploy.sh on each deployment.
-_DEPLOY_COUNTER_FILE = Path.home() / ".pi-deck-deploy"
-
-
-def _read_deploy_counter() -> int:
-    """Return the persistent deploy counter, or 0 if absent / unreadable."""
-    try:
-        return int(_DEPLOY_COUNTER_FILE.read_text().strip())
-    except Exception:
-        return 0
-
-
-def _build_version() -> str:
-    """Return ``__version__`` decorated with the deploy counter when present."""
-    n = _read_deploy_counter()
-    return f"{__version__}+r{n}" if n > 0 else __version__
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +63,7 @@ async def lifespan(app: FastAPI):
     hub = WsHub()
     live_log = LiveLogService(hub)
     hw = build_hardware()
-    version = _build_version()
+    version = __version__
     deck = DeckControlService(hardware=hw, ws_hub=hub, live_log=live_log, version=version)
     recordings = RecordingService(
         store=RecordingStore(),

@@ -88,6 +88,8 @@ class StatusOut(BaseModel):
     operating_mode: OperatingMode
     control_state: ControlState
     signals: SignalSnapshot
+    os_version: str = ""
+    python_version: str = ""
 
 
 class CommandRejectedOut(BaseModel):

@@ -10,7 +10,7 @@ It complements:
 - [Solution Overview](../design/solution-overview.md)
 - [Phase 2 Execution Record](./phase-2-execution.md)
 - [Phase 3 Execution Record](./phase-3-execution.md)
-- [Phase 4 Analog Drive BOM](../hardware/phase-4-analog-drive-bom.md)
+- [Phase 4 Analog Drive BOM](../hardware/analog-drive-bom.md)
 
 ## Goal
 
@@ -20,7 +20,7 @@ Design and approve an analog drive path that can safely reproduce the required `
 
 Current analog-drive concept diagram:
 
-![Phase 4 analog drive path concept](../assets/hardware/phase-4-analog-drive-schematic.svg)
+![Phase 4 analog drive path concept](../assets/hardware/analog-drive-schematic.svg)
 
 KiCad design artifacts for implementation:
 

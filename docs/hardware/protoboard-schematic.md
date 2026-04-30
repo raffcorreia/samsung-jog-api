@@ -34,7 +34,7 @@ There is no `J2` or `J3` header in this phase.
 | `display_power_en` output (Phase 21) | `GPIO24`, physical pin `18` |
 | `5V power rail for display branch` (Phase 21) | physical pin `2` |
 
-![Phase 6 Raspberry Pi pinout](../assets/hardware/phase-6-raspberry-pi-pinout.svg)
+![Phase 6 Raspberry Pi pinout](../assets/hardware/raspberry-pi-pinout.svg)
 
 ## ADC Block
 

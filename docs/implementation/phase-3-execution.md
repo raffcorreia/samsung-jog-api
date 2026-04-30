@@ -19,7 +19,7 @@ Produce and approve a hardware design for continuously observing `KEY_ADC1`, `KE
 
 Current observation-path concept diagram:
 
-![Phase 3 observation path concept](../assets/hardware/phase-3-observation-schematic.svg)
+![Phase 3 observation path concept](../assets/hardware/observation-schematic.svg)
 
 This diagram is intentionally schematic in the architectural sense, not a finalized electrical schematic. Its purpose is to show that the observation board probes the existing bus in parallel while the original `JOG` board and front-panel LED remain connected.
 
@@ -27,7 +27,7 @@ Preliminary connection-level schematic:
 
 - KiCad project: [phase-3-observation.kicad_pro](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_pro)
 - KiCad schematic: [phase-3-observation.kicad_sch](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_sch)
-- BOM: [phase-3-observation-bom.md](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/hardware/phase-3-observation-bom.md)
+- BOM: [observation-bom.md](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/hardware/observation-bom.md)
 
 This is the current connection-level schematic source for the observation path. It replaces the second SVG-style diagram and is intended to be the editable starting point for the actual electrical design.
 

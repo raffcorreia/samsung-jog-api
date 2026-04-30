@@ -9,8 +9,8 @@ It complements:
 - [Implementation Plan](./plan.md)
 - [Requirements](../requirements.md)
 - [CJ791 JOG Board Notes](../hardware/cj791-jog-board.md)
-- [Phase 6 Protoboard BOM](../hardware/phase-6-protoboard-bom.md)
-- [Phase 6 Protoboard Schematic](../hardware/phase-6-protoboard-schematic.md)
+- [Phase 6 Protoboard BOM](../hardware/protoboard-bom.md)
+- [Phase 6 Protoboard Schematic](../hardware/protoboard-schematic.md)
 
 ## Goal
 

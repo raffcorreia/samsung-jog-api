@@ -5,4 +5,7 @@ Bench bring-up scripts live under the repository `scripts/` directory.
 See docs/architecture.md (Repository layout) and docs/development/code-guidelines.md.
 """
 
-__version__ = "0.1.0"
+try:
+    from pi_deck._version import __version__
+except ImportError:
+    __version__ = "0.0.0-dev"

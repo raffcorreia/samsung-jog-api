@@ -215,7 +215,7 @@ Board 2 is Phase 5's `HDMI DDC Intermediary` schematic with a single connector s
 
 All other components, nets, and circuit function are unchanged. See Phase 5 execution record for full circuit description.
 
-Board 2 component list is identical to Phase 5 BOM. See [`docs/hardware/phase-5-hdmi-ddc-transport.md`](../hardware/phase-5-hdmi-ddc-transport.md).
+Board 2 component list is identical to Phase 5 BOM. See [`docs/hardware/hdmi-ddc-transport.md`](../hardware/hdmi-ddc-transport.md).
 
 ## I2C Bus Sharing
 

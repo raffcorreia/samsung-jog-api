@@ -486,7 +486,7 @@ Complete: [Phase 8 Execution Record](./phase-8-execution.md) (2026-04-12). Bench
 
 ## Phase 9: Local Platform Bring-Up
 
-**Status: complete.** Record: [Phase 9 Execution Record](./phase-9-execution.md). Runbook: [Phase 9 platform bring-up](../runbooks/phase-9-platform-bring-up.md).
+**Status: complete.** Record: [Phase 9 Execution Record](./phase-9-execution.md). Runbook: [Phase 9 platform bring-up](../runbooks/platform-bring-up.md).
 
 ### Goal
 
@@ -987,7 +987,7 @@ Run the validation in this order so differences are attributable and the prior p
 - install the backend service, graphical stack, kiosk autostart, and keyring suppression using existing scripts
 - deploy the current repo to the Pi 5 with `scripts/deploy.sh`
 - update or override `PI_TARGET` for the Pi 5 without changing the deploy script's single canonical workflow
-- wire the Pi 5 header according to [Phase 20 Pi 5 GPIO schema](../hardware/phase-20-pi5-gpio-schema.md)
+- wire the Pi 5 header according to [Phase 20 Pi 5 GPIO schema](../hardware/pi5-gpio-schema.md)
 - validate `gpiozero` pin factory compatibility on Pi 5; prefer `lgpio` if needed by the OS image, but record the actual setting
 - verify `i2c_arm`, project I2C bus, `ADS1115`, DDC bus, DSI touch/panel bus, and `/sys/class/backlight` paths
 - confirm whether `video=HDMI-A-1:d` is still required and still preserves DDC/CI access
@@ -1048,7 +1048,7 @@ Phases 19 and 20 confirmed that hot-plugging the display's 5V line while the Pi 
 ### Deliverables
 
 - Phase 21 display power circuit assembled on protoboard
-- Phase 21 display power schematic added to `docs/hardware/phase-6-protoboard-schematic.md`
+- Phase 21 display power schematic added to `docs/hardware/protoboard-schematic.md`
 - Phase 20 GPIO schema updated with GPIO24
 - backend `display_power_en` GPIO wired into `DisplayService`
 - Phase 21 execution record with evidence of clean switching
@@ -1082,6 +1082,7 @@ The project should follow the same rule already used successfully in code: imple
 
 ### Scope
 
+**Documentation:**
 - documentation naming policy for phase records versus living reference documents
 - repository organization policy for code, hardware artifacts, and documentation support assets
 - renaming shared docs whose current names are phase-scoped but whose role is not
@@ -1089,8 +1090,23 @@ The project should follow the same rule already used successfully in code: imple
 - documentation indexes and inbound links for discoverability
 - reference updates across the repo so renamed docs remain easy to find
 
+**Versioning:**
+- replace hardcoded `__version__` string with a git-tag–derived version computed at deploy time
+- single version for the whole deck — FE and BE are one deployment unit and always move together; no separate versioning layers
+- deploy counter kept as build metadata (e.g. `0.1.0+r64`)
+- non-main branch suffix appended when deploying from a branch (e.g. `0.1.0-dev.3.gabcdef.feature-foo+r64`)
+- version baked into a generated `_version.py` file (gitignored) so the running Pi always reports the exact build it is running
+- status endpoint enriched with OS version and Python version for diagnostics
+
+**Deploy harness:**
+- fast SSH connectivity pre-check at the top of the deploy script (5 s timeout, single attempt, fail-fast)
+- when the Pi is unreachable: print a clear actionable message and exit immediately — no silent retry hammering
+- `PI_TARGET` is an environment variable (not a config file); when unset or unreachable, the harness prints the exact `export PI_TARGET=user@host` command and stops so the caller can set it for the session
+- on a fresh shell (clean env) the same prompt surfaces again naturally
+
 ### Tasks
 
+**Documentation:**
 - define and document the naming rule: phase names are for execution/history documents; descriptive names are for living reference documents, runbooks, schemas, BOMs, and shared hardware notes
 - define and document the repository-organization rule: code trees are organized by implementation boundary, hardware trees by artifact/board, and docs by reader purpose
 - identify documentation files whose names describe the phase that created them rather than the artifact they contain
@@ -1108,6 +1124,18 @@ The project should follow the same rule already used successfully in code: imple
 - confirm that later phases reference the renamed living docs rather than phase-scoped filenames
 - verify after each rename/move that `KiCad` projects still open correctly and that existing Markdown references still resolve
 
+**Versioning:**
+- add `_version.py` to `.gitignore`; it is written by `scripts/deploy.sh` before the rsync step
+- deploy script: compute `GIT_VERSION` from `git describe --tags --always`; append branch name when not on main; combine with deploy counter into the final version string
+- deploy script: write `backend/src/pi_deck/_version.py` containing `__version__ = "<computed>"` before the rsync step
+- update `backend/src/pi_deck/__init__.py` to import `__version__` from `_version.py` with a fallback to `"0.0.0-dev"` for local runs without a deploy
+- update `StatusOut` in `schemas.py` to include `os_version: str` and `python_version: str`; populate them in `DeckControlService.status()` using `platform` from the standard library
+- create an initial git tag `v0.1.0` on the current commit so `git describe` has a base to work from
+
+**Deploy harness:**
+- add a `_check_reachable` step to `scripts/deploy.sh` immediately after the `PI_TARGET` check: attempt one SSH command with `ConnectTimeout=5 ConnectionAttempts=1`; if it fails, print an actionable error with the `export PI_TARGET=…` command and exit 1
+- remove any logic that would silently retry or continue past a connectivity failure
+
 ### Deliverables
 
 - documented repository rule for documentation naming and organization
@@ -1115,6 +1143,10 @@ The project should follow the same rule already used successfully in code: imple
 - renamed living reference documents using artifact-based names
 - hardware/documentation index pages that make the structure navigable
 - updated links across README, plan, execution records, and reference docs
+- `_version.py` generation in the deploy script; `__init__.py` reading from it
+- git tag `v0.1.0` on the current commit
+- `StatusOut` enriched with `os_version` and `python_version`
+- deploy harness fails fast on unreachable Pi with a clear actionable message
 
 ### Exit criteria
 
@@ -1124,6 +1156,9 @@ The project should follow the same rule already used successfully in code: imple
 - important docs are reachable through obvious links rather than requiring directory browsing
 - later phases can continue adding documentation without reintroducing phase-scoped names for living artifacts
 - no repository cleanup in this phase leaves broken `KiCad` references, broken scripts, or broken Markdown links behind
+- `GET /api/v1/status` returns a version string derived from the git tag and deploy counter, plus `os_version` and `python_version`
+- deploying from main produces `<tag>+r<N>`; deploying from a non-main branch produces `<tag>-dev.<commits>.<hash>.<branch>+r<N>`
+- if `PI_TARGET` is unset or the host is unreachable, the deploy script exits immediately with a message showing the exact `export` command needed
 
 ## Phase 22: Physical Display and Pi Power Button
 

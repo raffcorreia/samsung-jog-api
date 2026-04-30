@@ -166,7 +166,7 @@ This is best described as a smart `HDMI` intermediary for the `DDC` and presence
 
 Current transport concept diagram:
 
-![Phase 5 HDMI and DDC transport concept](../assets/hardware/phase-5-hdmi-ddc-transport-diagram.svg)
+![Phase 5 HDMI and DDC transport concept](../assets/hardware/hdmi-ddc-transport-diagram.svg)
 
 The diagram shows:
 

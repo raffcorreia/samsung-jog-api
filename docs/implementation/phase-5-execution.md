@@ -11,13 +11,13 @@ It complements:
 - [Architecture](../architecture.md)
 - [Solution Overview](../design/solution-overview.md)
 - [CJ791 DDC and VCP Behavior](../ddc/cj791-vcp-behavior.md)
-- [Phase 5 HDMI And DDC Transport Design](../hardware/phase-5-hdmi-ddc-transport.md)
+- [Phase 5 HDMI And DDC Transport Design](../hardware/hdmi-ddc-transport.md)
 
 ## Reference Diagram
 
 Current Phase 5 transport concept diagram:
 
-![Phase 5 HDMI and DDC transport concept](../assets/hardware/phase-5-hdmi-ddc-transport-diagram.svg)
+![Phase 5 HDMI and DDC transport concept](../assets/hardware/hdmi-ddc-transport-diagram.svg)
 
 ## Goal
 

@@ -135,7 +135,7 @@ Pi 5 idle draw is higher than Pi 2 (~0.60 A vs ~0.53 A display-off), consistent 
 
 ## GPIO Schema
 
-Use [Phase 20 Raspberry Pi 5 GPIO Schema](../hardware/phase-20-pi5-gpio-schema.md).
+Use [Phase 20 Raspberry Pi 5 GPIO Schema](../hardware/pi5-gpio-schema.md).
 
 ## Evidence Checklist
 

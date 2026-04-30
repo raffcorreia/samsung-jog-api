@@ -18,7 +18,7 @@ Phase 9 delivers a supervised local runtime aligned with [Solution Overview — 
 
 | Document / script | Role |
 |-------------------|------|
-| [Phase 9 platform bring-up runbook](../runbooks/phase-9-platform-bring-up.md) | End-to-end steps |
+| [Phase 9 platform bring-up runbook](../runbooks/platform-bring-up.md) | End-to-end steps |
 | `scripts/host/install_pi_deck_systemd.sh` | Venv + systemd unit |
 | `scripts/host/phase9_install_desktop_stack.sh` | Desktop + Chromium (sudo) |
 | `scripts/host/install_pi_deck_kiosk_autostart.sh` | XDG autostart for kiosk |

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import platform
+import sys
 import time
 from dataclasses import dataclass, field
 from typing import Literal, cast
@@ -60,6 +62,8 @@ class DeckControlService:
             operating_mode=self._operating_mode,
             control_state=self._control_state,
             signals=self.hardware.read_bus_snapshot(),
+            os_version=platform.platform(terse=True),
+            python_version=sys.version.split()[0],
         )
 
     def set_operating_mode(self, mode: OperatingMode) -> None:
