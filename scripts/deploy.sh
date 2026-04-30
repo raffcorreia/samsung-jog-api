@@ -81,10 +81,10 @@ if [[ "$_git_desc" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)-g([0-9a-f]+)$ ]]; the
     if [ "$_commits" -eq 0 ] && [ "$_branch" = "main" ]; then
         _git_part="${_tag}"
     elif [ "$_branch" = "main" ]; then
-        _git_part="${_tag}-dev.${_commits}"
+        _git_part="${_tag}-dev"
     else
         _branch_slug="${_branch//\//-}"
-        _git_part="${_tag}-dev.${_commits}.${_branch_slug}"
+        _git_part="${_tag}-dev.${_branch_slug}"
     fi
 else
     # No tags found
