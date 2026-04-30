@@ -68,29 +68,28 @@ fi
 # ---------------------------------------------------------------------------
 # 2. Compute app version from git and write _version.py
 #    Format on main/tag:     0.1.0+r64
-#    Format post-tag (main): 0.1.0-dev.3.gabcdef+r64
-#    Format on branch:       0.1.0-dev.3.gabcdef.my-branch+r64
+#    Format post-tag (main): 0.1.0-dev.3+r64
+#    Format on branch:       0.1.0-dev.3.my-branch+r64
 # ---------------------------------------------------------------------------
-_git_desc=$(git -C "${REPO_ROOT}" describe --tags --always --long 2>/dev/null || git -C "${REPO_ROOT}" rev-parse --short HEAD)
+_git_desc=$(git -C "${REPO_ROOT}" describe --tags --always --long 2>/dev/null || echo "untagged")
 _branch=$(git -C "${REPO_ROOT}" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 
 # Parse describe output: vX.Y.Z-N-gHASH or just a hash if no tags
 if [[ "$_git_desc" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)-g([0-9a-f]+)$ ]]; then
     _tag="${BASH_REMATCH[1]}"
     _commits="${BASH_REMATCH[2]}"
-    _hash="${BASH_REMATCH[3]}"
     if [ "$_commits" -eq 0 ] && [ "$_branch" = "main" ]; then
         _git_part="${_tag}"
     elif [ "$_branch" = "main" ]; then
-        _git_part="${_tag}-dev.${_commits}.g${_hash}"
+        _git_part="${_tag}-dev.${_commits}"
     else
         _branch_slug="${_branch//\//-}"
-        _git_part="${_tag}-dev.${_commits}.g${_hash}.${_branch_slug}"
+        _git_part="${_tag}-dev.${_commits}.${_branch_slug}"
     fi
 else
-    # No tags found — use raw hash
+    # No tags found
     _branch_slug="${_branch//\//-}"
-    _git_part="0.0.0-dev.${_git_desc}.${_branch_slug}"
+    _git_part="0.0.0-dev.${_branch_slug}"
 fi
 
 # Final version baked in after deploy counter is known (placeholder updated below)
