@@ -14,7 +14,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from pi_deck import __version__
-from pi_deck.models.schemas import ws_display_open_power_menu
+from pi_deck.models.schemas import ws_display_open_power_menu, ws_display_power_changed
 from pi_deck.api.router import api_v1, websocket_events
 from pi_deck.hardware.display_button import DisplayButton
 from pi_deck.hardware.display_power import build_display_power
@@ -92,7 +92,15 @@ async def lifespan(app: FastAPI):
     loop = asyncio.get_running_loop()
     status_led = StatusLedService(hw.kind)
     status_led.start()
-    display.set_power_listener(status_led.set_panel_on)
+
+    def _on_power_changed(on: bool) -> None:
+        status_led.set_panel_on(on)
+        asyncio.run_coroutine_threadsafe(
+            hub.broadcast_json(ws_display_power_changed(on=on).model_dump(mode="json")),
+            loop,
+        )
+
+    display.set_power_listener(_on_power_changed)
 
     def _on_observation_event(event: dict) -> None:
         if event.get("category") == "bus" and event.get("type") == "led_changed":

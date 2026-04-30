@@ -69,25 +69,40 @@ class DisplayButton:
         def _hold_tick() -> None:
             self._hold_fired = True
             self._hold_timer = None
-            on_hold()
+            try:
+                on_hold()
+            except Exception:
+                logger.exception("display-btn: on_hold raised")
 
         def _pressed() -> None:
-            if on_press:
-                on_press()
+            logger.debug("display-btn: pressed")
+            try:
+                if on_press:
+                    on_press()
+            except Exception:
+                logger.exception("display-btn: on_press raised")
             self._hold_fired = False
             timer = threading.Timer(_HOLD_SECONDS, _hold_tick)
             self._hold_timer = timer
             timer.start()
 
         def _released() -> None:
+            logger.debug("display-btn: released")
             timer = self._hold_timer
             if timer is not None:
                 timer.cancel()
                 self._hold_timer = None
-            if not self._hold_fired:
-                on_short_press()
-            if on_release_any:
-                on_release_any()
+            try:
+                if not self._hold_fired:
+                    on_short_press()
+            except Exception:
+                logger.exception("display-btn: on_short_press raised")
+            finally:
+                try:
+                    if on_release_any:
+                        on_release_any()
+                except Exception:
+                    logger.exception("display-btn: on_release_any raised")
 
         self._dev.when_activated = _pressed
         self._dev.when_deactivated = _released

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fetchDisplayPower, setDisplayPower } from "../api/client";
+import { setDisplayPower } from "../api/client";
 import { PowerMenu } from "./PowerMenu";
 
 import styles from "./TopBar.module.css";
@@ -35,21 +35,27 @@ function Clock() {
  *   - If display is on  → opens PowerMenu (Display off / Pi shutdown / Cancel).
  *   - If display is off → powers the display back on immediately (remote browser use-case).
  */
-export function TopBar({ title, openPowerMenuTick = 0 }: { title?: string; openPowerMenuTick?: number }) {
+export function TopBar({
+  title,
+  openPowerMenuTick = 0,
+  displayOn = true,
+}: {
+  title?: string;
+  openPowerMenuTick?: number;
+  displayOn?: boolean;
+}) {
   const navigate = useNavigate();
   const isHome = !title;
 
-  const [displayOn, setDisplayOn] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const holdFiredRef = useRef(false);
 
-  // Fetch initial display power state once on mount.
   useEffect(() => {
-    fetchDisplayPower()
-      .then((p) => setDisplayOn(p.on))
-      .catch(() => {
-        /* best-effort; display on is the safe default */
-      });
+    return () => {
+      if (holdTimerRef.current) clearTimeout(holdTimerRef.current);
+    };
   }, []);
 
   // Physical button short-press → open the power menu (display is already on when this fires).
@@ -59,26 +65,14 @@ export function TopBar({ title, openPowerMenuTick = 0 }: { title?: string; openP
   }, [openPowerMenuTick]);
 
   async function handlePowerClick() {
-    // Always fetch fresh state before acting — avoids stale-cache opening the
-    // wrong branch (e.g. menu when display is already off, or vice-versa).
-    let on = displayOn;
-    try {
-      const state = await fetchDisplayPower();
-      on = state.on;
-      setDisplayOn(on);
-    } catch {
-      /* use cached state if the fetch fails */
-    }
-
-    if (!on) {
+    if (!displayOn) {
       // Display is off — power it back on immediately.
       setPending(true);
       try {
-        const [result] = await Promise.all([
+        await Promise.all([
           setDisplayPower(true),
           new Promise((r) => setTimeout(r, 3000)),
         ]);
-        setDisplayOn((result as { on: boolean }).on);
       } catch {
         /* network error while display is off; nothing actionable */
       } finally {
@@ -90,10 +84,39 @@ export function TopBar({ title, openPowerMenuTick = 0 }: { title?: string; openP
   }
 
   function handleDisplayToggled() {
-    // Re-fetch after the menu performs a toggle.
-    fetchDisplayPower()
-      .then((p) => setDisplayOn(p.on))
-      .catch(() => {});
+    // WS display/power_changed event handles state sync.
+  }
+
+  function handlePointerDown() {
+    holdFiredRef.current = false;
+    if (!displayOn) return; // display off: handle on pointer up (turn on)
+    holdTimerRef.current = setTimeout(() => {
+      holdFiredRef.current = true;
+      holdTimerRef.current = null;
+      // Hold 3 s → turn display off directly
+      setPending(true);
+      setDisplayPower(false)
+        .catch(() => {})
+        .finally(() => setPending(false));
+    }, 3000);
+  }
+
+  function handlePointerUp() {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    if (!holdFiredRef.current) {
+      void handlePowerClick();
+    }
+  }
+
+  function handlePointerLeave() {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+      holdFiredRef.current = false;
+    }
   }
 
   return (
@@ -105,7 +128,9 @@ export function TopBar({ title, openPowerMenuTick = 0 }: { title?: string; openP
             type="button"
             aria-label={displayOn ? "Power menu" : "Turn display on"}
             data-testid="top-bar-power"
-            onClick={() => void handlePowerClick()}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerLeave}
           >
             {pending ? (
               <svg

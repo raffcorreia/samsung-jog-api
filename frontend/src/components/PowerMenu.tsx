@@ -51,6 +51,27 @@ export function PowerMenu({ open, displayOn, onClose, onDisplayToggled }: PowerM
   }, [open]);
 
   useEffect(() => {
+    if (!open) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (view === "countdown") {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+        setView("menu");
+        setCountdown(COUNTDOWN_S);
+      } else if (view === "poweroff_confirm") {
+        setView("menu");
+      } else {
+        onClose();
+      }
+    }
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [open, view, onClose]);
+
+  useEffect(() => {
     if (view !== "countdown" || !open) return;
 
     setCountdown(COUNTDOWN_S);

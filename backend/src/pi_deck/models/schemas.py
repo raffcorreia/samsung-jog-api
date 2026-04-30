@@ -222,6 +222,16 @@ def ws_display_open_power_menu() -> WsEventV1:
     )
 
 
+def ws_display_power_changed(*, on: bool) -> WsEventV1:
+    """Broadcast display power state after any change (button, API, or hold)."""
+    return WsEventV1(
+        category="display",
+        type="power_changed",
+        ts=utc_iso(),
+        data={"on": on},
+    )
+
+
 # ── Phase 19: display brightness / power ──────────────────────────────────────
 
 class DisplayBrightnessOut(BaseModel):

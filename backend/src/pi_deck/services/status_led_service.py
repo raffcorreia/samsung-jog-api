@@ -12,10 +12,11 @@ Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → SN74AHCT125 level shifter
 3.3 V → 5 V → WS2812B DIN.
 
 Color / state matrix:
-  button held          → amber  (overrides panel color)
-  panel on             → green
-  panel off            → red
-  monitor LED active   → brightness × DIM_FACTOR  (kept even at 1% base for future)
+  monitor LED active   → off (0%) — inverted: status LED is dark while monitor LED blinks
+  monitor LED inactive → restore _BRIGHTNESS with current color:
+    button held        → amber
+    panel on           → green
+    panel off          → red
 """
 
 from __future__ import annotations
@@ -27,8 +28,7 @@ logger = logging.getLogger(__name__)
 
 _SPI_SPEED_HZ = 3_200_000
 
-_BRIGHTNESS = 0.01   # 1 % — comfortable for desk use
-_DIM_FACTOR = 0.30   # monitor-LED-on dims to 30 % of _BRIGHTNESS
+_BRIGHTNESS = 0.01   # 1 % — normal operating brightness (adjust here to change all states)
 
 _RESET = bytes(20)
 
@@ -107,12 +107,14 @@ class StatusLedService:
     # ── internals ─────────────────────────────────────────────────────────────
 
     def _update(self) -> None:
-        brightness = _BRIGHTNESS * (_DIM_FACTOR if self._monitor_led_on else 1.0)
+        if self._monitor_led_on:
+            self._send(0, 0, 0)
+            return
         r, g, b = _AMBER if self._button_held else (_GREEN if self._panel_on else _RED)
         self._send(
-            round(r * brightness),
-            round(g * brightness),
-            round(b * brightness),
+            round(r * _BRIGHTNESS),
+            round(g * _BRIGHTNESS),
+            round(b * _BRIGHTNESS),
         )
 
     def _send(self, r: int, g: int, b: int) -> None:

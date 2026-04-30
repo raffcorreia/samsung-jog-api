@@ -10,6 +10,7 @@ import {
 import {
   deleteLiveLog,
   deleteRecording,
+  fetchDisplayPower,
   fetchRecordingContent,
   fetchRecordingLibrary,
   fetchRecordingState,
@@ -89,6 +90,7 @@ export interface DeckEventsState {
   wsReleasedActions: readonly JogAction[];
   wsSessionEpoch: number;
   openPowerMenuTick: number;
+  displayOn: boolean;
   logLines: readonly string[];
   recordingState: RecordingState;
   recordings: RecordingLibrary;
@@ -139,6 +141,7 @@ export function useDeckEvents(): DeckEventsState {
   const [wsReleasedActions, setWsReleasedActions] = useState<readonly JogAction[]>([]);
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [openPowerMenuTick, setOpenPowerMenuTick] = useState(0);
+  const [displayOn, setDisplayOn] = useState(true);
   const [logLines, setLogLines] = useState<string[]>([]);
   const [recordingState, setRecordingState] = useState<RecordingState>(EMPTY_RECORDING_STATE);
   const [recordings, setRecordings] = useState<RecordingLibrary>({ items: [] });
@@ -361,6 +364,7 @@ export function useDeckEvents(): DeckEventsState {
     void refreshStatus();
     void refreshRecordingState();
     void refreshRecordings();
+    fetchDisplayPower().then((p) => setDisplayOn(p.on)).catch(() => {});
     let stopped = false;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
     let sock: WebSocket | null = null;
@@ -409,6 +413,7 @@ export function useDeckEvents(): DeckEventsState {
           setWsReleasedActions([]);
           setWsSessionEpoch((e) => e + 1);
           setLogLines([]);
+          fetchDisplayPower().then((p) => setDisplayOn(p.on)).catch(() => {});
         }
 
         if (parsed.category === "recording" && parsed.type === "state") {
@@ -514,6 +519,9 @@ export function useDeckEvents(): DeckEventsState {
         if (parsed.category === "display" && parsed.type === "open_power_menu") {
           setOpenPowerMenuTick((n) => n + 1);
         }
+        if (parsed.category === "display" && parsed.type === "power_changed") {
+          setDisplayOn(Boolean(parsed.data.on));
+        }
       };
 
       ws.onerror = () => {
@@ -552,6 +560,7 @@ export function useDeckEvents(): DeckEventsState {
       wsReleasedActions,
       wsSessionEpoch,
       openPowerMenuTick,
+      displayOn,
       logLines,
       recordingState,
       recordings,
@@ -578,6 +587,7 @@ export function useDeckEvents(): DeckEventsState {
       wsReleasedActions,
       wsSessionEpoch,
       openPowerMenuTick,
+      displayOn,
       logLines,
       recordingState,
       recordings,
