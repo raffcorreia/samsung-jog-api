@@ -232,6 +232,26 @@ def ws_display_power_changed(*, on: bool) -> WsEventV1:
     )
 
 
+def ws_display_power_button_held() -> WsEventV1:
+    """Physical power button is being held."""
+    return WsEventV1(
+        category="display",
+        type="power_button_held",
+        ts=utc_iso(),
+        data={},
+    )
+
+
+def ws_display_power_button_released() -> WsEventV1:
+    """Physical power button was released."""
+    return WsEventV1(
+        category="display",
+        type="power_button_released",
+        ts=utc_iso(),
+        data={},
+    )
+
+
 # ── Phase 19: display brightness / power ──────────────────────────────────────
 
 class DisplayBrightnessOut(BaseModel):

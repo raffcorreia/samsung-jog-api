@@ -39,16 +39,19 @@ export function TopBar({
   title,
   openPowerMenuTick = 0,
   displayOn = true,
+  powerButtonHeld = false,
 }: {
   title?: string;
   openPowerMenuTick?: number;
   displayOn?: boolean;
+  powerButtonHeld?: boolean;
 }) {
   const navigate = useNavigate();
   const isHome = !title;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [localHeld, setLocalHeld] = useState(false);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const holdFiredRef = useRef(false);
 
@@ -90,9 +93,11 @@ export function TopBar({
   function handlePointerDown() {
     holdFiredRef.current = false;
     if (!displayOn) return; // display off: handle on pointer up (turn on)
+    setLocalHeld(true);
     holdTimerRef.current = setTimeout(() => {
       holdFiredRef.current = true;
       holdTimerRef.current = null;
+      setLocalHeld(false);
       // Hold 3 s → turn display off directly
       setPending(true);
       setDisplayPower(false)
@@ -102,6 +107,7 @@ export function TopBar({
   }
 
   function handlePointerUp() {
+    setLocalHeld(false);
     if (holdTimerRef.current) {
       clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
@@ -112,6 +118,7 @@ export function TopBar({
   }
 
   function handlePointerLeave() {
+    setLocalHeld(false);
     if (holdTimerRef.current) {
       clearTimeout(holdTimerRef.current);
       holdTimerRef.current = null;
@@ -124,7 +131,7 @@ export function TopBar({
       <header className={styles.bar} data-testid="top-bar">
         <div className={styles.left}>
           <button
-            className={`${styles.powerBtn}${displayOn ? ` ${styles.powerBtnOn}` : ""}`}
+            className={`${styles.powerBtn}${powerButtonHeld || localHeld ? ` ${styles.powerBtnAmber}` : displayOn ? ` ${styles.powerBtnOn}` : ""}`}
             type="button"
             aria-label={displayOn ? "Power menu" : "Turn display on"}
             data-testid="top-bar-power"

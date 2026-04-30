@@ -66,6 +66,10 @@
   color: #4ade80;
 }
 
+.powerBtnAmber {
+  color: #f59e0b;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

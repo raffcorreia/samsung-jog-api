@@ -14,7 +14,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from pi_deck import __version__
-from pi_deck.models.schemas import ws_display_open_power_menu, ws_display_power_changed
+from pi_deck.models.schemas import (
+    ws_display_open_power_menu,
+    ws_display_power_button_held,
+    ws_display_power_button_released,
+    ws_display_power_changed,
+)
 from pi_deck.api.router import api_v1, websocket_events
 from pi_deck.hardware.display_button import DisplayButton
 from pi_deck.hardware.display_power import build_display_power
@@ -102,12 +107,7 @@ async def lifespan(app: FastAPI):
 
     display.set_power_listener(_on_power_changed)
 
-    def _on_observation_event(event: dict) -> None:
-        if event.get("category") == "bus" and event.get("type") == "led_changed":
-            active = bool((event.get("data") or {}).get("key_led_active", False))
-            status_led.set_monitor_led(active)
-
-    observation.add_listener(_on_observation_event)
+    hw.led_observer.set_state_callback(lambda active: status_led.set_monitor_led(active))
 
     def _btn_short_press() -> None:
         if not display.is_on:
@@ -122,12 +122,26 @@ async def lifespan(app: FastAPI):
         if display.is_on:
             display.power_off()
 
+    def _btn_press() -> None:
+        status_led.set_button_held(True)
+        asyncio.run_coroutine_threadsafe(
+            hub.broadcast_json(ws_display_power_button_held().model_dump(mode="json")),
+            loop,
+        )
+
+    def _btn_release() -> None:
+        status_led.set_button_held(False)
+        asyncio.run_coroutine_threadsafe(
+            hub.broadcast_json(ws_display_power_button_released().model_dump(mode="json")),
+            loop,
+        )
+
     display_btn = DisplayButton()
     display_btn.set_callback(
         _btn_short_press,
         _btn_hold,
-        on_press=lambda: status_led.set_button_held(True),
-        on_release_any=lambda: status_led.set_button_held(False),
+        on_press=_btn_press,
+        on_release_any=_btn_release,
     )
     system = SystemService(hw.kind)
     app.state.ws_hub = hub

@@ -11,18 +11,21 @@ Encoding (4 SPI bits per WS2812B bit at 3.2 MHz → 312.5 ns per SPI bit):
 Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → SN74AHCT125 level shifter
 3.3 V → 5 V → WS2812B DIN.
 
-Color / state matrix:
-  monitor LED active   → off (0%) — inverted: status LED is dark while monitor LED blinks
-  monitor LED inactive → restore _BRIGHTNESS with current color:
-    button held        → amber
-    panel on           → green
-    panel off          → red
+Color / state — last event wins, all terminal events fall to panel colour:
+  set_button_held(True)              → AMBER
+  set_button_held(False)             → panel colour
+  set_monitor_led(True),  panel on   → BLUE
+  set_monitor_led(True),  panel off  → OFF
+  set_monitor_led(False)             → panel colour
+  set_panel_on(True)                 → GREEN
+  set_panel_on(False)                → RED
+  correction thread (every 5 s)     → panel colour  (self-heals missed events)
 
-Threading model:
-  All SPI writes happen on a dedicated daemon thread (_run).  Callers (asyncio
-  loop, gpiozero callbacks) only update state variables under a lock and signal
-  a threading.Event — they never block on SPI.  Rapid state changes coalesce:
-  the thread always reads the latest state, so no intermediate state is lost.
+Threading:
+  Each setter calls _send_frame() directly from the caller thread.
+  _spi_lock serialises concurrent SPI writes (~80 µs each at 3.2 MHz).
+  A correction daemon thread re-asserts panel colour every 5 s.
+  SPI frames for all states are pre-computed at import time.
 """
 
 from __future__ import annotations
@@ -34,15 +37,13 @@ import threading
 logger = logging.getLogger(__name__)
 
 _SPI_SPEED_HZ = 3_200_000
-
-_BRIGHTNESS = 0.01   # 1 % — normal operating brightness (adjust here to change all states)
-
+_BRIGHTNESS = 0.01   # 1 % — adjust here to change all states
 _RESET = bytes(20)
 
-# Full-scale RGB before brightness scaling
 _GREEN = (0, 255, 0)
 _RED   = (255, 0, 0)
 _AMBER = (255, 165, 0)
+_BLUE  = (0, 0, 255)
 
 
 def _find_spi() -> tuple[int, int] | None:
@@ -65,25 +66,31 @@ def _encode_pixel(r: int, g: int, b: int) -> bytes:
     return bytes(buf)
 
 
+def _make_frame(r: int, g: int, b: int) -> list[int]:
+    return list(_encode_pixel(r, g, b) + _RESET)
+
+
+# Pre-computed SPI frames — avoids encoding + list conversion on every write.
+_FRAME_OFF   = _make_frame(0, 0, 0)
+_FRAME_GREEN = _make_frame(int(_GREEN[0] * _BRIGHTNESS), int(_GREEN[1] * _BRIGHTNESS), int(_GREEN[2] * _BRIGHTNESS))
+_FRAME_RED   = _make_frame(int(_RED[0]   * _BRIGHTNESS), int(_RED[1]   * _BRIGHTNESS), int(_RED[2]   * _BRIGHTNESS))
+_FRAME_AMBER = _make_frame(int(_AMBER[0] * _BRIGHTNESS), int(_AMBER[1] * _BRIGHTNESS), int(_AMBER[2] * _BRIGHTNESS))
+_FRAME_BLUE  = _make_frame(int(_BLUE[0]  * _BRIGHTNESS), int(_BLUE[1]  * _BRIGHTNESS), int(_BLUE[2]  * _BRIGHTNESS))
+
+
 class StatusLedService:
-    """Single WS2812B status LED with a state-driven colour model.
+    """Single WS2812B status LED driven by last-event-wins state model.
 
-    State inputs (each triggers an immediate LED update):
-      set_panel_on(bool)     — panel on → green base; off → red base
-      set_button_held(bool)  — held → amber override until released
-      set_monitor_led(bool)  — monitor LED active → fully off (0 %)
-
-    All SPI I/O runs on a private daemon thread; callers never block.
+    Setters call SPI directly from the caller thread — no polling, no queue.
+    A correction daemon re-asserts panel colour every 5 s to self-heal missed events.
     """
 
     def __init__(self, hw_mode: str) -> None:
         self._live = hw_mode == "live"
         self._spi = None
         self._panel_on = True
-        self._button_held = False
-        self._monitor_led_on = False
-        self._lock = threading.Lock()
-        self._signal = threading.Event()
+        self._state_lock = threading.Lock()   # guards _panel_on reads/writes
+        self._spi_lock = threading.Lock()     # serialises concurrent SPI writes
         self._stop = threading.Event()
         self._thread: threading.Thread | None = None
         if self._live:
@@ -93,18 +100,17 @@ class StatusLedService:
 
     def start(self) -> None:
         self._thread = threading.Thread(
-            target=self._run, name="status-led", daemon=True
+            target=self._correction_loop, name="status-led", daemon=True
         )
         self._thread.start()
-        self._signal.set()  # trigger initial paint
+        self._send_panel_color()
         logger.info("status-led: started")
 
     def stop(self) -> None:
         self._stop.set()
-        self._signal.set()  # wake thread so it can exit
         if self._thread is not None:
-            self._thread.join(timeout=2)
-        self._send(0, 0, 0)
+            self._thread.join(timeout=6)
+        self._send_frame(_FRAME_OFF)
         if self._spi is not None:
             try:
                 self._spi.close()
@@ -114,52 +120,46 @@ class StatusLedService:
     # ── state setters — called from any thread ────────────────────────────────
 
     def set_panel_on(self, on: bool) -> None:
-        with self._lock:
+        with self._state_lock:
             self._panel_on = on
-        self._signal.set()
+        self._send_frame(_FRAME_GREEN if on else _FRAME_RED)
 
     def set_button_held(self, held: bool) -> None:
-        with self._lock:
-            self._button_held = held
-        self._signal.set()
+        if held:
+            self._send_frame(_FRAME_AMBER)
+        else:
+            self._send_panel_color()
 
     def set_monitor_led(self, active: bool) -> None:
-        with self._lock:
-            self._monitor_led_on = active
-        self._signal.set()
-
-    # ── LED thread ────────────────────────────────────────────────────────────
-
-    def _run(self) -> None:
-        while not self._stop.is_set():
-            self._signal.wait()
-            self._signal.clear()
-            if self._stop.is_set():
-                break
-            with self._lock:
-                monitor_on = self._monitor_led_on
-                button_held = self._button_held
+        if active:
+            with self._state_lock:
                 panel_on = self._panel_on
-            if monitor_on:
-                self._send(0, 0, 0)
-            else:
-                r, g, b = _AMBER if button_held else (_GREEN if panel_on else _RED)
-                self._send(
-                    int(r * _BRIGHTNESS),
-                    int(g * _BRIGHTNESS),
-                    int(b * _BRIGHTNESS),
-                )
-
-    # ── SPI helpers ───────────────────────────────────────────────────────────
-
-    def _send(self, r: int, g: int, b: int) -> None:
-        if self._spi is not None:
-            try:
-                self._spi.xfer2(list(_encode_pixel(r, g, b) + _RESET))
-            except Exception as exc:
-                logger.debug("status-led: SPI write error: %s", exc)
+            self._send_frame(_FRAME_BLUE if panel_on else _FRAME_OFF)
         else:
-            logger.debug("status-led: mock rgb(%d,%d,%d)", r, g, b)
+            self._send_panel_color()
+
+    # ── correction thread ─────────────────────────────────────────────────────
+
+    def _correction_loop(self) -> None:
+        while not self._stop.wait(timeout=5.0):
+            self._send_panel_color()
+
+    # ── internals ─────────────────────────────────────────────────────────────
+
+    def _send_panel_color(self) -> None:
+        with self._state_lock:
+            panel_on = self._panel_on
+        self._send_frame(_FRAME_GREEN if panel_on else _FRAME_RED)
+
+    def _send_frame(self, frame: list[int]) -> None:
+        if self._spi is not None:
+            with self._spi_lock:
+                try:
+                    self._spi.writebytes2(frame)
+                except Exception as exc:
+                    logger.debug("status-led: SPI write error: %s", exc)
+        else:
+            logger.debug("status-led: mock frame len=%d", len(frame))
 
     def _init_spi(self) -> None:
         bus_dev = _find_spi()

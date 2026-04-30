@@ -91,6 +91,7 @@ export interface DeckEventsState {
   wsSessionEpoch: number;
   openPowerMenuTick: number;
   displayOn: boolean;
+  powerButtonHeld: boolean;
   logLines: readonly string[];
   recordingState: RecordingState;
   recordings: RecordingLibrary;
@@ -142,6 +143,7 @@ export function useDeckEvents(): DeckEventsState {
   const [wsSessionEpoch, setWsSessionEpoch] = useState(0);
   const [openPowerMenuTick, setOpenPowerMenuTick] = useState(0);
   const [displayOn, setDisplayOn] = useState(true);
+  const [powerButtonHeld, setPowerButtonHeld] = useState(false);
   const [logLines, setLogLines] = useState<string[]>([]);
   const [recordingState, setRecordingState] = useState<RecordingState>(EMPTY_RECORDING_STATE);
   const [recordings, setRecordings] = useState<RecordingLibrary>({ items: [] });
@@ -413,6 +415,7 @@ export function useDeckEvents(): DeckEventsState {
           setWsReleasedActions([]);
           setWsSessionEpoch((e) => e + 1);
           setLogLines([]);
+          setPowerButtonHeld(false);
           fetchDisplayPower().then((p) => setDisplayOn(p.on)).catch(() => {});
         }
 
@@ -522,6 +525,12 @@ export function useDeckEvents(): DeckEventsState {
         if (parsed.category === "display" && parsed.type === "power_changed") {
           setDisplayOn(Boolean(parsed.data.on));
         }
+        if (parsed.category === "display" && parsed.type === "power_button_held") {
+          setPowerButtonHeld(true);
+        }
+        if (parsed.category === "display" && parsed.type === "power_button_released") {
+          setPowerButtonHeld(false);
+        }
       };
 
       ws.onerror = () => {
@@ -561,6 +570,7 @@ export function useDeckEvents(): DeckEventsState {
       wsSessionEpoch,
       openPowerMenuTick,
       displayOn,
+      powerButtonHeld,
       logLines,
       recordingState,
       recordings,
@@ -588,6 +598,7 @@ export function useDeckEvents(): DeckEventsState {
       wsSessionEpoch,
       openPowerMenuTick,
       displayOn,
+      powerButtonHeld,
       logLines,
       recordingState,
       recordings,
