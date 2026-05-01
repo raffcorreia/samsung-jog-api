@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fetchDisplayBrightness, fetchNetworkInfo, fetchStatus, setDisplayBrightness } from "../api/client";
+import { fetchDisplayBrightness, fetchLedBrightness, fetchNetworkInfo, fetchStatus, setDisplayBrightness, setLedBrightness } from "../api/client";
 import type { NetworkInfo } from "../api/client";
 import { DECK_WIDGETS } from "../widgets/deckWidgets";
 import styles from "./SettingsPage.module.css";
@@ -122,6 +122,50 @@ function BrightnessSlider() {
   );
 }
 
+function LedBrightnessSlider() {
+  const [pct, setPct] = useState<number | null>(null);
+  const debouncedPct = useDebounce(pct, 250);
+  const lastSentRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    fetchLedBrightness()
+      .then((b) => setPct(b.brightness_pct))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (debouncedPct === null) return;
+    if (debouncedPct === lastSentRef.current) return;
+    lastSentRef.current = debouncedPct;
+    setLedBrightness(debouncedPct).catch(() => {});
+  }, [debouncedPct]);
+
+  const displayPct = pct ?? 0;
+
+  return (
+    <div className={styles.sliderRow}>
+      <div className={styles.sliderLabel}>
+        <span>Status LED brightness</span>
+        <span className={styles.sliderValue} data-testid="led-brightness-value">
+          {pct === null ? "—" : `${displayPct}%`}
+        </span>
+      </div>
+      <input
+        className={styles.slider}
+        type="range"
+        min={0}
+        max={100}
+        step={1}
+        value={displayPct}
+        disabled={pct === null}
+        aria-label="Status LED brightness"
+        data-testid="led-brightness-slider"
+        onChange={(e) => setPct(Number(e.target.value))}
+      />
+    </div>
+  );
+}
+
 /**
  * Settings page — Phase 19 adds brightness slider and color-check entry.
  */
@@ -148,6 +192,9 @@ export function SettingsPage() {
         <h2 className={styles.sectionTitle}>Display</h2>
         <div className={styles.row} style={{ flexDirection: "column", alignItems: "stretch" }}>
           <BrightnessSlider />
+        </div>
+        <div className={styles.row} style={{ flexDirection: "column", alignItems: "stretch" }}>
+          <LedBrightnessSlider />
         </div>
         <div className={styles.row}>
           <span className={styles.rowLabel}>Color &amp; edge validation</span>

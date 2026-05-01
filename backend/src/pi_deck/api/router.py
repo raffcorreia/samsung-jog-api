@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
 import asyncio
 
-from pi_deck.api.deps import get_deck, get_display, get_recordings, get_system
+from pi_deck.api.deps import get_deck, get_display, get_recordings, get_strip, get_system
 from pi_deck.models.recordings import (
     RecordingLibraryOut,
     RecordingRejectedOut,
@@ -19,6 +19,8 @@ from pi_deck.models.schemas import (
     CommandRejectedReason,
     DisplayBrightnessIn,
     DisplayBrightnessOut,
+    LedBrightnessIn,
+    LedBrightnessOut,
     DisplayPowerIn,
     DisplayPowerOut,
     JogHoldIn,
@@ -33,6 +35,7 @@ from pi_deck.models.schemas import (
     ws_status_connected,
 )
 from pi_deck.services.display_service import DisplayService
+from pi_deck.services.strip_driver import StripDriver
 from pi_deck.services.system_service import SystemService
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.live_log import LiveLogService
@@ -303,6 +306,20 @@ def api_display_brightness_set(
         brightness_raw=display.get_brightness_raw(),
         max_raw=BRIGHTNESS_RAW_MAX,
     )
+
+
+@api_v1.get("/led/brightness", response_model=LedBrightnessOut)
+def api_led_brightness_get(strip: StripDriver = Depends(get_strip)) -> LedBrightnessOut:
+    return LedBrightnessOut(brightness_pct=strip.get_brightness_pct())
+
+
+@api_v1.put("/led/brightness", response_model=LedBrightnessOut)
+def api_led_brightness_set(
+    body: LedBrightnessIn,
+    strip: StripDriver = Depends(get_strip),
+) -> LedBrightnessOut:
+    strip.set_brightness_pct(body.brightness_pct)
+    return LedBrightnessOut(brightness_pct=strip.get_brightness_pct())
 
 
 @api_v1.get("/display/power", response_model=DisplayPowerOut)

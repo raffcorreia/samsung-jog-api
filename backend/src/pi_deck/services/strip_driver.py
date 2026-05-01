@@ -42,12 +42,14 @@ import queue
 import threading
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 _SPI_SPEED_HZ = 6_400_000
-_BRIGHTNESS = 0.01   # 1 % — adjust here to change all states
-_RESET = bytes(80)   # 80 bytes × 8 bits / 6.4 MHz = 100 µs reset pulse
+_DEFAULT_BRIGHTNESS_PCT = 1  # 1 % default; persisted to ~/.pi-deck-led-brightness
+_RESET = bytes(80)           # 80 bytes × 8 bits / 6.4 MHz = 100 µs reset pulse
+_BRIGHTNESS_FILE = Path.home() / ".pi-deck-led-brightness"
 
 # Named color constants — also accept any (r, g, b) tuple directly.
 OFF   = (0,   0,   0)
@@ -108,6 +110,9 @@ class StripDriver:
         self._worker: threading.Thread | None = None
         # Worker-owned state — only touched from the worker thread.
         self._state: list[_LedState] = [_LedState(saved=OFF, locked=None) for _ in range(num_leds)]
+        # Brightness — readable from any thread, written only via set_brightness_pct().
+        self._brightness_pct: int = self._load_brightness()
+        self._brightness_lock = threading.Lock()
         if self._live:
             self._init_spi()
 
@@ -125,6 +130,18 @@ class StripDriver:
             self._worker.join(timeout=2)
 
     # ── public API ────────────────────────────────────────────────────────────
+
+    def get_brightness_pct(self) -> int:
+        with self._brightness_lock:
+            return self._brightness_pct
+
+    def set_brightness_pct(self, pct: int) -> None:
+        pct = max(0, min(100, pct))
+        with self._brightness_lock:
+            self._brightness_pct = pct
+        self._persist_brightness(pct)
+        self._queue.put(_Cmd(index=-1, color=None, lock=None))  # reassert with new brightness
+        logger.info("strip-driver: brightness → %d%%", pct)
 
     def send(
         self,
@@ -184,14 +201,12 @@ class StripDriver:
     def _write_strip(self) -> None:
         if self._spi is None:
             return
+        with self._brightness_lock:
+            br = self._brightness_pct / 100.0
         frame = bytearray(_RESET)
         for s in self._state:
             r, g, b = self._current(s)
-            frame += _encode_pixel(
-                int(r * _BRIGHTNESS),
-                int(g * _BRIGHTNESS),
-                int(b * _BRIGHTNESS),
-            )
+            frame += _encode_pixel(int(r * br), int(g * br), int(b * br))
         frame += _RESET
         try:
             self._spi.writebytes2(bytes(frame))
@@ -209,6 +224,20 @@ class StripDriver:
             pass
         finally:
             self._spi = None
+
+    def _load_brightness(self) -> int:
+        try:
+            return max(0, min(100, int(_BRIGHTNESS_FILE.read_text().strip())))
+        except Exception:
+            return _DEFAULT_BRIGHTNESS_PCT
+
+    def _persist_brightness(self, pct: int) -> None:
+        tmp = _BRIGHTNESS_FILE.with_suffix(".tmp")
+        try:
+            tmp.write_text(str(pct))
+            tmp.replace(_BRIGHTNESS_FILE)
+        except Exception as exc:
+            logger.warning("strip-driver: could not persist brightness: %s", exc)
 
     def _init_spi(self) -> None:
         bus_dev = _find_spi()

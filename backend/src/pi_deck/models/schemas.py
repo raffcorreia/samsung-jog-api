@@ -270,6 +270,18 @@ class DisplayBrightnessIn(BaseModel):
     brightness_pct: int = Field(ge=0, le=100)
 
 
+class LedBrightnessOut(BaseModel):
+    """Current LED strip brightness."""
+
+    brightness_pct: int = Field(ge=0, le=100)
+
+
+class LedBrightnessIn(BaseModel):
+    """Set LED strip brightness by percentage."""
+
+    brightness_pct: int = Field(ge=0, le=100)
+
+
 class DisplayPowerOut(BaseModel):
     """Current display power state (Phase 19)."""
 

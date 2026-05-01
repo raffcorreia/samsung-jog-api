@@ -295,6 +295,26 @@ export async function setDisplayBrightness(brightnessPct: number): Promise<Displ
   return (await r.json()) as DisplayBrightness;
 }
 
+export interface LedBrightness {
+  brightness_pct: number;
+}
+
+export async function fetchLedBrightness(): Promise<LedBrightness> {
+  const r = await fetch(`${apiBase()}/api/v1/led/brightness`);
+  if (!r.ok) throw new Error(`led brightness fetch failed: ${r.status}`);
+  return (await r.json()) as LedBrightness;
+}
+
+export async function setLedBrightness(brightnessPct: number): Promise<LedBrightness> {
+  const r = await fetch(`${apiBase()}/api/v1/led/brightness`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ brightness_pct: brightnessPct }),
+  });
+  if (!r.ok) throw new Error(`led brightness set failed: ${r.status}`);
+  return (await r.json()) as LedBrightness;
+}
+
 export async function fetchDisplayPower(): Promise<DisplayPower> {
   const r = await fetch(`${apiBase()}/api/v1/display/power`);
   if (!r.ok) throw new Error(`display power fetch failed: ${r.status}`);
