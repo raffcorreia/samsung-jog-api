@@ -3,7 +3,7 @@ import pcbnew
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-BOARD_PATH = PROJECT_DIR / "phase-5-hdmi-ddc-intermediary.kicad_pcb"
+BOARD_PATH = PROJECT_DIR / "hdmi-ddc-intermediary.kicad_pcb"
 
 LIB_ROOT = Path("/Applications/KiCad/KiCad.app/Contents/SharedSupport/footprints")
 LIBS = {

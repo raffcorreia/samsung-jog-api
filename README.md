@@ -34,7 +34,7 @@ Current state of the repository:
 - completed: `Phase 17: Development Fixture` — [execution record](docs/implementation/phase-17-execution.md) (crude open support to hold monitor/control-deck hardware together for development)
 - completed: `Phase 18: Display and Touch Validation` — [execution record](docs/implementation/phase-18-execution.md) (Waveshare DSI display/touch working; HDMI disabled as a display and retained for DDC/CI only; safe brightness ceiling `170/255`)
 - completed: `Phase 19: Display Usability and Power Hardening` — [execution record](docs/implementation/phase-19-execution.md) (display/Pi power menu, brightness API/UI cap, color/edge validation page, Xwayland/font readability pass, power measurements)
-- next: `Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation` — [execution record scaffold](docs/implementation/phase-20-execution.md), [GPIO schema](docs/hardware/phase-20-pi5-gpio-schema.md)
+- next: `Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation` — [execution record scaffold](docs/implementation/phase-20-execution.md), [GPIO schema](docs/hardware/pi5-gpio-schema.md)
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
@@ -95,7 +95,7 @@ Reference and reverse-engineering notes:
 
 - [Architecture](docs/architecture.md)
 - [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
-- [Phase 3 Observation BOM](docs/hardware/phase-3-observation-bom.md)
+- [Observation BOM](docs/hardware/observation-bom.md)
 - [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
 
 Operational docs:

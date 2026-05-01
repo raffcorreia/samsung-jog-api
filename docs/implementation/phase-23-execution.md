@@ -27,8 +27,15 @@ Renamed all phase-scoped living reference documents to artifact-based names:
 | `docs/assets/hardware/phase-4-analog-drive-schematic.svg` | `docs/assets/hardware/analog-drive-schematic.svg` |
 | `docs/assets/hardware/phase-5-hdmi-ddc-transport-diagram.svg` | `docs/assets/hardware/hdmi-ddc-transport-diagram.svg` |
 | `docs/assets/hardware/phase-6-raspberry-pi-pinout.svg` | `docs/assets/hardware/raspberry-pi-pinout.svg` |
+| `hardware/kicad/phase-3-observation-proto/` | `hardware/kicad/observation-proto/` |
+| `hardware/kicad/phase-3-observation-reva/` | `hardware/kicad/observation-reva/` |
+| `hardware/kicad/phase-4-analog-drive/` | `hardware/kicad/analog-drive/` |
+| `hardware/kicad/phase-5-hdmi-ddc-intermediary/` | `hardware/kicad/hdmi-ddc-intermediary/` |
+| `hardware/kicad/phase-6-protoboard-validation/` | `hardware/kicad/protoboard-validation/` |
+| `hardware/kicad/phase-7-controller-board/` | `hardware/kicad/controller-board/` |
+| `hardware/kicad/phase-7-hdmi-ddc-board/` | `hardware/kicad/hdmi-ddc-board/` |
 
-All inbound links in execution records, the implementation plan, and internal document references updated to match.
+All inbound links in execution records, the implementation plan, and internal document references updated to match. KiCad files within each directory renamed to match (e.g. `phase-4-analog-drive.kicad_sch` → `analog-drive.kicad_sch`); internal `(project "phase-N-...")` instance-tracking references updated throughout.
 
 Added `docs/hardware/README.md` — index of all hardware reference documents with one-line descriptions and the naming rule.
 
