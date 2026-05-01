@@ -15,6 +15,11 @@ Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → WS2812B DIN (direct, no level 
 The SN74AHCT125 level shifter was removed after testing showed it caused random frame
 corruption and missed updates. WS2812B tolerates 3.3 V logic reliably at this distance.
 
+Color order: the installed LED responds to RGB byte order (Red, Green, Blue), not the
+GRB order specified by the standard WS2812B datasheet. This is common in clone/variant
+units. If a replacement LED shows red and green swapped, change _encode_pixel to send
+(g, r, b) instead of (r, g, b).
+
 Color / state — priority reassert (button > monitor > panel):
   button held                        → AMBER
   monitor active,  panel on          → BLUE
@@ -39,7 +44,7 @@ logger = logging.getLogger(__name__)
 
 _SPI_SPEED_HZ = 6_400_000
 _BRIGHTNESS = 0.01   # 1 % — adjust here to change all states
-_RESET = bytes(40)   # 40 bytes × 8 bits / 6.4 MHz = 50 µs reset pulse
+_RESET = bytes(80)   # 80 bytes × 8 bits / 6.4 MHz = 100 µs reset pulse (Adafruit margin)
 
 _GREEN = (0, 255, 0)
 _RED   = (255, 0, 0)
@@ -65,11 +70,11 @@ def _encode_pixel(r: int, g: int, b: int) -> bytes:
     return bytes(buf)
 
 
-def _make_frame(r: int, g: int, b: int) -> list[int]:
-    return list(_RESET + _encode_pixel(r, g, b) + _RESET)
+def _make_frame(r: int, g: int, b: int) -> bytes:
+    return _RESET + _encode_pixel(r, g, b) + _RESET
 
 
-# Pre-computed SPI frames — avoids encoding + list conversion on every write.
+# Pre-computed SPI frames — avoids encoding on every write.
 _FRAME_OFF   = _make_frame(0, 0, 0)
 _FRAME_GREEN = _make_frame(int(_GREEN[0] * _BRIGHTNESS), int(_GREEN[1] * _BRIGHTNESS), int(_GREEN[2] * _BRIGHTNESS))
 _FRAME_RED   = _make_frame(int(_RED[0]   * _BRIGHTNESS), int(_RED[1]   * _BRIGHTNESS), int(_RED[2]   * _BRIGHTNESS))
@@ -81,10 +86,8 @@ class StatusLedService:
     """Single WS2812B status LED driven by tracked state with priority reassert.
 
     Setters call SPI directly from the caller thread — no polling, no queue.
-    A correction daemon re-asserts the full current state every 5 s to self-heal
-    missed events without clobbering non-panel states (e.g. blue during monitor active).
 
-    Priority (for reassert and terminal fallbacks):
+    Priority:
       button held  →  AMBER
       monitor active  →  BLUE (panel on) / OFF (panel off)
       default  →  GREEN (panel on) / RED (panel off)
@@ -115,6 +118,8 @@ class StatusLedService:
                     self._spi.close()
                 except Exception:
                     pass
+                finally:
+                    self._spi = None
 
     # ── state setters — called from any thread ────────────────────────────────
 
