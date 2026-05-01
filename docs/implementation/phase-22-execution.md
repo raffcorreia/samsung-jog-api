@@ -159,11 +159,13 @@ pi-deck:        0.1.9+r89, hardware=live, control_state=idle
 
 Measured 2026-05-01 with protoboard attached (SW1, WS2812B LED, Phase 21 display circuit):
 
-Measurements taken at 5V supply. Current fluctuates continuously; values are approximate averages.
+Measurements taken at 5V supply with Pi 5, protoboard, and Waveshare DSI display. Current fluctuates continuously; values are approximate averages.
 
-| Condition | Voltage | Current | Power |
-|-----------|---------|---------|-------|
-| Display ON 100%, LED green 100% | 5V | ~1.30A | ~6.5W |
-| Display ON 100%, LED green 1%   | 5V | ~1.26A | ~6.3W |
+| Condition | Voltage | Current | Power | Notes |
+|-----------|---------|---------|-------|-------|
+| Display ON 100%, LED green 100%, 1 browser | 5V | ~1.30A | ~6.5W | |
+| Display ON 100%, LED green 1%, 1 browser   | 5V | ~1.26A | ~6.3W | LED at 100% adds ~40 mA |
+| Display ON 100%, LED green 1%, no browser  | 5V | ~1.22A | ~6.1W | ~40 mA saved closing remote WS connection |
+| JOG button press (any direction)           | 5V | ~1.47A | ~7.4W | ~250 mA spike during drive actuation; brief |
 
-The WS2812B at 100% brightness adds approximately 40 mA over 1% brightness. Current variation during normal operation makes precise isolation difficult — readings are best-effort averages.
+The JOG spike (~250 mA over idle) is caused by the GPIO drive circuit actuating the monitor's control board contacts. The spike is well within the 3A supply headroom and does not destabilize the Pi. A decoupling capacitor on the Pi's 5V rail is not needed — the supply has ample margin. A 100 µF electrolytic near the drive transistors on the custom PCB is worth adding as a precaution (noted in Phase 7 open items).
