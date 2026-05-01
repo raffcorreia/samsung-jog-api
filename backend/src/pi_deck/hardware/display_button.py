@@ -69,13 +69,14 @@ class DisplayButton:
         def _hold_tick() -> None:
             self._hold_fired = True
             self._hold_timer = None
+            logger.info("display-btn: hold fired (3 s)")
             try:
                 on_hold()
             except Exception:
                 logger.exception("display-btn: on_hold raised")
 
         def _pressed() -> None:
-            logger.debug("display-btn: pressed")
+            logger.info("display-btn: pressed")
             try:
                 if on_press:
                     on_press()
@@ -87,7 +88,7 @@ class DisplayButton:
             timer.start()
 
         def _released() -> None:
-            logger.debug("display-btn: released")
+            logger.info("display-btn: released")
             timer = self._hold_timer
             if timer is not None:
                 timer.cancel()

@@ -81,22 +81,20 @@ Continues the Phase 21 numbering (last used: Q9, R24, C4, no U or SW designators
 - C5: debounce; 100 nF across GPIO4-GND smooths mechanical contact bounce.
 - Software uses `gpiozero.Button(4)` with `pull_up=True` (internal + external pull-up).
 
-## Protoboard Wiring — LED Level Shifter
+## Protoboard Wiring — LED Direct Wiring
 
 ```
-GPIO10 (pin 19, SPI0 MOSI) ──── U2.A (3.3V IN)    U2.Y (5V OUT) ──── LED DIN
-                                  U2.GND ──── GND
-                                  U2.VCC ──── 5V (pin 2)
+GPIO10 (pin 19, SPI0 MOSI) ──── LED DIN
 
-LED chain: DIN → LED1 → DOUT → (next LED DIN if chained)
 LED GND → GND rail
 LED 5V → 5V rail
 ```
 
-- U1 level shifter: data-in at 3.3V logic (GPIO10 / SPI MOSI), data-out at 5V logic to WS2812B.
-- Pi 5 uses SPI (not DMA/PWM) because RP1 has no GPU mailbox; `StatusLedService` uses `spidev` at 3.2 MHz.
-- Each WS2812B bit is encoded as 4 SPI clock cycles (4-bit nibble: 1110='1', 1000='0').
-- Chain is expandable: additional LEDs connect DOUT → DIN with no GPIO changes.
+- GPIO10 drives WS2812B DIN directly at 3.3V logic — no level shifter.
+- The SN74AHCT125 level shifter (U2) was removed after testing showed it caused random frame corruption and missed LED updates. WS2812B tolerates 3.3V logic reliably at this cable length.
+- Pi 5 uses SPI (not DMA/PWM) because RP1 has no GPU mailbox; `StatusLedService` uses `spidev` at 6.4 MHz.
+- Each WS2812B bit is encoded as 8 SPI clock cycles (Adafruit NeoPixel encoding: `0xF8`='1', `0xC0`='0').
+- Protoboard signal integrity may still be a factor; if corruption returns, consider point-to-point wiring directly from the Pi header to LED DIN.
 
 ## PowerMenu Redesign
 

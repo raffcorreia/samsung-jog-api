@@ -4,12 +4,16 @@ Pi 5 (RP1 chip) does not expose the GPU DMA mailbox that rpi_ws281x uses,
 so we drive the LED with the SPI bus instead.  SPI generates the precise
 800 kHz NRZ waveform in hardware without needing root or DMA access.
 
-Encoding (4 SPI bits per WS2812B bit at 3.2 MHz → 312.5 ns per SPI bit):
-  WS2812B '1' → SPI nibble 0xE  (1110) : 937.5 ns high / 312.5 ns low  ✓
-  WS2812B '0' → SPI nibble 0x8  (1000) : 312.5 ns high / 937.5 ns low  ✓
+Encoding (8 SPI bits per WS2812B bit at 6.4 MHz → 156.25 ns per SPI bit):
+  WS2812B '1' → 0xF8 (11111000) : 781.25 ns high / 468.75 ns low  ✓
+  WS2812B '0' → 0xC0 (11000000) : 312.5 ns high  / 937.5 ns low   ✓
 
-Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → SN74AHCT125 level shifter
-3.3 V → 5 V → WS2812B DIN.
+This matches the Adafruit NeoPixel SPI encoding and gives well-centred
+timing margins vs the WS2812B spec (±150 ns tolerance).
+
+Hardware: GPIO10 (SPI0 MOSI, physical pin 19) → WS2812B DIN (direct, no level shifter).
+The SN74AHCT125 level shifter was removed after testing showed it caused random frame
+corruption and missed updates. WS2812B tolerates 3.3 V logic reliably at this distance.
 
 Color / state — priority reassert (button > monitor > panel):
   button held                        → AMBER
@@ -17,13 +21,11 @@ Color / state — priority reassert (button > monitor > panel):
   monitor active,  panel off         → OFF
   default,         panel on          → GREEN
   default,         panel off         → RED
-  correction thread (every 5 s)     → reasserts full current state (self-heals missed events
-                                       without clobbering non-panel states)
 
 Threading:
-  Each setter calls _send_frame() directly from the caller thread.
-  _spi_lock serialises concurrent SPI writes (~80 µs each at 3.2 MHz).
-  A correction daemon thread re-asserts panel colour every 5 s.
+  State is read inside _spi_lock so the last writer always uses the true
+  final state — prevents a race where two rapid events queue and the
+  earlier write overwrites the later one.
   SPI frames for all states are pre-computed at import time.
 """
 
@@ -35,9 +37,9 @@ import threading
 
 logger = logging.getLogger(__name__)
 
-_SPI_SPEED_HZ = 3_200_000
+_SPI_SPEED_HZ = 6_400_000
 _BRIGHTNESS = 0.01   # 1 % — adjust here to change all states
-_RESET = bytes(20)
+_RESET = bytes(40)   # 40 bytes × 8 bits / 6.4 MHz = 50 µs reset pulse
 
 _GREEN = (0, 255, 0)
 _RED   = (255, 0, 0)
@@ -55,18 +57,16 @@ def _find_spi() -> tuple[int, int] | None:
 
 
 def _encode_pixel(r: int, g: int, b: int) -> bytes:
-    """Encode one WS2811 pixel as 12 SPI bytes (RGB order, 4 SPI bits per bit)."""
-    buf = bytearray(12)
+    """Encode one pixel as 24 SPI bytes (RGB order, 8 SPI bits per WS2812B bit)."""
+    buf = bytearray(24)
     for ch_idx, byte_val in enumerate((r, g, b)):
-        for pair in range(4):
-            hi = (byte_val >> (7 - pair * 2)) & 1
-            lo = (byte_val >> (6 - pair * 2)) & 1
-            buf[ch_idx * 4 + pair] = (0xE0 if hi else 0x80) | (0x0E if lo else 0x08)
+        for bit in range(8):
+            buf[ch_idx * 8 + bit] = 0xF8 if (byte_val >> (7 - bit)) & 1 else 0xC0
     return bytes(buf)
 
 
 def _make_frame(r: int, g: int, b: int) -> list[int]:
-    return list(_encode_pixel(r, g, b) + _RESET)
+    return list(_RESET + _encode_pixel(r, g, b) + _RESET)
 
 
 # Pre-computed SPI frames — avoids encoding + list conversion on every write.
@@ -98,79 +98,83 @@ class StatusLedService:
         self._button_held = False
         self._state_lock = threading.Lock()
         self._spi_lock = threading.Lock()
-        self._stop = threading.Event()
-        self._thread: threading.Thread | None = None
         if self._live:
             self._init_spi()
 
     # ── lifecycle ─────────────────────────────────────────────────────────────
 
     def start(self) -> None:
-        self._thread = threading.Thread(
-            target=self._correction_loop, name="status-led", daemon=True
-        )
-        self._thread.start()
         self._reassert()
         logger.info("status-led: started")
 
     def stop(self) -> None:
-        self._stop.set()
-        if self._thread is not None:
-            self._thread.join(timeout=6)
-        self._send_frame(_FRAME_OFF)
         if self._spi is not None:
-            try:
-                self._spi.close()
-            except Exception:
-                pass
+            with self._spi_lock:
+                try:
+                    self._spi.writebytes2(_FRAME_OFF)
+                    self._spi.close()
+                except Exception:
+                    pass
 
     # ── state setters — called from any thread ────────────────────────────────
 
     def set_panel_on(self, on: bool) -> None:
         with self._state_lock:
             self._panel_on = on
+        logger.info("status-led: panel_on → %s", on)
         self._reassert()
 
     def set_button_held(self, held: bool) -> None:
         with self._state_lock:
             self._button_held = held
+        logger.info("status-led: button_held → %s", held)
         self._reassert()
 
     def set_monitor_led(self, active: bool) -> None:
         with self._state_lock:
             self._monitor_active = active
+        logger.info("status-led: monitor_led → %s", active)
         self._reassert()
-
-    # ── correction thread ─────────────────────────────────────────────────────
-
-    def _correction_loop(self) -> None:
-        while not self._stop.wait(timeout=5.0):
-            self._reassert()
 
     # ── internals ─────────────────────────────────────────────────────────────
 
     def _reassert(self) -> None:
-        """Send the correct frame for the current tracked state."""
-        with self._state_lock:
-            button_held = self._button_held
-            monitor_active = self._monitor_active
-            panel_on = self._panel_on
-        if button_held:
-            self._send_frame(_FRAME_AMBER)
-        elif monitor_active:
-            self._send_frame(_FRAME_BLUE if panel_on else _FRAME_OFF)
-        else:
-            self._send_frame(_FRAME_GREEN if panel_on else _FRAME_RED)
+        """Write the correct frame for the current state, re-reading state inside the SPI lock.
 
-    def _send_frame(self, frame: list[int]) -> None:
-        if self._spi is not None:
-            with self._spi_lock:
-                try:
-                    self._spi.writebytes2(frame)
-                except Exception as exc:
-                    logger.debug("status-led: SPI write error: %s", exc)
-        else:
-            logger.debug("status-led: mock frame len=%d", len(frame))
+        Acquiring spi_lock before reading state guarantees the last writer always
+        reflects the true final state — prevents a race where two rapid events
+        queue up and the earlier one overwrites the later one's SPI write.
+        """
+        if self._spi is None:
+            return
+        with self._spi_lock:
+            with self._state_lock:
+                button_held = self._button_held
+                monitor_active = self._monitor_active
+                panel_on = self._panel_on
+            if button_held:
+                label, color, frame = "AMBER", _AMBER, _FRAME_AMBER
+            elif monitor_active:
+                if panel_on:
+                    label, color, frame = "BLUE", _BLUE, _FRAME_BLUE
+                else:
+                    label, color, frame = "OFF", (0, 0, 0), _FRAME_OFF
+            else:
+                if panel_on:
+                    label, color, frame = "GREEN", _GREEN, _FRAME_GREEN
+                else:
+                    label, color, frame = "RED", _RED, _FRAME_RED
+            r = int(color[0] * _BRIGHTNESS)
+            g = int(color[1] * _BRIGHTNESS)
+            b = int(color[2] * _BRIGHTNESS)
+            logger.info(
+                "status-led: %s (%d,%d,%d)  [button=%s monitor=%s panel=%s]",
+                label, r, g, b, button_held, monitor_active, panel_on,
+            )
+            try:
+                self._spi.writebytes2(frame)
+            except Exception as exc:
+                logger.error("status-led: SPI write error: %s", exc)
 
     def _init_spi(self) -> None:
         bus_dev = _find_spi()

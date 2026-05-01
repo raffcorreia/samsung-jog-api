@@ -26,7 +26,7 @@ def setup_logging(log_dir: Path | None = None) -> Path:
     log_path = resolved / "pi-deck.log"
 
     fmt = logging.Formatter(
-        fmt="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        fmt="%(asctime)s.%(msecs)03d | %(levelname)s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
