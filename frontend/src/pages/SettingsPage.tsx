@@ -1,10 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { fetchDisplayBrightness, fetchNetworkInfo, setDisplayBrightness } from "../api/client";
+import { fetchDisplayBrightness, fetchNetworkInfo, fetchStatus, setDisplayBrightness } from "../api/client";
 import type { NetworkInfo } from "../api/client";
 import { DECK_WIDGETS } from "../widgets/deckWidgets";
 import styles from "./SettingsPage.module.css";
+
+function VersionPanel() {
+  const [version, setVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchStatus()
+      .then((s) => setVersion(s.version))
+      .catch(() => { /* non-critical */ });
+  }, []);
+
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>Version</h2>
+      <div className={styles.row}>
+        <span className={styles.rowLabel}>pi-deck</span>
+        <span className={styles.rowValue}>{version ?? "—"}</span>
+      </div>
+    </section>
+  );
+}
 
 function NetworkPanel() {
   const [info, setInfo] = useState<NetworkInfo | null>(null);
@@ -110,6 +130,7 @@ export function SettingsPage() {
 
   return (
     <div className={styles.page} data-widget={DECK_WIDGETS.settings}>
+      <VersionPanel />
       <NetworkPanel />
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Appearance</h2>

@@ -8,8 +8,17 @@
 # Usage:
 #   PI_TARGET=user@pi-hostname ./scripts/deploy.sh
 #
+# Persist PI_TARGET for the session so you don't need to prefix every run:
+#   export PI_TARGET=rafael@10.0.0.116
+#   ./scripts/deploy.sh
+#
+# SSH key auth is required (BatchMode — no password prompts). One-time setup:
+#   ssh-keygen -t ed25519 -C "pi-deck-deploy"
+#   ssh-copy-id $PI_TARGET
+#
 # Environment:
-#   PI_TARGET   SSH destination — required (e.g. user@pi-hostname or user@192.168.x.x)
+#   PI_TARGET     SSH destination — required (e.g. user@hostname or user@192.168.x.x)
+#   FORCE_BUILD   Set to 1 to rebuild the frontend even when no source files changed
 
 set -euo pipefail
 
@@ -66,34 +75,50 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 2. Compute app version from git and write _version.py
-#    Format on main/tag:     0.1.0+r64
-#    Format post-tag (main): 0.1.0-dev.3+r64
-#    Format on branch:       0.1.0-dev.3.my-branch+r64
+# 2. Auto-tag on main + compute version
+#    Format on main:   0.1.0+r64
+#    Format on branch: 0.1.0+r64-phase-x-implementation
 # ---------------------------------------------------------------------------
-_git_desc=$(git -C "${REPO_ROOT}" describe --tags --always --long 2>/dev/null || echo "untagged")
 _branch=$(git -C "${REPO_ROOT}" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 
-# Parse describe output: vX.Y.Z-N-gHASH or just a hash if no tags
-if [[ "$_git_desc" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)-g([0-9a-f]+)$ ]]; then
-    _tag="${BASH_REMATCH[1]}"
-    _commits="${BASH_REMATCH[2]}"
-    if [ "$_commits" -eq 0 ] && [ "$_branch" = "main" ]; then
-        _git_part="${_tag}"
-    elif [ "$_branch" = "main" ]; then
-        _git_part="${_tag}-dev"
+# On main: auto-tag HEAD if not already tagged, then push the tag.
+if [ "$_branch" = "main" ]; then
+    _head_tag=$(git -C "${REPO_ROOT}" tag --points-at HEAD 2>/dev/null \
+        | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
+    if [ -z "$_head_tag" ]; then
+        _latest_tag=$(git -C "${REPO_ROOT}" tag --sort=-version:refname 2>/dev/null \
+            | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)
+        if [ -z "$_latest_tag" ]; then
+            _new_tag="v0.1.0"
+        else
+            IFS='.' read -r _maj _min _pat <<< "${_latest_tag#v}"
+            _new_tag="v${_maj}.${_min}.$((_pat + 1))"
+        fi
+        echo "==> Auto-tagging HEAD as ${_new_tag} ..."
+        git -C "${REPO_ROOT}" tag "${_new_tag}"
+        git -C "${REPO_ROOT}" push origin "${_new_tag}" 2>/dev/null && echo "    Tagged and pushed." || echo "    Tagged locally (push skipped — no remote auth)."
     else
-        _branch_slug="${_branch//\//-}"
-        _git_part="${_tag}-dev.${_branch_slug}"
+        echo "==> HEAD already tagged as ${_head_tag} — skipping auto-tag."
     fi
-else
-    # No tags found
-    _branch_slug="${_branch//\//-}"
-    _git_part="0.0.0-dev.${_branch_slug}"
 fi
 
-# Final version baked in after deploy counter is known (placeholder updated below)
-_APP_VERSION_BASE="${_git_part}"
+_git_desc=$(git -C "${REPO_ROOT}" describe --tags --always --long 2>/dev/null || echo "untagged")
+
+# Parse describe output: vX.Y.Z-N-gHASH
+if [[ "$_git_desc" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)-([0-9]+)-g([0-9a-f]+)$ ]]; then
+    _tag="${BASH_REMATCH[1]}"
+else
+    _tag="0.0.0"
+fi
+
+if [ "$_branch" = "main" ]; then
+    _BRANCH_SUFFIX=""
+else
+    _branch_slug="${_branch//\//-}"
+    _BRANCH_SUFFIX="-${_branch_slug}"
+fi
+
+_APP_VERSION_BASE="${_tag}"
 
 # ---------------------------------------------------------------------------
 # 3. Sync code to Pi (no git pull on Pi; dev machine is the source of truth)
@@ -143,7 +168,7 @@ DEPLOY_COUNTER=$(ssh -o BatchMode=yes "${PI_TARGET}" '
 ')
 echo "    Deploy counter: ${DEPLOY_COUNTER}"
 
-APP_VERSION="${_APP_VERSION_BASE}+r${DEPLOY_COUNTER}"
+APP_VERSION="${_APP_VERSION_BASE}+r${DEPLOY_COUNTER}${_BRANCH_SUFFIX}"
 echo "    App version:    ${APP_VERSION}"
 
 # Write _version.py locally so the rsync picks it up.

@@ -46,9 +46,19 @@ Added `docs/hardware/README.md` — index of all hardware reference documents wi
 - Created initial git tag `v0.1.0` on commit `0d5ce9b`
 
 Version format:
-- Main, on tag: `0.1.0+r<N>`
-- Main, commits past tag: `0.1.0-dev.<N>.g<hash>+r<N>`
-- Non-main branch: `0.1.0-dev.<N>.g<hash>.<branch>+r<N>`
+- Main: `0.1.0+r<N>` (tag is always the displayed version; no "dev" suffix)
+- Non-main branch: `0.1.0+r<N>-phase-x-implementation` (branch slug appended after counter)
+- No tags, main: `0.0.0+r<N>`
+- No tags, branch: `0.0.0+r<N>-branch-slug`
+
+### Tagging workflow (automated by deploy.sh)
+
+`scripts/deploy.sh` auto-tags on every deploy from `main`:
+
+- If HEAD already has a `vX.Y.Z` tag, it is reused.
+- Otherwise the latest tag's patch is incremented (`v0.1.0` → `v0.1.1`), the new tag is created locally and pushed to `origin` before the deploy proceeds.
+
+Branch deploys are never auto-tagged. CI/CD automation is a future phase.
 
 ### Deploy harness
 

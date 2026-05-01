@@ -89,7 +89,42 @@ After changing any code, use the canonical deploy script from the dev machine (r
 PI_TARGET=user@pi-hostname ./scripts/deploy.sh
 ```
 
-This builds the frontend, rsyncs all code to the Pi, restarts `pi-deck`, and reloads Chromium. Do not rsync partial directories or restart the service manually — use the script so the deploy counter increments and the kiosk picks up the latest assets.
+This builds the frontend, rsyncs all code to the Pi, auto-tags on main, restarts `pi-deck`, and reloads Chromium. Do not rsync partial directories or restart the service manually — use the script so the deploy counter increments and the kiosk picks up the latest assets.
+
+### SSH key setup (one time)
+
+The script uses `BatchMode=yes` (no password prompts). Set up key-based auth before the first deploy:
+
+```bash
+ssh-keygen -t ed25519 -C "pi-deck-deploy"   # skip if you already have a key
+ssh-copy-id user@192.168.x.x                # copies ~/.ssh/id_ed25519.pub to the Pi
+ssh user@192.168.x.x                        # verify it connects without a password
+```
+
+Optional — add a `~/.ssh/config` entry so you can use a short alias:
+
+```
+Host pi-deck
+    HostName 192.168.x.x
+    User rafael
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+Then `PI_TARGET=pi-deck ./scripts/deploy.sh` works from any directory.
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `PI_TARGET` | yes | SSH destination, e.g. `rafael@10.0.0.116` or `pi-deck` if using `~/.ssh/config`. |
+| `FORCE_BUILD` | no | Set to `1` to rebuild the frontend even when no source files changed. |
+
+Persist `PI_TARGET` for your shell session so you don't have to prefix every command:
+
+```bash
+export PI_TARGET=rafael@10.0.0.116   # add to ~/.zshrc or ~/.bashrc to make it permanent
+./scripts/deploy.sh
+```
 
 ## 3. Recovery checks
 
