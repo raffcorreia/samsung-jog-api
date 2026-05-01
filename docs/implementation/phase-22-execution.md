@@ -159,6 +159,11 @@ pi-deck:        0.1.9+r89, hardware=live, control_state=idle
 
 Measured 2026-05-01 with protoboard attached (SW1, WS2812B LED, Phase 21 display circuit):
 
-| Condition | Current | Notes |
-|-----------|---------|-------|
-| _to be filled by user_ | | |
+Measurements taken at 5V supply. Current fluctuates continuously; values are approximate averages.
+
+| Condition | Voltage | Current | Power |
+|-----------|---------|---------|-------|
+| Display ON 100%, LED green 100% | 5V | ~1.30A | ~6.5W |
+| Display ON 100%, LED green 1%   | 5V | ~1.26A | ~6.3W |
+
+The WS2812B at 100% brightness adds approximately 40 mA over 1% brightness. Current variation during normal operation makes precise isolation difficult — readings are best-effort averages.
