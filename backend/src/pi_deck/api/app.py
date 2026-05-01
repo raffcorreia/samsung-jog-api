@@ -102,6 +102,8 @@ async def lifespan(app: FastAPI):
 
     hw.led_observer.set_state_callback(_on_monitor_led)
 
+    strip.send(0, GREEN if display.is_on else RED)
+
     def _btn_short_press() -> None:
         if not display.is_on:
             display.power_on()
