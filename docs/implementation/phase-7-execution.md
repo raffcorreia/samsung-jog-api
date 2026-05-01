@@ -237,6 +237,8 @@ Board 2 target: approximately **50 × 35 mm**. Dominated by two horizontal HDMI 
 - Define inter-board cable length based on final physical enclosure layout
 - Decide whether the custom board should include a GPIO-controlled global power switch so the entire board can be forced off when an enable pin is low
 - **Add GPIO-controlled high-side switch for display 5V** — route the Waveshare DSI display 5V through a P-channel MOSFET (NPN-driven gate) controlled by `GPIO26`. Required to enable full software display power-off and to eliminate the Pi brownout-reset risk on display reconnection. See Power Architecture section for measurements and circuit rationale.
+- **Add WS2812B status LED circuit** — GPIO10 (SPI0 MOSI, pin 19) drives a single WS2812B LED directly at 3.3V logic (no level shifter; validated in Phase 22). The LED requires a 5V supply rail and a direct data line from GPIO10. The SN74AHCT125 level shifter originally planned was removed after it caused frame corruption. Include a 10 kΩ pull-down on GPIO10/MOSI to keep the line LOW when SPI is idle. See Phase 22 execution record for full wiring details and StripDriver SPI encoding spec.
+- **Add SW1 display toggle button circuit** — GPIO4 (pin 7), active-low, with R25 (10 kΩ pull-up to 3.3V) and C5 (100 nF debounce cap to GND). Validated on protoboard in Phase 22.
 
 ## Exit-Criteria Assessment
 

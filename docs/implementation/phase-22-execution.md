@@ -6,7 +6,7 @@ Track **Phase 22: Physical Display and Pi Power Button** per [Implementation Pla
 
 ## Status
 
-**In progress.**
+**Complete.** Closed 2026-05-01 at deploy r89 (v0.1.9).
 
 ## Working Goal
 
@@ -53,7 +53,7 @@ _To be filled in during phase execution._
 | `display_btn` — display toggle button (active low) | GPIO4 | 7 | Input |
 | `led_data` — WS2812B LED data out (SPI0 MOSI) | GPIO10 | 19 | Output |
 
-GPIO10 (SPI0 MOSI) is used for WS2812B because Pi 5's RP1 chip does not expose the GPU DMA mailbox required by `rpi_ws281x`.  The SPI bus encodes each WS2812B bit as 4 SPI clock cycles at 3.2 MHz (312.5 ns/cycle), producing the required NRZ waveform entirely in hardware without root or DMA access.  SPI is accessible via `/dev/spidev10.0` on Pi 5.  On Pi 4 and earlier, SPI0 is at `/dev/spidev0.0` on the same GPIO10 pin — no wiring change needed between Pi generations.
+GPIO10 (SPI0 MOSI) is used for WS2812B because Pi 5's RP1 chip does not expose the GPU DMA mailbox required by `rpi_ws281x`.  The SPI bus encodes each WS2812B bit as 8 SPI clock cycles at 6.4 MHz (156.25 ns/cycle), producing the required NRZ waveform entirely in hardware without root or DMA access.  SPI is accessible via `/dev/spidev0.0` on Pi 5.  On Pi 4 and earlier, SPI0 is on the same GPIO10 pin — no wiring change needed between Pi generations.
 
 ## Component Designator Map (Phase 22 protoboard additions)
 
@@ -64,7 +64,7 @@ Continues the Phase 21 numbering (last used: Q9, R24, C4, no U or SW designators
 | `SW1` | Momentary SPST NO | Display toggle button (GPIO4 → GND when pressed) |
 | `R25` | 10 kΩ | GPIO4 hardware pull-up to 3.3V |
 | `C5` | 100 nF | GPIO4 debounce cap to GND |
-| `U2` | SN74AHCT125 (or equivalent) | 3.3V→5V level shifter, GPIO10 (SPI MOSI) → WS2812B DIN |
+| `U2` | SN74AHCT125 | 3.3V→5V level shifter — **removed**; caused random frame corruption. WS2812B driven directly from GPIO10 at 3.3V logic. |
 
 ## Protoboard Wiring — Button Circuit
 
@@ -92,7 +92,7 @@ LED 5V → 5V rail
 
 - GPIO10 drives WS2812B DIN directly at 3.3V logic — no level shifter.
 - The SN74AHCT125 level shifter (U2) was removed after testing showed it caused random frame corruption and missed LED updates. WS2812B tolerates 3.3V logic reliably at this cable length.
-- Pi 5 uses SPI (not DMA/PWM) because RP1 has no GPU mailbox; `StatusLedService` uses `spidev` at 6.4 MHz.
+- Pi 5 uses SPI (not DMA/PWM) because RP1 has no GPU mailbox; `StripDriver` uses `spidev` at 6.4 MHz.
 - Each WS2812B bit is encoded as 8 SPI clock cycles (Adafruit NeoPixel encoding: `0xF8`='1', `0xC0`='0').
 - Protoboard signal integrity may still be a factor; if corruption returns, consider point-to-point wiring directly from the Pi header to LED DIN.
 
@@ -123,20 +123,42 @@ No duplicate countdown screens.
 
 ## Evidence Checklist
 
-- ⬜ Pi 5 power button behavior defined and documented
-- ⬜ Pi 2 power button strategy decided (or limitation documented)
-- ⬜ Display on/off button wiring defined
-- ⬜ Single vs separate buttons decided
-- ⬜ Debounce and press-duration requirements defined
-- ⬜ Physical button design does not conflict with GPIO24 display circuit
-- ⬜ Integrated-board requirements updated
-- ⬜ PowerMenu action dialog updated: Display / Reset / Power off with correct sizing
-- ⬜ Power off confirmation uses existing `ConfirmDialog` component
-- ⬜ Countdown screen is a single reusable component (10 s, parameterized)
-- ⬜ Reset path: dialog → countdown → reboot works end-to-end
-- ⬜ Power off path: dialog → confirmation → countdown → halt works end-to-end
-- ⬜ WS2812B wired on GPIO10 (SPI0 MOSI, pin 19) via 3.3V→5V level shifter
-- ⬜ `StatusLedService` implemented using `rpi_ws281x`
-- ⬜ Healthy state (solid green) confirmed on hardware
-- ⬜ `StatusLedService` integrated into service lifecycle
-- ⬜ Host health gate passes
+- ✅ Pi 5 power button behavior defined and documented (J2 header / PMIC — clean shutdown while running, wake from halt)
+- ✅ Pi 2 power button strategy decided (operational limitation documented — physically unplug/replug power)
+- ✅ Display on/off button wiring defined (SW1 on GPIO4, R25 pull-up, C5 debounce)
+- ✅ Single button decided — SW1 handles display toggle; Pi 5 J2 handles Pi power separately
+- ✅ Debounce and press-duration requirements defined (hardware RC filter + 50 ms software debounce; 3 s hold threshold)
+- ✅ Physical button design does not conflict with GPIO24 display circuit (GPIO4 is independent)
+- ✅ PowerMenu action dialog updated: Display / Restart / Power off with correct sizing
+- ✅ Power off confirmation uses `ConfirmDialog` component
+- ✅ Countdown screen is a single reusable component (10 s, parameterized by action)
+- ✅ Reset path: dialog → countdown → reboot works end-to-end
+- ✅ Power off path: dialog → confirmation → countdown → halt works end-to-end
+- ✅ WS2812B wired on GPIO10 (SPI0 MOSI, pin 19) direct — level shifter removed (caused corruption)
+- ✅ `StripDriver` implemented via SPI at 6.4 MHz with per-LED lock arbitration
+- ✅ Healthy state (solid green) confirmed on hardware at startup
+- ✅ `StripDriver` integrated into service lifecycle; physical button broadcasts deck-only
+- ✅ Host health gate passes (verified at close — see snapshot below)
+
+## Host Health Snapshot
+
+Captured 2026-05-01 at deploy r89 (v0.1.9), ~41 min uptime, kiosk idle:
+
+```text
+temperature:    49.4 °C
+get_throttled:  0x0  (no flags)
+uptime:         41 min
+load average:   0.33 / 0.14 / 0.09
+RAM:            15 GiB total, 773 MiB used, 15 GiB available
+swap:           2.0 GiB total, 0 used
+disk (/):       58 GiB total, 5.7 GiB used (11%)
+pi-deck:        0.1.9+r89, hardware=live, control_state=idle
+```
+
+## Power Consumption
+
+Measured 2026-05-01 with protoboard attached (SW1, WS2812B LED, Phase 21 display circuit):
+
+| Condition | Current | Notes |
+|-----------|---------|-------|
+| _to be filled by user_ | | |
