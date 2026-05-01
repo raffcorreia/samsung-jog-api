@@ -61,10 +61,10 @@ export function TopBar({
     };
   }, []);
 
-  // Physical button short-press → open the power menu (display is already on when this fires).
+  // Physical button short-press → toggle the power menu.
   useEffect(() => {
     if (openPowerMenuTick === 0) return;
-    setMenuOpen(true);
+    setMenuOpen((prev) => !prev);
   }, [openPowerMenuTick]);
 
   async function handlePowerClick() {

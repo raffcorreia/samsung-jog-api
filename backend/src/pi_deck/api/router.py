@@ -383,7 +383,8 @@ async def websocket_events(ws: WebSocket) -> None:
     hub: WsHub = ws.app.state.ws_hub
     live_log: LiveLogService = ws.app.state.live_log
     recordings: RecordingService = ws.app.state.recordings
-    await hub.connect(ws)
+    is_deck = ws.client is not None and ws.client.host in ("127.0.0.1", "::1")
+    await hub.connect(ws, is_deck=is_deck)
     try:
         hello = ws_status_connected(status=deck.status())
         await ws.send_json(hello.model_dump(mode="json"))

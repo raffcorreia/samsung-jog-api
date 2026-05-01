@@ -107,7 +107,7 @@ async def lifespan(app: FastAPI):
             display.power_on()
         else:
             asyncio.run_coroutine_threadsafe(
-                hub.broadcast_json(ws_display_open_power_menu().model_dump(mode="json")),
+                hub.broadcast_deck_json(ws_display_open_power_menu().model_dump(mode="json")),
                 loop,
             )
 
