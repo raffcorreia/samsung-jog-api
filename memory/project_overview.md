@@ -65,8 +65,8 @@ The original Phase 7 intent was a home-built board using through-hole transistor
 - Logitech USB dongle (development only, ~100mA)
 
 **KiCad files location:**
-- Board 1: hardware/kicad/phase-7-controller-board/
-- Board 2: hardware/kicad/phase-7-hdmi-ddc-board/
+- Board 1: hardware/kicad/controller-board/
+- Board 2: hardware/kicad/hdmi-ddc-board/
 
 **Execution record:** docs/implementation/phase-7-execution.md
 
