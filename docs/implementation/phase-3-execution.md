@@ -25,8 +25,8 @@ This diagram is intentionally schematic in the architectural sense, not a finali
 
 Preliminary connection-level schematic:
 
-- KiCad project: [`hardware/kicad/observation-proto/observation-proto.kicad_pro`](../../hardware/kicad/observation-proto/observation-proto.kicad_pro)
-- BOM: [observation-bom.md](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/hardware/observation-bom.md)
+- KiCad project: [`hardware/kicad/observation-reva/`](../../hardware/kicad/observation-reva/observation-reva.kicad_pro)
+- BOM: [observation-bom.md](../hardware/observation-bom.md)
 
 This is the current connection-level schematic source for the observation path. It replaces the second SVG-style diagram and is intended to be the editable starting point for the actual electrical design.
 

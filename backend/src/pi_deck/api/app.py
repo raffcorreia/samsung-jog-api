@@ -29,7 +29,7 @@ from pi_deck.services.hardware_facade import build_hardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.observation_bus import ObservationBusService
 from pi_deck.services.recordings import RecordingService
-from pi_deck.services.status_led_service import StatusLedService
+from pi_deck.services.strip_driver import AMBER, BLUE, GREEN, OFF, RED, StripDriver
 from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 from pi_deck.storage.recordings import RecordingStore
@@ -79,11 +79,14 @@ async def lifespan(app: FastAPI):
     display = DisplayService(display_hw)
     display.power_on()
     loop = asyncio.get_running_loop()
-    status_led = StatusLedService(hw.kind)
-    status_led.start()
+    strip = StripDriver(num_leds=1, hw_mode=hw.kind)
+    strip.start()
+
+    _monitor_active = False
 
     def _on_power_changed(on: bool) -> None:
-        status_led.set_panel_on(on)
+        color = (BLUE if _monitor_active else GREEN) if on else (OFF if _monitor_active else RED)
+        strip.send(0, priority=False, color=color)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_changed(on=on).model_dump(mode="json")),
             loop,
@@ -91,7 +94,13 @@ async def lifespan(app: FastAPI):
 
     display.set_power_listener(_on_power_changed)
 
-    hw.led_observer.set_state_callback(lambda active: status_led.set_monitor_led(active))
+    def _on_monitor_led(active: bool) -> None:
+        nonlocal _monitor_active
+        _monitor_active = active
+        color = (BLUE if active else GREEN) if display.is_on else (OFF if active else RED)
+        strip.send(0, priority=False, color=color)
+
+    hw.led_observer.set_state_callback(_on_monitor_led)
 
     def _btn_short_press() -> None:
         if not display.is_on:
@@ -107,14 +116,14 @@ async def lifespan(app: FastAPI):
             display.power_off()
 
     def _btn_press() -> None:
-        status_led.set_button_held(True)
+        strip.send(0, priority=True, color=AMBER)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_button_held().model_dump(mode="json")),
             loop,
         )
 
     def _btn_release() -> None:
-        status_led.set_button_held(False)
+        strip.send(0, priority=True, color=None)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_button_released().model_dump(mode="json")),
             loop,
@@ -137,11 +146,11 @@ async def lifespan(app: FastAPI):
     app.state.display = display
     app.state.display_btn = display_btn
     app.state.system = system
-    app.state.status_led = status_led
+    app.state.strip = strip
     logger.info("pi-deck hardware mode: %s  version: %s", hw.kind, version)
     yield
     display_btn.close()
-    status_led.stop()
+    strip.stop()
     await observation.stop()
     hw.close()
 

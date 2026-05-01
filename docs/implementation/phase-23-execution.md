@@ -27,7 +27,6 @@ Renamed all phase-scoped living reference documents to artifact-based names:
 | `docs/assets/hardware/phase-4-analog-drive-schematic.svg` | `docs/assets/hardware/analog-drive-schematic.svg` |
 | `docs/assets/hardware/phase-5-hdmi-ddc-transport-diagram.svg` | `docs/assets/hardware/hdmi-ddc-transport-diagram.svg` |
 | `docs/assets/hardware/phase-6-raspberry-pi-pinout.svg` | `docs/assets/hardware/raspberry-pi-pinout.svg` |
-| `hardware/kicad/phase-3-observation-proto/` | `hardware/kicad/observation-proto/` |
 | `hardware/kicad/phase-3-observation-reva/` | `hardware/kicad/observation-reva/` |
 | `hardware/kicad/phase-4-analog-drive/` | `hardware/kicad/analog-drive/` |
 | `hardware/kicad/phase-5-hdmi-ddc-intermediary/` | `hardware/kicad/hdmi-ddc-intermediary/` |
