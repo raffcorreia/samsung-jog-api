@@ -3975,7 +3975,7 @@
 			(uuid "8c2619b7-558a-4902-9b63-a833c09523b3")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R4")
 					(unit 1)
@@ -4077,7 +4077,7 @@
 			(uuid "80a876a0-cded-4bfd-8d73-e1b1d6d9bc08")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R1")
 					(unit 1)
@@ -4215,7 +4215,7 @@
 			(uuid "1a2b3c4d-0005-4000-8000-000000000013")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U1")
 					(unit 4)
@@ -4317,7 +4317,7 @@
 			(uuid "e3778207-32f9-494e-8644-fd2d0cb5fc87")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R3")
 					(unit 1)
@@ -4419,7 +4419,7 @@
 			(uuid "afea705f-3cf6-4cfd-820d-8a4ab62784cd")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C4")
 					(unit 1)
@@ -4521,7 +4521,7 @@
 			(uuid "ba7356e8-75bf-4228-806d-38952f8c8e3e")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C6")
 					(unit 1)
@@ -4636,7 +4636,7 @@
 			(uuid "49db5564-7f2d-4e9e-a628-958a7efc5084")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U1")
 					(unit 3)
@@ -4769,7 +4769,7 @@
 			(uuid "f558481f-8f20-4c7d-9776-fecabdfd7e20")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U2")
 					(unit 1)
@@ -4871,7 +4871,7 @@
 			(uuid "7ed823f0-8a12-4591-98fc-3e5fe88606f7")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R5")
 					(unit 1)
@@ -4973,7 +4973,7 @@
 			(uuid "2a9b5b3c-b1c4-4c7f-be15-2ea691041545")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C7")
 					(unit 1)
@@ -5088,7 +5088,7 @@
 			(uuid "53586da4-8f68-45ec-9c94-a9172e4abc1c")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U1")
 					(unit 2)
@@ -5199,7 +5199,7 @@
 			(uuid "d04eed2e-d8c0-4977-b716-89836e7a7fdc")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U4")
 					(unit 1)
@@ -5301,7 +5301,7 @@
 			(uuid "dbcda548-88e7-4d9a-8e10-fe92ab4d9148")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C1")
 					(unit 1)
@@ -5403,7 +5403,7 @@
 			(uuid "be83fea6-d738-44b2-9cd9-1ccf15106b0f")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C2")
 					(unit 1)
@@ -5511,7 +5511,7 @@
 			(uuid "4190c191-5fc3-460a-aa1b-6e23cfad69c2")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "J1")
 					(unit 1)
@@ -5613,7 +5613,7 @@
 			(uuid "a5382972-3e98-4bfe-a117-a345e971816d")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C5")
 					(unit 1)
@@ -5688,7 +5688,7 @@
 			(uuid "a98f0e98-fd1b-45fe-9009-ec7ef6e3347b")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "#FLG02")
 					(unit 1)
@@ -5790,7 +5790,7 @@
 			(uuid "e65b76a9-1ad4-441e-af12-b3e31e1f0e71")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C8")
 					(unit 1)
@@ -5901,7 +5901,7 @@
 			(uuid "d6b2c02d-e627-4702-87e6-55319672ff50")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U3")
 					(unit 1)
@@ -5976,7 +5976,7 @@
 			(uuid "6c37512d-ae65-435a-9969-6b2182eb7246")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "#FLG01")
 					(unit 1)
@@ -6091,7 +6091,7 @@
 			(uuid "76e4b212-eee0-4b3b-8b33-a34dcc3e8e05")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U1")
 					(unit 5)
@@ -6229,7 +6229,7 @@
 			(uuid "b3985336-0735-44fc-87c5-a9592b4e5308")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U1")
 					(unit 1)
@@ -6331,7 +6331,7 @@
 			(uuid "8b184087-4842-4d08-bfc8-e33d6ca2af4f")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R2")
 					(unit 1)
@@ -6433,7 +6433,7 @@
 			(uuid "05b39f04-dbcc-479d-8b71-651cfc9b166c")
 		)
 		(instances
-			(project "phase-3-observation-reva"
+			(project "observation-reva"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C3")
 					(unit 1)
@@ -7746,7 +7746,7 @@
 			(uuid "11111111-0000-4000-8000-00000000003e")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U5")
 					(unit 1)
@@ -7859,7 +7859,7 @@
 			(uuid "11111111-0000-4000-8000-000000000045")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "U6")
 					(unit 1)
@@ -7963,7 +7963,7 @@
 			(uuid "11111111-0000-4000-8000-000000000052")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R13")
 					(unit 1)
@@ -8067,7 +8067,7 @@
 			(uuid "11111111-0000-4000-8000-000000000062")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R14")
 					(unit 1)
@@ -8171,7 +8171,7 @@
 			(uuid "11111111-0000-4000-8000-000000000072")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R15")
 					(unit 1)
@@ -8275,7 +8275,7 @@
 			(uuid "11111111-0000-4000-8000-000000000082")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R16")
 					(unit 1)
@@ -8379,7 +8379,7 @@
 			(uuid "11111111-0000-4000-8000-000000000092")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R17")
 					(unit 1)
@@ -8483,7 +8483,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000a2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R18")
 					(unit 1)
@@ -8587,7 +8587,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000b2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R19")
 					(unit 1)
@@ -8691,7 +8691,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000c2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R20")
 					(unit 1)
@@ -8795,7 +8795,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000d2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R21")
 					(unit 1)
@@ -8899,7 +8899,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000e2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "R22")
 					(unit 1)
@@ -9003,7 +9003,7 @@
 			(uuid "11111111-0000-4000-8000-0000000000f2")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C9")
 					(unit 1)
@@ -9107,7 +9107,7 @@
 			(uuid "11111111-0000-4000-8000-000000000102")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C10")
 					(unit 1)
@@ -9211,7 +9211,7 @@
 			(uuid "11111111-0000-4000-8000-000000000112")
 		)
 		(instances
-			(project "phase-4-analog-drive"
+			(project "analog-drive"
 				(path "/b1cb0001-0001-4000-8000-000000000001"
 					(reference "C11")
 					(unit 1)

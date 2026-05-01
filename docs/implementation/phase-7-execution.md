@@ -19,10 +19,10 @@ Combine the validated outputs of Phase 3 (observation), Phase 4 (drive), Phase 5
 
 ## Reference Artifacts
 
-- Board 1 schematic: [`hardware/kicad/phase-7-controller-board/phase-7-controller-board.kicad_sch`](../../hardware/kicad/phase-7-controller-board/phase-7-controller-board.kicad_sch)
-- Board 1 PCB: [`hardware/kicad/phase-7-controller-board/phase-7-controller-board.kicad_pcb`](../../hardware/kicad/phase-7-controller-board/phase-7-controller-board.kicad_pcb)
-- Board 2 schematic: [`hardware/kicad/phase-7-hdmi-ddc-board/phase-7-hdmi-ddc-board.kicad_sch`](../../hardware/kicad/phase-7-hdmi-ddc-board/phase-7-hdmi-ddc-board.kicad_sch)
-- Board 2 PCB: [`hardware/kicad/phase-7-hdmi-ddc-board/phase-7-hdmi-ddc-board.kicad_pcb`](../../hardware/kicad/phase-7-hdmi-ddc-board/phase-7-hdmi-ddc-board.kicad_pcb)
+- Board 1 schematic: [`hardware/kicad/controller-board/controller-board.kicad_sch`](../../hardware/kicad/controller-board/controller-board.kicad_sch)
+- Board 1 PCB: [`hardware/kicad/controller-board/controller-board.kicad_pcb`](../../hardware/kicad/controller-board/controller-board.kicad_pcb)
+- Board 2 schematic: [`hardware/kicad/hdmi-ddc-board/hdmi-ddc-board.kicad_sch`](../../hardware/kicad/hdmi-ddc-board/hdmi-ddc-board.kicad_sch)
+- Board 2 PCB: [`hardware/kicad/hdmi-ddc-board/hdmi-ddc-board.kicad_pcb`](../../hardware/kicad/hdmi-ddc-board/hdmi-ddc-board.kicad_pcb)
 
 ## Two-Board Architecture Decision
 

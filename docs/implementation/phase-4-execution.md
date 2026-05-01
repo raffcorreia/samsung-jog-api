@@ -24,10 +24,10 @@ Current analog-drive concept diagram:
 
 KiCad design artifacts for implementation:
 
-- KiCad project: [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pro`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pro)
-- KiCad schematic: [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_sch`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_sch)
-- KiCad PCB: [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb)
-- KiCad BOM CSV: [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.bom.csv`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.bom.csv)
+- KiCad project: [`hardware/kicad/analog-drive/analog-drive.kicad_pro`](../../hardware/kicad/analog-drive/analog-drive.kicad_pro)
+- KiCad schematic: [`hardware/kicad/analog-drive/analog-drive.kicad_sch`](../../hardware/kicad/analog-drive/analog-drive.kicad_sch)
+- KiCad PCB: [`hardware/kicad/analog-drive/analog-drive.kicad_pcb`](../../hardware/kicad/analog-drive/analog-drive.kicad_pcb)
+- KiCad BOM CSV: [`hardware/kicad/analog-drive/analog-drive.bom.csv`](../../hardware/kicad/analog-drive/analog-drive.bom.csv)
 
 ## Inputs From Prior Phases
 

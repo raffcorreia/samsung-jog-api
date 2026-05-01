@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="E">
   <design>
-    <source>/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation-reva/phase-3-observation-reva.kicad_sch</source>
+    <source>/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/observation-reva/observation-reva.kicad_sch</source>
     <date>2026-03-25T23:13:01</date>
     <tool>Eeschema 10.0.0</tool>
     <sheet number="1" name="/" tstamps="/">
@@ -10,7 +10,7 @@
         <company>samsung-jog-api</company>
         <rev>A</rev>
         <date/>
-        <source>phase-3-observation-reva.kicad_sch</source>
+        <source>observation-reva.kicad_sch</source>
         <comment number="1" value="Observation-only board for KEY_ADC2, KEY_ADC1, and KEY_LED"/>
         <comment number="2" value="Generated for KiCad 10"/>
         <comment number="3" value=""/>
@@ -39,7 +39,7 @@
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="MPN" value="CL10B104KB8NNNC"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -68,7 +68,7 @@
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="MPN" value="CL10B104KB8NNNC"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -97,7 +97,7 @@
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="MPN" value="CL10B104KB8NNNC"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -126,7 +126,7 @@
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="MPN" value="CL10B104KB8NNNC"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -155,7 +155,7 @@
       <property name="Manufacturer" value="Samsung Electro-Mechanics"/>
       <property name="MPN" value="CL10A105KB8NNNC"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -184,7 +184,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603B102K500NT"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -213,7 +213,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603B102K500NT"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -242,7 +242,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603B102K500NT"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="cap capacitor"/>
       <property name="ki_fp_filters" value="C_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -271,7 +271,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="PinHeader_1x04_P2.54mm"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="connector"/>
       <property name="ki_fp_filters" value="Connector*:*_1x??_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -302,7 +302,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="PinHeader_1x07_P2.54mm"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="connector"/>
       <property name="ki_fp_filters" value="Connector*:*_1x??_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -336,7 +336,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="PinHeader_1x02_P2.54mm"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="connector"/>
       <property name="ki_fp_filters" value="Connector*:*_1x??_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -365,7 +365,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603WAF1002T5E"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
       <property name="ki_fp_filters" value="R_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -394,7 +394,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603WAF1002T5E"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
       <property name="ki_fp_filters" value="R_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -423,7 +423,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603WAF1002T5E"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
       <property name="ki_fp_filters" value="R_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -452,7 +452,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603WAF4701T5E"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
       <property name="ki_fp_filters" value="R_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -481,7 +481,7 @@
       <property name="Manufacturer" value="Generic"/>
       <property name="MPN" value="0603WAF4701T5E"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="R res resistor"/>
       <property name="ki_fp_filters" value="R_*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -508,7 +508,7 @@
       </fields>
       <libsource lib="Amplifier_Operational" part="LM2902" description="Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="quad opamp"/>
       <property name="ki_fp_filters" value="SOIC*3.9x8.7mm*P1.27mm* DIP*W7.62mm* TSSOP*4.4x5mm*P0.65mm* SSOP*5.3x6.2mm*P0.65mm* MSOP*3x3mm*P0.5mm*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -565,7 +565,7 @@
       <property name="Manufacturer" value="Texas Instruments"/>
       <property name="MPN" value="ADS1114IDGS"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="16 bit single channel I2C ADC"/>
       <property name="ki_fp_filters" value="TSSOP*3x3mm*P0.5mm*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -602,7 +602,7 @@
       <property name="Manufacturer" value="Nexperia"/>
       <property name="MPN" value="74LVC1G17GW"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="Single Gate Buff Schmitt LVC CMOS"/>
       <property name="ki_fp_filters" value="SOT?23* SOT?553* Texas?R-PDSO-G5?DCK* Texas?R-PDSO-N5?DRL* Texas?X2SON*0.8x0.8mm*P0.48mm*"/>
       <sheetpath names="/" tstamps="/"/>
@@ -634,7 +634,7 @@
       <property name="Manufacturer" value="Nexperia"/>
       <property name="MPN" value="74LVC1G17GW"/>
       <property name="Sheetname" value=""/>
-      <property name="Sheetfile" value="phase-3-observation-reva.kicad_sch"/>
+      <property name="Sheetfile" value="observation-reva.kicad_sch"/>
       <property name="ki_keywords" value="Single Gate Buff Schmitt LVC CMOS"/>
       <property name="ki_fp_filters" value="SOT?23* SOT?553* Texas?R-PDSO-G5?DCK* Texas?R-PDSO-N5?DRL* Texas?X2SON*0.8x0.8mm*P0.48mm*"/>
       <sheetpath names="/" tstamps="/"/>

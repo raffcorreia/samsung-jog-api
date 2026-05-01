@@ -225,7 +225,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": "A"
+      "sch_revision": "A.04"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -250,18 +250,174 @@
       "version": 0
     },
     "pin_map": [
-      [0,0,0,0,0,0,1,0,0,0,0,2],
-      [0,2,0,1,0,0,1,0,2,2,2,2],
-      [0,0,0,0,0,0,1,0,1,0,1,2],
-      [0,1,0,0,0,0,1,1,2,1,1,2],
-      [0,0,0,0,0,0,1,0,0,0,0,2],
-      [0,0,0,0,0,0,0,0,0,0,0,2],
-      [1,1,1,1,1,0,1,1,1,1,1,2],
-      [0,0,0,1,0,0,1,0,0,0,0,2],
-      [0,2,1,2,0,0,1,0,2,2,2,2],
-      [0,2,0,1,0,0,1,0,2,0,0,2],
-      [0,2,1,1,0,0,1,0,2,0,0,2],
-      [2,2,2,2,2,2,2,2,2,2,2,2]
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        2,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        2,
+        0,
+        0,
+        1,
+        0,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
     ],
     "rule_severities": {
       "bus_definition_conflict": "error",
@@ -281,7 +437,7 @@
       "ground_pin_not_ground": "warning",
       "hier_label_mismatch": "error",
       "isolated_pin_label": "warning",
-      "label_dangling": "warning",
+      "label_dangling": "error",
       "label_multiple_wires": "warning",
       "lib_symbol_issues": "warning",
       "lib_symbol_mismatch": "warning",
@@ -296,7 +452,7 @@
       "pin_not_connected": "error",
       "pin_not_driven": "error",
       "pin_to_pin": "warning",
-      "power_pin_not_driven": "warning",
+      "power_pin_not_driven": "error",
       "same_local_global_label": "warning",
       "similar_label_and_power": "warning",
       "similar_labels": "warning",
@@ -317,7 +473,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "phase-7-controller-board.kicad_pro",
+    "filename": "protoboard-validation.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -382,14 +538,54 @@
     "bom_settings": {
       "exclude_dnp": false,
       "fields_ordered": [
-        {"group_by": false, "label": "Reference", "name": "Reference", "show": true},
-        {"group_by": false, "label": "Qty", "name": "${QUANTITY}", "show": true},
-        {"group_by": true, "label": "Value", "name": "Value", "show": true},
-        {"group_by": true, "label": "DNP", "name": "${DNP}", "show": true},
-        {"group_by": true, "label": "Exclude from BOM", "name": "${EXCLUDE_FROM_BOM}", "show": true},
-        {"group_by": true, "label": "Exclude from Board", "name": "${EXCLUDE_FROM_BOARD}", "show": true},
-        {"group_by": true, "label": "Footprint", "name": "Footprint", "show": true},
-        {"group_by": false, "label": "Datasheet", "name": "Datasheet", "show": true}
+        {
+          "group_by": false,
+          "label": "Reference",
+          "name": "Reference",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Qty",
+          "name": "${QUANTITY}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Value",
+          "name": "Value",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "DNP",
+          "name": "${DNP}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Exclude from BOM",
+          "name": "${EXCLUDE_FROM_BOM}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Exclude from Board",
+          "name": "${EXCLUDE_FROM_BOARD}",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Footprint",
+          "name": "Footprint",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Datasheet",
+          "name": "Datasheet",
+          "show": true
+        }
       ],
       "filter_string": "",
       "group_symbols": true,
@@ -428,6 +624,14 @@
       "version": 1
     },
     "net_format_name": "",
+    "ngspice": {
+      "fix_include_paths": true,
+      "meta": {
+        "version": 0
+      },
+      "model_mode": 4,
+      "workbook_filename": ""
+    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "reuse_designators": true,
@@ -437,9 +641,9 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "phase-7-controller-board.kicad_sch",
-        "name": "phase-7-controller-board",
-        "uuid": "b1cb0001-0001-4000-8000-000000000001"
+        "filename": "protoboard-validation.kicad_sch",
+        "name": "protoboard-validation",
+        "uuid": "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
       }
     ],
     "used_designators": "",
@@ -447,8 +651,8 @@
   },
   "sheets": [
     [
-      "b1cb0001-0001-4000-8000-000000000001",
-      "phase-7-controller-board"
+      "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd",
+      "protoboard-validation"
     ]
   ],
   "text_variables": {},

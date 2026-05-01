@@ -1564,7 +1564,7 @@
 					(unit 1)
 				)
 			)
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R5")
 					(unit 1)
@@ -1651,7 +1651,7 @@
 					(unit 1)
 				)
 			)
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R10")
 					(unit 1)
@@ -1738,7 +1738,7 @@
 					(unit 1)
 				)
 			)
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R15")
 					(unit 1)

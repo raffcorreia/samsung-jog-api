@@ -2999,7 +2999,7 @@
 			(uuid "66666666-0000-4000-8000-000000005014")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "J1")
 					(unit 1)
@@ -3104,7 +3104,7 @@
 			(uuid "66666666-0000-4000-8000-000000005030")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "U1")
 					(unit 1)
@@ -3185,7 +3185,7 @@
 			(uuid "66666666-0000-4000-8000-000000005052")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R1")
 					(unit 1)
@@ -3269,7 +3269,7 @@
 			(uuid "66666666-0000-4000-8000-000000005063")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q1")
 					(unit 1)
@@ -3350,7 +3350,7 @@
 			(uuid "66666666-0000-4000-8000-000000005072")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R2")
 					(unit 1)
@@ -3431,7 +3431,7 @@
 			(uuid "66666666-0000-4000-8000-000000005082")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R3")
 					(unit 1)
@@ -3515,7 +3515,7 @@
 			(uuid "66666666-0000-4000-8000-000000005093")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q2")
 					(unit 1)
@@ -3596,7 +3596,7 @@
 			(uuid "66666666-0000-4000-8000-000000005102")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R4")
 					(unit 1)
@@ -3680,7 +3680,7 @@
 			(uuid "66666666-0000-4000-8000-000000005113")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q3")
 					(unit 1)
@@ -3764,7 +3764,7 @@
 			(uuid "66666666-0000-4000-8000-000000005123")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q4")
 					(unit 1)
@@ -3848,7 +3848,7 @@
 			(uuid "66666666-0000-4000-8000-000000005133")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q5")
 					(unit 1)
@@ -3932,7 +3932,7 @@
 			(uuid "66666666-0000-4000-8000-000000005143")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q6")
 					(unit 1)
@@ -4016,7 +4016,7 @@
 			(uuid "66666666-0000-4000-8000-000000005153")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q7")
 					(unit 1)
@@ -4097,7 +4097,7 @@
 			(uuid "66666666-0000-4000-8000-000000005162")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "C1")
 					(unit 1)
@@ -4178,7 +4178,7 @@
 			(uuid "66666666-0000-4000-8000-000000005172")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "C2")
 					(unit 1)
@@ -4259,7 +4259,7 @@
 			(uuid "66666666-0000-4000-8000-000000005182")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R5")
 					(unit 1)
@@ -4340,7 +4340,7 @@
 			(uuid "66666666-0000-4000-8000-000000005192")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R6")
 					(unit 1)
@@ -4421,7 +4421,7 @@
 			(uuid "66666666-0000-4000-8000-000000005202")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R7")
 					(unit 1)
@@ -4502,7 +4502,7 @@
 			(uuid "66666666-0000-4000-8000-000000005212")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R8")
 					(unit 1)
@@ -4583,7 +4583,7 @@
 			(uuid "66666666-0000-4000-8000-000000005222")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R9")
 					(unit 1)
@@ -4664,7 +4664,7 @@
 			(uuid "66666666-0000-4000-8000-000000005232")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R10")
 					(unit 1)
@@ -4745,7 +4745,7 @@
 			(uuid "66666666-0000-4000-8000-000000005242")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R11")
 					(unit 1)
@@ -4826,7 +4826,7 @@
 			(uuid "66666666-0000-4000-8000-000000005252")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R12")
 					(unit 1)
@@ -4907,7 +4907,7 @@
 			(uuid "66666666-0000-4000-8000-000000005262")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R13")
 					(unit 1)
@@ -4988,7 +4988,7 @@
 			(uuid "66666666-0000-4000-8000-000000005272")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R14")
 					(unit 1)
@@ -5069,7 +5069,7 @@
 			(uuid "66666666-0000-4000-8000-000000005282")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R15")
 					(unit 1)
@@ -5150,7 +5150,7 @@
 			(uuid "66666666-0000-4000-8000-000000005292")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R16")
 					(unit 1)
@@ -5231,7 +5231,7 @@
 			(uuid "66666666-0000-4000-8000-000000005302")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R17")
 					(unit 1)
@@ -5312,7 +5312,7 @@
 			(uuid "66666666-0000-4000-8000-000000005312")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R18")
 					(unit 1)
@@ -5393,7 +5393,7 @@
 			(uuid "66666666-0000-4000-8000-000000005322")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R19")
 					(unit 1)
@@ -5477,7 +5477,7 @@
 			(uuid "66666666-0000-4000-8000-000000007013")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q8")
 					(unit 1)
@@ -5561,7 +5561,7 @@
 			(uuid "66666666-0000-4000-8000-000000007023")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "Q9")
 					(unit 1)
@@ -5642,7 +5642,7 @@
 			(uuid "66666666-0000-4000-8000-000000007032")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R21")
 					(unit 1)
@@ -5723,7 +5723,7 @@
 			(uuid "66666666-0000-4000-8000-000000007042")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R22")
 					(unit 1)
@@ -5804,7 +5804,7 @@
 			(uuid "66666666-0000-4000-8000-000000007052")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R23")
 					(unit 1)
@@ -5885,7 +5885,7 @@
 			(uuid "66666666-0000-4000-8000-000000007062")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R24")
 					(unit 1)
@@ -5966,7 +5966,7 @@
 			(uuid "66666666-0000-4000-8000-000000007072")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "C3")
 					(unit 1)
@@ -6047,7 +6047,7 @@
 			(uuid "66666666-0000-4000-8000-000000007082")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "C4")
 					(unit 1)
@@ -6264,7 +6264,7 @@
 			(uuid "66666666-0000-4000-8000-000000008022")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R25")
 					(unit 1)
@@ -6345,7 +6345,7 @@
 			(uuid "66666666-0000-4000-8000-000000008032")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "C5")
 					(unit 1)
@@ -6426,7 +6426,7 @@
 			(uuid "66666666-0000-4000-8000-000000008012")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "SW1")
 					(unit 1)
@@ -6513,7 +6513,7 @@
 			(uuid "66666666-0000-4000-8000-000000008044")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "U2")
 					(unit 1)
@@ -6594,7 +6594,7 @@
 			(uuid "66666666-0000-4000-8000-00000000b022")
 		)
 		(instances
-			(project "phase-6-protoboard-validation"
+			(project "protoboard-validation"
 				(path "/9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
 					(reference "R20")
 					(unit 1)

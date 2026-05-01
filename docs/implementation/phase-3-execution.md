@@ -25,8 +25,7 @@ This diagram is intentionally schematic in the architectural sense, not a finali
 
 Preliminary connection-level schematic:
 
-- KiCad project: [phase-3-observation.kicad_pro](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_pro)
-- KiCad schematic: [phase-3-observation.kicad_sch](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-3-observation/phase-3-observation.kicad_sch)
+- KiCad project: [`hardware/kicad/observation-proto/observation-proto.kicad_pro`](../../hardware/kicad/observation-proto/observation-proto.kicad_pro)
 - BOM: [observation-bom.md](/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/docs/hardware/observation-bom.md)
 
 This is the current connection-level schematic source for the observation path. It replaces the second SVG-style diagram and is intended to be the editable starting point for the actual electrical design.
@@ -516,12 +515,12 @@ The earlier broader open items are now narrowed by the selected architecture:
 
 ## Fabrication Files
 
-KiCad project: `hardware/kicad/phase-3-observation-reva/`
+KiCad project: `hardware/kicad/observation-reva/`
 
 | File | Purpose |
 |------|---------|
-| `phase-3-observation-reva.kicad_sch` | Schematic (topology frozen, all fields updated) |
-| `phase-3-observation-reva.kicad_pcb` | PCB (components placed, 3D models linked) |
+| `observation-reva.kicad_sch` | Schematic (topology frozen, all fields updated) |
+| `observation-reva.kicad_pcb` | PCB (components placed, 3D models linked) |
 | `production/phase-3-observation-reva.zip` | Gerbers for JLCPCB fabrication |
 | `production/bom.csv` | JLCPCB-format BOM with LCSC part numbers |
 | `production/positions.csv` | JLCPCB-format CPL with corrected IC rotations |

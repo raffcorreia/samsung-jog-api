@@ -11,7 +11,7 @@ It covers only the analog drive subcircuit for reproducing `JOG` resistance stat
 
 A JLC-oriented CSV BOM is tracked at:
 
-- [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.bom.csv`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.bom.csv)
+- [`hardware/kicad/analog-drive/analog-drive.bom.csv`](../../hardware/kicad/analog-drive/analog-drive.bom.csv)
 
 This markdown BOM is the review-friendly version; the CSV is the fabrication-oriented artifact used for PCB ordering and assembly preparation.
 
@@ -44,7 +44,7 @@ This markdown BOM is the review-friendly version; the CSV is the fabrication-ori
 
 ## PCB Outcome
 
-- the phase-4 KiCad PCB is now a routed compact prototype board in [`hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb`](../../hardware/kicad/phase-4-analog-drive/phase-4-analog-drive.kicad_pcb)
+- the phase-4 KiCad PCB is now a routed compact prototype board in [`hardware/kicad/analog-drive/analog-drive.kicad_pcb`](../../hardware/kicad/analog-drive/analog-drive.kicad_pcb)
 - KiCad successfully exports front-side placement CSV, gerbers, and 3D board renders from the board file
 - standard KiCad 3D models are now attached to the board footprints for connectors, ICs, passives, and capacitors
 - `kicad-cli pcb drc` still crashes in this environment with a KiCad `10.0.0` macOS CLI runtime error, so final clearance review still needs an interactive KiCad GUI pass before ordering

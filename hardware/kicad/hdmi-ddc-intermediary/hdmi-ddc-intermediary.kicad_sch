@@ -309,7 +309,7 @@
 		(pin "18" (uuid "55555555-0000-4000-8000-000000000228"))
 		(pin "19" (uuid "55555555-0000-4000-8000-000000000229"))
 		(pin "SH" (uuid "55555555-0000-4000-8000-000000000230"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "J1") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "J1") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:HDMI_A_Simple")
@@ -348,7 +348,7 @@
 		(pin "18" (uuid "55555555-0000-4000-8000-000000000258"))
 		(pin "19" (uuid "55555555-0000-4000-8000-000000000259"))
 		(pin "SH" (uuid "55555555-0000-4000-8000-000000000260"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "J2") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "J2") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:Conn_01x12_Simple")
@@ -378,7 +378,7 @@
 		(pin "10" (uuid "55555555-0000-4000-8000-000000000271"))
 		(pin "11" (uuid "55555555-0000-4000-8000-000000000272"))
 		(pin "12" (uuid "55555555-0000-4000-8000-000000000273"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "J3") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "J3") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:TCA4307DGKR")
@@ -405,7 +405,7 @@
 		(pin "6" (uuid "55555555-0000-4000-8000-000000000280"))
 		(pin "7" (uuid "55555555-0000-4000-8000-000000000281"))
 		(pin "8" (uuid "55555555-0000-4000-8000-000000000282"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "U1") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "U1") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:PCA9306")
@@ -432,7 +432,7 @@
 		(pin "6" (uuid "55555555-0000-4000-8000-000000000289"))
 		(pin "7" (uuid "55555555-0000-4000-8000-000000000290"))
 		(pin "8" (uuid "55555555-0000-4000-8000-000000000291"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "U2") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "U2") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:TPS2113APWR")
@@ -459,7 +459,7 @@
 		(pin "6" (uuid "55555555-0000-4000-8000-000000000298"))
 		(pin "7" (uuid "55555555-0000-4000-8000-000000000299"))
 		(pin "8" (uuid "55555555-0000-4000-8000-000000000300"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "U3") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "U3") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:NMOS_GSD")
@@ -481,7 +481,7 @@
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000302"))
 		(pin "2" (uuid "55555555-0000-4000-8000-000000000303"))
 		(pin "3" (uuid "55555555-0000-4000-8000-000000000304"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "Q1") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "Q1") (unit 1))))
 	)
 
 	(symbol
@@ -494,7 +494,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 76.2 130.81 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 76.2 130.81 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000306")) (pin "2" (uuid "55555555-0000-4000-8000-000000000307"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R1") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R1") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 66.04 149.86 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -506,7 +506,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 66.04 149.86 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 66.04 149.86 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000309")) (pin "2" (uuid "55555555-0000-4000-8000-000000000310"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R2") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R2") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 114.3 132.08 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -518,7 +518,7 @@
 		(property "MPN" "RMC_0603_10K_JN" (at 114.3 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C5362358" (at 114.3 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000312")) (pin "2" (uuid "55555555-0000-4000-8000-000000000313"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R3") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R3") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 142.24 132.08 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -530,7 +530,7 @@
 		(property "MPN" "RC0603FR-074K7L" (at 142.24 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C99782" (at 142.24 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000315")) (pin "2" (uuid "55555555-0000-4000-8000-000000000316"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R4") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R4") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 152.4 132.08 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -542,7 +542,7 @@
 		(property "MPN" "RC0603FR-074K7L" (at 152.4 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C99782" (at 152.4 132.08 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000318")) (pin "2" (uuid "55555555-0000-4000-8000-000000000319"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R5") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R5") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 55.88 181.61 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -554,7 +554,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 55.88 181.61 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 55.88 181.61 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000321")) (pin "2" (uuid "55555555-0000-4000-8000-000000000322"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R6") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R6") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 55.88 193.04 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -566,7 +566,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 55.88 193.04 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 55.88 193.04 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000324")) (pin "2" (uuid "55555555-0000-4000-8000-000000000325"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R7") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R7") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 165.1 181.61 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -578,7 +578,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 165.1 181.61 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 165.1 181.61 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000327")) (pin "2" (uuid "55555555-0000-4000-8000-000000000328"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R8") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R8") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 165.1 193.04 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -590,7 +590,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 165.1 193.04 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 165.1 193.04 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000330")) (pin "2" (uuid "55555555-0000-4000-8000-000000000331"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R9") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R9") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 101.6 182.88 0) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -602,7 +602,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 101.6 182.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 101.6 182.88 0) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000333")) (pin "2" (uuid "55555555-0000-4000-8000-000000000334"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R10") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R10") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 139.7 175.26 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -614,7 +614,7 @@
 		(property "MPN" "RC0603FR-07100KL" (at 139.7 175.26 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C25803" (at 139.7 175.26 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000336")) (pin "2" (uuid "55555555-0000-4000-8000-000000000337"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R11") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R11") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:R_Simple") (at 101.6 172.72 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -626,7 +626,7 @@
 		(property "MPN" "RC0603FR-071KL" (at 101.6 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C22548" (at 101.6 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000339")) (pin "2" (uuid "55555555-0000-4000-8000-000000000340"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "R12") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "R12") (unit 1))))
 	)
 
 	(symbol
@@ -639,7 +639,7 @@
 		(property "MPN" "CL10B104KA8NNNC" (at 83.82 118.11 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C14663" (at 83.82 118.11 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000342")) (pin "2" (uuid "55555555-0000-4000-8000-000000000343"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "C1") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "C1") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:C_Simple") (at 91.44 172.72 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -651,7 +651,7 @@
 		(property "MPN" "CL10B104KA8NNNC" (at 91.44 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C14663" (at 91.44 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000345")) (pin "2" (uuid "55555555-0000-4000-8000-000000000346"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "C2") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "C2") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:C_Simple") (at 76.2 172.72 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -663,7 +663,7 @@
 		(property "MPN" "CL10B104KA8NNNC" (at 76.2 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C14663" (at 76.2 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000348")) (pin "2" (uuid "55555555-0000-4000-8000-000000000349"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "C3") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "C3") (unit 1))))
 	)
 	(symbol
 		(lib_id "Custom:C_Simple") (at 149.86 172.72 90) (unit 1) (body_style 1) (exclude_from_sim no) (in_bom yes) (on_board yes) (in_pos_files yes) (dnp no)
@@ -675,7 +675,7 @@
 		(property "MPN" "CL10B104KA8NNNC" (at 149.86 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(property "JLCPCB Part" "C14663" (at 149.86 172.72 90) (hide yes) (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27))))
 		(pin "1" (uuid "55555555-0000-4000-8000-000000000351")) (pin "2" (uuid "55555555-0000-4000-8000-000000000352"))
-		(instances (project "phase-5-hdmi-ddc-intermediary" (path "/" (reference "C4") (unit 1))))
+		(instances (project "hdmi-ddc-intermediary" (path "/" (reference "C4") (unit 1))))
 	)
 
 	(wire (pts (xy 38.1 122.86) (xy 50.8 122.86)) (stroke (width 0) (type default)) (uuid "55555555-0000-4000-8000-000000000401"))

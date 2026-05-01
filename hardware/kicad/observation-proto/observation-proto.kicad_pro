@@ -141,7 +141,7 @@
         "min_track_width": 0.2,
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.5,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.005,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
@@ -225,7 +225,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": "A.04"
+      "sch_revision": "A.01"
     },
     "layer_pairs": [],
     "layer_presets": [],
@@ -473,7 +473,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "phase-6-protoboard-validation.kicad_pro",
+    "filename": "observation-proto.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -510,7 +510,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "gerbers/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
@@ -624,14 +624,6 @@
       "version": 1
     },
     "net_format_name": "",
-    "ngspice": {
-      "fix_include_paths": true,
-      "meta": {
-        "version": 0
-      },
-      "model_mode": 4,
-      "workbook_filename": ""
-    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "reuse_designators": true,
@@ -641,9 +633,9 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "phase-6-protoboard-validation.kicad_sch",
-        "name": "phase-6-protoboard-validation",
-        "uuid": "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd"
+        "filename": "observation-proto.kicad_sch",
+        "name": "observation-proto",
+        "uuid": "8eb49c18-7d51-4fe3-8c39-d40a1995eaab"
       }
     ],
     "used_designators": "",
@@ -651,8 +643,8 @@
   },
   "sheets": [
     [
-      "9dcd8f4a-4a8a-45db-b129-06d92d4ac6fd",
-      "phase-6-protoboard-validation"
+      "8eb49c18-7d51-4fe3-8c39-d40a1995eaab",
+      "observation-proto"
     ]
   ],
   "text_variables": {},

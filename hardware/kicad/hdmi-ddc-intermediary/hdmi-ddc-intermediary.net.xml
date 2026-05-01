@@ -1,7 +1,7 @@
 (export
 	(version "E")
 	(design
-		(source "/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/phase-5-hdmi-ddc-intermediary/phase-5-hdmi-ddc-intermediary.kicad_sch")
+		(source "/Users/raffcorreia/dev/src/raffcorreia/samsung-jog-api/hardware/kicad/hdmi-ddc-intermediary/hdmi-ddc-intermediary.kicad_sch")
 		(date "2026-04-03T10:56:49")
 		(tool "Eeschema 10.0.0")
 		(sheet
@@ -13,7 +13,7 @@
 				(company "samsung-jog-api")
 				(rev "A")
 				(date)
-				(source "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(source "hdmi-ddc-intermediary.kicad_sch")
 				(comment
 					(number "1")
 					(value "Attached Pi listener/slave DDC architecture with source disconnect and monitor +5V mux")
@@ -97,7 +97,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -161,7 +161,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -225,7 +225,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -289,7 +289,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -353,7 +353,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -471,7 +471,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -583,7 +583,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -677,7 +677,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -744,7 +744,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -808,7 +808,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -872,7 +872,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -936,7 +936,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1000,7 +1000,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1064,7 +1064,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1128,7 +1128,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1192,7 +1192,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1256,7 +1256,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1320,7 +1320,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1384,7 +1384,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1448,7 +1448,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1512,7 +1512,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1594,7 +1594,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
@@ -1676,7 +1676,7 @@
 			)
 			(property
 				(name "Sheetfile")
-				(value "phase-5-hdmi-ddc-intermediary.kicad_sch")
+				(value "hdmi-ddc-intermediary.kicad_sch")
 			)
 			(sheetpath
 				(names "/")
