@@ -34,6 +34,7 @@ Current state of the repository:
 - completed: `Phase 17: Development Fixture` — [execution record](docs/implementation/phase-17-execution.md) (crude open support to hold monitor/control-deck hardware together for development)
 - completed: `Phase 18: Display and Touch Validation` — [execution record](docs/implementation/phase-18-execution.md) (Waveshare DSI display/touch working; HDMI disabled as a display and retained for DDC/CI only; safe brightness ceiling `170/255`)
 - completed: `Phase 19: Display Usability and Power Hardening` — [execution record](docs/implementation/phase-19-execution.md) (display/Pi power menu, brightness API/UI cap, color/edge validation page, Xwayland/font readability pass, power measurements)
+- completed: `Phase 21: Display Power Control Circuit` — [execution record](docs/implementation/phase-21-execution.md) (high-side 5V switch + RC soft-start to prevent Pi 5 shutdown on display reconnect; hardware design complete)
 - completed: `Phase 23: Documentation Reorganization, Versioning, and Deploy Harness` — [execution record](docs/implementation/phase-23-execution.md) (artifact-based naming for all docs and KiCad projects, git-tag versioning, auto-tag on deploy, version panel in settings UI, deploy runbook)
 - next: `Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation` — [execution record scaffold](docs/implementation/phase-20-execution.md), [GPIO schema](docs/hardware/pi5-gpio-schema.md)
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
