@@ -20,14 +20,12 @@ GRB order specified by the standard WS2812B datasheet. This is common in clone/v
 units. If a replacement LED shows red and green swapped, change _encode_pixel to send
 (g, r, b) instead of (r, g, b).
 
-Priority model (per LED index):
-  Non-priority command  — updates the saved state; applied immediately unless that LED
-                          is currently under a priority override.
-  Priority command      — applied immediately regardless; non-priority commands received
-                          while active still update the saved state but do not change
-                          the displayed color.
-  Priority cancel       — send(index, priority=True, color=None); reverts to the last
-                          saved non-priority color for that LED.
+Lock model (per LED index):
+  send(index, color)                         — normal; ignored if LED is locked
+                                               always updates saved state
+  send(index, color, lock=LockMode.LOCK)     — lock LED to color immediately
+  send(index, color, lock=LockMode.UNLOCK)   — unlock and display color; color=None
+                                               reverts to last saved state
 
 Threading:
   send() is non-blocking — it enqueues a command and returns immediately.
@@ -43,6 +41,7 @@ import logging
 import queue
 import threading
 from dataclasses import dataclass
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +55,11 @@ GREEN = (0,   255, 0)
 RED   = (255, 0,   0)
 AMBER = (255, 165, 0)
 BLUE  = (0,   0,   255)
+
+
+class LockMode(Enum):
+    LOCK   = "lock"
+    UNLOCK = "unlock"
 
 
 def _find_spi() -> tuple[int, int] | None:
@@ -76,20 +80,24 @@ def _encode_pixel(r: int, g: int, b: int) -> bytes:
 
 
 @dataclass
+class _LedState:
+    saved:  tuple[int, int, int]        # last non-locked color
+    locked: tuple[int, int, int] | None # None = not locked
+
+
+@dataclass
 class _Cmd:
     index: int
-    priority: bool
-    color: tuple[int, int, int] | None  # None = cancel priority
+    color: tuple[int, int, int] | None
+    lock:  LockMode | None
 
 
 class StripDriver:
-    """Addressable RGB LED strip with per-LED priority arbitration.
+    """Addressable RGB LED strip with per-LED lock arbitration.
 
-    Priority:
-      send(index, priority=True, color=RGB)  — override that LED immediately
-      send(index, priority=True, color=None) — cancel override, revert to saved state
-      send(index, priority=False, color=RGB) — update saved state; applied only when
-                                               no priority override is active for that LED
+    send(index, color)                       — normal update, ignored if locked
+    send(index, color, lock=LockMode.LOCK)   — lock LED to color
+    send(index, color, lock=LockMode.UNLOCK) — unlock; color overrides saved if given
     """
 
     def __init__(self, num_leds: int, hw_mode: str) -> None:
@@ -99,9 +107,7 @@ class StripDriver:
         self._queue: queue.SimpleQueue[_Cmd | None] = queue.SimpleQueue()
         self._worker: threading.Thread | None = None
         # Worker-owned state — only touched from the worker thread.
-        self._saved: list[tuple[int, int, int]] = [OFF] * num_leds
-        self._current: list[tuple[int, int, int]] = [OFF] * num_leds
-        self._priority_active: list[bool] = [False] * num_leds
+        self._state: list[_LedState] = [_LedState(saved=OFF, locked=None) for _ in range(num_leds)]
         if self._live:
             self._init_spi()
 
@@ -110,7 +116,7 @@ class StripDriver:
     def start(self) -> None:
         self._worker = threading.Thread(target=self._drain, daemon=True, name="strip-driver")
         self._worker.start()
-        self._queue.put(_Cmd(index=-1, priority=False, color=None))  # initial assert
+        self._queue.put(_Cmd(index=-1, color=None, lock=None))  # initial assert
         logger.info("strip-driver: started (%d LED(s))", self._num_leds)
 
     def stop(self) -> None:
@@ -123,14 +129,13 @@ class StripDriver:
     def send(
         self,
         index: int,
-        *,
-        priority: bool,
         color: tuple[int, int, int] | None,
+        lock: LockMode | None = None,
     ) -> None:
         """Enqueue a command for LED at index. Non-blocking."""
         if not 0 <= index < self._num_leds:
             raise IndexError(f"LED index {index} out of range (0..{self._num_leds - 1})")
-        self._queue.put(_Cmd(index=index, priority=priority, color=color))
+        self._queue.put(_Cmd(index=index, color=color, lock=lock))
 
     # ── worker ────────────────────────────────────────────────────────────────
 
@@ -144,44 +149,44 @@ class StripDriver:
 
     def _process(self, cmd: _Cmd) -> None:
         if cmd.index == -1:
-            # Initial assert — write current state without changing it.
             self._write_strip()
             return
 
-        idx = cmd.index
-        if cmd.priority:
-            if cmd.color is None:
-                # Cancel priority — revert to saved state.
-                self._priority_active[idx] = False
-                self._current[idx] = self._saved[idx]
-                logger.info(
-                    "strip-driver: LED[%d] priority cleared → %s", idx, self._current[idx]
-                )
-            else:
-                # Activate priority override.
-                self._priority_active[idx] = True
-                self._current[idx] = cmd.color
-                logger.info(
-                    "strip-driver: LED[%d] priority %s", idx, cmd.color
-                )
+        s = self._state[cmd.index]
+
+        if cmd.lock is LockMode.LOCK:
+            s.locked = cmd.color
+            logger.info("strip-driver: LED[%d] locked %s", cmd.index, cmd.color)
+
+        elif cmd.lock is LockMode.UNLOCK:
+            if cmd.color is not None:
+                s.saved = cmd.color
+            s.locked = None
+            logger.info("strip-driver: LED[%d] unlocked → %s", cmd.index, s.saved)
+
         else:
-            # Non-priority: always update saved state.
-            self._saved[idx] = cmd.color  # type: ignore[assignment]
-            if not self._priority_active[idx]:
-                self._current[idx] = cmd.color  # type: ignore[assignment]
-                logger.info("strip-driver: LED[%d] %s", idx, cmd.color)
+            # Normal command — always update saved; apply only if not locked.
+            if cmd.color is not None:
+                s.saved = cmd.color
+            if s.locked is None:
+                logger.info("strip-driver: LED[%d] %s", cmd.index, s.saved)
             else:
                 logger.info(
-                    "strip-driver: LED[%d] saved %s (priority active, not applied)",
-                    idx, cmd.color,
+                    "strip-driver: LED[%d] saved %s (locked, not applied)",
+                    cmd.index, s.saved,
                 )
+
         self._write_strip()
+
+    def _current(self, s: _LedState) -> tuple[int, int, int]:
+        return s.locked if s.locked is not None else s.saved
 
     def _write_strip(self) -> None:
         if self._spi is None:
             return
         frame = bytearray(_RESET)
-        for idx, (r, g, b) in enumerate(self._current):
+        for s in self._state:
+            r, g, b = self._current(s)
             frame += _encode_pixel(
                 int(r * _BRIGHTNESS),
                 int(g * _BRIGHTNESS),

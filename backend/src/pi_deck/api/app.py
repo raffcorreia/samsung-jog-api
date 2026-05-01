@@ -29,7 +29,7 @@ from pi_deck.services.hardware_facade import build_hardware
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.observation_bus import ObservationBusService
 from pi_deck.services.recordings import RecordingService
-from pi_deck.services.strip_driver import AMBER, BLUE, GREEN, OFF, RED, StripDriver
+from pi_deck.services.strip_driver import AMBER, BLUE, GREEN, OFF, RED, LockMode, StripDriver
 from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 from pi_deck.storage.recordings import RecordingStore
@@ -86,7 +86,7 @@ async def lifespan(app: FastAPI):
 
     def _on_power_changed(on: bool) -> None:
         color = (BLUE if _monitor_active else GREEN) if on else (OFF if _monitor_active else RED)
-        strip.send(0, priority=False, color=color)
+        strip.send(0, color)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_changed(on=on).model_dump(mode="json")),
             loop,
@@ -98,7 +98,7 @@ async def lifespan(app: FastAPI):
         nonlocal _monitor_active
         _monitor_active = active
         color = (BLUE if active else GREEN) if display.is_on else (OFF if active else RED)
-        strip.send(0, priority=False, color=color)
+        strip.send(0, color)
 
     hw.led_observer.set_state_callback(_on_monitor_led)
 
@@ -116,14 +116,14 @@ async def lifespan(app: FastAPI):
             display.power_off()
 
     def _btn_press() -> None:
-        strip.send(0, priority=True, color=AMBER)
+        strip.send(0, AMBER, lock=LockMode.LOCK)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_button_held().model_dump(mode="json")),
             loop,
         )
 
     def _btn_release() -> None:
-        strip.send(0, priority=True, color=None)
+        strip.send(0, None, lock=LockMode.UNLOCK)
         asyncio.run_coroutine_threadsafe(
             hub.broadcast_json(ws_display_power_button_released().model_dump(mode="json")),
             loop,
