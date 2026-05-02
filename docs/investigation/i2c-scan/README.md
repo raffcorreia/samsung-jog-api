@@ -142,6 +142,12 @@ menus were likely displayed during those captures.
 2. Confirm `0xE1 ≠ 0xFA` (no Menu1 OSD open)
 3. Be aware that Menu2 is undetectable — wait at least 25s after any OSD interaction before scanning
 
+**Retake policy:** validate every capture inline before moving to the next state. If any of the following fail, call it immediately and retake on the spot — do not defer:
+- `0x02 ≠ 0x79` — scaler not in normal state
+- `0xE1 = 0xFA` — Menu1 OSD still open
+- Values match a known-contaminated pattern (e.g. E0–E3 matching a Menu2 or wrong-mode fingerprint)
+- Result looks inconsistent with the expected mode
+
 ---
 
 ## Scan file index
