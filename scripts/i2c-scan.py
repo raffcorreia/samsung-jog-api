@@ -11,7 +11,7 @@ DDC VCP codes (0x00–0xFF) are a separate namespace accessed via protocol reque
 Usage:
     python3 scripts/i2c-scan.py                          # scan defaults
     python3 scripts/i2c-scan.py --devices 0x54,0x58
-    python3 scripts/i2c-scan.py --bus 13 --output artifacts/i2c-scan
+    python3 scripts/i2c-scan.py --bus 13 --output docs/investigation/i2c-scan
     python3 scripts/i2c-scan.py --no-ddc                 # skip DDC VCP scan
 
 Requirements:
@@ -208,7 +208,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="I2C register scanner + DDC VCP reader")
     parser.add_argument("--bus",      type=int,  default=DEFAULT_BUS)
     parser.add_argument("--devices",  type=str,  help="Comma-separated hex addresses (default: 0x54,0x58)")
-    parser.add_argument("--output",   type=Path, default=Path("artifacts/i2c-scan"))
+    parser.add_argument("--output",   type=Path, default=Path("docs/investigation/i2c-scan"))
     parser.add_argument("--no-ddc",   action="store_true", help="Skip DDC VCP scan")
     args = parser.parse_args()
 

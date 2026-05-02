@@ -18,7 +18,7 @@ This runbook is the operational output of `Phase 1: Host Preparation and Conserv
 
 Phase 1 host-preparation artifacts are expected to live under:
 
-- `artifacts/host-prep/`
+- `docs/investigation/host-prep/`
 
 That directory is ignored by git because it may contain machine-specific details such as private IP addresses, package inventories, and service lists.
 
@@ -57,7 +57,7 @@ Run:
 scripts/host/capture_host_state.sh
 ```
 
-This writes a timestamped snapshot under `artifacts/host-prep/`.
+This writes a timestamped snapshot under `docs/investigation/host-prep/`.
 
 ### 2. Review the default cleanup candidates
 

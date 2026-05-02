@@ -13,7 +13,7 @@ command briefly leaving the monitor unresponsive.
 Usage:
     python3 scripts/ddc-scan.py [--bus N] [--delay MS] [--output DIR]
 
-Output (written to --output, default artifacts/ddc-scan/):
+Output (written to --output, default docs/investigation/ddc-scan/):
     ddc-scan-YYYYMMDD-HHMMSS.jsonl       full event log
     ddc-scan-YYYYMMDD-HHMMSS-summary.md  markdown table of responding codes
 
@@ -195,7 +195,7 @@ def main() -> None:
     parser.add_argument("--bus", type=int, help="I2C bus number (auto-detect if omitted)")
     parser.add_argument("--delay", type=float, default=DEFAULT_DELAY,
                         help=f"Delay between commands in seconds (default: {DEFAULT_DELAY})")
-    parser.add_argument("--output", type=Path, default=Path("artifacts/ddc-scan"),
+    parser.add_argument("--output", type=Path, default=Path("docs/investigation/ddc-scan"),
                         help="Output directory")
     parser.add_argument("--codes", type=str,
                         help="Comma-separated hex codes to scan instead of full 0x00-0xFF range")

@@ -6,7 +6,7 @@ repo_root="$(cd "${script_dir}/../.." && pwd)"
 
 timestamp="$(date +%Y%m%d-%H%M%S)"
 host_name="$(hostname -s 2>/dev/null || hostname)"
-output_root="${1:-${repo_root}/artifacts/host-prep}"
+output_root="${1:-${repo_root}/docs/investigation/host-prep}"
 output_dir="${output_root}/${host_name}-${timestamp}"
 
 mkdir -p "${output_dir}"

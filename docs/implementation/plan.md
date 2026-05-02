@@ -983,7 +983,7 @@ Run the validation in this order so differences are attributable and the prior p
 ### Tasks
 
 - prepare the Pi 5 storage, OS image, power supply, network, SSH, and hostname without reusing the Pi 2 host state as evidence
-- capture Phase 1 baseline artifacts under `artifacts/host-prep/` on the Pi 5
+- capture Phase 1 baseline artifacts under `docs/investigation/host-prep/` on the Pi 5
 - install the backend service, graphical stack, kiosk autostart, and keyring suppression using existing scripts
 - deploy the current repo to the Pi 5 with `scripts/deploy.sh`
 - update or override `PI_TARGET` for the Pi 5 without changing the deploy script's single canonical workflow

@@ -152,7 +152,7 @@ Use [Phase 20 Raspberry Pi 5 GPIO Schema](../hardware/pi5-gpio-schema.md).
 - ✅ Color/edge validation page inspected — defective panel; see Known Issues
 - ✅ Sustained kiosk run completed — full day, no instability or throttling
 - ✅ Final host health snapshot recorded
-- ⏳ Phase 1 host-prep artifacts under `artifacts/host-prep/` — not captured (non-blocking)
+- ⏳ Phase 1 host-prep artifacts under `docs/investigation/host-prep/` — not captured (non-blocking)
 - ⏳ Brightness range and artifact threshold re-test — deferred to replacement panel
 - ⏳ Touch re-validation on healthy panel — deferred to replacement panel
 
