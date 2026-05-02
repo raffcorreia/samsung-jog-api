@@ -5,6 +5,48 @@ and raw I2C (device `0x58`, Novatek scaler SoC). All reads on I2C bus 13.
 
 ---
 
+## Display state coverage
+
+All possible display configurations across 3 sources (HDMI, DP, TB). Audio excluded — tracked separately via `0x4A`.
+
+**Single source — 3 states**
+
+| State | Scan |
+|-------|------|
+| HDMI | ⚠ Pi source, incompatible resolution |
+| DP | ⚠ early scan, contamination risk |
+| TB | ⚠ early scan, contamination risk |
+
+**PBP side-by-side — 6 states** (left source = primary, reported by VCP `0x60`)
+
+| Left | Right | Scan |
+|------|-------|------|
+| DP | HDMI | ⚠ OSD contamination |
+| DP | TB | ⚠ OSD contamination |
+| HDMI | DP | ⚠ OSD contamination |
+| HDMI | TB | ⚠ OSD contamination |
+| TB | DP | ⚠ OSD contamination |
+| TB | HDMI | ⚠ OSD contamination |
+
+**PIP overlay — 18 states** (main × pip × size 1/2/3)
+
+| Main | PIP | Size 1 | Size 2 | Size 3 |
+|------|-----|--------|--------|--------|
+| DP | HDMI | ✓ | ✓ | ✓ |
+| DP | TB | ✓ | ✓ | ✓ |
+| HDMI | DP | — | — | — |
+| HDMI | TB | — | — | ✓ |
+| TB | DP | — | — | — |
+| TB | HDMI | ✓ | — | ✓ |
+
+**No signal / idle — 1 state:** ✓
+
+**Standby — 1 state:** — (never captured)
+
+**Total: 29 states. Data (clean or contaminated) for 18. Missing: all HDMI/TB-main DP-pip states, HDMI-main TB-pip sizes 1–2, TB-main HDMI-pip size 2, TB-main DP-pip all sizes.**
+
+---
+
 ## Register map
 
 ### DDC/CI — device `0x37`
