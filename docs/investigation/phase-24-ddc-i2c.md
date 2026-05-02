@@ -104,7 +104,7 @@ Given a set of clean register reads (`0x02=0x79`, `0xE1≠0xFA`, 25s elapsed aft
 
 ## Data gaps — retakes scheduled 2026-05-03
 
-- `0x48` meaning: need clean per-mode reads to determine what it encodes
+- `0x48`: reads `0x0F` in all modes from existing data (single-source, PBP, PIP); one unexplained `0x00` in `pbp-dp-tb-sound-right` — treated as outlier, no retake needed
 - Single-source E0–E3: need clean re-captures (early scans have contamination risk)
 - PBP audio-left states: 5 combos never captured with audio on the left
 - PBP E0–E3: all captures have OSD/input-change contamination — full re-capture needed
