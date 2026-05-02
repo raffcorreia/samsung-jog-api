@@ -1,0 +1,768 @@
+{"device": "0x37", "reg": "0x0", "status": "error"}
+{"device": "0x37", "reg": "0x1", "status": "error"}
+{"device": "0x37", "reg": "0x2", "status": "error"}
+{"device": "0x37", "reg": "0x3", "status": "error"}
+{"device": "0x37", "reg": "0x4", "status": "error"}
+{"device": "0x37", "reg": "0x5", "status": "error"}
+{"device": "0x37", "reg": "0x6", "status": "error"}
+{"device": "0x37", "reg": "0x7", "status": "error"}
+{"device": "0x37", "reg": "0x8", "status": "error"}
+{"device": "0x37", "reg": "0x9", "status": "error"}
+{"device": "0x37", "reg": "0xa", "status": "error"}
+{"device": "0x37", "reg": "0xb", "status": "error"}
+{"device": "0x37", "reg": "0xc", "status": "error"}
+{"device": "0x37", "reg": "0xd", "status": "error"}
+{"device": "0x37", "reg": "0xe", "status": "error"}
+{"device": "0x37", "reg": "0xf", "status": "error"}
+{"device": "0x37", "reg": "0x10", "status": "error"}
+{"device": "0x37", "reg": "0x11", "status": "error"}
+{"device": "0x37", "reg": "0x12", "status": "error"}
+{"device": "0x37", "reg": "0x13", "status": "error"}
+{"device": "0x37", "reg": "0x14", "status": "error"}
+{"device": "0x37", "reg": "0x15", "status": "error"}
+{"device": "0x37", "reg": "0x16", "status": "error"}
+{"device": "0x37", "reg": "0x17", "status": "error"}
+{"device": "0x37", "reg": "0x18", "status": "error"}
+{"device": "0x37", "reg": "0x19", "status": "error"}
+{"device": "0x37", "reg": "0x1a", "status": "error"}
+{"device": "0x37", "reg": "0x1b", "status": "error"}
+{"device": "0x37", "reg": "0x1c", "status": "error"}
+{"device": "0x37", "reg": "0x1d", "status": "error"}
+{"device": "0x37", "reg": "0x1e", "status": "error"}
+{"device": "0x37", "reg": "0x1f", "status": "error"}
+{"device": "0x37", "reg": "0x20", "status": "error"}
+{"device": "0x37", "reg": "0x21", "status": "error"}
+{"device": "0x37", "reg": "0x22", "status": "error"}
+{"device": "0x37", "reg": "0x23", "status": "error"}
+{"device": "0x37", "reg": "0x24", "status": "error"}
+{"device": "0x37", "reg": "0x25", "status": "error"}
+{"device": "0x37", "reg": "0x26", "status": "error"}
+{"device": "0x37", "reg": "0x27", "status": "error"}
+{"device": "0x37", "reg": "0x28", "status": "error"}
+{"device": "0x37", "reg": "0x29", "status": "error"}
+{"device": "0x37", "reg": "0x2a", "status": "error"}
+{"device": "0x37", "reg": "0x2b", "status": "error"}
+{"device": "0x37", "reg": "0x2c", "status": "error"}
+{"device": "0x37", "reg": "0x2d", "status": "error"}
+{"device": "0x37", "reg": "0x2e", "status": "error"}
+{"device": "0x37", "reg": "0x2f", "status": "error"}
+{"device": "0x37", "reg": "0x30", "status": "error"}
+{"device": "0x37", "reg": "0x31", "status": "error"}
+{"device": "0x37", "reg": "0x32", "status": "error"}
+{"device": "0x37", "reg": "0x33", "status": "error"}
+{"device": "0x37", "reg": "0x34", "status": "error"}
+{"device": "0x37", "reg": "0x35", "status": "error"}
+{"device": "0x37", "reg": "0x36", "status": "error"}
+{"device": "0x37", "reg": "0x37", "status": "error"}
+{"device": "0x37", "reg": "0x38", "status": "error"}
+{"device": "0x37", "reg": "0x39", "status": "error"}
+{"device": "0x37", "reg": "0x3a", "status": "error"}
+{"device": "0x37", "reg": "0x3b", "status": "error"}
+{"device": "0x37", "reg": "0x3c", "status": "error"}
+{"device": "0x37", "reg": "0x3d", "status": "error"}
+{"device": "0x37", "reg": "0x3e", "status": "error"}
+{"device": "0x37", "reg": "0x3f", "status": "error"}
+{"device": "0x37", "reg": "0x40", "status": "error"}
+{"device": "0x37", "reg": "0x41", "status": "error"}
+{"device": "0x37", "reg": "0x42", "status": "error"}
+{"device": "0x37", "reg": "0x43", "status": "error"}
+{"device": "0x37", "reg": "0x44", "status": "error"}
+{"device": "0x37", "reg": "0x45", "status": "error"}
+{"device": "0x37", "reg": "0x46", "status": "error"}
+{"device": "0x37", "reg": "0x47", "status": "error"}
+{"device": "0x37", "reg": "0x48", "status": "error"}
+{"device": "0x37", "reg": "0x49", "status": "error"}
+{"device": "0x37", "reg": "0x4a", "status": "error"}
+{"device": "0x37", "reg": "0x4b", "status": "error"}
+{"device": "0x37", "reg": "0x4c", "status": "error"}
+{"device": "0x37", "reg": "0x4d", "status": "error"}
+{"device": "0x37", "reg": "0x4e", "status": "error"}
+{"device": "0x37", "reg": "0x4f", "status": "error"}
+{"device": "0x37", "reg": "0x50", "status": "error"}
+{"device": "0x37", "reg": "0x51", "status": "error"}
+{"device": "0x37", "reg": "0x52", "status": "error"}
+{"device": "0x37", "reg": "0x53", "status": "error"}
+{"device": "0x37", "reg": "0x54", "status": "error"}
+{"device": "0x37", "reg": "0x55", "status": "error"}
+{"device": "0x37", "reg": "0x56", "status": "error"}
+{"device": "0x37", "reg": "0x57", "status": "error"}
+{"device": "0x37", "reg": "0x58", "status": "error"}
+{"device": "0x37", "reg": "0x59", "status": "error"}
+{"device": "0x37", "reg": "0x5a", "status": "error"}
+{"device": "0x37", "reg": "0x5b", "status": "error"}
+{"device": "0x37", "reg": "0x5c", "status": "error"}
+{"device": "0x37", "reg": "0x5d", "status": "error"}
+{"device": "0x37", "reg": "0x5e", "status": "error"}
+{"device": "0x37", "reg": "0x5f", "status": "error"}
+{"device": "0x37", "reg": "0x60", "status": "error"}
+{"device": "0x37", "reg": "0x61", "status": "error"}
+{"device": "0x37", "reg": "0x62", "status": "error"}
+{"device": "0x37", "reg": "0x63", "status": "error"}
+{"device": "0x37", "reg": "0x64", "status": "error"}
+{"device": "0x37", "reg": "0x65", "status": "error"}
+{"device": "0x37", "reg": "0x66", "status": "error"}
+{"device": "0x37", "reg": "0x67", "status": "error"}
+{"device": "0x37", "reg": "0x68", "status": "error"}
+{"device": "0x37", "reg": "0x69", "status": "error"}
+{"device": "0x37", "reg": "0x6a", "status": "error"}
+{"device": "0x37", "reg": "0x6b", "status": "error"}
+{"device": "0x37", "reg": "0x6c", "status": "error"}
+{"device": "0x37", "reg": "0x6d", "status": "error"}
+{"device": "0x37", "reg": "0x6e", "status": "error"}
+{"device": "0x37", "reg": "0x6f", "status": "error"}
+{"device": "0x37", "reg": "0x70", "status": "error"}
+{"device": "0x37", "reg": "0x71", "status": "error"}
+{"device": "0x37", "reg": "0x72", "status": "error"}
+{"device": "0x37", "reg": "0x73", "status": "error"}
+{"device": "0x37", "reg": "0x74", "status": "error"}
+{"device": "0x37", "reg": "0x75", "status": "error"}
+{"device": "0x37", "reg": "0x76", "status": "error"}
+{"device": "0x37", "reg": "0x77", "status": "error"}
+{"device": "0x37", "reg": "0x78", "status": "error"}
+{"device": "0x37", "reg": "0x79", "status": "error"}
+{"device": "0x37", "reg": "0x7a", "status": "error"}
+{"device": "0x37", "reg": "0x7b", "status": "error"}
+{"device": "0x37", "reg": "0x7c", "status": "error"}
+{"device": "0x37", "reg": "0x7d", "status": "error"}
+{"device": "0x37", "reg": "0x7e", "status": "error"}
+{"device": "0x37", "reg": "0x7f", "status": "error"}
+{"device": "0x37", "reg": "0x80", "status": "error"}
+{"device": "0x37", "reg": "0x81", "status": "error"}
+{"device": "0x37", "reg": "0x82", "status": "error"}
+{"device": "0x37", "reg": "0x83", "status": "error"}
+{"device": "0x37", "reg": "0x84", "status": "error"}
+{"device": "0x37", "reg": "0x85", "status": "error"}
+{"device": "0x37", "reg": "0x86", "status": "error"}
+{"device": "0x37", "reg": "0x87", "status": "error"}
+{"device": "0x37", "reg": "0x88", "status": "error"}
+{"device": "0x37", "reg": "0x89", "status": "error"}
+{"device": "0x37", "reg": "0x8a", "status": "error"}
+{"device": "0x37", "reg": "0x8b", "status": "error"}
+{"device": "0x37", "reg": "0x8c", "status": "error"}
+{"device": "0x37", "reg": "0x8d", "status": "error"}
+{"device": "0x37", "reg": "0x8e", "status": "error"}
+{"device": "0x37", "reg": "0x8f", "status": "error"}
+{"device": "0x37", "reg": "0x90", "status": "error"}
+{"device": "0x37", "reg": "0x91", "status": "error"}
+{"device": "0x37", "reg": "0x92", "status": "error"}
+{"device": "0x37", "reg": "0x93", "status": "error"}
+{"device": "0x37", "reg": "0x94", "status": "error"}
+{"device": "0x37", "reg": "0x95", "status": "error"}
+{"device": "0x37", "reg": "0x96", "status": "error"}
+{"device": "0x37", "reg": "0x97", "status": "error"}
+{"device": "0x37", "reg": "0x98", "status": "error"}
+{"device": "0x37", "reg": "0x99", "status": "error"}
+{"device": "0x37", "reg": "0x9a", "status": "error"}
+{"device": "0x37", "reg": "0x9b", "status": "error"}
+{"device": "0x37", "reg": "0x9c", "status": "error"}
+{"device": "0x37", "reg": "0x9d", "status": "error"}
+{"device": "0x37", "reg": "0x9e", "status": "error"}
+{"device": "0x37", "reg": "0x9f", "status": "error"}
+{"device": "0x37", "reg": "0xa0", "status": "error"}
+{"device": "0x37", "reg": "0xa1", "status": "error"}
+{"device": "0x37", "reg": "0xa2", "status": "error"}
+{"device": "0x37", "reg": "0xa3", "status": "error"}
+{"device": "0x37", "reg": "0xa4", "status": "error"}
+{"device": "0x37", "reg": "0xa5", "status": "error"}
+{"device": "0x37", "reg": "0xa6", "status": "error"}
+{"device": "0x37", "reg": "0xa7", "status": "error"}
+{"device": "0x37", "reg": "0xa8", "status": "error"}
+{"device": "0x37", "reg": "0xa9", "status": "error"}
+{"device": "0x37", "reg": "0xaa", "status": "error"}
+{"device": "0x37", "reg": "0xab", "status": "error"}
+{"device": "0x37", "reg": "0xac", "status": "error"}
+{"device": "0x37", "reg": "0xad", "status": "error"}
+{"device": "0x37", "reg": "0xae", "status": "error"}
+{"device": "0x37", "reg": "0xaf", "status": "error"}
+{"device": "0x37", "reg": "0xb0", "status": "error"}
+{"device": "0x37", "reg": "0xb1", "status": "error"}
+{"device": "0x37", "reg": "0xb2", "status": "error"}
+{"device": "0x37", "reg": "0xb3", "status": "error"}
+{"device": "0x37", "reg": "0xb4", "status": "error"}
+{"device": "0x37", "reg": "0xb5", "status": "error"}
+{"device": "0x37", "reg": "0xb6", "status": "error"}
+{"device": "0x37", "reg": "0xb7", "status": "error"}
+{"device": "0x37", "reg": "0xb8", "status": "error"}
+{"device": "0x37", "reg": "0xb9", "status": "error"}
+{"device": "0x37", "reg": "0xba", "status": "error"}
+{"device": "0x37", "reg": "0xbb", "status": "error"}
+{"device": "0x37", "reg": "0xbc", "status": "error"}
+{"device": "0x37", "reg": "0xbd", "status": "error"}
+{"device": "0x37", "reg": "0xbe", "status": "error"}
+{"device": "0x37", "reg": "0xbf", "status": "error"}
+{"device": "0x37", "reg": "0xc0", "status": "error"}
+{"device": "0x37", "reg": "0xc1", "status": "error"}
+{"device": "0x37", "reg": "0xc2", "status": "error"}
+{"device": "0x37", "reg": "0xc3", "status": "error"}
+{"device": "0x37", "reg": "0xc4", "status": "error"}
+{"device": "0x37", "reg": "0xc5", "status": "error"}
+{"device": "0x37", "reg": "0xc6", "status": "error"}
+{"device": "0x37", "reg": "0xc7", "status": "error"}
+{"device": "0x37", "reg": "0xc8", "status": "error"}
+{"device": "0x37", "reg": "0xc9", "status": "error"}
+{"device": "0x37", "reg": "0xca", "status": "error"}
+{"device": "0x37", "reg": "0xcb", "status": "error"}
+{"device": "0x37", "reg": "0xcc", "status": "error"}
+{"device": "0x37", "reg": "0xcd", "status": "error"}
+{"device": "0x37", "reg": "0xce", "status": "error"}
+{"device": "0x37", "reg": "0xcf", "status": "error"}
+{"device": "0x37", "reg": "0xd0", "status": "error"}
+{"device": "0x37", "reg": "0xd1", "status": "error"}
+{"device": "0x37", "reg": "0xd2", "status": "error"}
+{"device": "0x37", "reg": "0xd3", "status": "error"}
+{"device": "0x37", "reg": "0xd4", "status": "error"}
+{"device": "0x37", "reg": "0xd5", "status": "error"}
+{"device": "0x37", "reg": "0xd6", "status": "error"}
+{"device": "0x37", "reg": "0xd7", "status": "error"}
+{"device": "0x37", "reg": "0xd8", "status": "error"}
+{"device": "0x37", "reg": "0xd9", "status": "error"}
+{"device": "0x37", "reg": "0xda", "status": "error"}
+{"device": "0x37", "reg": "0xdb", "status": "error"}
+{"device": "0x37", "reg": "0xdc", "status": "error"}
+{"device": "0x37", "reg": "0xdd", "status": "error"}
+{"device": "0x37", "reg": "0xde", "status": "error"}
+{"device": "0x37", "reg": "0xdf", "status": "error"}
+{"device": "0x37", "reg": "0xe0", "status": "error"}
+{"device": "0x37", "reg": "0xe1", "status": "error"}
+{"device": "0x37", "reg": "0xe2", "status": "error"}
+{"device": "0x37", "reg": "0xe3", "status": "error"}
+{"device": "0x37", "reg": "0xe4", "status": "error"}
+{"device": "0x37", "reg": "0xe5", "status": "error"}
+{"device": "0x37", "reg": "0xe6", "status": "error"}
+{"device": "0x37", "reg": "0xe7", "status": "error"}
+{"device": "0x37", "reg": "0xe8", "status": "error"}
+{"device": "0x37", "reg": "0xe9", "status": "error"}
+{"device": "0x37", "reg": "0xea", "status": "error"}
+{"device": "0x37", "reg": "0xeb", "status": "error"}
+{"device": "0x37", "reg": "0xec", "status": "error"}
+{"device": "0x37", "reg": "0xed", "status": "error"}
+{"device": "0x37", "reg": "0xee", "status": "error"}
+{"device": "0x37", "reg": "0xef", "status": "error"}
+{"device": "0x37", "reg": "0xf0", "status": "error"}
+{"device": "0x37", "reg": "0xf1", "status": "error"}
+{"device": "0x37", "reg": "0xf2", "status": "error"}
+{"device": "0x37", "reg": "0xf3", "status": "error"}
+{"device": "0x37", "reg": "0xf4", "status": "error"}
+{"device": "0x37", "reg": "0xf5", "status": "error"}
+{"device": "0x37", "reg": "0xf6", "status": "error"}
+{"device": "0x37", "reg": "0xf7", "status": "error"}
+{"device": "0x37", "reg": "0xf8", "status": "error"}
+{"device": "0x37", "reg": "0xf9", "status": "error"}
+{"device": "0x37", "reg": "0xfa", "status": "error"}
+{"device": "0x37", "reg": "0xfb", "status": "error"}
+{"device": "0x37", "reg": "0xfc", "status": "error"}
+{"device": "0x37", "reg": "0xfd", "status": "error"}
+{"device": "0x37", "reg": "0xfe", "status": "error"}
+{"device": "0x37", "reg": "0xff", "status": "error"}
+{"device": "0x54", "reg": "0x0", "status": "error"}
+{"device": "0x54", "reg": "0x1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x2", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x3", "status": "error"}
+{"device": "0x54", "reg": "0x4", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x5", "status": "error"}
+{"device": "0x54", "reg": "0x6", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x7", "status": "error"}
+{"device": "0x54", "reg": "0x8", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa", "status": "error"}
+{"device": "0x54", "reg": "0xb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd", "status": "error"}
+{"device": "0x54", "reg": "0xe", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf", "status": "error"}
+{"device": "0x54", "reg": "0x10", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x11", "status": "error"}
+{"device": "0x54", "reg": "0x12", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x13", "status": "error"}
+{"device": "0x54", "reg": "0x14", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x15", "status": "error"}
+{"device": "0x54", "reg": "0x16", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x17", "status": "error"}
+{"device": "0x54", "reg": "0x18", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x19", "status": "error"}
+{"device": "0x54", "reg": "0x1a", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x1b", "status": "error"}
+{"device": "0x54", "reg": "0x1c", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x1d", "status": "error"}
+{"device": "0x54", "reg": "0x1e", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x1f", "status": "error"}
+{"device": "0x54", "reg": "0x20", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x21", "status": "error"}
+{"device": "0x54", "reg": "0x22", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x23", "status": "error"}
+{"device": "0x54", "reg": "0x24", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x25", "status": "error"}
+{"device": "0x54", "reg": "0x26", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x27", "status": "error"}
+{"device": "0x54", "reg": "0x28", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x29", "status": "error"}
+{"device": "0x54", "reg": "0x2a", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x2b", "status": "error"}
+{"device": "0x54", "reg": "0x2c", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x2d", "status": "error"}
+{"device": "0x54", "reg": "0x2e", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x2f", "status": "error"}
+{"device": "0x54", "reg": "0x30", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x31", "status": "error"}
+{"device": "0x54", "reg": "0x32", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x33", "status": "error"}
+{"device": "0x54", "reg": "0x34", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x35", "status": "error"}
+{"device": "0x54", "reg": "0x36", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x37", "status": "error"}
+{"device": "0x54", "reg": "0x38", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x39", "status": "error"}
+{"device": "0x54", "reg": "0x3a", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x3b", "status": "error"}
+{"device": "0x54", "reg": "0x3c", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x3d", "status": "error"}
+{"device": "0x54", "reg": "0x3e", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x3f", "status": "error"}
+{"device": "0x54", "reg": "0x40", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x41", "status": "error"}
+{"device": "0x54", "reg": "0x42", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x43", "status": "error"}
+{"device": "0x54", "reg": "0x44", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x45", "status": "error"}
+{"device": "0x54", "reg": "0x46", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x47", "status": "error"}
+{"device": "0x54", "reg": "0x48", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x49", "status": "error"}
+{"device": "0x54", "reg": "0x4a", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x4b", "status": "error"}
+{"device": "0x54", "reg": "0x4c", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x4d", "status": "error"}
+{"device": "0x54", "reg": "0x4e", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x4f", "status": "error"}
+{"device": "0x54", "reg": "0x50", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x51", "status": "error"}
+{"device": "0x54", "reg": "0x52", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x53", "status": "error"}
+{"device": "0x54", "reg": "0x54", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x55", "status": "error"}
+{"device": "0x54", "reg": "0x56", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x57", "status": "error"}
+{"device": "0x54", "reg": "0x58", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x59", "status": "error"}
+{"device": "0x54", "reg": "0x5a", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x5b", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x5c", "status": "error"}
+{"device": "0x54", "reg": "0x5d", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x5e", "status": "error"}
+{"device": "0x54", "reg": "0x5f", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x60", "status": "error"}
+{"device": "0x54", "reg": "0x61", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x62", "status": "error"}
+{"device": "0x54", "reg": "0x63", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x64", "status": "error"}
+{"device": "0x54", "reg": "0x65", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x66", "status": "error"}
+{"device": "0x54", "reg": "0x67", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x68", "status": "error"}
+{"device": "0x54", "reg": "0x69", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x6a", "status": "error"}
+{"device": "0x54", "reg": "0x6b", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x6c", "status": "error"}
+{"device": "0x54", "reg": "0x6d", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x6e", "status": "error"}
+{"device": "0x54", "reg": "0x6f", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x70", "status": "error"}
+{"device": "0x54", "reg": "0x71", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x72", "status": "error"}
+{"device": "0x54", "reg": "0x73", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x74", "status": "error"}
+{"device": "0x54", "reg": "0x75", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x76", "status": "error"}
+{"device": "0x54", "reg": "0x77", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x78", "status": "error"}
+{"device": "0x54", "reg": "0x79", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x7a", "status": "error"}
+{"device": "0x54", "reg": "0x7b", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x7c", "status": "error"}
+{"device": "0x54", "reg": "0x7d", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x7e", "status": "error"}
+{"device": "0x54", "reg": "0x7f", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x80", "status": "error"}
+{"device": "0x54", "reg": "0x81", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x82", "status": "error"}
+{"device": "0x54", "reg": "0x83", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x84", "status": "error"}
+{"device": "0x54", "reg": "0x85", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x86", "status": "error"}
+{"device": "0x54", "reg": "0x87", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x88", "status": "error"}
+{"device": "0x54", "reg": "0x89", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x8a", "status": "error"}
+{"device": "0x54", "reg": "0x8b", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x8c", "status": "error"}
+{"device": "0x54", "reg": "0x8d", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x8e", "status": "error"}
+{"device": "0x54", "reg": "0x8f", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x90", "status": "error"}
+{"device": "0x54", "reg": "0x91", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x92", "status": "error"}
+{"device": "0x54", "reg": "0x93", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x94", "status": "error"}
+{"device": "0x54", "reg": "0x95", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x96", "status": "error"}
+{"device": "0x54", "reg": "0x97", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x98", "status": "error"}
+{"device": "0x54", "reg": "0x99", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x9a", "status": "error"}
+{"device": "0x54", "reg": "0x9b", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x9c", "status": "error"}
+{"device": "0x54", "reg": "0x9d", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0x9e", "status": "error"}
+{"device": "0x54", "reg": "0x9f", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa0", "status": "error"}
+{"device": "0x54", "reg": "0xa1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa2", "status": "error"}
+{"device": "0x54", "reg": "0xa3", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa4", "status": "error"}
+{"device": "0x54", "reg": "0xa5", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa6", "status": "error"}
+{"device": "0x54", "reg": "0xa7", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xa8", "status": "error"}
+{"device": "0x54", "reg": "0xa9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xaa", "status": "error"}
+{"device": "0x54", "reg": "0xab", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xac", "status": "error"}
+{"device": "0x54", "reg": "0xad", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xae", "status": "error"}
+{"device": "0x54", "reg": "0xaf", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xb0", "status": "error"}
+{"device": "0x54", "reg": "0xb1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xb2", "status": "error"}
+{"device": "0x54", "reg": "0xb3", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xb4", "status": "error"}
+{"device": "0x54", "reg": "0xb5", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xb6", "status": "error"}
+{"device": "0x54", "reg": "0xb7", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xb8", "status": "error"}
+{"device": "0x54", "reg": "0xb9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xba", "status": "error"}
+{"device": "0x54", "reg": "0xbb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xbc", "status": "error"}
+{"device": "0x54", "reg": "0xbd", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xbe", "status": "error"}
+{"device": "0x54", "reg": "0xbf", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc0", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc1", "status": "error"}
+{"device": "0x54", "reg": "0xc2", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc3", "status": "error"}
+{"device": "0x54", "reg": "0xc4", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc5", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc6", "status": "error"}
+{"device": "0x54", "reg": "0xc7", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xc8", "status": "error"}
+{"device": "0x54", "reg": "0xc9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xca", "status": "error"}
+{"device": "0x54", "reg": "0xcb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xcc", "status": "error"}
+{"device": "0x54", "reg": "0xcd", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xce", "status": "error"}
+{"device": "0x54", "reg": "0xcf", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd0", "status": "error"}
+{"device": "0x54", "reg": "0xd1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd2", "status": "error"}
+{"device": "0x54", "reg": "0xd3", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd4", "status": "error"}
+{"device": "0x54", "reg": "0xd5", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd6", "status": "error"}
+{"device": "0x54", "reg": "0xd7", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xd8", "status": "error"}
+{"device": "0x54", "reg": "0xd9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xda", "status": "error"}
+{"device": "0x54", "reg": "0xdb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xdc", "status": "error"}
+{"device": "0x54", "reg": "0xdd", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xde", "status": "error"}
+{"device": "0x54", "reg": "0xdf", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xe0", "status": "error"}
+{"device": "0x54", "reg": "0xe1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xe2", "status": "error"}
+{"device": "0x54", "reg": "0xe3", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xe4", "status": "error"}
+{"device": "0x54", "reg": "0xe5", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xe6", "status": "error"}
+{"device": "0x54", "reg": "0xe7", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xe8", "status": "error"}
+{"device": "0x54", "reg": "0xe9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xea", "status": "error"}
+{"device": "0x54", "reg": "0xeb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xec", "status": "error"}
+{"device": "0x54", "reg": "0xed", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xee", "status": "error"}
+{"device": "0x54", "reg": "0xef", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf0", "status": "error"}
+{"device": "0x54", "reg": "0xf1", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf2", "status": "error"}
+{"device": "0x54", "reg": "0xf3", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf4", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf5", "status": "error"}
+{"device": "0x54", "reg": "0xf6", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf7", "status": "error"}
+{"device": "0x54", "reg": "0xf8", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xf9", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xfa", "status": "error"}
+{"device": "0x54", "reg": "0xfb", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xfc", "status": "error"}
+{"device": "0x54", "reg": "0xfd", "value": "0x6e", "status": "ok"}
+{"device": "0x54", "reg": "0xfe", "status": "error"}
+{"device": "0x54", "reg": "0xff", "value": "0x6e", "status": "ok"}
+{"device": "0x58", "reg": "0x0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x2", "value": "0x79", "status": "ok"}
+{"device": "0x58", "reg": "0x3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7", "value": "0x88", "status": "ok"}
+{"device": "0x58", "reg": "0x8", "value": "0x88", "status": "ok"}
+{"device": "0x58", "reg": "0x9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb", "value": "0x81", "status": "ok"}
+{"device": "0x58", "reg": "0xc", "value": "0xd3", "status": "ok"}
+{"device": "0x58", "reg": "0xd", "value": "0x3", "status": "ok"}
+{"device": "0x58", "reg": "0xe", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xf", "value": "0xe7", "status": "ok"}
+{"device": "0x58", "reg": "0x10", "value": "0x3", "status": "ok"}
+{"device": "0x58", "reg": "0x11", "value": "0x13", "status": "ok"}
+{"device": "0x58", "reg": "0x12", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x13", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x14", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x15", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x16", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x17", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x18", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x19", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x1f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x20", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x21", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x22", "value": "0x3", "status": "ok"}
+{"device": "0x58", "reg": "0x23", "value": "0x83", "status": "ok"}
+{"device": "0x58", "reg": "0x24", "value": "0x8", "status": "ok"}
+{"device": "0x58", "reg": "0x25", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x26", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x27", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x28", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x29", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x2a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x2b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x2c", "value": "0xd", "status": "ok"}
+{"device": "0x58", "reg": "0x2d", "value": "0x7", "status": "ok"}
+{"device": "0x58", "reg": "0x2e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x2f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x30", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x31", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x32", "value": "0x10", "status": "ok"}
+{"device": "0x58", "reg": "0x33", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x34", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x35", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x36", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x37", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x38", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x39", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x3a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x3b", "value": "0x45", "status": "ok"}
+{"device": "0x58", "reg": "0x3c", "value": "0x1d", "status": "ok"}
+{"device": "0x58", "reg": "0x3d", "value": "0x3a", "status": "ok"}
+{"device": "0x58", "reg": "0x3e", "value": "0xf", "status": "ok"}
+{"device": "0x58", "reg": "0x3f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x40", "value": "0x80", "status": "ok"}
+{"device": "0x58", "reg": "0x41", "value": "0x84", "status": "ok"}
+{"device": "0x58", "reg": "0x42", "value": "0x84", "status": "ok"}
+{"device": "0x58", "reg": "0x43", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x44", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x45", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x46", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x47", "value": "0x9", "status": "ok"}
+{"device": "0x58", "reg": "0x48", "value": "0xf", "status": "ok"}
+{"device": "0x58", "reg": "0x49", "value": "0x6", "status": "ok"}
+{"device": "0x58", "reg": "0x4a", "value": "0x2", "status": "ok"}
+{"device": "0x58", "reg": "0x4b", "value": "0x40", "status": "ok"}
+{"device": "0x58", "reg": "0x4c", "value": "0x6", "status": "ok"}
+{"device": "0x58", "reg": "0x4d", "value": "0x8", "status": "ok"}
+{"device": "0x58", "reg": "0x4e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x4f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x50", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x51", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x52", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x53", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x54", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x55", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x56", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x57", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x58", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x59", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x5f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x60", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x61", "value": "0x1", "status": "ok"}
+{"device": "0x58", "reg": "0x62", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x63", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x64", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x65", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x66", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x67", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x68", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x69", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x6f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x70", "value": "0x1f", "status": "ok"}
+{"device": "0x58", "reg": "0x71", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x72", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x73", "value": "0x20", "status": "ok"}
+{"device": "0x58", "reg": "0x74", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x75", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x76", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x77", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x78", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x79", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x7f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x80", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x81", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x82", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x83", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x84", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x85", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x86", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x87", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x88", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x89", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x8f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x90", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x91", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x92", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x93", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x94", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x95", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x96", "value": "0x40", "status": "ok"}
+{"device": "0x58", "reg": "0x97", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x98", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x99", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9a", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9b", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9c", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9d", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9e", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0x9f", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa2", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa7", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa8", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xa9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xaa", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xab", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xac", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xad", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xae", "value": "0x2", "status": "ok"}
+{"device": "0x58", "reg": "0xaf", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb2", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb7", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb8", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xb9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xba", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xbb", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xbc", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xbd", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xbe", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xbf", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc2", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc7", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc8", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xc9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xca", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xcb", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xcc", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xcd", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xce", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xcf", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd2", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd7", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd8", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xd9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xda", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xdb", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xdc", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xdd", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xde", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xdf", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe0", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe1", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe2", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe3", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe4", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe5", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe6", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe7", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe8", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xe9", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xea", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xeb", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xec", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xed", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xee", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xef", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xf0", "value": "0x10", "status": "ok"}
+{"device": "0x58", "reg": "0xf1", "value": "0x32", "status": "ok"}
+{"device": "0x58", "reg": "0xf2", "value": "0x54", "status": "ok"}
+{"device": "0x58", "reg": "0xf3", "value": "0x76", "status": "ok"}
+{"device": "0x58", "reg": "0xf4", "value": "0x10", "status": "ok"}
+{"device": "0x58", "reg": "0xf5", "value": "0x32", "status": "ok"}
+{"device": "0x58", "reg": "0xf6", "value": "0x54", "status": "ok"}
+{"device": "0x58", "reg": "0xf7", "value": "0x98", "status": "ok"}
+{"device": "0x58", "reg": "0xf8", "value": "0x10", "status": "ok"}
+{"device": "0x58", "reg": "0xf9", "value": "0x32", "status": "ok"}
+{"device": "0x58", "reg": "0xfa", "value": "0x54", "status": "ok"}
+{"device": "0x58", "reg": "0xfb", "value": "0x76", "status": "ok"}
+{"device": "0x58", "reg": "0xfc", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xfd", "value": "0x0", "status": "ok"}
+{"device": "0x58", "reg": "0xfe", "value": "0x1", "status": "ok"}
+{"device": "0x58", "reg": "0xff", "value": "0x45", "status": "ok"}

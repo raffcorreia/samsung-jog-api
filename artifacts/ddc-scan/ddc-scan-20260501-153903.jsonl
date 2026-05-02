@@ -1,0 +1,257 @@
+{"ts": "2026-05-01T19:39:04+00:00", "event": "capabilities", "bus": 13, "output": "none"}
+{"ts": "2026-05-01T19:39:04+00:00", "code": "0x00", "name": "Unknown (0x00)", "attempt": 1, "status": "error", "error": "VCP 00 ERR"}
+{"ts": "2026-05-01T19:39:04+00:00", "code": "0x01", "name": "Degauss", "attempt": 1, "status": "error", "error": "Feature 01 (Degauss) is not readable"}
+{"ts": "2026-05-01T19:39:05+00:00", "code": "0x02", "name": "New Control Value", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP 02 CNC x00 xff x00 x02"}
+{"ts": "2026-05-01T19:39:10+00:00", "code": "0x03", "name": "Unknown (0x03)", "attempt": 2, "status": "error", "error": "VCP 03 ERR"}
+{"ts": "2026-05-01T19:39:11+00:00", "code": "0x04", "name": "Restore Factory Defaults", "attempt": 1, "status": "error", "error": "Feature 04 (Restore factory defaults) is not readable"}
+{"ts": "2026-05-01T19:39:11+00:00", "code": "0x05", "name": "Restore Factory Luminance/Contrast", "attempt": 1, "status": "error", "error": "Feature 05 (Restore factory brightness/contrast defaults) is not readable"}
+{"ts": "2026-05-01T19:39:11+00:00", "code": "0x06", "name": "Restore Factory Geometry", "attempt": 1, "status": "error", "error": "Feature 06 (Restore factory geometry defaults) is not readable"}
+{"ts": "2026-05-01T19:39:12+00:00", "code": "0x07", "name": "Unknown (0x07)", "attempt": 1, "status": "error", "error": "VCP 07 ERR"}
+{"ts": "2026-05-01T19:39:12+00:00", "code": "0x08", "name": "Restore Factory Color", "attempt": 1, "status": "error", "error": "Feature 08 (Restore color defaults) is not readable"}
+{"ts": "2026-05-01T19:39:12+00:00", "code": "0x09", "name": "Unknown (0x09)", "attempt": 1, "status": "error", "error": "VCP 09 ERR"}
+{"ts": "2026-05-01T19:39:13+00:00", "code": "0x0A", "name": "Unknown (0x0A)", "attempt": 1, "status": "error", "error": "Feature 0a (Restore factory TV defaults) is not readable"}
+{"ts": "2026-05-01T19:39:13+00:00", "code": "0x0B", "name": "Color Temperature Increment", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP 0B CNC xff xff x00 x32"}
+{"ts": "2026-05-01T19:39:13+00:00", "code": "0x0C", "name": "Color Temperature Request", "attempt": 1, "status": "ok", "type": "C", "current": 40, "max": 170}
+{"ts": "2026-05-01T19:39:19+00:00", "code": "0x0D", "name": "Unknown (0x0D)", "attempt": 2, "status": "error", "error": "VCP 0D ERR"}
+{"ts": "2026-05-01T19:39:19+00:00", "code": "0x0E", "name": "Clock", "attempt": 1, "status": "error", "error": "VCP 0E ERR"}
+{"ts": "2026-05-01T19:39:20+00:00", "code": "0x0F", "name": "Unknown (0x0F)", "attempt": 1, "status": "error", "error": "VCP 0F ERR"}
+{"ts": "2026-05-01T19:39:20+00:00", "code": "0x10", "name": "Brightness", "attempt": 1, "status": "ok", "type": "C", "current": 59, "max": 100}
+{"ts": "2026-05-01T19:39:25+00:00", "code": "0x11", "name": "Unknown (0x11)", "attempt": 2, "status": "error", "error": "VCP 11 ERR"}
+{"ts": "2026-05-01T19:39:26+00:00", "code": "0x12", "name": "Contrast", "attempt": 1, "status": "ok", "type": "C", "current": 75, "max": 100}
+{"ts": "2026-05-01T19:39:31+00:00", "code": "0x13", "name": "Unknown (0x13)", "attempt": 2, "status": "error", "error": "VCP 13 ERR"}
+{"ts": "2026-05-01T19:39:32+00:00", "code": "0x14", "name": "Select Color Preset", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP 14 SNC x04"}
+{"ts": "2026-05-01T19:39:37+00:00", "code": "0x15", "name": "Unknown (0x15)", "attempt": 2, "status": "error", "error": "VCP 15 ERR"}
+{"ts": "2026-05-01T19:39:38+00:00", "code": "0x16", "name": "Red Video Gain", "attempt": 1, "status": "ok", "type": "C", "current": 70, "max": 100}
+{"ts": "2026-05-01T19:39:43+00:00", "code": "0x17", "name": "Unknown (0x17)", "attempt": 2, "status": "error", "error": "VCP 17 ERR"}
+{"ts": "2026-05-01T19:39:44+00:00", "code": "0x18", "name": "Green Video Gain", "attempt": 1, "status": "ok", "type": "C", "current": 70, "max": 100}
+{"ts": "2026-05-01T19:39:49+00:00", "code": "0x19", "name": "Unknown (0x19)", "attempt": 2, "status": "error", "error": "VCP 19 ERR"}
+{"ts": "2026-05-01T19:39:50+00:00", "code": "0x1A", "name": "Blue Video Gain", "attempt": 1, "status": "ok", "type": "C", "current": 70, "max": 100}
+{"ts": "2026-05-01T19:39:55+00:00", "code": "0x1B", "name": "Unknown (0x1B)", "attempt": 2, "status": "error", "error": "VCP 1B ERR"}
+{"ts": "2026-05-01T19:39:56+00:00", "code": "0x1C", "name": "Unknown (0x1C)", "attempt": 1, "status": "error", "error": "VCP 1C ERR"}
+{"ts": "2026-05-01T19:39:56+00:00", "code": "0x1D", "name": "Unknown (0x1D)", "attempt": 1, "status": "error", "error": "VCP 1D ERR"}
+{"ts": "2026-05-01T19:39:56+00:00", "code": "0x1E", "name": "Auto Setup", "attempt": 1, "status": "error", "error": "VCP 1E ERR"}
+{"ts": "2026-05-01T19:39:57+00:00", "code": "0x1F", "name": "Auto Color Setup", "attempt": 1, "status": "error", "error": "VCP 1F ERR"}
+{"ts": "2026-05-01T19:39:57+00:00", "code": "0x20", "name": "Horizontal Position", "attempt": 1, "status": "error", "error": "VCP 20 ERR"}
+{"ts": "2026-05-01T19:39:58+00:00", "code": "0x21", "name": "Unknown (0x21)", "attempt": 1, "status": "error", "error": "VCP 21 ERR"}
+{"ts": "2026-05-01T19:39:58+00:00", "code": "0x22", "name": "Horizontal Size", "attempt": 1, "status": "error", "error": "VCP 22 ERR"}
+{"ts": "2026-05-01T19:39:58+00:00", "code": "0x23", "name": "Unknown (0x23)", "attempt": 1, "status": "error", "error": "VCP 23 ERR"}
+{"ts": "2026-05-01T19:39:59+00:00", "code": "0x24", "name": "Unknown (0x24)", "attempt": 1, "status": "error", "error": "VCP 24 ERR"}
+{"ts": "2026-05-01T19:39:59+00:00", "code": "0x25", "name": "Unknown (0x25)", "attempt": 1, "status": "error", "error": "VCP 25 ERR"}
+{"ts": "2026-05-01T19:39:59+00:00", "code": "0x26", "name": "Unknown (0x26)", "attempt": 1, "status": "error", "error": "VCP 26 ERR"}
+{"ts": "2026-05-01T19:40:00+00:00", "code": "0x27", "name": "Unknown (0x27)", "attempt": 1, "status": "error", "error": "VCP 27 ERR"}
+{"ts": "2026-05-01T19:40:00+00:00", "code": "0x28", "name": "Unknown (0x28)", "attempt": 1, "status": "error", "error": "VCP 28 ERR"}
+{"ts": "2026-05-01T19:40:00+00:00", "code": "0x29", "name": "Unknown (0x29)", "attempt": 1, "status": "error", "error": "VCP 29 ERR"}
+{"ts": "2026-05-01T19:40:01+00:00", "code": "0x2A", "name": "Unknown (0x2A)", "attempt": 1, "status": "error", "error": "VCP 2A ERR"}
+{"ts": "2026-05-01T19:40:01+00:00", "code": "0x2B", "name": "Unknown (0x2B)", "attempt": 1, "status": "error", "error": "VCP 2B ERR"}
+{"ts": "2026-05-01T19:40:01+00:00", "code": "0x2C", "name": "Unknown (0x2C)", "attempt": 1, "status": "error", "error": "VCP 2C ERR"}
+{"ts": "2026-05-01T19:40:02+00:00", "code": "0x2D", "name": "Unknown (0x2D)", "attempt": 1, "status": "error", "error": "VCP 2D ERR"}
+{"ts": "2026-05-01T19:40:02+00:00", "code": "0x2E", "name": "Unknown (0x2E)", "attempt": 1, "status": "error", "error": "VCP 2E ERR"}
+{"ts": "2026-05-01T19:40:03+00:00", "code": "0x2F", "name": "Unknown (0x2F)", "attempt": 1, "status": "error", "error": "VCP 2F ERR"}
+{"ts": "2026-05-01T19:40:03+00:00", "code": "0x30", "name": "Vertical Position", "attempt": 1, "status": "error", "error": "VCP 30 ERR"}
+{"ts": "2026-05-01T19:40:03+00:00", "code": "0x31", "name": "Unknown (0x31)", "attempt": 1, "status": "error", "error": "VCP 31 ERR"}
+{"ts": "2026-05-01T19:40:04+00:00", "code": "0x32", "name": "Vertical Size", "attempt": 1, "status": "error", "error": "VCP 32 ERR"}
+{"ts": "2026-05-01T19:40:04+00:00", "code": "0x33", "name": "Unknown (0x33)", "attempt": 1, "status": "error", "error": "VCP 33 ERR"}
+{"ts": "2026-05-01T19:40:05+00:00", "code": "0x34", "name": "Unknown (0x34)", "attempt": 1, "status": "error", "error": "VCP 34 ERR"}
+{"ts": "2026-05-01T19:40:05+00:00", "code": "0x35", "name": "Unknown (0x35)", "attempt": 1, "status": "error", "error": "VCP 35 ERR"}
+{"ts": "2026-05-01T19:40:05+00:00", "code": "0x36", "name": "Unknown (0x36)", "attempt": 1, "status": "error", "error": "VCP 36 ERR"}
+{"ts": "2026-05-01T19:40:06+00:00", "code": "0x37", "name": "Unknown (0x37)", "attempt": 1, "status": "error", "error": "VCP 37 ERR"}
+{"ts": "2026-05-01T19:40:06+00:00", "code": "0x38", "name": "Unknown (0x38)", "attempt": 1, "status": "error", "error": "VCP 38 ERR"}
+{"ts": "2026-05-01T19:40:07+00:00", "code": "0x39", "name": "Unknown (0x39)", "attempt": 1, "status": "error", "error": "VCP 39 ERR"}
+{"ts": "2026-05-01T19:40:07+00:00", "code": "0x3A", "name": "Unknown (0x3A)", "attempt": 1, "status": "error", "error": "VCP 3A ERR"}
+{"ts": "2026-05-01T19:40:07+00:00", "code": "0x3B", "name": "Unknown (0x3B)", "attempt": 1, "status": "error", "error": "VCP 3B ERR"}
+{"ts": "2026-05-01T19:40:08+00:00", "code": "0x3C", "name": "Unknown (0x3C)", "attempt": 1, "status": "error", "error": "VCP 3C ERR"}
+{"ts": "2026-05-01T19:40:08+00:00", "code": "0x3D", "name": "Unknown (0x3D)", "attempt": 1, "status": "error", "error": "VCP 3D ERR"}
+{"ts": "2026-05-01T19:40:08+00:00", "code": "0x3E", "name": "Clock Phase", "attempt": 1, "status": "error", "error": "VCP 3E ERR"}
+{"ts": "2026-05-01T19:40:09+00:00", "code": "0x3F", "name": "Unknown (0x3F)", "attempt": 1, "status": "error", "error": "VCP 3F ERR"}
+{"ts": "2026-05-01T19:40:09+00:00", "code": "0x40", "name": "Unknown (0x40)", "attempt": 1, "status": "error", "error": "VCP 40 ERR"}
+{"ts": "2026-05-01T19:40:09+00:00", "code": "0x41", "name": "Unknown (0x41)", "attempt": 1, "status": "error", "error": "VCP 41 ERR"}
+{"ts": "2026-05-01T19:40:10+00:00", "code": "0x42", "name": "Unknown (0x42)", "attempt": 1, "status": "error", "error": "VCP 42 ERR"}
+{"ts": "2026-05-01T19:40:10+00:00", "code": "0x43", "name": "Unknown (0x43)", "attempt": 1, "status": "error", "error": "VCP 43 ERR"}
+{"ts": "2026-05-01T19:40:11+00:00", "code": "0x44", "name": "Unknown (0x44)", "attempt": 1, "status": "error", "error": "VCP 44 ERR"}
+{"ts": "2026-05-01T19:40:11+00:00", "code": "0x45", "name": "Unknown (0x45)", "attempt": 1, "status": "error", "error": "VCP 45 ERR"}
+{"ts": "2026-05-01T19:40:11+00:00", "code": "0x46", "name": "Unknown (0x46)", "attempt": 1, "status": "error", "error": "VCP 46 ERR"}
+{"ts": "2026-05-01T19:40:12+00:00", "code": "0x47", "name": "Unknown (0x47)", "attempt": 1, "status": "error", "error": "VCP 47 ERR"}
+{"ts": "2026-05-01T19:40:12+00:00", "code": "0x48", "name": "Unknown (0x48)", "attempt": 1, "status": "error", "error": "VCP 48 ERR"}
+{"ts": "2026-05-01T19:40:12+00:00", "code": "0x49", "name": "Unknown (0x49)", "attempt": 1, "status": "error", "error": "VCP 49 ERR"}
+{"ts": "2026-05-01T19:40:13+00:00", "code": "0x4A", "name": "Unknown (0x4A)", "attempt": 1, "status": "error", "error": "VCP 4A ERR"}
+{"ts": "2026-05-01T19:40:13+00:00", "code": "0x4B", "name": "Unknown (0x4B)", "attempt": 1, "status": "error", "error": "VCP 4B ERR"}
+{"ts": "2026-05-01T19:40:13+00:00", "code": "0x4C", "name": "Unknown (0x4C)", "attempt": 1, "status": "error", "error": "VCP 4C ERR"}
+{"ts": "2026-05-01T19:40:14+00:00", "code": "0x4D", "name": "Unknown (0x4D)", "attempt": 1, "status": "error", "error": "VCP 4D ERR"}
+{"ts": "2026-05-01T19:40:14+00:00", "code": "0x4E", "name": "Unknown (0x4E)", "attempt": 1, "status": "error", "error": "VCP 4E ERR"}
+{"ts": "2026-05-01T19:40:15+00:00", "code": "0x4F", "name": "Unknown (0x4F)", "attempt": 1, "status": "error", "error": "VCP 4F ERR"}
+{"ts": "2026-05-01T19:40:15+00:00", "code": "0x50", "name": "Unknown (0x50)", "attempt": 1, "status": "error", "error": "VCP 50 ERR"}
+{"ts": "2026-05-01T19:40:15+00:00", "code": "0x51", "name": "Unknown (0x51)", "attempt": 1, "status": "error", "error": "VCP 51 ERR"}
+{"ts": "2026-05-01T19:40:16+00:00", "code": "0x52", "name": "Active Control", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP 52 CNC x00 xff x00 x00"}
+{"ts": "2026-05-01T19:40:21+00:00", "code": "0x53", "name": "Unknown (0x53)", "attempt": 2, "status": "error", "error": "VCP 53 ERR"}
+{"ts": "2026-05-01T19:40:22+00:00", "code": "0x54", "name": "Performance Preservation", "attempt": 1, "status": "error", "error": "VCP 54 ERR"}
+{"ts": "2026-05-01T19:40:22+00:00", "code": "0x55", "name": "Unknown (0x55)", "attempt": 1, "status": "error", "error": "VCP 55 ERR"}
+{"ts": "2026-05-01T19:40:23+00:00", "code": "0x56", "name": "Horizontal Moire", "attempt": 1, "status": "error", "error": "VCP 56 ERR"}
+{"ts": "2026-05-01T19:40:23+00:00", "code": "0x57", "name": "Unknown (0x57)", "attempt": 1, "status": "error", "error": "VCP 57 ERR"}
+{"ts": "2026-05-01T19:40:23+00:00", "code": "0x58", "name": "Vertical Moire", "attempt": 1, "status": "error", "error": "VCP 58 ERR"}
+{"ts": "2026-05-01T19:40:24+00:00", "code": "0x59", "name": "Red Saturation", "attempt": 1, "status": "error", "error": "VCP 59 ERR"}
+{"ts": "2026-05-01T19:40:24+00:00", "code": "0x5A", "name": "Yellow Saturation", "attempt": 1, "status": "error", "error": "VCP 5A ERR"}
+{"ts": "2026-05-01T19:40:25+00:00", "code": "0x5B", "name": "Green Saturation", "attempt": 1, "status": "error", "error": "VCP 5B ERR"}
+{"ts": "2026-05-01T19:40:25+00:00", "code": "0x5C", "name": "Cyan Saturation", "attempt": 1, "status": "error", "error": "VCP 5C ERR"}
+{"ts": "2026-05-01T19:40:25+00:00", "code": "0x5D", "name": "Blue Saturation", "attempt": 1, "status": "error", "error": "VCP 5D ERR"}
+{"ts": "2026-05-01T19:40:26+00:00", "code": "0x5E", "name": "Magenta Saturation", "attempt": 1, "status": "error", "error": "VCP 5E ERR"}
+{"ts": "2026-05-01T19:40:26+00:00", "code": "0x5F", "name": "Unknown (0x5F)", "attempt": 1, "status": "error", "error": "VCP 5F ERR"}
+{"ts": "2026-05-01T19:40:26+00:00", "code": "0x60", "name": "Input Source", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP 60 SNC x04"}
+{"ts": "2026-05-01T19:40:32+00:00", "code": "0x61", "name": "Unknown (0x61)", "attempt": 2, "status": "error", "error": "VCP 61 ERR"}
+{"ts": "2026-05-01T19:40:32+00:00", "code": "0x62", "name": "Audio Speaker Volume", "attempt": 1, "status": "ok", "type": "C", "current": 3, "max": 100}
+{"ts": "2026-05-01T19:40:38+00:00", "code": "0x63", "name": "Speaker Select", "attempt": 2, "status": "error", "error": "VCP 63 ERR"}
+{"ts": "2026-05-01T19:40:38+00:00", "code": "0x64", "name": "Unknown (0x64)", "attempt": 1, "status": "error", "error": "VCP 64 ERR"}
+{"ts": "2026-05-01T19:40:38+00:00", "code": "0x65", "name": "Unknown (0x65)", "attempt": 1, "status": "error", "error": "VCP 65 ERR"}
+{"ts": "2026-05-01T19:40:39+00:00", "code": "0x66", "name": "Unknown (0x66)", "attempt": 1, "status": "error", "error": "VCP 66 ERR"}
+{"ts": "2026-05-01T19:40:39+00:00", "code": "0x67", "name": "Unknown (0x67)", "attempt": 1, "status": "error", "error": "VCP 67 ERR"}
+{"ts": "2026-05-01T19:40:39+00:00", "code": "0x68", "name": "Unknown (0x68)", "attempt": 1, "status": "error", "error": "VCP 68 ERR"}
+{"ts": "2026-05-01T19:40:40+00:00", "code": "0x69", "name": "Unknown (0x69)", "attempt": 1, "status": "error", "error": "VCP 69 ERR"}
+{"ts": "2026-05-01T19:40:40+00:00", "code": "0x6A", "name": "Audio Balance L/R", "attempt": 1, "status": "error", "error": "VCP 6A ERR"}
+{"ts": "2026-05-01T19:40:40+00:00", "code": "0x6B", "name": "Unknown (0x6B)", "attempt": 1, "status": "error", "error": "VCP 6B ERR"}
+{"ts": "2026-05-01T19:40:41+00:00", "code": "0x6C", "name": "Video Black Level: Red", "attempt": 1, "status": "ok", "type": "C", "current": 50, "max": 100}
+{"ts": "2026-05-01T19:40:46+00:00", "code": "0x6D", "name": "Unknown (0x6D)", "attempt": 2, "status": "error", "error": "VCP 6D ERR"}
+{"ts": "2026-05-01T19:40:47+00:00", "code": "0x6E", "name": "Video Black Level: Green", "attempt": 1, "status": "ok", "type": "C", "current": 50, "max": 100}
+{"ts": "2026-05-01T19:40:52+00:00", "code": "0x6F", "name": "Unknown (0x6F)", "attempt": 2, "status": "error", "error": "VCP 6F ERR"}
+{"ts": "2026-05-01T19:40:53+00:00", "code": "0x70", "name": "Video Black Level: Blue", "attempt": 1, "status": "ok", "type": "C", "current": 50, "max": 100}
+{"ts": "2026-05-01T19:40:58+00:00", "code": "0x71", "name": "Unknown (0x71)", "attempt": 2, "status": "error", "error": "VCP 71 ERR"}
+{"ts": "2026-05-01T19:40:59+00:00", "code": "0x72", "name": "Gamma", "attempt": 1, "status": "error", "error": "VCP 72 ERR"}
+{"ts": "2026-05-01T19:41:00+00:00", "code": "0x73", "name": "Unknown (0x73)", "attempt": 1, "status": "error", "error": "Feature 0x73, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:41:01+00:00", "code": "0x74", "name": "Unknown (0x74)", "attempt": 1, "status": "error", "error": "Feature 0x74, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:41:03+00:00", "code": "0x75", "name": "Unknown (0x75)", "attempt": 1, "status": "error", "error": "Feature 0x75, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:41:03+00:00", "code": "0x76", "name": "Unknown (0x76)", "attempt": 1, "status": "error", "error": "Feature 76 (Remote Procedure Call) is not readable"}
+{"ts": "2026-05-01T19:41:04+00:00", "code": "0x77", "name": "Unknown (0x77)", "attempt": 1, "status": "error", "error": "VCP 77 ERR"}
+{"ts": "2026-05-01T19:41:05+00:00", "code": "0x78", "name": "Unknown (0x78)", "attempt": 1, "status": "error", "error": "Feature 0x78, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:41:06+00:00", "code": "0x79", "name": "Unknown (0x79)", "attempt": 1, "status": "error", "error": "VCP 79 ERR"}
+{"ts": "2026-05-01T19:41:07+00:00", "code": "0x7A", "name": "Unknown (0x7A)", "attempt": 1, "status": "error", "error": "VCP 7A ERR"}
+{"ts": "2026-05-01T19:41:08+00:00", "code": "0x7B", "name": "Unknown (0x7B)", "attempt": 1, "status": "error", "error": "VCP 7B ERR"}
+{"ts": "2026-05-01T19:41:08+00:00", "code": "0x7C", "name": "Unknown (0x7C)", "attempt": 1, "status": "error", "error": "VCP 7C ERR"}
+{"ts": "2026-05-01T19:41:09+00:00", "code": "0x7D", "name": "Unknown (0x7D)", "attempt": 1, "status": "error", "error": "VCP 7D ERR"}
+{"ts": "2026-05-01T19:41:09+00:00", "code": "0x7E", "name": "Trapezoid", "attempt": 1, "status": "error", "error": "VCP 7E ERR"}
+{"ts": "2026-05-01T19:41:10+00:00", "code": "0x7F", "name": "Unknown (0x7F)", "attempt": 1, "status": "error", "error": "VCP 7F ERR"}
+{"ts": "2026-05-01T19:41:10+00:00", "code": "0x80", "name": "Unknown (0x80)", "attempt": 1, "status": "error", "error": "VCP 80 ERR"}
+{"ts": "2026-05-01T19:41:10+00:00", "code": "0x81", "name": "Unknown (0x81)", "attempt": 1, "status": "error", "error": "VCP 81 ERR"}
+{"ts": "2026-05-01T19:41:11+00:00", "code": "0x82", "name": "Display Scaling", "attempt": 1, "status": "error", "error": "VCP 82 ERR"}
+{"ts": "2026-05-01T19:41:11+00:00", "code": "0x83", "name": "Unknown (0x83)", "attempt": 1, "status": "error", "error": "VCP 83 ERR"}
+{"ts": "2026-05-01T19:41:11+00:00", "code": "0x84", "name": "Sharpness", "attempt": 1, "status": "error", "error": "VCP 84 ERR"}
+{"ts": "2026-05-01T19:41:12+00:00", "code": "0x85", "name": "Unknown (0x85)", "attempt": 1, "status": "error", "error": "VCP 85 ERR"}
+{"ts": "2026-05-01T19:41:12+00:00", "code": "0x86", "name": "Video Signal Interface", "attempt": 1, "status": "error", "error": "VCP 86 ERR"}
+{"ts": "2026-05-01T19:41:13+00:00", "code": "0x87", "name": "Unknown (0x87)", "attempt": 1, "status": "error", "error": "VCP 87 ERR"}
+{"ts": "2026-05-01T19:41:13+00:00", "code": "0x88", "name": "Unknown (0x88)", "attempt": 1, "status": "error", "error": "VCP 88 ERR"}
+{"ts": "2026-05-01T19:41:13+00:00", "code": "0x89", "name": "Unknown (0x89)", "attempt": 1, "status": "error", "error": "VCP 89 ERR"}
+{"ts": "2026-05-01T19:41:14+00:00", "code": "0x8A", "name": "Color Saturation", "attempt": 1, "status": "error", "error": "VCP 8A ERR"}
+{"ts": "2026-05-01T19:41:14+00:00", "code": "0x8B", "name": "Unknown (0x8B)", "attempt": 1, "status": "error", "error": "Feature 8b (TV Channel Up/Down) is not readable"}
+{"ts": "2026-05-01T19:41:14+00:00", "code": "0x8C", "name": "Unknown (0x8C)", "attempt": 1, "status": "error", "error": "VCP 8C ERR"}
+{"ts": "2026-05-01T19:41:14+00:00", "code": "0x8D", "name": "Audio Mute", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP 8D SNC x02"}
+{"ts": "2026-05-01T19:41:20+00:00", "code": "0x8E", "name": "Unknown (0x8E)", "attempt": 2, "status": "error", "error": "VCP 8E ERR"}
+{"ts": "2026-05-01T19:41:20+00:00", "code": "0x8F", "name": "Unknown (0x8F)", "attempt": 1, "status": "error", "error": "VCP 8F ERR"}
+{"ts": "2026-05-01T19:41:21+00:00", "code": "0x90", "name": "Hue", "attempt": 1, "status": "error", "error": "VCP 90 ERR"}
+{"ts": "2026-05-01T19:41:21+00:00", "code": "0x91", "name": "Unknown (0x91)", "attempt": 1, "status": "error", "error": "VCP 91 ERR"}
+{"ts": "2026-05-01T19:41:21+00:00", "code": "0x92", "name": "Unknown (0x92)", "attempt": 1, "status": "error", "error": "VCP 92 ERR"}
+{"ts": "2026-05-01T19:41:21+00:00", "code": "0x93", "name": "Unknown (0x93)", "attempt": 1, "status": "error", "error": "VCP 93 ERR"}
+{"ts": "2026-05-01T19:41:22+00:00", "code": "0x94", "name": "Unknown (0x94)", "attempt": 1, "status": "error", "error": "VCP 94 ERR"}
+{"ts": "2026-05-01T19:41:22+00:00", "code": "0x95", "name": "Unknown (0x95)", "attempt": 1, "status": "error", "error": "VCP 95 ERR"}
+{"ts": "2026-05-01T19:41:23+00:00", "code": "0x96", "name": "Unknown (0x96)", "attempt": 1, "status": "error", "error": "VCP 96 ERR"}
+{"ts": "2026-05-01T19:41:23+00:00", "code": "0x97", "name": "Unknown (0x97)", "attempt": 1, "status": "error", "error": "VCP 97 ERR"}
+{"ts": "2026-05-01T19:41:23+00:00", "code": "0x98", "name": "Unknown (0x98)", "attempt": 1, "status": "error", "error": "VCP 98 ERR"}
+{"ts": "2026-05-01T19:41:24+00:00", "code": "0x99", "name": "Unknown (0x99)", "attempt": 1, "status": "error", "error": "VCP 99 ERR"}
+{"ts": "2026-05-01T19:41:24+00:00", "code": "0x9A", "name": "Unknown (0x9A)", "attempt": 1, "status": "error", "error": "VCP 9A ERR"}
+{"ts": "2026-05-01T19:41:24+00:00", "code": "0x9B", "name": "Unknown (0x9B)", "attempt": 1, "status": "error", "error": "VCP 9B ERR"}
+{"ts": "2026-05-01T19:41:25+00:00", "code": "0x9C", "name": "Unknown (0x9C)", "attempt": 1, "status": "error", "error": "VCP 9C ERR"}
+{"ts": "2026-05-01T19:41:25+00:00", "code": "0x9D", "name": "Unknown (0x9D)", "attempt": 1, "status": "error", "error": "VCP 9D ERR"}
+{"ts": "2026-05-01T19:41:26+00:00", "code": "0x9E", "name": "Auto Setup Lock", "attempt": 1, "status": "error", "error": "VCP 9E ERR"}
+{"ts": "2026-05-01T19:41:26+00:00", "code": "0x9F", "name": "Unknown (0x9F)", "attempt": 1, "status": "error", "error": "VCP 9F ERR"}
+{"ts": "2026-05-01T19:41:26+00:00", "code": "0xA0", "name": "Unknown (0xA0)", "attempt": 1, "status": "error", "error": "VCP A0 ERR"}
+{"ts": "2026-05-01T19:41:27+00:00", "code": "0xA1", "name": "Unknown (0xA1)", "attempt": 1, "status": "error", "error": "VCP A1 ERR"}
+{"ts": "2026-05-01T19:41:27+00:00", "code": "0xA2", "name": "Unknown (0xA2)", "attempt": 1, "status": "error", "error": "Feature a2 (Auto setup on/off) is not readable"}
+{"ts": "2026-05-01T19:41:27+00:00", "code": "0xA3", "name": "Unknown (0xA3)", "attempt": 1, "status": "error", "error": "VCP A3 ERR"}
+{"ts": "2026-05-01T19:41:28+00:00", "code": "0xA4", "name": "Unknown (0xA4)", "attempt": 1, "status": "error", "error": "VCP A4 ERR"}
+{"ts": "2026-05-01T19:41:28+00:00", "code": "0xA5", "name": "Unknown (0xA5)", "attempt": 1, "status": "error", "error": "VCP A5 ERR"}
+{"ts": "2026-05-01T19:41:28+00:00", "code": "0xA6", "name": "Unknown (0xA6)", "attempt": 1, "status": "error", "error": "VCP A6 ERR"}
+{"ts": "2026-05-01T19:41:29+00:00", "code": "0xA7", "name": "Unknown (0xA7)", "attempt": 1, "status": "error", "error": "VCP A7 ERR"}
+{"ts": "2026-05-01T19:41:29+00:00", "code": "0xA8", "name": "Unknown (0xA8)", "attempt": 1, "status": "error", "error": "VCP A8 ERR"}
+{"ts": "2026-05-01T19:41:29+00:00", "code": "0xA9", "name": "Unknown (0xA9)", "attempt": 1, "status": "error", "error": "VCP A9 ERR"}
+{"ts": "2026-05-01T19:41:30+00:00", "code": "0xAA", "name": "Screen Orientation", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP AA SNC x00"}
+{"ts": "2026-05-01T19:41:35+00:00", "code": "0xAB", "name": "Unknown (0xAB)", "attempt": 2, "status": "error", "error": "VCP AB ERR"}
+{"ts": "2026-05-01T19:41:36+00:00", "code": "0xAC", "name": "Horizontal Frequency", "attempt": 1, "status": "ok", "type": "C", "current": 23364, "max": 65281}
+{"ts": "2026-05-01T19:41:41+00:00", "code": "0xAD", "name": "Unknown (0xAD)", "attempt": 2, "status": "error", "error": "VCP AD ERR"}
+{"ts": "2026-05-01T19:41:42+00:00", "code": "0xAE", "name": "Vertical Frequency", "attempt": 1, "status": "ok", "type": "C", "current": 6000, "max": 65535}
+{"ts": "2026-05-01T19:41:47+00:00", "code": "0xAF", "name": "Unknown (0xAF)", "attempt": 2, "status": "error", "error": "VCP AF ERR"}
+{"ts": "2026-05-01T19:41:48+00:00", "code": "0xB0", "name": "Settings", "attempt": 1, "status": "error", "error": "Feature b0 (Settings) is not readable"}
+{"ts": "2026-05-01T19:41:48+00:00", "code": "0xB1", "name": "Unknown (0xB1)", "attempt": 1, "status": "error", "error": "VCP B1 ERR"}
+{"ts": "2026-05-01T19:41:49+00:00", "code": "0xB2", "name": "Flat Panel Sub-Pixel Layout", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP B2 SNC x01"}
+{"ts": "2026-05-01T19:41:54+00:00", "code": "0xB3", "name": "Unknown (0xB3)", "attempt": 2, "status": "error", "error": "VCP B3 ERR"}
+{"ts": "2026-05-01T19:41:54+00:00", "code": "0xB4", "name": "Unknown (0xB4)", "attempt": 1, "status": "error", "error": "VCP B4 ERR"}
+{"ts": "2026-05-01T19:41:55+00:00", "code": "0xB5", "name": "Unknown (0xB5)", "attempt": 1, "status": "error", "error": "VCP B5 ERR"}
+{"ts": "2026-05-01T19:41:55+00:00", "code": "0xB6", "name": "Display Technology Type", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP B6 SNC x03"}
+{"ts": "2026-05-01T19:42:01+00:00", "code": "0xB7", "name": "Unknown (0xB7)", "attempt": 2, "status": "error", "error": "VCP B7 ERR"}
+{"ts": "2026-05-01T19:42:01+00:00", "code": "0xB8", "name": "Unknown (0xB8)", "attempt": 1, "status": "error", "error": "VCP B8 ERR"}
+{"ts": "2026-05-01T19:42:01+00:00", "code": "0xB9", "name": "Unknown (0xB9)", "attempt": 1, "status": "error", "error": "VCP B9 ERR"}
+{"ts": "2026-05-01T19:42:02+00:00", "code": "0xBA", "name": "Unknown (0xBA)", "attempt": 1, "status": "error", "error": "VCP BA ERR"}
+{"ts": "2026-05-01T19:42:02+00:00", "code": "0xBB", "name": "Unknown (0xBB)", "attempt": 1, "status": "error", "error": "VCP BB ERR"}
+{"ts": "2026-05-01T19:42:02+00:00", "code": "0xBC", "name": "Unknown (0xBC)", "attempt": 1, "status": "error", "error": "VCP BC ERR"}
+{"ts": "2026-05-01T19:42:03+00:00", "code": "0xBD", "name": "Unknown (0xBD)", "attempt": 1, "status": "error", "error": "VCP BD ERR"}
+{"ts": "2026-05-01T19:42:03+00:00", "code": "0xBE", "name": "Unknown (0xBE)", "attempt": 1, "status": "error", "error": "VCP BE ERR"}
+{"ts": "2026-05-01T19:42:04+00:00", "code": "0xBF", "name": "Unknown (0xBF)", "attempt": 1, "status": "error", "error": "VCP BF ERR"}
+{"ts": "2026-05-01T19:42:04+00:00", "code": "0xC0", "name": "Display Usage Time", "attempt": 1, "status": "ok", "type": "C", "current": 200, "max": 65535}
+{"ts": "2026-05-01T19:42:09+00:00", "code": "0xC1", "name": "Unknown (0xC1)", "attempt": 2, "status": "error", "error": "VCP C1 ERR"}
+{"ts": "2026-05-01T19:42:10+00:00", "code": "0xC2", "name": "Unknown (0xC2)", "attempt": 1, "status": "error", "error": "VCP C2 ERR"}
+{"ts": "2026-05-01T19:42:10+00:00", "code": "0xC3", "name": "Unknown (0xC3)", "attempt": 1, "status": "error", "error": "Feature 0xc3, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:42:11+00:00", "code": "0xC4", "name": "Unknown (0xC4)", "attempt": 1, "status": "error", "error": "VCP C4 ERR"}
+{"ts": "2026-05-01T19:42:11+00:00", "code": "0xC5", "name": "Unknown (0xC5)", "attempt": 1, "status": "error", "error": "VCP C5 ERR"}
+{"ts": "2026-05-01T19:42:12+00:00", "code": "0xC6", "name": "Application Enable Key", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP C6 CNC xff xff x00 x6f"}
+{"ts": "2026-05-01T19:42:17+00:00", "code": "0xC7", "name": "Unknown (0xC7)", "attempt": 2, "status": "error", "error": "VCP C7 ERR"}
+{"ts": "2026-05-01T19:42:18+00:00", "code": "0xC8", "name": "Display Controller ID", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP C8 CNC xff xff x00 x12"}
+{"ts": "2026-05-01T19:42:18+00:00", "code": "0xC9", "name": "Display Firmware Level", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP C9 CNC xff xff x01 x20"}
+{"ts": "2026-05-01T19:42:18+00:00", "code": "0xCA", "name": "OSD/Button Control", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP CA SNC x02"}
+{"ts": "2026-05-01T19:42:24+00:00", "code": "0xCB", "name": "Unknown (0xCB)", "attempt": 2, "status": "error", "error": "VCP CB ERR"}
+{"ts": "2026-05-01T19:42:24+00:00", "code": "0xCC", "name": "OSD Language", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP CC SNC x02"}
+{"ts": "2026-05-01T19:42:30+00:00", "code": "0xCD", "name": "Unknown (0xCD)", "attempt": 2, "status": "error", "error": "VCP CD ERR"}
+{"ts": "2026-05-01T19:42:30+00:00", "code": "0xCE", "name": "Unknown (0xCE)", "attempt": 1, "status": "error", "error": "VCP CE ERR"}
+{"ts": "2026-05-01T19:42:30+00:00", "code": "0xCF", "name": "Unknown (0xCF)", "attempt": 1, "status": "error", "error": "Feature cf (Auxiliary display data) is not readable"}
+{"ts": "2026-05-01T19:42:31+00:00", "code": "0xD0", "name": "Unknown (0xD0)", "attempt": 1, "status": "error", "error": "VCP D0 ERR"}
+{"ts": "2026-05-01T19:42:31+00:00", "code": "0xD1", "name": "Unknown (0xD1)", "attempt": 1, "status": "error", "error": "VCP D1 ERR"}
+{"ts": "2026-05-01T19:42:32+00:00", "code": "0xD2", "name": "Unknown (0xD2)", "attempt": 1, "status": "error", "error": "Feature 0xd2, maximum retries (3) for DDC Null Response exceeded"}
+{"ts": "2026-05-01T19:42:33+00:00", "code": "0xD3", "name": "Unknown (0xD3)", "attempt": 1, "status": "error", "error": "VCP D3 ERR"}
+{"ts": "2026-05-01T19:42:34+00:00", "code": "0xD4", "name": "Unknown (0xD4)", "attempt": 1, "status": "error", "error": "VCP D4 ERR"}
+{"ts": "2026-05-01T19:42:35+00:00", "code": "0xD5", "name": "Unknown (0xD5)", "attempt": 1, "status": "error", "error": "VCP D5 ERR"}
+{"ts": "2026-05-01T19:42:35+00:00", "code": "0xD6", "name": "Power Mode", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP D6 SNC x01"}
+{"ts": "2026-05-01T19:42:41+00:00", "code": "0xD7", "name": "Unknown (0xD7)", "attempt": 2, "status": "error", "error": "VCP D7 ERR"}
+{"ts": "2026-05-01T19:42:41+00:00", "code": "0xD8", "name": "Unknown (0xD8)", "attempt": 1, "status": "error", "error": "VCP D8 ERR"}
+{"ts": "2026-05-01T19:42:41+00:00", "code": "0xD9", "name": "Unknown (0xD9)", "attempt": 1, "status": "error", "error": "VCP D9 ERR"}
+{"ts": "2026-05-01T19:42:42+00:00", "code": "0xDA", "name": "Scan Mode", "attempt": 1, "status": "error", "error": "VCP DA ERR"}
+{"ts": "2026-05-01T19:42:42+00:00", "code": "0xDB", "name": "Image Mode", "attempt": 1, "status": "error", "error": "VCP DB ERR"}
+{"ts": "2026-05-01T19:42:42+00:00", "code": "0xDC", "name": "Display Application", "attempt": 1, "status": "ok", "type": "SNC", "raw": "VCP DC SNC x02"}
+{"ts": "2026-05-01T19:42:48+00:00", "code": "0xDD", "name": "Unknown (0xDD)", "attempt": 2, "status": "error", "error": "VCP DD ERR"}
+{"ts": "2026-05-01T19:42:48+00:00", "code": "0xDE", "name": "Unknown (0xDE)", "attempt": 1, "status": "error", "error": "VCP DE ERR"}
+{"ts": "2026-05-01T19:42:49+00:00", "code": "0xDF", "name": "VCP Version", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP DF CNC xff xff x02 x01"}
+{"ts": "2026-05-01T19:42:54+00:00", "code": "0xE0", "name": "Unknown (0xE0)", "attempt": 2, "status": "error", "error": "VCP E0 ERR"}
+{"ts": "2026-05-01T19:42:55+00:00", "code": "0xE1", "name": "Unknown (0xE1)", "attempt": 1, "status": "error", "error": "VCP E1 ERR"}
+{"ts": "2026-05-01T19:42:55+00:00", "code": "0xE2", "name": "Unknown (0xE2)", "attempt": 1, "status": "error", "error": "VCP E2 ERR"}
+{"ts": "2026-05-01T19:42:55+00:00", "code": "0xE3", "name": "Unknown (0xE3)", "attempt": 1, "status": "error", "error": "VCP E3 ERR"}
+{"ts": "2026-05-01T19:42:56+00:00", "code": "0xE4", "name": "Unknown (0xE4)", "attempt": 1, "status": "error", "error": "VCP E4 ERR"}
+{"ts": "2026-05-01T19:42:56+00:00", "code": "0xE5", "name": "Unknown (0xE5)", "attempt": 1, "status": "error", "error": "VCP E5 ERR"}
+{"ts": "2026-05-01T19:42:56+00:00", "code": "0xE6", "name": "Unknown (0xE6)", "attempt": 1, "status": "error", "error": "VCP E6 ERR"}
+{"ts": "2026-05-01T19:42:57+00:00", "code": "0xE7", "name": "Unknown (0xE7)", "attempt": 1, "status": "error", "error": "VCP E7 ERR"}
+{"ts": "2026-05-01T19:42:57+00:00", "code": "0xE8", "name": "Unknown (0xE8)", "attempt": 1, "status": "error", "error": "VCP E8 ERR"}
+{"ts": "2026-05-01T19:42:57+00:00", "code": "0xE9", "name": "Unknown (0xE9)", "attempt": 1, "status": "error", "error": "VCP E9 ERR"}
+{"ts": "2026-05-01T19:42:58+00:00", "code": "0xEA", "name": "Unknown (0xEA)", "attempt": 1, "status": "error", "error": "VCP EA ERR"}
+{"ts": "2026-05-01T19:42:58+00:00", "code": "0xEB", "name": "Unknown (0xEB)", "attempt": 1, "status": "error", "error": "VCP EB ERR"}
+{"ts": "2026-05-01T19:42:59+00:00", "code": "0xEC", "name": "Unknown (0xEC)", "attempt": 1, "status": "error", "error": "VCP EC ERR"}
+{"ts": "2026-05-01T19:42:59+00:00", "code": "0xED", "name": "Unknown (0xED)", "attempt": 1, "status": "error", "error": "VCP ED ERR"}
+{"ts": "2026-05-01T19:42:59+00:00", "code": "0xEE", "name": "Unknown (0xEE)", "attempt": 1, "status": "error", "error": "VCP EE ERR"}
+{"ts": "2026-05-01T19:43:00+00:00", "code": "0xEF", "name": "Unknown (0xEF)", "attempt": 1, "status": "error", "error": "VCP EF ERR"}
+{"ts": "2026-05-01T19:43:00+00:00", "code": "0xF0", "name": "Unknown (0xF0)", "attempt": 1, "status": "error", "error": "VCP F0 ERR"}
+{"ts": "2026-05-01T19:43:00+00:00", "code": "0xF1", "name": "Unknown (0xF1)", "attempt": 1, "status": "error", "error": "VCP F1 ERR"}
+{"ts": "2026-05-01T19:43:01+00:00", "code": "0xF2", "name": "Unknown (0xF2)", "attempt": 1, "status": "error", "error": "VCP F2 ERR"}
+{"ts": "2026-05-01T19:43:01+00:00", "code": "0xF3", "name": "Unknown (0xF3)", "attempt": 1, "status": "error", "error": "VCP F3 ERR"}
+{"ts": "2026-05-01T19:43:02+00:00", "code": "0xF4", "name": "Unknown (0xF4)", "attempt": 1, "status": "error", "error": "VCP F4 ERR"}
+{"ts": "2026-05-01T19:43:02+00:00", "code": "0xF5", "name": "Unknown (0xF5)", "attempt": 1, "status": "error", "error": "VCP F5 ERR"}
+{"ts": "2026-05-01T19:43:02+00:00", "code": "0xF6", "name": "Unknown (0xF6)", "attempt": 1, "status": "error", "error": "VCP F6 ERR"}
+{"ts": "2026-05-01T19:43:03+00:00", "code": "0xF7", "name": "Unknown (0xF7)", "attempt": 1, "status": "error", "error": "VCP F7 ERR"}
+{"ts": "2026-05-01T19:43:03+00:00", "code": "0xF8", "name": "Unknown (0xF8)", "attempt": 1, "status": "error", "error": "VCP F8 ERR"}
+{"ts": "2026-05-01T19:43:03+00:00", "code": "0xF9", "name": "Unknown (0xF9)", "attempt": 1, "status": "error", "error": "VCP F9 ERR"}
+{"ts": "2026-05-01T19:43:04+00:00", "code": "0xFA", "name": "Unknown (0xFA)", "attempt": 1, "status": "error", "error": "VCP FA ERR"}
+{"ts": "2026-05-01T19:43:04+00:00", "code": "0xFB", "name": "Unknown (0xFB)", "attempt": 1, "status": "error", "error": "VCP FB ERR"}
+{"ts": "2026-05-01T19:43:04+00:00", "code": "0xFC", "name": "Unknown (0xFC)", "attempt": 1, "status": "error", "error": "VCP FC ERR"}
+{"ts": "2026-05-01T19:43:05+00:00", "code": "0xFD", "name": "Unknown (0xFD)", "attempt": 1, "status": "error", "error": "VCP FD ERR"}
+{"ts": "2026-05-01T19:43:05+00:00", "code": "0xFE", "name": "Unknown (0xFE)", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP FE CNC x00 x02 x00 x02"}
+{"ts": "2026-05-01T19:43:05+00:00", "code": "0xFF", "name": "Unknown (0xFF)", "attempt": 1, "status": "ok", "type": "CNC", "raw": "VCP FF CNC x00 x01 x00 x00"}
