@@ -93,7 +93,7 @@ Given a set of clean register reads (`0x02=0x79`, `0xE1≠0xFA`, 25s elapsed aft
 | Which source is primary? | VCP `0x60` — `0x01`=HDMI, `0x03`=DP, `0x04`=TB |
 | Which side has audio? | `0x4A` — `0x00`=left/primary, `0x02`=right/secondary |
 | Is PIP mode active? | `0xE0`–`0xE3` match a known PIP fingerprint (see table above) |
-| Is PIP sub-source identifiable? | Only when main=DP and size=1 and `0xE1=0x4E` (HDMI pip) |
+| What is the secondary source? | **Not reliably detectable.** Only exception: HDMI pip / DP main / size 1 → `0xE1=0x4E`. In all other PIP configurations the secondary source cannot be distinguished from registers alone. PBP secondary source: no clean data yet. |
 | Is PIP size identifiable? | Only size 2 (DP main, `0xE1=0x8C`); sizes 2 and 3 collide |
 | Can I detect PIP state with TB main? | No — E0–E3 identical for all sizes and PIP sources |
 | Is PBP mode active? | `0x48` — unresolved, retake pending |
