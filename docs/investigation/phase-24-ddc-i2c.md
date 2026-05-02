@@ -3,6 +3,8 @@
 Consolidated register reference for the Samsung C34J79x combining DDC/CI (device `0x37`, via VCP codes)
 and raw I2C (device `0x58`, Novatek scaler SoC). All reads on I2C bus 13.
 
+For the raw dump of all 29 states × 512 registers see [phase-24-full-matrix.md](./phase-24-full-matrix.md).
+
 ---
 
 ## Display state coverage
