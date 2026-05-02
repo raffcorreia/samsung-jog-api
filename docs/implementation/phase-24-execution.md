@@ -47,8 +47,7 @@ Direct smbus2 reads, bypassing DDC/CI entirely.
 | Register | Meaning |
 |----------|---------|
 | `0x02=0x79` | Scaler active and healthy — use as scan sanity check |
-| `0x48=0x0F` | PIP mode active |
-| `0x48=0x00` | PBP or single-source mode |
+| `0x48` | Display mode — reads `0x0F` in all active states (single, PBP, PIP); meaning unresolved |
 | `0x4A=0x00` | Audio routed to left source |
 | `0x4A=0x02` | Audio routed to right source |
 | `0xA1=0x00` | No active video signal |
@@ -133,8 +132,25 @@ Investigation scripts: `scripts/i2c-scan.py`.
 
 - Re-capture all PBP states (6 combos × 2 sound positions) with clean protocol — E0–E3 data contaminated
 - Re-capture single-source states (TB, DP, HDMI) for clean E0–E3 baseline
-- Software integration: feed VCP 0x60 + `0x48` into the monitor state model
+- Capture missing PIP states: all TB-main/DP-pip and HDMI-main/DP-pip combos (9 states never captured)
+- Software integration: feed VCP 0x60 + `0x58:0x48` into the monitor state model
 - Verify DDC write reliability (input switching, brightness) under normal operating conditions
+
+### Next: interactive register explorer
+
+The flat markdown matrix (`phase-24-full-matrix.md`) is not navigable at scale — 29 rows × 768+ columns (256 DDC + 256 `0x58` + 256 `0x54`) cannot be meaningfully reviewed as static text.
+
+**Goal:** a local interactive HTML page (no server required) that loads all scan JSONL files directly and allows:
+
+- All devices in a single view: `0x37_ddc`, `0x54`, `0x58`
+- Display states as rows, registers as columns
+- Filter: show only registers that vary across states (hide constants)
+- Filter by device, mode type (single / PBP / PIP / idle), specific state
+- Sort rows and columns
+- Color rules: highlight specific values, mark registers as noisy/excluded, flag contaminated captures
+- Click a cell to see the raw value and which scan file it came from
+
+This replaces the static matrix as the primary analysis tool and unblocks characterizing `0x54` properly.
 
 ---
 
