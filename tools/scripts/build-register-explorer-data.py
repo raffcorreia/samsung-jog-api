@@ -20,6 +20,7 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parents[2]
 INVESTIGATION_ROOT = REPO_ROOT / "docs" / "investigation"
 OUTPUT_ROOT = REPO_ROOT / "tools" / "register-explorer" / "data"
+CANONICAL_CAPTURE_ROOT = INVESTIGATION_ROOT / "register-captures"
 
 FULL_HEX_RANGE = [f"0x{i:02X}" for i in range(256)]
 STATEFUL_DDC_CODES = ["0x10", "0x12", "0x60", "0x62", "0xD6", "0xDC"]
@@ -481,6 +482,32 @@ def normalize_capture(spec: CaptureSpec) -> dict[str, Any]:
     raise ValueError(f"Unsupported source format: {spec.source_format}")
 
 
+def load_canonical_capture(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text())
+
+
+def include_canonical_capture(capture: dict[str, Any]) -> bool:
+    flags = capture.get("flags", {})
+    return bool(flags.get("include_in_explorer"))
+
+
+def load_canonical_captures() -> tuple[list[dict[str, Any]], list[tuple[str, str]]]:
+    captures: list[dict[str, Any]] = []
+    decisions: list[tuple[str, str]] = []
+    if not CANONICAL_CAPTURE_ROOT.exists():
+        return captures, decisions
+
+    for path in sorted(CANONICAL_CAPTURE_ROOT.glob("*.json")):
+        capture = load_canonical_capture(path)
+        relative_path = str(path.relative_to(INVESTIGATION_ROOT))
+        if include_canonical_capture(capture):
+            captures.append(capture)
+            decisions.append((relative_path, "Included: canonical capture marked include_in_explorer=true."))
+        else:
+            decisions.append((relative_path, "Excluded: canonical capture marked include_in_explorer=false."))
+    return captures, decisions
+
+
 def normalize_bruteforce_ddc(path: Path) -> dict[str, Any]:
     items = load_jsonl(path)
     scan = {
@@ -524,16 +551,25 @@ def normalize_bruteforce_ddc(path: Path) -> dict[str, Any]:
     return scan
 
 
-def build_inventory(included_capture_paths: set[str], ddc_paths: set[str]) -> list[dict[str, str]]:
+def build_inventory(
+    included_capture_paths: set[str],
+    ddc_paths: set[str],
+    canonical_decisions: list[tuple[str, str]],
+) -> list[dict[str, str]]:
     decisions: dict[str, str] = {path: "Included in stateful explorer dataset." for path in included_capture_paths}
     decisions.update({path: "Included as brute-force DDC capability scan." for path in ddc_paths})
     decisions.update(dict(EXCLUSION_RULES))
+    decisions.update(dict(canonical_decisions))
 
-    all_jsonl = {
+    all_sources = {
         str(path.relative_to(INVESTIGATION_ROOT))
         for path in INVESTIGATION_ROOT.glob("**/*.jsonl")
     }
-    for path in sorted(all_jsonl):
+    all_sources.update(
+        str(path.relative_to(INVESTIGATION_ROOT))
+        for path in CANONICAL_CAPTURE_ROOT.glob("*.json")
+    )
+    for path in sorted(all_sources):
         if path not in decisions:
             decisions[path] = "Excluded: no explicit allowlist entry for this source."
 
@@ -544,10 +580,13 @@ def main() -> None:
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
     captures = [normalize_capture(spec) for spec in INCLUDED_CAPTURE_SPECS]
+    canonical_captures, canonical_decisions = load_canonical_captures()
+    captures.extend(canonical_captures)
     ddc_scans = [normalize_bruteforce_ddc(INVESTIGATION_ROOT / relative_path) for relative_path in BRUTE_FORCE_DDC_FILES]
     inventory = build_inventory(
         included_capture_paths={spec.relative_path for spec in INCLUDED_CAPTURE_SPECS},
         ddc_paths=set(BRUTE_FORCE_DDC_FILES),
+        canonical_decisions=canonical_decisions,
     )
 
     register_explorer = {

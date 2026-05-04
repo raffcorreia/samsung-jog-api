@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-04T14:29:21+00:00",
+  "generated_at": "2026-05-04T15:29:28+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",

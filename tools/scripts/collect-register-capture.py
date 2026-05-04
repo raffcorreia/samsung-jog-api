@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
 """
-collect-register-capture.py — Raw I2C register scan + DDC VCP scan for Phase 24 investigation.
+collect-register-capture.py — one-command Phase 24 capture workflow.
 
-Reads all 256 registers (0x00–0xFF) from I2C devices 0x54 and 0x58 directly,
-then reads key DDC VCP codes from device 0x37 using the DDC/CI protocol.
+Workflow:
+1. Prompt for the observed monitor state.
+2. Read the full repeated register set from the monitor-facing bus.
+3. Write one canonical raw capture JSON under docs/investigation/register-captures/.
+4. Regenerate tools/register-explorer/data/.
 
-Device 0x37 only speaks DDC/CI protocol — raw register reads return bus echo.
-DDC VCP codes (0x00–0xFF) are a separate namespace accessed via protocol requests.
-
-Usage:
-    python3 tools/scripts/collect-register-capture.py                          # scan defaults
-    python3 tools/scripts/collect-register-capture.py --devices 0x54,0x58
-    python3 tools/scripts/collect-register-capture.py --bus 13 --output docs/investigation/i2c-scan
-    python3 tools/scripts/collect-register-capture.py --no-ddc                 # skip DDC VCP scan
-
-Requirements:
-    pip install smbus2
-    User must be in the i2c group.
+No command-line parameters are required for the normal repeated workflow.
 """
 
-import argparse
+from __future__ import annotations
+
 import json
+import re
+import subprocess
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 try:
     from smbus2 import SMBus, i2c_msg
@@ -32,30 +28,12 @@ except ImportError:
     print("ERROR: smbus2 not installed. Run: pip install smbus2")
     sys.exit(1)
 
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+RAW_CAPTURE_ROOT = REPO_ROOT / "docs" / "investigation" / "register-captures"
 DEFAULT_BUS = 13
-DEFAULT_DEVICES = [0x54, 0x58]  # 0x37 excluded — raw reads return only bus echo
-
-ANNOTATIONS: dict[int, dict[int, str]] = {
-    0x58: {
-        0x3C: "layout key reg A (noisy)",
-        0x3D: "layout key reg B (noisy)",
-        0x3E: "layout key reg C (noisy)",
-        0xA1: "state byte — 0x00=no signal",
-        0xA3: "state byte (noisy when active)",
-        0xA5: "state byte (noisy)",
-        0xE0: "primary source/pipeline — unique per input",
-        0xE1: "secondary source indicator",
-        0xE2: "HDMI-single flag",
-        0xE3: "HDMI-single flag",
-    },
-    0x54: {
-        0x10: "HDCP state — 0x01=HDMI inactive, 0x03=HDMI port active",
-        0x40: "HDCP active flag — 0x00=inactive, 0x0F=HDMI port active",
-    },
-}
-
-# DDC VCP codes to read via protocol (device 0x37)
-DDC_VCP_CODES: dict[int, str] = {
+DEFAULT_DEVICES = [0x54, 0x58]
+KNOWN_DDC_VCP_NAMES: dict[int, str] = {
     0x10: "Brightness",
     0x12: "Contrast",
     0x60: "Input Source",
@@ -65,205 +43,301 @@ DDC_VCP_CODES: dict[int, str] = {
 }
 
 
-def now_ts() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+def now_utc() -> datetime:
+    return datetime.now(UTC)
 
 
-def ddc_get_vcp(bus: SMBus, feature: int) -> dict | None:
-    """Read a single DDC/CI VCP code from device 0x37 via protocol request."""
-    dst_w  = 0x6E  # 0x37 << 1, write form
-    src    = 0x51  # host address
-    opcode = 0x01  # Get VCP Feature
-    length = 2     # opcode + feature code
+def prompt_choice(label: str, options: list[tuple[str, str]], *, allow_blank: bool = False) -> str | None:
+    option_text = " / ".join(f"{key}={value}" for key, value in options)
+    while True:
+        raw = input(f"{label} [{option_text}]: ").strip().lower()
+        if not raw and allow_blank:
+            return None
+        for key, value in options:
+            if raw == key:
+                return value
+        print("Invalid choice.")
+
+
+def prompt_text(label: str, *, allow_blank: bool = True) -> str | None:
+    raw = input(f"{label}: ").strip()
+    if not raw and allow_blank:
+        return None
+    return raw
+
+
+def prompt_int(label: str, *, allow_blank: bool = False) -> int | None:
+    while True:
+        raw = input(f"{label}: ").strip()
+        if not raw and allow_blank:
+            return None
+        try:
+            return int(raw)
+        except ValueError:
+            print("Enter an integer.")
+
+
+def prompt_bool(label: str, *, default: bool = False) -> bool:
+    suffix = "Y/n" if default else "y/N"
+    while True:
+        raw = input(f"{label} [{suffix}]: ").strip().lower()
+        if not raw:
+            return default
+        if raw in {"y", "yes"}:
+            return True
+        if raw in {"n", "no"}:
+            return False
+        print("Enter y or n.")
+
+
+def slugify(text: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug or "capture"
+
+
+def parse_hex_value(value: str) -> int:
+    return int(value, 16)
+
+
+def full_hex_range() -> list[str]:
+    return [f"0x{i:02X}" for i in range(256)]
+
+
+def empty_register_map() -> dict[str, int | None]:
+    return {reg: None for reg in full_hex_range()}
+
+
+def ddc_vcp_name(code: int) -> str:
+    return KNOWN_DDC_VCP_NAMES.get(code, f"Unknown (0x{code:02X})")
+
+
+def ddc_get_vcp(bus: SMBus, feature: int) -> dict[str, Any]:
+    dst_w = 0x6E
+    src = 0x51
+    opcode = 0x01
+    length = 2
 
     pkt = [src, length | 0x80, opcode, feature]
     checksum = dst_w
-    for b in pkt:
-        checksum ^= b
+    for byte in pkt:
+        checksum ^= byte
     pkt.append(checksum)
 
     try:
-        write_msg = i2c_msg.write(0x37, pkt)
-        bus.i2c_rdwr(write_msg)
+        bus.i2c_rdwr(i2c_msg.write(0x37, pkt))
         time.sleep(0.05)
-
         read_msg = i2c_msg.read(0x37, 11)
         bus.i2c_rdwr(read_msg)
         reply = list(read_msg)
-
-        # Reply: [src=0x6E, len|0x80, opcode=0x02, result, vcp_code,
-        #         vcp_type, max_hi, max_lo, cur_hi, cur_lo, checksum]
         if len(reply) < 11 or reply[2] != 0x02 or reply[4] != feature:
             return {"status": "error", "error": f"unexpected reply: {[hex(b) for b in reply]}"}
-
         return {
             "status": "ok",
             "current": (reply[8] << 8) | reply[9],
-            "max":     (reply[6] << 8) | reply[7],
-            "type":    "SNC" if reply[5] == 0x01 else "C",
-            "raw":     [hex(b) for b in reply],
+            "max": (reply[6] << 8) | reply[7],
+            "type": "SNC" if reply[5] == 0x01 else "C",
+            "raw": [hex(b) for b in reply],
         }
-    except OSError as e:
-        return {"status": "error", "error": str(e)}
+    except OSError as exc:
+        return {"status": "error", "error": str(exc)}
 
 
-def scan_ddc(bus: SMBus) -> list[dict]:
-    results = []
-    for code, name in DDC_VCP_CODES.items():
-        entry = {
-            "ts":      now_ts(),
-            "device":  "0x37_ddc",
-            "vcp":     f"0x{code:02X}",
-            "name":    name,
-        }
+def scan_ddc(bus: SMBus) -> dict[str, Any]:
+    values: dict[str, int | None] = {}
+    details: dict[str, Any] = {}
+    attempted = full_hex_range()
+    for code_num in range(256):
+        code = code_num
+        name = ddc_vcp_name(code)
+        reg = f"0x{code:02X}"
         result = ddc_get_vcp(bus, code)
-        if result and result["status"] == "ok":
-            entry["status"]  = "ok"
-            entry["current"] = f"0x{result['current']:02X}"
-            entry["max"]     = f"0x{result['max']:02X}"
-            entry["type"]    = result["type"]
-        else:
-            entry["status"] = "error"
-            entry["error"]  = result.get("error", "no reply") if result else "no reply"
-        results.append(entry)
-        time.sleep(0.1)
-    return results
-
-
-def scan_device(bus: SMBus, device: int) -> list[dict]:
-    results = []
-    for reg in range(0x00, 0x100):
-        try:
-            value = bus.read_byte_data(device, reg)
-            entry = {
-                "ts":     now_ts(),
-                "device": f"0x{device:02X}",
-                "reg":    f"0x{reg:02X}",
-                "value":  f"0x{value:02X}",
+        if result["status"] == "ok":
+            values[reg] = result["current"]
+            details[reg] = {
+                "name": name,
                 "status": "ok",
+                "value": result["current"],
+                "max": result["max"],
+                "type": result["type"],
+                "raw": result["raw"],
             }
-            note = ANNOTATIONS.get(device, {}).get(reg)
-            if note:
-                entry["note"] = note
-        except OSError as e:
-            entry = {
-                "ts":     now_ts(),
-                "device": f"0x{device:02X}",
-                "reg":    f"0x{reg:02X}",
+        else:
+            values[reg] = None
+            details[reg] = {
+                "name": name,
                 "status": "error",
-                "error":  str(e),
+                "value": None,
+                "max": None,
+                "type": None,
+                "raw": None,
+                "error": result["error"],
             }
-        results.append(entry)
+        time.sleep(0.1)
+    return {
+        "kind": "ddc_vcp",
+        "scan_scope": "full_256",
+        "attempted_registers": attempted,
+        "values": values,
+        "details": details,
+    }
+
+
+def scan_device(bus: SMBus, device: int) -> dict[str, Any]:
+    values = empty_register_map()
+    errors: dict[str, str] = {}
+    for reg_num in range(256):
+        reg = f"0x{reg_num:02X}"
+        try:
+            values[reg] = bus.read_byte_data(device, reg_num)
+        except OSError as exc:
+            values[reg] = None
+            errors[reg] = str(exc)
         time.sleep(0.02)
-    return results
+    return {
+        "kind": "i2c_registers",
+        "scan_scope": "full_256",
+        "attempted_registers": full_hex_range(),
+        "values": values,
+        "errors": errors,
+    }
 
 
-def write_summary(path: Path, device: int, results: list[dict], scan_ts: str) -> None:
-    ok     = [r for r in results if r["status"] == "ok"]
-    errors = [r for r in results if r["status"] != "ok"]
-
-    with path.open("w") as f:
-        f.write(f"# I2C Raw Scan — Device 0x{device:02X}\n\n")
-        f.write(f"- **Date:** {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
-        f.write(f"- **Bus:** I2C-{DEFAULT_BUS}\n")
-        f.write(f"- **Readable:** {len(ok)}/256\n\n")
-
-        if ok:
-            f.write("## Readable Registers\n\n")
-            f.write("| Reg | Value | Note |\n|-----|-------|------|\n")
-            for r in ok:
-                f.write(f"| `{r['reg']}` | `{r['value']}` | {r.get('note', '')} |\n")
-
-        if errors:
-            f.write("\n## Unreadable Registers\n\n")
-            error_regs = [int(r["reg"], 16) for r in errors]
-            ranges, start, prev = [], error_regs[0], error_regs[0]
-            for reg in error_regs[1:]:
-                if reg != prev + 1:
-                    ranges.append((start, prev))
-                    start = reg
-                prev = reg
-            ranges.append((start, prev))
-            for s, e in ranges:
-                f.write(f"- `0x{s:02X}`\n" if s == e else f"- `0x{s:02X}`–`0x{e:02X}`\n")
-
-        f.write(f"\n*Generated by `tools/scripts/collect-register-capture.py`*\n")
-
-
-def write_ddc_summary(path: Path, results: list[dict]) -> None:
-    with path.open("w") as f:
-        f.write("# DDC VCP Scan — Device 0x37 (via DDC/CI protocol)\n\n")
-        f.write(f"- **Date:** {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
-        f.write("| VCP | Name | Current | Max | Status |\n")
-        f.write("|-----|------|---------|-----|--------|\n")
-        for r in results:
-            if r["status"] == "ok":
-                f.write(f"| `{r['vcp']}` | {r['name']} | `{r['current']}` | `{r['max']}` | ok |\n")
+def build_state_metadata() -> dict[str, Any]:
+    print("Enter the observed monitor state.")
+    power_state = prompt_choice("Power state", [("on", "on"), ("standby", "standby")])
+    if power_state == "standby":
+        signal_state = "none"
+        layout_mode = "standby"
+        primary_input = None
+        secondary_input = None
+        audio_side = None
+        pip = {"main_input": None, "window_input": None, "size": None, "position": None}
+    else:
+        signal_state = prompt_choice("Signal state", [("active", "active"), ("idle", "idle")])
+        if signal_state == "idle":
+            layout_mode = "idle"
+            primary_input = None
+            secondary_input = None
+            audio_side = None
+            pip = {"main_input": None, "window_input": None, "size": None, "position": None}
+        else:
+            layout_mode = prompt_choice("Layout mode", [("single", "single"), ("pbp", "pbp"), ("pip", "pip")])
+            primary_input = prompt_choice("Primary/main input", [("hdmi", "hdmi"), ("dp", "dp"), ("tb", "tb")])
+            secondary_input = None
+            audio_side = None
+            pip = {"main_input": None, "window_input": None, "size": None, "position": None}
+            if layout_mode == "single":
+                state_label = f"Single source: {primary_input.upper()}"
+            elif layout_mode == "pbp":
+                secondary_input = prompt_choice("Secondary/right input", [("hdmi", "hdmi"), ("dp", "dp"), ("tb", "tb")])
+                audio_side = prompt_choice("Audio side", [("left", "left"), ("right", "right")])
+                state_label = f"PBP left: {primary_input.upper()} / right: {secondary_input.upper()} / audio {audio_side}"
             else:
-                f.write(f"| `{r['vcp']}` | {r['name']} | — | — | error: {r.get('error','')} |\n")
-        f.write(f"\n*Generated by `tools/scripts/collect-register-capture.py`*\n")
+                secondary_input = prompt_choice("PIP window input", [("hdmi", "hdmi"), ("dp", "dp"), ("tb", "tb")])
+                audio_side = prompt_choice("Audio side", [("left", "left"), ("right", "right")])
+                pip_size = prompt_int("PIP size (1/2/3)")
+                pip_position = prompt_text("PIP position", allow_blank=False)
+                pip = {
+                    "main_input": primary_input,
+                    "window_input": secondary_input,
+                    "size": pip_size,
+                    "position": pip_position,
+                }
+                state_label = (
+                    f"PIP main: {primary_input.upper()} / window: {secondary_input.upper()} / "
+                    f"size {pip_size} / {pip_position}"
+                )
+            if layout_mode != "single":
+                state_label = locals().get("state_label")
+            else:
+                state_label = f"Single source: {primary_input.upper()}"
+
+    osd_visible = prompt_bool("OSD visible at capture time?", default=False)
+    contaminated = prompt_bool("Capture contaminated or otherwise untrusted?", default=False)
+    include_in_explorer = prompt_bool("Include this capture in regenerated explorer data?", default=not contaminated)
+    notes_text = prompt_text("Notes (optional)")
+
+    if power_state == "standby":
+        state_label = "Standby"
+    elif signal_state == "idle":
+        state_label = "Idle / no active source"
+
+    metadata = {
+        "state_label": state_label,
+        "power_state": power_state,
+        "signal_state": signal_state,
+        "layout_mode": layout_mode,
+        "primary_input": primary_input,
+        "secondary_input": secondary_input,
+        "audio_side": audio_side,
+        "pip": pip,
+        "flags": {
+            "osd_visible": osd_visible,
+            "contaminated": contaminated,
+            "include_in_explorer": include_in_explorer,
+            "metadata_certainty": "high" if include_in_explorer else "unknown",
+        },
+        "notes": [notes_text] if notes_text else [],
+    }
+    return metadata
+
+
+def write_capture_file(capture: dict[str, Any]) -> Path:
+    RAW_CAPTURE_ROOT.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.fromisoformat(capture["captured_at"].replace("Z", "+00:00")).strftime("%Y%m%d-%H%M%S")
+    filename = f"{timestamp}-{slugify(capture['state_label'])}.json"
+    path = RAW_CAPTURE_ROOT / filename
+    path.write_text(json.dumps(capture, indent=2) + "\n")
+    return path
+
+
+def refresh_register_explorer_data() -> None:
+    script = REPO_ROOT / "tools" / "scripts" / "build-register-explorer-data.py"
+    subprocess.run([sys.executable, str(script)], check=True, cwd=REPO_ROOT)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="I2C register scanner + DDC VCP reader")
-    parser.add_argument("--bus",      type=int,  default=DEFAULT_BUS)
-    parser.add_argument("--devices",  type=str,  help="Comma-separated hex addresses (default: 0x54,0x58)")
-    parser.add_argument("--output",   type=Path, default=Path("docs/investigation/i2c-scan"))
-    parser.add_argument("--no-ddc",   action="store_true", help="Skip DDC VCP scan")
-    args = parser.parse_args()
-
-    devices = DEFAULT_DEVICES
-    if args.devices:
-        devices = [int(d.strip(), 16) for d in args.devices.split(",")]
+    metadata = build_state_metadata()
 
     try:
-        bus = SMBus(args.bus)
-    except Exception as e:
-        print(f"ERROR: cannot open I2C bus {args.bus}: {e}")
+        bus = SMBus(DEFAULT_BUS)
+    except Exception as exc:
+        print(f"ERROR: cannot open I2C bus {DEFAULT_BUS}: {exc}")
         sys.exit(1)
 
-    args.output.mkdir(parents=True, exist_ok=True)
-    scan_ts  = datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_path = args.output / f"i2c-scan-{scan_ts}.jsonl"
+    captured_at = now_utc().isoformat(timespec="seconds")
+    capture_id = f"{datetime.fromisoformat(captured_at).strftime('%Y%m%d-%H%M%S')}-{slugify(metadata['state_label'])}"
 
-    print(f"Bus: I2C-{args.bus}  Log: {log_path}\n")
-
-    all_results: list[dict] = []
-
-    # Raw I2C scans
-    with log_path.open("w") as log_f:
-        for device in devices:
-            print(f"Scanning 0x{device:02X} (256 registers)...", flush=True)
-            results = scan_device(bus, device)
-            all_results.extend(results)
-            for entry in results:
-                log_f.write(json.dumps(entry) + "\n")
-            log_f.flush()
-
-            ok_count = sum(1 for r in results if r["status"] == "ok")
-            print(f"  {ok_count}/256 readable")
-
-            summary_path = args.output / f"i2c-scan-{scan_ts}-0x{device:02X}-summary.md"
-            write_summary(summary_path, device, results, scan_ts)
-            print(f"  Summary: {summary_path}\n")
-
-        # DDC VCP scan
-        if not args.no_ddc:
-            print("Scanning DDC VCP codes on 0x37 (via DDC/CI protocol)...", flush=True)
-            ddc_results = scan_ddc(bus)
-            all_results.extend(ddc_results)
-            for entry in ddc_results:
-                log_f.write(json.dumps(entry) + "\n")
-
-            ok_count = sum(1 for r in ddc_results if r["status"] == "ok")
-            print(f"  {ok_count}/{len(DDC_VCP_CODES)} VCP codes readable")
-
-            ddc_summary_path = args.output / f"i2c-scan-{scan_ts}-ddc-summary.md"
-            write_ddc_summary(ddc_summary_path, ddc_results)
-            print(f"  Summary: {ddc_summary_path}\n")
-
+    print("\nCapturing 0x54...")
+    device_54 = scan_device(bus, 0x54)
+    print("Capturing 0x58...")
+    device_58 = scan_device(bus, 0x58)
+    print("Capturing DDC subset on 0x37...")
+    device_ddc = scan_ddc(bus)
     bus.close()
-    print(f"Done. Log: {log_path}")
+
+    capture = {
+        "capture_id": capture_id,
+        "captured_at": captured_at,
+        "monitor_bus": f"/dev/i2c-{DEFAULT_BUS}",
+        "source": {
+            "tool": "tools/scripts/collect-register-capture.py",
+            "tool_version": 1,
+        },
+        **metadata,
+        "devices": {
+            "0x54": device_54,
+            "0x58": device_58,
+            "0x37_ddc": device_ddc,
+        },
+    }
+
+    path = write_capture_file(capture)
+    print(f"\nRaw capture written to {path}")
+
+    print("Refreshing tools/register-explorer/data/ ...")
+    refresh_register_explorer_data()
+    print("Done.")
 
 
 if __name__ == "__main__":
