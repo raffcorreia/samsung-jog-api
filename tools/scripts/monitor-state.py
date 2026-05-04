@@ -7,10 +7,10 @@ matches them against known signatures to report the current display layout:
 single-source or PBP (Picture by Picture) with source pair.
 
 Usage:
-    python3 scripts/monitor-state.py            # poll every 1s
-    python3 scripts/monitor-state.py --interval 0.5
-    python3 scripts/monitor-state.py --once     # single read, then exit
-    python3 scripts/monitor-state.py --dump     # dump all 0x58 registers 0x00-0xFF
+    python3 tools/scripts/monitor-state.py            # poll every 1s
+    python3 tools/scripts/monitor-state.py --interval 0.5
+    python3 tools/scripts/monitor-state.py --once     # single read, then exit
+    python3 tools/scripts/monitor-state.py --dump     # dump all 0x58 registers 0x00-0xFF
 
 Requirements:
     pip install smbus2

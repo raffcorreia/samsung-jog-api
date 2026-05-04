@@ -31,6 +31,8 @@ Full results in `docs/investigation/ddc-scan/`.
 
 ### Raw I2C scan — device map on bus 13
 
+Here, **bus 13** means the Linux monitor-facing I2C adapter exposed as `/dev/i2c-13` in this setup. It is the host-side bus used to reach the monitor's DDC/CI endpoint and other readable monitor-side I2C devices.
+
 Direct smbus2 reads, bypassing DDC/CI entirely.
 
 | Address | Device | Notes |
@@ -124,7 +126,7 @@ All 6 input combinations × 2 sound positions scanned. **E0–E3 data for PBP is
 
 All scan evidence committed to `docs/investigation/i2c-scan/` and `docs/investigation/ddc-scan/`. Full findings, contamination notes, register reference, and scan file index are in [`docs/investigation/i2c-scan/README.md`](../investigation/i2c-scan/README.md).
 
-Investigation scripts: `scripts/i2c-scan.py`.
+Investigation scripts: `tools/scripts/collect-register-capture.py`.
 
 ---
 
@@ -139,6 +141,74 @@ Investigation scripts: `scripts/i2c-scan.py`.
 ### Next: interactive register explorer
 
 The flat markdown matrix (`phase-24-full-matrix.md`) is not navigable at scale — 29 rows × 768+ columns (256 DDC + 256 `0x58` + 256 `0x54`) cannot be meaningfully reviewed as static text.
+
+The explorer must be backed by capture files that include the observed monitor state as first-class metadata. Register values alone are not enough; each capture has to record the operator-asserted ground truth so characterization does not depend on inferring state from the same registers under analysis.
+
+**Required capture metadata:**
+
+- Power state: `on` or `standby`
+- Signal state: `active` or `idle/no-signal`
+- Layout mode: `single`, `PBP`, or `PIP`
+- Primary/left input: `HDMI`, `DP`, or `TB`
+- Secondary/right input when applicable
+- Audio side: `left` or `right`
+- PIP main input and PIP window input when applicable
+- PIP size and window position when applicable
+- Whether OSD is visible at capture time
+- Whether the capture is contaminated or otherwise untrusted
+- Free-text notes for anything unusual during the read
+
+**Canonical raw capture shape:**
+
+```json
+{
+  "capture_id": "2026-05-02T01:03:33-04:00_pip_dp_main_hdmi_window_size1_top_right",
+  "timestamp": "2026-05-02T01:03:33-04:00",
+  "bus": 13,
+  "state_label": "main: DP / pip: HDMI / size 1 / top-right",
+  "power_state": "on",
+  "signal_state": "active",
+  "layout_mode": "pip",
+  "primary_input": "dp",
+  "secondary_input": "hdmi",
+  "audio_side": "right",
+  "pip": {
+    "main_input": "dp",
+    "window_input": "hdmi",
+    "size": 1,
+    "position": "top-right"
+  },
+  "flags": {
+    "osd_visible": false,
+    "contaminated": false
+  },
+  "notes": "",
+  "devices": {
+    "0x37_ddc": {
+      "0x60": 3,
+      "0xD6": 1
+    },
+    "0x54": {
+      "0x00": 17,
+      "0x01": 44
+    },
+    "0x58": {
+      "0x02": 121,
+      "0x48": 15,
+      "0x4A": 2,
+      "0xA1": 33,
+      "0xE0": 64,
+      "0xE1": 78,
+      "0xE2": 0,
+      "0xE3": 0
+    }
+  }
+}
+```
+
+Raw captures should remain the source of truth. Any FE-friendly flattened dataset should be generated from these files rather than replacing them.
+
+**Hypothesis to test:** `0x37_ddc`, `0x54`, and `0x58` may not be the only useful endpoints on the monitor-facing bus (`/dev/i2c-13`). Run a discovery pass against all readable device addresses, compare state-to-state variation, and promote any additional device to first-class analysis only if its registers track monitor state in a meaningful way.
 
 **Goal:** a local interactive HTML page (no server required) that loads all scan JSONL files directly and allows:
 

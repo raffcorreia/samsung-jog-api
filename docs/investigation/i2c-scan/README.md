@@ -3,7 +3,7 @@
 Phase 24 investigation. Raw I2C reads via `smbus2` on I2C bus 13, bypassing DDC/CI protocol.
 DDC only surfaces what the firmware advertises; direct I2C exposes the full scaler register map.
 
-Script: `scripts/i2c-scan.py`
+Script: `tools/scripts/collect-register-capture.py`
 
 ---
 

@@ -2,7 +2,7 @@
 
 Monitor: **Samsung C34J79x** (`SAM`, product code `0x0F1C`)
 Host: Raspberry Pi 5 — I2C bus 13 (HDMI0 / `card2-HDMI-A-1`)
-Tool: `scripts/ddc-scan.py`
+Tool: `tools/scripts/ddc-scan.py`
 
 ## Methodology
 
