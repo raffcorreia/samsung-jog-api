@@ -32,7 +32,7 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RAW_CAPTURE_ROOT = REPO_ROOT / "docs" / "investigation" / "register-captures"
 DEFAULT_BUS = 13
-DEFAULT_DEVICES = [0x54, 0x58]
+DEFAULT_DEVICES = [0x3A, 0x54, 0x58]
 KNOWN_DDC_VCP_NAMES: dict[int, str] = {
     0x10: "Brightness",
     0x12: "Contrast",

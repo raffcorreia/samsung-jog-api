@@ -38,9 +38,14 @@ Direct smbus2 reads, bypassing DDC/CI entirely.
 | Address | Device | Notes |
 |---------|--------|-------|
 | `0x37` | DDC/CI controller (8051 MCU) | Raw I2C returns bus echo only; must use DDC/CI protocol |
+| `0x3A` | Unknown monitor-side device | Discovered on 2026-05-04 bus sweep; 256/256 registers readable in single-source TB state |
 | `0x50` | EDID ROM | |
 | `0x54` | Likely HDCP controller | Activates when Pi HDMI port is outputting; not display-state-dependent |
 | `0x58` | Novatek scaler SoC (probable) | 256/256 registers readable; holds live scaler and pipeline state |
+
+Bus discovery retake on 2026-05-04 (single-source TB) found five readable addresses on `/dev/i2c-13`:
+`0x37`, `0x3A`, `0x50`, `0x54`, and `0x58`. Future repeated captures should include `0x3A`
+alongside `0x54`, `0x58`, and the full DDC VCP sweep on `0x37`.
 
 ---
 
