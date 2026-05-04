@@ -154,6 +154,8 @@ The explorer must be backed by capture files that include the observed monitor s
 - Power state: `on` or `standby`
 - Signal state: `active` or `idle/no-signal`
 - Layout mode: `single`, `PBP`, or `PIP`
+- Connected inputs present on the monitor cabling
+- Inputs currently sending usable images
 - Primary/left input: `HDMI`, `DP`, or `TB`
 - Secondary/right input when applicable
 - Audio side: `left` or `right`
@@ -174,6 +176,8 @@ The explorer must be backed by capture files that include the observed monitor s
   "power_state": "on",
   "signal_state": "active",
   "layout_mode": "pip",
+  "connected_inputs": ["dp", "hdmi", "tb"],
+  "signal_present_inputs": ["dp", "hdmi", "tb"],
   "primary_input": "dp",
   "secondary_input": "hdmi",
   "audio_side": "right",

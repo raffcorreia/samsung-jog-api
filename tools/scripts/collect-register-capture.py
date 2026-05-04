@@ -32,7 +32,7 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RAW_CAPTURE_ROOT = REPO_ROOT / "docs" / "investigation" / "register-captures"
 DEFAULT_BUS = 13
-DEFAULT_DEVICES = [0x3A, 0x54, 0x58]
+DEFAULT_DEVICES = [0x3A, 0x50, 0x54, 0x58]
 KNOWN_DDC_VCP_NAMES: dict[int, str] = {
     0x10: "Brightness",
     0x12: "Contrast",
@@ -75,6 +75,18 @@ def prompt_int(label: str, *, allow_blank: bool = False) -> int | None:
             return int(raw)
         except ValueError:
             print("Enter an integer.")
+
+
+def prompt_input_list(label: str) -> list[str]:
+    valid = {"hdmi", "dp", "tb"}
+    while True:
+        raw = input(f"{label} [comma-separated: hdmi,dp,tb or none]: ").strip().lower()
+        if not raw or raw == "none":
+            return []
+        values = [item.strip() for item in raw.split(",") if item.strip()]
+        if values and all(value in valid for value in values) and len(set(values)) == len(values):
+            return values
+        print("Enter a comma-separated list using only hdmi, dp, tb, or none.")
 
 
 def prompt_bool(label: str, *, default: bool = False) -> bool:
@@ -205,6 +217,8 @@ def scan_device(bus: SMBus, device: int) -> dict[str, Any]:
 def build_state_metadata() -> dict[str, Any]:
     print("Enter the observed monitor state.")
     power_state = prompt_choice("Power state", [("on", "on"), ("standby", "standby")])
+    connected_inputs = prompt_input_list("Connected inputs")
+    signal_present_inputs = prompt_input_list("Inputs currently sending usable images")
     if power_state == "standby":
         signal_state = "none"
         layout_mode = "standby"
@@ -267,6 +281,8 @@ def build_state_metadata() -> dict[str, Any]:
         "power_state": power_state,
         "signal_state": signal_state,
         "layout_mode": layout_mode,
+        "connected_inputs": connected_inputs,
+        "signal_present_inputs": signal_present_inputs,
         "primary_input": primary_input,
         "secondary_input": secondary_input,
         "audio_side": audio_side,
@@ -308,10 +324,10 @@ def main() -> None:
     captured_at = now_utc().isoformat(timespec="seconds")
     capture_id = f"{datetime.fromisoformat(captured_at).strftime('%Y%m%d-%H%M%S')}-{slugify(metadata['state_label'])}"
 
-    print("\nCapturing 0x54...")
-    device_54 = scan_device(bus, 0x54)
-    print("Capturing 0x58...")
-    device_58 = scan_device(bus, 0x58)
+    scanned_devices: dict[str, Any] = {}
+    for device in DEFAULT_DEVICES:
+        print(f"\nCapturing {hex(device)}...")
+        scanned_devices[f"0x{device:02X}"] = scan_device(bus, device)
     print("Capturing DDC subset on 0x37...")
     device_ddc = scan_ddc(bus)
     bus.close()
@@ -326,8 +342,7 @@ def main() -> None:
         },
         **metadata,
         "devices": {
-            "0x54": device_54,
-            "0x58": device_58,
+            **scanned_devices,
             "0x37_ddc": device_ddc,
         },
     }
