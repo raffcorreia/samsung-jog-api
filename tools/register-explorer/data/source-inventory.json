@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-04T16:53:56+00:00",
+  "generated_at": "2026-05-05T21:32:49+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -158,6 +158,22 @@
     },
     {
       "path": "register-captures/20260504-164121-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260504-165602-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260505-204229-idle-no-active-source.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260505-204604-standby.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260505-213141-standby.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]

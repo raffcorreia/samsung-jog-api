@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Explorer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <button id="header-toggle" class="header-toggle" type="button">Hide Header</button>
+
+      <div id="header-stack" class="header-stack">
+        <header class="hero card">
+          <div class="hero-title">
+            <h1>Register Explorer</h1>
+          </div>
+          <div class="hero-meta" id="dataset-meta"></div>
+          <div class="hero-stat">
+            <p class="stat-label">Registers</p>
+            <div id="register-summary" class="summary-content"></div>
+          </div>
+          <div class="hero-stat">
+            <p class="stat-label">Labels</p>
+            <div id="inventory-summary" class="summary-content"></div>
+          </div>
+        </header>
+
+        <section class="controls card">
+          <div class="control-grid">
+            <label>
+              <span>Device</span>
+              <select id="device-select" multiple></select>
+              <div class="multi-tools">
+                <button class="mini-button filter-action" type="button" data-action="all" data-target="device-select">All</button>
+                <button class="mini-button filter-action" type="button" data-action="none" data-target="device-select">None</button>
+              </div>
+              <div class="multi-summary" id="device-select-summary"></div>
+            </label>
+          <label>
+            <span>Power State</span>
+            <select id="power-select" multiple></select>
+            <div class="multi-tools">
+              <button class="mini-button filter-action" type="button" data-action="all" data-target="power-select">All</button>
+              <button class="mini-button filter-action" type="button" data-action="none" data-target="power-select">None</button>
+            </div>
+            <div class="multi-summary" id="power-select-summary"></div>
+          </label>
+          <label>
+            <span>Layout</span>
+            <select id="layout-select" multiple></select>
+            <div class="multi-tools">
+              <button class="mini-button filter-action" type="button" data-action="all" data-target="layout-select">All</button>
+              <button class="mini-button filter-action" type="button" data-action="none" data-target="layout-select">None</button>
+            </div>
+            <div class="multi-summary" id="layout-select-summary"></div>
+          </label>
+          <label>
+            <span>Primary</span>
+            <select id="primary-select" multiple></select>
+            <div class="multi-tools">
+              <button class="mini-button filter-action" type="button" data-action="all" data-target="primary-select">All</button>
+              <button class="mini-button filter-action" type="button" data-action="none" data-target="primary-select">None</button>
+            </div>
+            <div class="multi-summary" id="primary-select-summary"></div>
+          </label>
+          <label>
+            <span>Connected Input</span>
+            <select id="connected-select" multiple></select>
+            <div class="multi-tools">
+              <button class="mini-button filter-action" type="button" data-action="all" data-target="connected-select">All</button>
+              <button class="mini-button filter-action" type="button" data-action="none" data-target="connected-select">None</button>
+            </div>
+            <div class="multi-summary" id="connected-select-summary"></div>
+          </label>
+          <label>
+            <span>Signal Input</span>
+            <select id="signal-input-select" multiple></select>
+            <div class="multi-tools">
+              <button class="mini-button filter-action" type="button" data-action="all" data-target="signal-input-select">All</button>
+              <button class="mini-button filter-action" type="button" data-action="none" data-target="signal-input-select">None</button>
+            </div>
+            <div class="multi-summary" id="signal-input-select-summary"></div>
+          </label>
+            <label>
+              <span>Compare Against</span>
+              <select id="compare-select" multiple></select>
+              <div class="multi-tools">
+                <button class="mini-button filter-action" type="button" data-action="all" data-target="compare-select">All</button>
+                <button class="mini-button filter-action" type="button" data-action="none" data-target="compare-select">None</button>
+              </div>
+              <div class="multi-summary" id="compare-select-summary"></div>
+            </label>
+            <label>
+              <span>Register Filter</span>
+              <input id="register-filter" type="text" placeholder="0xC7 or c7" />
+            </label>
+          </div>
+          <div class="toggle-panel">
+            <label class="check">
+              <input id="varying-only" type="checkbox" />
+              <span>Show varying only</span>
+            </label>
+            <label class="check">
+              <input id="attempted-only" type="checkbox" />
+              <span>Attempted by all visible captures</span>
+            </label>
+            <label class="check">
+              <input id="labeled-only" type="checkbox" />
+              <span>Only show labeled registers</span>
+            </label>
+            <label class="check">
+              <input id="diff-only" type="checkbox" />
+              <span>Only show registers changed vs compare</span>
+            </label>
+          </div>
+          <div class="legend">
+            <span class="legend-item value">value</span>
+            <span class="legend-item null">attempted, unreadable</span>
+            <span class="legend-item unattempted">not attempted</span>
+            <span class="legend-item changed">changed vs compare</span>
+          </div>
+        </section>
+
+        <section class="detail-grid">
+          <article class="card">
+            <h2>Cell Detail</h2>
+            <div id="cell-detail" class="detail-panel empty">
+              Select a cell to inspect its raw value, attempt state, and metadata.
+            </div>
+          </article>
+          <article class="card">
+            <h2>Capture Detail</h2>
+            <div id="capture-detail" class="detail-panel empty">
+              Click any row label to inspect the full capture metadata.
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <section class="matrix card">
+        <div class="matrix-scroll">
+          <table id="matrix-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
