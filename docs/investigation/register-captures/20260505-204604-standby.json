@@ -9,7 +9,7 @@
   "state_label": "Standby",
   "power_state": "standby",
   "signal_state": "none",
-  "layout_mode": null,
+  "layout_mode": "standby",
   "connected_inputs": [],
   "signal_present_inputs": [],
   "primary_input": null,
