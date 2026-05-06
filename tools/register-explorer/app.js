@@ -4,6 +4,9 @@ const dataUrls = {
 };
 
 const aliasStorageKey = "register-explorer-aliases-v1";
+const excludedCapturesKey = "register-explorer-excluded-v1";
+const irrelevantCountsKey = "register-explorer-irrelevant-v1";
+const filterStateKey = "register-explorer-filters-v1";
 const defaultAliases = {
   "0x37_ddc:0x10": "brightness",
   "0x37_ddc:0x12": "contrast",
@@ -30,10 +33,15 @@ const state = {
   selectedCell: null,
   selectedCaptureId: null,
   aliases: loadAliases(),
+  excludedCaptures: loadExcluded(),
+  irrelevantCounts: loadIrrelevantCounts(),
 };
 
 const els = {
   datasetMeta: document.querySelector("#dataset-meta"),
+  captureFilterToggle: document.querySelector("#capture-filter-toggle"),
+  captureFilterList: document.querySelector("#capture-filter-list"),
+  captureFilterBadge: document.querySelector("#capture-filter-badge"),
   headerStack: document.querySelector("#header-stack"),
   headerToggle: document.querySelector("#header-toggle"),
   deviceSelect: document.querySelector("#device-select"),
@@ -48,6 +56,9 @@ const els = {
   attemptedOnly: document.querySelector("#attempted-only"),
   labeledOnly: document.querySelector("#labeled-only"),
   diffOnly: document.querySelector("#diff-only"),
+  equalsOnly: document.querySelector("#equals-only"),
+  hideIrrelevants: document.querySelector("#hide-irrelevants"),
+  irrelevantsOnly: document.querySelector("#irrelevants-only"),
   registerSummary: document.querySelector("#register-summary"),
   inventorySummary: document.querySelector("#inventory-summary"),
   matrixHead: document.querySelector("#matrix-table thead"),
@@ -108,8 +119,10 @@ function hydrateControls() {
   fillMultiSelect(els.connectedSelect, ["hdmi", "dp", "tb"]);
   fillMultiSelect(els.signalInputSelect, ["hdmi", "dp", "tb"]);
   fillCompareSelect();
+  applyFilterState();
   installMultiSelectBehavior();
   updateFilterSummaries();
+  renderCaptureList();
 }
 
 function facetValues(key) {
@@ -140,6 +153,15 @@ function bindEvents() {
     els.headerToggle.textContent = hidden ? "Show Header" : "Hide Header";
   });
 
+  els.captureFilterToggle.addEventListener("click", () => {
+    els.captureFilterList.classList.toggle("open");
+  });
+
+  els.varyingOnly.addEventListener("change", () => { if (els.varyingOnly.checked) els.equalsOnly.checked = false; });
+  els.equalsOnly.addEventListener("change", () => { if (els.equalsOnly.checked) els.varyingOnly.checked = false; });
+  els.hideIrrelevants.addEventListener("change", () => { if (els.hideIrrelevants.checked) els.irrelevantsOnly.checked = false; });
+  els.irrelevantsOnly.addEventListener("change", () => { if (els.irrelevantsOnly.checked) els.hideIrrelevants.checked = false; });
+
   [
     els.deviceSelect,
     els.powerSelect,
@@ -152,14 +174,18 @@ function bindEvents() {
     els.attemptedOnly,
     els.labeledOnly,
     els.diffOnly,
+    els.equalsOnly,
+    els.hideIrrelevants,
+    els.irrelevantsOnly,
   ].forEach((element) => {
     element.addEventListener("change", () => {
       updateFilterSummaries();
+      saveFilterState();
       render();
     });
   });
 
-  els.registerFilter.addEventListener("input", () => render());
+  els.registerFilter.addEventListener("input", () => { saveFilterState(); render(); });
 
   document.querySelectorAll(".filter-action").forEach((button) => {
     button.addEventListener("click", () => {
@@ -167,17 +193,16 @@ function bindEvents() {
       if (!(select instanceof HTMLSelectElement)) return;
       if (button.dataset.action === "none") {
         clearSelections(select);
-        updateFilterSummaries();
-        render();
-        return;
+      } else {
+        [...select.options].forEach((option) => { option.selected = true; });
       }
-      [...select.options].forEach((option) => {
-        option.selected = true;
-      });
       updateFilterSummaries();
+      saveFilterState();
       render();
     });
   });
+
+  document.querySelector("#reset-all-filters")?.addEventListener("click", resetAllFilters);
 }
 
 function render() {
@@ -203,6 +228,7 @@ function getVisibleCaptures() {
   const filterSignal = isRestrictiveSelection(els.signalInputSelect, signalInputs);
 
   return state.data.captures.filter((capture) => {
+    if (state.excludedCaptures.has(capture.capture_id)) return false;
     if (selectedDevices.length && !selectedDevices.some((device) => capture.devices[device])) return false;
     if (filterPowers && !powers.includes(capture.power_state)) return false;
     if (filterLayouts && !layouts.includes(capture.layout_mode)) return false;
@@ -217,9 +243,12 @@ function getVisibleColumns(captures) {
   const compareCaptures = getCompareCaptures();
   const registerFilter = normalizeRegFilter(els.registerFilter.value);
   const showVaryingOnly = els.varyingOnly.checked;
+  const showEqualsOnly = els.equalsOnly.checked;
   const attemptedOnly = els.attemptedOnly.checked;
   const labeledOnly = els.labeledOnly.checked;
   const diffOnly = els.diffOnly.checked;
+  const hideIrrelevants = els.hideIrrelevants.checked;
+  const irrelevantsOnly = els.irrelevantsOnly.checked;
   const selectedDevices = getSelectedValues(els.deviceSelect);
   const columns = [];
 
@@ -232,6 +261,7 @@ function getVisibleColumns(captures) {
       const states = captures.map((capture) => valueState(capture, device, reg));
       if (attemptedOnly && states.some((entry) => entry.kind === "unattempted")) continue;
       if (showVaryingOnly && !isVarying(states, captures.length)) continue;
+      if (showEqualsOnly && isVarying(states, captures.length)) continue;
       if (
         diffOnly &&
         compareCaptures.length &&
@@ -239,6 +269,10 @@ function getVisibleColumns(captures) {
       ) {
         continue;
       }
+
+      const irrCount = getIrrelevantCount(device, reg);
+      if (hideIrrelevants && irrCount > 0) continue;
+      if (irrelevantsOnly && irrCount === 0) continue;
 
       columns.push({ device, reg });
     }
@@ -275,6 +309,7 @@ function renderMeta(captures, columns) {
     0,
   );
   const namedVisible = columns.filter((column) => getAlias(column.device, column.reg)).length;
+  const irrelevantCount = Object.keys(state.irrelevantCounts).length;
 
   els.datasetMeta.innerHTML = `
     <div><strong>Generated:</strong> ${escapeHtml(state.data.generated_at)}</div>
@@ -285,10 +320,16 @@ function renderMeta(captures, columns) {
   `;
 
   els.registerSummary.innerHTML = `
-    <div><strong>${columns.length}</strong> visible register(s)</div>
+    <div><strong>${columns.length}</strong> visible register(s)${irrelevantCount > 0 ? ` · <strong>${irrelevantCount}</strong> irrelevant` : ""}</div>
     <div><strong>${nullCount}</strong> attempted null cell(s)</div>
     <div>${activeRegisterFilterSummary()}</div>
+    <div class="header-actions">
+      <button class="mini-button" id="mark-varying-irrelevant" type="button">Mark Varying as Irrelevant</button>
+      <button class="mini-button danger" id="reset-irrelevancy" type="button">Reset Irrelevancy</button>
+    </div>
   `;
+  document.querySelector("#mark-varying-irrelevant")?.addEventListener("click", markVaryingAsIrrelevant);
+  document.querySelector("#reset-irrelevancy")?.addEventListener("click", resetIrrelevancy);
 
   const selectedDeviceSummary = selectedDevices.length === 1 ? selectedDevices[0] : `${selectedDevices.length} selected devices`;
   els.inventorySummary.innerHTML = `
@@ -307,9 +348,12 @@ function renderMeta(captures, columns) {
 function activeRegisterFilterSummary() {
   const filters = [];
   if (els.varyingOnly.checked) filters.push("varying only");
+  if (els.equalsOnly.checked) filters.push("equal only");
   if (els.attemptedOnly.checked) filters.push("attempted by all");
   if (els.labeledOnly.checked) filters.push("labeled only");
   if (els.diffOnly.checked) filters.push("changed vs compare");
+  if (els.hideIrrelevants.checked) filters.push("irrelevants hidden");
+  if (els.irrelevantsOnly.checked) filters.push("irrelevants only");
   return filters.length ? filters.join(" · ") : "all matching registers shown";
 }
 
@@ -340,8 +384,9 @@ function renderMatrix(captures, columns) {
     const row = document.createElement("tr");
     const metaCell = document.createElement("td");
     metaCell.innerHTML = `
-      <div class="capture-label ${capture.capture_id === state.selectedCaptureId ? "selected" : ""}" data-capture-id="${escapeHtml(capture.capture_id)}" title="${escapeHtml(captureStatusCode(capture))}">
+      <div class="capture-label ${capture.capture_id === state.selectedCaptureId ? "selected" : ""}" data-capture-id="${escapeHtml(capture.capture_id)}" title="${escapeHtml(capture.capture_id)}">
         <div class="capture-title">${escapeHtml(captureStatusCode(capture))}</div>
+        <div class="capture-id">${escapeHtml(capture.capture_id)}</div>
       </div>
     `;
     metaCell.querySelector(".capture-label").addEventListener("click", () => {
@@ -370,7 +415,15 @@ function renderMatrix(captures, columns) {
       ) {
         cell.classList.add("selected");
       }
-      cell.textContent = formatCellState(cellState);
+      const irrCount = getIrrelevantCount(column.device, column.reg);
+      const badge = irrCount > 0 ? `<span class="irr-count">${irrCount}</span>` : "";
+      cell.innerHTML = `${badge}<span class="cell-value">${escapeHtml(formatCellState(cellState))}</span><span class="cell-irr-controls"><button class="irr-btn" type="button" data-delta="-1">−</button><button class="irr-btn" type="button" data-delta="1">+</button></span>`;
+      cell.querySelectorAll(".irr-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          adjustIrrelevancy(column.device, column.reg, parseInt(btn.dataset.delta, 10));
+        });
+      });
       cell.addEventListener("click", () => {
         if (hasActiveSelection()) return;
         const alreadySelected =
@@ -504,6 +557,7 @@ async function reloadData() {
   state.selectedCaptureId = null;
   buildDeviceColumns(captureData.captures);
   hydrateControls();
+  renderCaptureList();
   resetCellDetail();
   resetCaptureDetail();
   render();
@@ -619,6 +673,7 @@ function installMultiSelectBehavior() {
         });
         select.focus();
         updateFilterSummaries();
+        saveFilterState();
         render();
       });
     });
@@ -679,6 +734,183 @@ function columnKey(device, reg) {
 
 function aliasKey(device, reg) {
   return `${device}:${reg}`;
+}
+
+function loadExcluded() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(excludedCapturesKey) || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveExcluded() {
+  localStorage.setItem(excludedCapturesKey, JSON.stringify([...state.excludedCaptures]));
+}
+
+function loadIrrelevantCounts() {
+  try {
+    return JSON.parse(localStorage.getItem(irrelevantCountsKey) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveIrrelevantCounts() {
+  localStorage.setItem(irrelevantCountsKey, JSON.stringify(state.irrelevantCounts));
+}
+
+function loadFilterState() {
+  try {
+    return JSON.parse(localStorage.getItem(filterStateKey) || "null");
+  } catch {
+    return null;
+  }
+}
+
+function saveFilterState() {
+  const saved = {
+    device: getSelectedValues(els.deviceSelect),
+    power: getSelectedValues(els.powerSelect),
+    layout: getSelectedValues(els.layoutSelect),
+    primary: getSelectedValues(els.primarySelect),
+    connected: getSelectedValues(els.connectedSelect),
+    signal: getSelectedValues(els.signalInputSelect),
+    compare: getSelectedValues(els.compareSelect),
+    registerFilter: els.registerFilter.value,
+    varyingOnly: els.varyingOnly.checked,
+    attemptedOnly: els.attemptedOnly.checked,
+    labeledOnly: els.labeledOnly.checked,
+    diffOnly: els.diffOnly.checked,
+    equalsOnly: els.equalsOnly.checked,
+    hideIrrelevants: els.hideIrrelevants.checked,
+    irrelevantsOnly: els.irrelevantsOnly.checked,
+  };
+  localStorage.setItem(filterStateKey, JSON.stringify(saved));
+}
+
+function applyFilterState() {
+  const saved = loadFilterState();
+  if (!saved) return;
+  applySelectState(els.deviceSelect, saved.device);
+  applySelectState(els.powerSelect, saved.power);
+  applySelectState(els.layoutSelect, saved.layout);
+  applySelectState(els.primarySelect, saved.primary);
+  applySelectState(els.connectedSelect, saved.connected);
+  applySelectState(els.signalInputSelect, saved.signal);
+  applySelectState(els.compareSelect, saved.compare);
+  if (saved.registerFilter != null) els.registerFilter.value = saved.registerFilter;
+  if (saved.varyingOnly != null) els.varyingOnly.checked = saved.varyingOnly;
+  if (saved.attemptedOnly != null) els.attemptedOnly.checked = saved.attemptedOnly;
+  if (saved.labeledOnly != null) els.labeledOnly.checked = saved.labeledOnly;
+  if (saved.diffOnly != null) els.diffOnly.checked = saved.diffOnly;
+  if (saved.equalsOnly != null) els.equalsOnly.checked = saved.equalsOnly;
+  if (saved.hideIrrelevants != null) els.hideIrrelevants.checked = saved.hideIrrelevants;
+  if (saved.irrelevantsOnly != null) els.irrelevantsOnly.checked = saved.irrelevantsOnly;
+}
+
+function applySelectState(select, savedValues) {
+  if (!Array.isArray(savedValues)) return;
+  const available = new Set([...select.options].map((o) => o.value));
+  const toSelect = new Set(savedValues.filter((v) => available.has(v)));
+  [...select.options].forEach((o) => { o.selected = toSelect.has(o.value); });
+}
+
+function resetAllFilters() {
+  localStorage.removeItem(filterStateKey);
+  [els.deviceSelect, els.powerSelect, els.layoutSelect, els.primarySelect, els.connectedSelect, els.signalInputSelect].forEach((sel) => {
+    [...sel.options].forEach((o) => { o.selected = true; });
+  });
+  clearSelections(els.compareSelect);
+  els.registerFilter.value = "";
+  els.varyingOnly.checked = false;
+  els.attemptedOnly.checked = false;
+  els.labeledOnly.checked = false;
+  els.diffOnly.checked = false;
+  els.equalsOnly.checked = false;
+  els.hideIrrelevants.checked = false;
+  els.irrelevantsOnly.checked = false;
+  updateFilterSummaries();
+  render();
+}
+
+function getIrrelevantCount(device, reg) {
+  return state.irrelevantCounts[columnKey(device, reg)] ?? 0;
+}
+
+function adjustIrrelevancy(device, reg, delta) {
+  const key = columnKey(device, reg);
+  const next = Math.max(0, (state.irrelevantCounts[key] ?? 0) + delta);
+  if (next === 0) {
+    delete state.irrelevantCounts[key];
+  } else {
+    state.irrelevantCounts[key] = next;
+  }
+  saveIrrelevantCounts();
+  render();
+}
+
+function resetIrrelevancy() {
+  if (!window.confirm("Reset all irrelevancy counts?")) return;
+  state.irrelevantCounts = {};
+  saveIrrelevantCounts();
+  render();
+}
+
+function markVaryingAsIrrelevant() {
+  const captures = getVisibleCaptures();
+  const columns = getVisibleColumns(captures);
+  const varyingColumns = columns.filter(({ device, reg }) => {
+    const states = captures.map((capture) => valueState(capture, device, reg));
+    return isVarying(states, captures.length);
+  });
+  if (!varyingColumns.length) {
+    window.alert("No varying registers in the current view.");
+    return;
+  }
+  if (!window.confirm(`Add 1 to the irrelevancy count for ${varyingColumns.length} varying register(s)?`)) return;
+  for (const { device, reg } of varyingColumns) {
+    const key = columnKey(device, reg);
+    state.irrelevantCounts[key] = (state.irrelevantCounts[key] ?? 0) + 1;
+  }
+  saveIrrelevantCounts();
+  render();
+}
+
+function renderCaptureList() {
+  const hiddenCount = state.excludedCaptures.size;
+  els.captureFilterBadge.textContent = hiddenCount ? `${hiddenCount} hidden` : "";
+  els.captureFilterBadge.className = hiddenCount ? "badge active" : "badge";
+
+  const sorted = [...state.data.captures].sort((a, b) =>
+    (b.captured_at ?? "").localeCompare(a.captured_at ?? ""),
+  );
+
+  els.captureFilterList.innerHTML = sorted
+    .map((capture) => {
+      const excluded = state.excludedCaptures.has(capture.capture_id);
+      return `
+        <label class="capture-filter-item${excluded ? " excluded" : ""}" title="${escapeHtml(capture.capture_id)}">
+          <input type="checkbox" class="capture-filter-check" ${excluded ? "" : "checked"} data-id="${escapeHtml(capture.capture_id)}" />
+          <span class="capture-filter-code">${escapeHtml(captureStatusCode(capture))}</span>
+          <span class="capture-filter-id">${escapeHtml(capture.capture_id)}</span>
+        </label>`;
+    })
+    .join("");
+
+  els.captureFilterList.querySelectorAll(".capture-filter-check").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const id = checkbox.dataset.id;
+      if (checkbox.checked) {
+        state.excludedCaptures.delete(id);
+      } else {
+        state.excludedCaptures.add(id);
+      }
+      saveExcluded();
+      renderCaptureList();
+      render();
+    });
+  });
 }
 
 function loadAliases() {
