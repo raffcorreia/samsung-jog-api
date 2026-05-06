@@ -34,7 +34,9 @@ class Handler(SimpleHTTPRequestHandler):
 
         target = CAPTURE_ROOT / f"{capture_id}.json"
         if not target.exists():
-            self._json(404, {"error": f"No backing file found for '{capture_id}'. Only captures collected with the capture script can be deleted."})
+            target = self._find_legacy_backing_file(capture_id)
+        if target is None or not target.exists():
+            self._json(404, {"error": f"No backing file found for '{capture_id}'."})
             return
 
         target.unlink()
@@ -47,6 +49,23 @@ class Handler(SimpleHTTPRequestHandler):
             return
 
         self._json(200, {"ok": True})
+
+    def _find_legacy_backing_file(self, capture_id: str):
+        """Look up the source_file for old JSONL-backed captures from the built data."""
+        explorer_data = TOOL_ROOT / "data" / "register-explorer.json"
+        if not explorer_data.exists():
+            return None
+        try:
+            import json as _json
+            captures = _json.loads(explorer_data.read_text()).get("captures", [])
+            for capture in captures:
+                if capture.get("capture_id") == capture_id:
+                    source_file = capture.get("source_file")
+                    if source_file:
+                        return REPO_ROOT / "docs" / "investigation" / source_file
+        except Exception:
+            pass
+        return None
 
     def _json(self, status, data):
         body = json.dumps(data).encode()

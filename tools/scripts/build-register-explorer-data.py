@@ -47,26 +47,6 @@ class CaptureSpec:
 
 INCLUDED_CAPTURE_SPECS = [
     CaptureSpec(
-        relative_path="i2c-scan/i2c-0x58-on-idle-20260501-212914.jsonl",
-        capture_id="idle-post-reboot-0x58-only",
-        source_format="simple_0x58_only",
-        state_label="Idle / no active source / post-reboot",
-        power_state="on",
-        signal_state="idle",
-        layout_mode="idle",
-        primary_input=None,
-        secondary_input=None,
-        audio_side=None,
-        pip_main_input=None,
-        pip_window_input=None,
-        pip_size=None,
-        pip_position=None,
-        notes=[
-            "Explicitly indexed in the investigation README as post-reboot idle.",
-            "Only device 0x58 was captured in this file.",
-        ],
-    ),
-    CaptureSpec(
         relative_path="i2c-scan/pip-size1-tb-small-dp-main/i2c-scan-20260501-231923.jsonl",
         capture_id="pip-size1-tb-small-dp-main",
         source_format="stateful_capture",

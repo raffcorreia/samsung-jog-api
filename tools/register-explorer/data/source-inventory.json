@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05T21:32:49+00:00",
+  "generated_at": "2026-05-06T14:13:00+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -15,10 +15,6 @@
     {
       "path": "ddc-scan/ddc-scan-20260501-161655.jsonl",
       "decision": "Included as brute-force DDC capability scan."
-    },
-    {
-      "path": "i2c-scan/i2c-0x58-on-idle-20260501-212914.jsonl",
-      "decision": "Included in stateful explorer dataset."
     },
     {
       "path": "i2c-scan/i2c-0x58-tb-active-20260501-214114.jsonl",
