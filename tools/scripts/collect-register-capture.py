@@ -221,7 +221,7 @@ def build_state_metadata() -> dict[str, Any]:
     signal_present_inputs = prompt_input_list("Inputs currently sending usable images")
     if power_state == "standby":
         signal_state = "none"
-        layout_mode = "standby"
+        layout_mode = None
         primary_input = None
         secondary_input = None
         audio_side = None

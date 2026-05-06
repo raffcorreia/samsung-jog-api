@@ -29,10 +29,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 7 | PIP | TB (main) | DP | Small |
 | 8 | PIP | TB (main) | DP | Medium |
 | 9 | PIP | TB (main) | DP | Large |
-| 10 | PBP | TB (left) | HDMI (right) | Audio: TB |
-| 11 | PBP | TB (left) | HDMI (right) | Audio: HDMI |
-| 12 | PBP | TB (left) | DP (right) | Audio: TB |
-| 13 | PBP | TB (left) | DP (right) | Audio: DP |
+| 10 | PBP | TB (left) | DP (right) | Audio: TB |
+| 11 | PBP | TB (left) | DP (right) | Audio: DP |
+| 12 | PBP | TB (left) | HDMI (right) | Audio: TB |
+| 13 | PBP | TB (left) | HDMI (right) | Audio: HDMI |
 
 ---
 
@@ -47,10 +47,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 18 | PIP | HDMI (main) | DP | Small |
 | 19 | PIP | HDMI (main) | DP | Medium |
 | 20 | PIP | HDMI (main) | DP | Large |
-| 21 | PBP | HDMI (left) | TB (right) | Audio: HDMI |
-| 22 | PBP | HDMI (left) | TB (right) | Audio: TB |
-| 23 | PBP | HDMI (left) | DP (right) | Audio: HDMI |
-| 24 | PBP | HDMI (left) | DP (right) | Audio: DP |
+| 21 | PBP | HDMI (left) | DP (right) | Audio: HDMI |
+| 22 | PBP | HDMI (left) | DP (right) | Audio: DP |
+| 23 | PBP | HDMI (left) | TB (right) | Audio: HDMI |
+| 24 | PBP | HDMI (left) | TB (right) | Audio: TB |
 
 ---
 
@@ -65,10 +65,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 29 | PIP | DP (main) | HDMI | Small |
 | 30 | PIP | DP (main) | HDMI | Medium |
 | 31 | PIP | DP (main) | HDMI | Large |
-| 32 | PBP | DP (left) | TB (right) | Audio: DP |
-| 33 | PBP | DP (left) | TB (right) | Audio: TB |
-| 34 | PBP | DP (left) | HDMI (right) | Audio: DP |
-| 35 | PBP | DP (left) | HDMI (right) | Audio: HDMI |
+| 32 | PBP | DP (left) | HDMI (right) | Audio: DP |
+| 33 | PBP | DP (left) | HDMI (right) | Audio: HDMI |
+| 34 | PBP | DP (left) | TB (right) | Audio: DP |
+| 35 | PBP | DP (left) | TB (right) | Audio: TB |
 
 ---
 
@@ -86,6 +86,6 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 
 - **Single → PIP**: enabling PIP promotes single input to main, sub input added — no primary change.
 - **PIP sub swap (HDMI ↔ DP)**: change only the sub-source knob — primary stays TB/HDMI/DP.
-- **PIP → PBP**: switch multi-view mode, keep same two inputs — no input change.
+- **PIP → PBP**: PBP sub-source order starts with the same partner as the last PIP sub, so the mode switch requires no input change.
 - **PBP audio flip (L → R)**: single OSD press — neither input changes.
 - **Group boundary (e.g. 13 → 14)**: only place where the primary input changes.

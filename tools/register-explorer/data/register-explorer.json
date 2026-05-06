@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T17:16:09+00:00",
+  "generated_at": "2026-05-06T17:42:14+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",
@@ -20181,7 +20181,7 @@
       "state_label": "Standby",
       "power_state": "standby",
       "signal_state": "none",
-      "layout_mode": "standby",
+      "layout_mode": null,
       "connected_inputs": [],
       "signal_present_inputs": [],
       "primary_input": null,
@@ -28445,7 +28445,7 @@
       "state_label": "Standby",
       "power_state": "standby",
       "signal_state": "none",
-      "layout_mode": "standby",
+      "layout_mode": null,
       "connected_inputs": [],
       "signal_present_inputs": [],
       "primary_input": null,
