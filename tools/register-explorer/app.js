@@ -59,6 +59,7 @@ const els = {
   equalsOnly: document.querySelector("#equals-only"),
   hideIrrelevants: document.querySelector("#hide-irrelevants"),
   irrelevantsOnly: document.querySelector("#irrelevants-only"),
+  hideAllNull: document.querySelector("#hide-all-null"),
   registerSummary: document.querySelector("#register-summary"),
   inventorySummary: document.querySelector("#inventory-summary"),
   matrixHead: document.querySelector("#matrix-table thead"),
@@ -177,6 +178,7 @@ function bindEvents() {
     els.equalsOnly,
     els.hideIrrelevants,
     els.irrelevantsOnly,
+    els.hideAllNull,
   ].forEach((element) => {
     element.addEventListener("change", () => {
       updateFilterSummaries();
@@ -249,6 +251,7 @@ function getVisibleColumns(captures) {
   const diffOnly = els.diffOnly.checked;
   const hideIrrelevants = els.hideIrrelevants.checked;
   const irrelevantsOnly = els.irrelevantsOnly.checked;
+  const hideAllNull = els.hideAllNull.checked;
   const selectedDevices = getSelectedValues(els.deviceSelect);
   const columns = [];
 
@@ -273,6 +276,7 @@ function getVisibleColumns(captures) {
       const irrCount = getIrrelevantCount(device, reg);
       if (hideIrrelevants && irrCount > 0) continue;
       if (irrelevantsOnly && irrCount === 0) continue;
+      if (hideAllNull && states.some((s) => s.kind === "null") && states.every((s) => s.kind !== "value")) continue;
 
       columns.push({ device, reg });
     }
@@ -354,6 +358,7 @@ function activeRegisterFilterSummary() {
   if (els.diffOnly.checked) filters.push("changed vs compare");
   if (els.hideIrrelevants.checked) filters.push("irrelevants hidden");
   if (els.irrelevantsOnly.checked) filters.push("irrelevants only");
+  if (els.hideAllNull.checked) filters.push("all-null hidden");
   return filters.length ? filters.join(" · ") : "all matching registers shown";
 }
 
@@ -785,6 +790,7 @@ function saveFilterState() {
     equalsOnly: els.equalsOnly.checked,
     hideIrrelevants: els.hideIrrelevants.checked,
     irrelevantsOnly: els.irrelevantsOnly.checked,
+    hideAllNull: els.hideAllNull.checked,
   };
   localStorage.setItem(filterStateKey, JSON.stringify(saved));
 }
@@ -807,6 +813,7 @@ function applyFilterState() {
   if (saved.equalsOnly != null) els.equalsOnly.checked = saved.equalsOnly;
   if (saved.hideIrrelevants != null) els.hideIrrelevants.checked = saved.hideIrrelevants;
   if (saved.irrelevantsOnly != null) els.irrelevantsOnly.checked = saved.irrelevantsOnly;
+  if (saved.hideAllNull != null) els.hideAllNull.checked = saved.hideAllNull;
 }
 
 function applySelectState(select, savedValues) {
@@ -830,6 +837,7 @@ function resetAllFilters() {
   els.equalsOnly.checked = false;
   els.hideIrrelevants.checked = false;
   els.irrelevantsOnly.checked = false;
+  els.hideAllNull.checked = false;
   updateFilterSummaries();
   render();
 }
