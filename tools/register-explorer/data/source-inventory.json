@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T17:42:14+00:00",
+  "generated_at": "2026-05-06T17:48:27+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -151,10 +151,6 @@
     {
       "path": "i2c-scan/pip-size3-tb-small-hdmi-main/i2c-scan-20260501-233134.jsonl",
       "decision": "Included in stateful explorer dataset."
-    },
-    {
-      "path": "register-captures/20260505-204229-idle-no-active-source.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
       "path": "register-captures/20260505-204604-standby.json",
