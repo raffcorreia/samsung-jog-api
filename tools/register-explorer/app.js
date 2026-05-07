@@ -417,11 +417,11 @@ function renderMeta(captures, columns) {
     <div><strong>${nullCount}</strong> attempted null cell(s)</div>
     <div>${activeRegisterFilterSummary()}</div>
     <div class="header-actions">
-      <button class="mini-button" id="mark-varying-irrelevant" type="button">Mark Varying as Irrelevant</button>
+      <button class="mini-button" id="mark-visible-irrelevant" type="button">Mark Visible as Irrelevant</button>
       <button class="mini-button danger" id="reset-irrelevancy" type="button">Reset Irrelevancy</button>
     </div>
   `;
-  document.querySelector("#mark-varying-irrelevant")?.addEventListener("click", markVaryingAsIrrelevant);
+  document.querySelector("#mark-visible-irrelevant")?.addEventListener("click", markVisibleAsIrrelevant);
   document.querySelector("#reset-irrelevancy")?.addEventListener("click", resetIrrelevancy);
 
   const selectedDeviceSummary = selectedDevices.length === 1 ? selectedDevices[0] : `${selectedDevices.length} selected devices`;
@@ -981,19 +981,15 @@ function resetIrrelevancy() {
   render();
 }
 
-function markVaryingAsIrrelevant() {
+function markVisibleAsIrrelevant() {
   const captures = getVisibleCaptures();
   const columns = getVisibleColumns(captures);
-  const varyingColumns = columns.filter(({ device, reg }) => {
-    const states = captures.map((capture) => valueState(capture, device, reg));
-    return isVarying(states, captures.length);
-  });
-  if (!varyingColumns.length) {
-    window.alert("No varying registers in the current view.");
+  if (!columns.length) {
+    window.alert("No visible registers to mark.");
     return;
   }
-  if (!window.confirm(`Add 1 to the irrelevancy count for ${varyingColumns.length} varying register(s)?`)) return;
-  for (const { device, reg } of varyingColumns) {
+  if (!window.confirm(`Add 1 to the irrelevancy count for ${columns.length} visible register(s)?`)) return;
+  for (const { device, reg } of columns) {
     const key = columnKey(device, reg);
     state.irrelevantCounts[key] = (state.irrelevantCounts[key] ?? 0) + 1;
   }
