@@ -5,7 +5,7 @@ Within each primary-input group, transitioning Single → PIP → PBP reuses the
 same main input; PIP sub-source and PBP partner change, never the primary.
 
 Sizes for PIP: 1 = Small, 2 = Medium, 3 = Large.  
-PBP audio variants: L = left-panel audio active, R = right-panel audio active.
+PBP audio variants: Left = left panel active, Right = right panel active (set via OSD).
 
 ---
 
@@ -29,10 +29,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 7 | PIP | TB (main) | DP | Large |
 | 8 | PIP | TB (main) | DP | Medium |
 | 9 | PIP | TB (main) | DP | Small |
-| 10 | PBP | TB (left) | DP (right) | Audio: TB |
-| 11 | PBP | TB (left) | DP (right) | Audio: DP |
-| 12 | PBP | TB (left) | HDMI (right) | Audio: TB |
-| 13 | PBP | TB (left) | HDMI (right) | Audio: HDMI |
+| 10 | PBP | TB (left) | DP (right) | Audio: Left |
+| 11 | PBP | TB (left) | DP (right) | Audio: Right |
+| 12 | PBP | TB (left) | HDMI (right) | Audio: Left |
+| 13 | PBP | TB (left) | HDMI (right) | Audio: Right |
 
 ---
 
@@ -47,10 +47,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 18 | PIP | HDMI (main) | DP | Large |
 | 19 | PIP | HDMI (main) | DP | Medium |
 | 20 | PIP | HDMI (main) | DP | Small |
-| 21 | PBP | HDMI (left) | DP (right) | Audio: HDMI |
-| 22 | PBP | HDMI (left) | DP (right) | Audio: DP |
-| 23 | PBP | HDMI (left) | TB (right) | Audio: HDMI |
-| 24 | PBP | HDMI (left) | TB (right) | Audio: TB |
+| 21 | PBP | HDMI (left) | DP (right) | Audio: Right |
+| 22 | PBP | HDMI (left) | DP (right) | Audio: Right |
+| 23 | PBP | HDMI (left) | TB (right) | Audio: Right |
+| 24 | PBP | HDMI (left) | TB (right) | Audio: Left |
 
 ---
 
@@ -65,10 +65,10 @@ PBP audio variants: L = left-panel audio active, R = right-panel audio active.
 | 29 | PIP | DP (main) | HDMI | Large |
 | 30 | PIP | DP (main) | HDMI | Medium |
 | 31 | PIP | DP (main) | HDMI | Small |
-| 32 | PBP | DP (left) | HDMI (right) | Audio: DP |
-| 33 | PBP | DP (left) | HDMI (right) | Audio: HDMI |
-| 34 | PBP | DP (left) | TB (right) | Audio: DP |
-| 35 | PBP | DP (left) | TB (right) | Audio: TB |
+| 32 | PBP | DP (left) | HDMI (right) | Audio: Right |
+| 33 | PBP | DP (left) | HDMI (right) | Audio: Right |
+| 34 | PBP | DP (left) | TB (right) | Audio: Right |
+| 35 | PBP | DP (left) | TB (right) | Audio: Left |
 
 ---
 
