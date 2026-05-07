@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T18:25:29+00:00",
+  "generated_at": "2026-05-07T18:28:37+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -246,6 +246,14 @@
     },
     {
       "path": "register-captures/20260507-182424-pbp-left-hdmi-right-dp-audio-right.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260507-182627-pbp-left-hdmi-right-dp-audio-left.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260507-182731-pbp-left-hdmi-right-dp-audio-left.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]
