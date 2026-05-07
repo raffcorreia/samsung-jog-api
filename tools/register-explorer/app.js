@@ -101,6 +101,7 @@ const els = {
   hideIrrelevants: document.querySelector("#hide-irrelevants"),
   irrelevantsOnly: document.querySelector("#irrelevants-only"),
   hideAllNull: document.querySelector("#hide-all-null"),
+  hideAllZero: document.querySelector("#hide-all-zero"),
   registerSummary: document.querySelector("#register-summary"),
   inventorySummary: document.querySelector("#inventory-summary"),
   matrixHead: document.querySelector("#matrix-table thead"),
@@ -226,6 +227,7 @@ function bindEvents() {
     els.hideIrrelevants,
     els.irrelevantsOnly,
     els.hideAllNull,
+    els.hideAllZero,
   ].forEach((element) => {
     element.addEventListener("change", () => {
       updateFilterSummaries();
@@ -337,6 +339,7 @@ function getVisibleColumns(captures) {
   const hideIrrelevants = els.hideIrrelevants.checked;
   const irrelevantsOnly = els.irrelevantsOnly.checked;
   const hideAllNull = els.hideAllNull.checked;
+  const hideAllZero = els.hideAllZero.checked;
   const selectedDevices = getSelectedValues(els.deviceSelect);
   const columns = [];
 
@@ -362,6 +365,7 @@ function getVisibleColumns(captures) {
       if (hideIrrelevants && irrCount > 0) continue;
       if (irrelevantsOnly && irrCount === 0) continue;
       if (hideAllNull && states.some((s) => s.kind === "null") && states.every((s) => s.kind !== "value")) continue;
+      if (hideAllZero && states.some((s) => s.kind === "value") && states.every((s) => s.kind !== "value" || s.value === 0)) continue;
 
       columns.push({ device, reg });
     }
@@ -444,6 +448,7 @@ function activeRegisterFilterSummary() {
   if (els.hideIrrelevants.checked) filters.push("irrelevants hidden");
   if (els.irrelevantsOnly.checked) filters.push("irrelevants only");
   if (els.hideAllNull.checked) filters.push("all-null hidden");
+  if (els.hideAllZero.checked) filters.push("all-zero hidden");
   return filters.length ? filters.join(" · ") : "all matching registers shown";
 }
 
@@ -896,6 +901,7 @@ function saveFilterState() {
     hideIrrelevants: els.hideIrrelevants.checked,
     irrelevantsOnly: els.irrelevantsOnly.checked,
     hideAllNull: els.hideAllNull.checked,
+    hideAllZero: els.hideAllZero.checked,
   };
   localStorage.setItem(filterStateKey, JSON.stringify(saved));
 }
@@ -921,6 +927,7 @@ function applyFilterState() {
   if (saved.hideIrrelevants != null) els.hideIrrelevants.checked = saved.hideIrrelevants;
   if (saved.irrelevantsOnly != null) els.irrelevantsOnly.checked = saved.irrelevantsOnly;
   if (saved.hideAllNull != null) els.hideAllNull.checked = saved.hideAllNull;
+  if (saved.hideAllZero != null) els.hideAllZero.checked = saved.hideAllZero;
 }
 
 function applySelectState(select, savedValues) {
@@ -945,6 +952,7 @@ function resetAllFilters() {
   els.hideIrrelevants.checked = false;
   els.irrelevantsOnly.checked = false;
   els.hideAllNull.checked = false;
+  els.hideAllZero.checked = false;
   updateFilterSummaries();
   render();
   syncTestCasePreset();

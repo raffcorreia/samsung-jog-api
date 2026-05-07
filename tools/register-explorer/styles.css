@@ -165,7 +165,7 @@ h2 {
 
 .toggle-panel {
   display: grid;
-  grid-template-columns: repeat(4, 148px);
+  grid-template-columns: repeat(5, 148px);
   gap: 6px;
   align-content: start;
   flex-shrink: 0;
