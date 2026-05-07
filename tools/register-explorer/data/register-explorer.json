@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T04:27:04+00:00",
+  "generated_at": "2026-05-07T14:43:20+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",
@@ -213609,7 +213609,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -221374,7 +221376,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -229139,7 +229143,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -236904,7 +236910,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -244669,7 +244677,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -252434,7 +252444,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -260199,7 +260211,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -267964,7 +267978,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -275729,7 +275745,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -283494,7 +283512,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -291248,7 +291268,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -299012,7 +299034,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -306777,7 +306801,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -314542,7 +314568,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -322307,7 +322335,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -330072,7 +330102,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -337837,7 +337869,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -345602,7 +345636,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -353367,7 +353403,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -361132,7 +361170,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -368897,7 +368937,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -376660,7 +376702,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -384423,7 +384467,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -392188,7 +392234,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -399953,7 +400001,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -407718,7 +407768,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",
@@ -415483,7 +415535,9 @@
         "include_in_explorer": true,
         "metadata_certainty": "high"
       },
-      "notes": [],
+      "notes": [
+        "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+      ],
       "devices": {
         "0x3A": {
           "kind": "i2c_registers",

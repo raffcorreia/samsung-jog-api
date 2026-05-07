@@ -33,7 +33,9 @@
     "include_in_explorer": true,
     "metadata_certainty": "high"
   },
-  "notes": [],
+  "notes": [
+    "Thunderbolt cable may have been disconnected at capture time; monitor source selection appeared correct but TB signal was absent. Readings may be affected \u2014 candidate for retake."
+  ],
   "devices": {
     "0x3A": {
       "kind": "i2c_registers",
