@@ -47,7 +47,7 @@ PBP audio variants: Left = left panel active, Right = right panel active (set vi
 | 18 | PIP | HDMI (main) | DP | Large |
 | 19 | PIP | HDMI (main) | DP | Medium |
 | 20 | PIP | HDMI (main) | DP | Small |
-| 21 | PBP | HDMI (left) | DP (right) | Audio: Left |
+| 21 | PBP | HDMI (left) | DP (right) | Audio: Right |
 | 22 | PBP | HDMI (left) | DP (right) | Audio: Left |
 | 23 | PBP | HDMI (left) | TB (right) | Audio: Right |
 | 24 | PBP | HDMI (left) | TB (right) | Audio: Left |
