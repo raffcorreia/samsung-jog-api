@@ -1,29 +1,32 @@
 {
-  "capture_id": "20260507-025110-single-source-hdmi",
-  "captured_at": "2026-05-07T02:51:10+00:00",
+  "capture_id": "20260507-175408-pip-main-hdmi-window-tb-size-1-top-left",
+  "captured_at": "2026-05-07T17:54:08+00:00",
   "monitor_bus": "/dev/i2c-13",
   "source": {
     "tool": "tools/scripts/collect-register-capture.py",
     "tool_version": 1
   },
-  "state_label": "Single source: HDMI",
+  "state_label": "PIP main: HDMI / window: TB / size 1 / top-left",
   "power_state": "on",
   "signal_state": "active",
-  "layout_mode": "single",
+  "layout_mode": "pip",
   "connected_inputs": [
-    "hdmi"
+    "hdmi",
+    "dp",
+    "tb"
   ],
   "signal_present_inputs": [
-    "hdmi"
+    "hdmi",
+    "tb"
   ],
   "primary_input": "hdmi",
-  "secondary_input": null,
-  "audio_side": null,
+  "secondary_input": "tb",
+  "audio_side": "left",
   "pip": {
-    "main_input": null,
-    "window_input": null,
-    "size": null,
-    "position": null
+    "main_input": "hdmi",
+    "window_input": "tb",
+    "size": 1,
+    "position": "top-left"
   },
   "flags": {
     "osd_visible": false,
@@ -303,9 +306,9 @@
         "0x05": 0,
         "0x06": 0,
         "0x07": 0,
-        "0x08": 49,
-        "0x09": 223,
-        "0x0A": 34,
+        "0x08": 39,
+        "0x09": 228,
+        "0x0A": 52,
         "0x0B": 0,
         "0x0C": 0,
         "0x0D": 0,
@@ -1918,9 +1921,9 @@
         "0x39": 0,
         "0x3A": 0,
         "0x3B": 69,
-        "0x3C": 9,
-        "0x3D": 143,
-        "0x3E": 4,
+        "0x3C": 16,
+        "0x3D": 109,
+        "0x3E": 7,
         "0x3F": 0,
         "0x40": 132,
         "0x41": 132,
@@ -2021,7 +2024,7 @@
         "0xA0": 245,
         "0xA1": 33,
         "0xA2": 255,
-        "0xA3": 220,
+        "0xA3": 224,
         "0xA4": 0,
         "0xA5": 0,
         "0xA6": 255,
@@ -2082,7 +2085,7 @@
         "0xDD": 3,
         "0xDE": 3,
         "0xDF": 3,
-        "0xE0": 128,
+        "0xE0": 244,
         "0xE1": 0,
         "0xE2": 0,
         "0xE3": 0,
@@ -2571,7 +2574,7 @@
         "0xBD": 0,
         "0xBE": 0,
         "0xBF": 0,
-        "0xC0": 220,
+        "0xC0": 226,
         "0xC1": 0,
         "0xC2": 0,
         "0xC3": 0,
@@ -6480,7 +6483,7 @@
         "0xC0": {
           "name": "Unknown (0xC0)",
           "status": "ok",
-          "value": 220,
+          "value": 226,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6493,8 +6496,8 @@
             "0xff",
             "0xff",
             "0x0",
-            "0xdc",
-            "0xa8"
+            "0xe2",
+            "0x96"
           ]
         },
         "0xC1": {
