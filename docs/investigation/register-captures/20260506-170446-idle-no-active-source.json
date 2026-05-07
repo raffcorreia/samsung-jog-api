@@ -10,7 +10,11 @@
   "power_state": "on",
   "signal_state": "idle",
   "layout_mode": "idle",
-  "connected_inputs": [],
+  "connected_inputs": [
+    "dp",
+    "hdmi",
+    "tb"
+  ],
   "signal_present_inputs": [],
   "primary_input": null,
   "secondary_input": null,

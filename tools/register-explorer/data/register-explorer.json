@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T14:43:20+00:00",
+  "generated_at": "2026-05-07T14:49:54+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",
@@ -48,7 +48,11 @@
       "power_state": "standby",
       "signal_state": "none",
       "layout_mode": "standby",
-      "connected_inputs": [],
+      "connected_inputs": [
+        "dp",
+        "hdmi",
+        "tb"
+      ],
       "signal_present_inputs": [],
       "primary_input": null,
       "secondary_input": null,
@@ -8312,7 +8316,11 @@
       "power_state": "standby",
       "signal_state": "none",
       "layout_mode": "standby",
-      "connected_inputs": [],
+      "connected_inputs": [
+        "dp",
+        "hdmi",
+        "tb"
+      ],
       "signal_present_inputs": [],
       "primary_input": null,
       "secondary_input": null,
@@ -16585,7 +16593,11 @@
       "power_state": "on",
       "signal_state": "idle",
       "layout_mode": "idle",
-      "connected_inputs": [],
+      "connected_inputs": [
+        "dp",
+        "hdmi",
+        "tb"
+      ],
       "signal_present_inputs": [],
       "primary_input": null,
       "secondary_input": null,
@@ -21908,7 +21920,11 @@
       "power_state": "on",
       "signal_state": "idle",
       "layout_mode": "idle",
-      "connected_inputs": [],
+      "connected_inputs": [
+        "dp",
+        "hdmi",
+        "tb"
+      ],
       "signal_present_inputs": [],
       "primary_input": null,
       "secondary_input": null,
@@ -27235,6 +27251,8 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
+        "dp",
+        "hdmi",
         "tb"
       ],
       "signal_present_inputs": [
@@ -34998,6 +35016,8 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
+        "dp",
+        "hdmi",
         "tb"
       ],
       "signal_present_inputs": [
@@ -42761,8 +42781,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -50526,8 +50547,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -58291,8 +58313,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -66056,8 +66079,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -73821,8 +73845,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -81586,8 +81611,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -89351,8 +89377,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -97116,8 +97143,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -104881,8 +104909,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -112646,8 +112675,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -120411,8 +120441,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -128176,8 +128207,9 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -135941,8 +135973,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -143706,8 +143739,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -151471,8 +151505,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -159236,8 +159271,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "dp"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -167001,8 +167037,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -174766,8 +174803,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -182531,8 +182569,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -190296,8 +190335,9 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "tb",
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "tb",
@@ -198061,7 +198101,9 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "hdmi"
@@ -205824,7 +205866,9 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
-        "hdmi"
+        "dp",
+        "hdmi",
+        "tb"
       ],
       "signal_present_inputs": [
         "hdmi"
@@ -213587,8 +213631,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -221354,8 +221398,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -229121,8 +229165,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -236888,8 +236932,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -244655,8 +244699,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -252422,8 +252466,8 @@
       "signal_state": "active",
       "layout_mode": "pip",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -345614,8 +345658,8 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -353381,8 +353425,8 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -361148,8 +361192,8 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -368915,8 +368959,8 @@
       "signal_state": "active",
       "layout_mode": "pbp",
       "connected_inputs": [
-        "hdmi",
-        "tb"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "hdmi",
@@ -376682,7 +376726,8 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
-        "dp"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp"
@@ -384447,7 +384492,8 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
-        "dp"
+        "dp",
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp"
@@ -392213,7 +392259,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
-        "tb"
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp",
@@ -399980,7 +400026,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
-        "tb"
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp",
@@ -407747,7 +407793,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
-        "tb"
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp",
@@ -415514,7 +415560,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
-        "tb"
+        "hdmi"
       ],
       "signal_present_inputs": [
         "dp",
@@ -423281,6 +423327,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
+        "hdmi",
         "tb"
       ],
       "signal_present_inputs": [
@@ -431046,6 +431093,7 @@
       "layout_mode": "pip",
       "connected_inputs": [
         "dp",
+        "hdmi",
         "tb"
       ],
       "signal_present_inputs": [

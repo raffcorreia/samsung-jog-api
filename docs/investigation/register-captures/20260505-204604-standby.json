@@ -10,7 +10,11 @@
   "power_state": "standby",
   "signal_state": "none",
   "layout_mode": "standby",
-  "connected_inputs": [],
+  "connected_inputs": [
+    "dp",
+    "hdmi",
+    "tb"
+  ],
   "signal_present_inputs": [],
   "primary_input": null,
   "secondary_input": null,

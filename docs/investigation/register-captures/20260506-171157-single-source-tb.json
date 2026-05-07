@@ -11,6 +11,8 @@
   "signal_state": "active",
   "layout_mode": "single",
   "connected_inputs": [
+    "dp",
+    "hdmi",
     "tb"
   ],
   "signal_present_inputs": [

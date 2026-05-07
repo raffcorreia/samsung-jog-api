@@ -12,7 +12,7 @@
   "layout_mode": "pip",
   "connected_inputs": [
     "dp",
-    "tb"
+    "hdmi"
   ],
   "signal_present_inputs": [
     "dp",

@@ -11,8 +11,8 @@
   "signal_state": "active",
   "layout_mode": "pbp",
   "connected_inputs": [
-    "hdmi",
-    "tb"
+    "dp",
+    "hdmi"
   ],
   "signal_present_inputs": [
     "hdmi",
