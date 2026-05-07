@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T03:03:09+00:00",
+  "generated_at": "2026-05-07T03:06:03+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -146,6 +146,10 @@
     },
     {
       "path": "register-captures/20260507-030205-pip-main-hdmi-window-tb-size-3-top-left.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260507-030458-pip-main-hdmi-window-tb-size-3-top-left.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]
