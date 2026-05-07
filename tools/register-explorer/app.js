@@ -26,6 +26,44 @@ const defaultAliases = {
   "0x58:0xE3": "pipeline byte 3",
 };
 
+const TEST_CASES = [
+  { num: 1,  label: "1 — Standby",              filters: { power: ["standby"] } },
+  { num: 2,  label: "2 — Idle",                 filters: { power: ["on"], layout: ["idle"] } },
+  { num: 3,  label: "3 — Single: TB",           filters: { power: ["on"], layout: ["single"], primary: ["tb"] } },
+  { num: 4,  label: "4 — PIP TB+HDMI (S)",      filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["hdmi"], size: ["small"] } },
+  { num: 5,  label: "5 — PIP TB+HDMI (M)",      filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["hdmi"], size: ["medium"] } },
+  { num: 6,  label: "6 — PIP TB+HDMI (L)",      filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["hdmi"], size: ["large"] } },
+  { num: 7,  label: "7 — PIP TB+DP (L)",        filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["dp"], size: ["large"] } },
+  { num: 8,  label: "8 — PIP TB+DP (M)",        filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["dp"], size: ["medium"] } },
+  { num: 9,  label: "9 — PIP TB+DP (S)",        filters: { power: ["on"], layout: ["pip"], primary: ["tb"], secondary: ["dp"], size: ["small"] } },
+  { num: 10, label: "10 — PBP TB/DP Audio L",   filters: { power: ["on"], layout: ["pbp"], primary: ["tb"], secondary: ["dp"],   audio: ["left"] } },
+  { num: 11, label: "11 — PBP TB/DP Audio R",   filters: { power: ["on"], layout: ["pbp"], primary: ["tb"], secondary: ["dp"],   audio: ["right"] } },
+  { num: 12, label: "12 — PBP TB/HDMI Audio L", filters: { power: ["on"], layout: ["pbp"], primary: ["tb"], secondary: ["hdmi"], audio: ["left"] } },
+  { num: 13, label: "13 — PBP TB/HDMI Audio R", filters: { power: ["on"], layout: ["pbp"], primary: ["tb"], secondary: ["hdmi"], audio: ["right"] } },
+  { num: 14, label: "14 — Single: HDMI",        filters: { power: ["on"], layout: ["single"], primary: ["hdmi"] } },
+  { num: 15, label: "15 — PIP HDMI+TB (S)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["tb"], size: ["small"] } },
+  { num: 16, label: "16 — PIP HDMI+TB (M)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["tb"], size: ["medium"] } },
+  { num: 17, label: "17 — PIP HDMI+TB (L)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["tb"], size: ["large"] } },
+  { num: 18, label: "18 — PIP HDMI+DP (L)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["dp"], size: ["large"] } },
+  { num: 19, label: "19 — PIP HDMI+DP (M)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["dp"], size: ["medium"] } },
+  { num: 20, label: "20 — PIP HDMI+DP (S)",     filters: { power: ["on"], layout: ["pip"], primary: ["hdmi"], secondary: ["dp"], size: ["small"] } },
+  { num: 21, label: "21 — PBP HDMI/DP Audio R", filters: { power: ["on"], layout: ["pbp"], primary: ["hdmi"], secondary: ["dp"],   audio: ["right"] } },
+  { num: 22, label: "22 — PBP HDMI/DP Audio L", filters: { power: ["on"], layout: ["pbp"], primary: ["hdmi"], secondary: ["dp"],   audio: ["left"] } },
+  { num: 23, label: "23 — PBP HDMI/TB Audio R", filters: { power: ["on"], layout: ["pbp"], primary: ["hdmi"], secondary: ["tb"],   audio: ["right"] } },
+  { num: 24, label: "24 — PBP HDMI/TB Audio L", filters: { power: ["on"], layout: ["pbp"], primary: ["hdmi"], secondary: ["tb"],   audio: ["left"] } },
+  { num: 25, label: "25 — Single: DP",          filters: { power: ["on"], layout: ["single"], primary: ["dp"] } },
+  { num: 26, label: "26 — PIP DP+TB (S)",       filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["tb"], size: ["small"] } },
+  { num: 27, label: "27 — PIP DP+TB (M)",       filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["tb"], size: ["medium"] } },
+  { num: 28, label: "28 — PIP DP+TB (L)",       filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["tb"], size: ["large"] } },
+  { num: 29, label: "29 — PIP DP+HDMI (L)",     filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["hdmi"], size: ["large"] } },
+  { num: 30, label: "30 — PIP DP+HDMI (M)",     filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["hdmi"], size: ["medium"] } },
+  { num: 31, label: "31 — PIP DP+HDMI (S)",     filters: { power: ["on"], layout: ["pip"], primary: ["dp"], secondary: ["hdmi"], size: ["small"] } },
+  { num: 32, label: "32 — PBP DP/HDMI Audio R", filters: { power: ["on"], layout: ["pbp"], primary: ["dp"], secondary: ["hdmi"], audio: ["right"] } },
+  { num: 33, label: "33 — PBP DP/HDMI Audio L", filters: { power: ["on"], layout: ["pbp"], primary: ["dp"], secondary: ["hdmi"], audio: ["left"] } },
+  { num: 34, label: "34 — PBP DP/TB Audio R",   filters: { power: ["on"], layout: ["pbp"], primary: ["dp"], secondary: ["tb"],   audio: ["right"] } },
+  { num: 35, label: "35 — PBP DP/TB Audio L",   filters: { power: ["on"], layout: ["pbp"], primary: ["dp"], secondary: ["tb"],   audio: ["left"] } },
+];
+
 const state = {
   data: null,
   inventory: null,
@@ -48,8 +86,11 @@ const els = {
   powerSelect: document.querySelector("#power-select"),
   layoutSelect: document.querySelector("#layout-select"),
   primarySelect: document.querySelector("#primary-select"),
+  audioSelect: document.querySelector("#audio-select"),
+  pipSizeSelect: document.querySelector("#pip-size-select"),
+  secondarySelect: document.querySelector("#secondary-select"),
   connectedSelect: document.querySelector("#connected-select"),
-  signalInputSelect: document.querySelector("#signal-input-select"),
+  testCaseSelect: document.querySelector("#test-case-select"),
   registerFilter: document.querySelector("#register-filter"),
   compareSelect: document.querySelector("#compare-select"),
   varyingOnly: document.querySelector("#varying-only"),
@@ -117,13 +158,17 @@ function hydrateControls() {
   fillMultiSelect(els.powerSelect, facetValues("power_state"));
   fillMultiSelect(els.layoutSelect, facetValues("layout_mode"));
   fillMultiSelect(els.primarySelect, facetValues("primary_input"));
-  fillMultiSelect(els.connectedSelect, ["hdmi", "dp", "tb"]);
-  fillMultiSelect(els.signalInputSelect, ["hdmi", "dp", "tb"]);
+  fillMultiSelect(els.audioSelect, ["any", "left", "right"], ["any"]);
+  fillMultiSelect(els.pipSizeSelect, ["any", "small", "medium", "large"], ["any"]);
+  fillMultiSelect(els.secondarySelect, facetValues("secondary_input"));
+  fillMultiSelect(els.connectedSelect, ["any", "dp", "hdmi", "tb"], ["any"]);
   fillCompareSelect();
   applyFilterState();
   installMultiSelectBehavior();
   updateFilterSummaries();
   renderCaptureList();
+  hydrateTestCaseSelect();
+  syncTestCasePreset();
 }
 
 function facetValues(key) {
@@ -168,8 +213,10 @@ function bindEvents() {
     els.powerSelect,
     els.layoutSelect,
     els.primarySelect,
+    els.audioSelect,
+    els.pipSizeSelect,
+    els.secondarySelect,
     els.connectedSelect,
-    els.signalInputSelect,
     els.compareSelect,
     els.varyingOnly,
     els.attemptedOnly,
@@ -184,7 +231,14 @@ function bindEvents() {
       updateFilterSummaries();
       saveFilterState();
       render();
+      syncTestCasePreset();
     });
+  });
+
+  els.testCaseSelect.addEventListener("change", () => {
+    const num = parseInt(els.testCaseSelect.value, 10);
+    const tc = TEST_CASES.find((t) => t.num === num);
+    if (tc) applyTestCasePreset(tc);
   });
 
   els.registerFilter.addEventListener("input", () => { saveFilterState(); render(); });
@@ -201,6 +255,7 @@ function bindEvents() {
       updateFilterSummaries();
       saveFilterState();
       render();
+      syncTestCasePreset();
     });
   });
 
@@ -221,13 +276,20 @@ function getVisibleCaptures() {
   const powers = getSelectedValues(els.powerSelect);
   const layouts = getSelectedValues(els.layoutSelect);
   const primaries = getSelectedValues(els.primarySelect);
+  const audioValues = getSelectedValues(els.audioSelect);
+  const pipSizes = getSelectedValues(els.pipSizeSelect);
+  const secondaries = getSelectedValues(els.secondarySelect);
   const connectedInputs = getSelectedValues(els.connectedSelect);
-  const signalInputs = getSelectedValues(els.signalInputSelect);
   const filterPowers = isRestrictiveSelection(els.powerSelect, powers);
   const filterLayouts = isRestrictiveSelection(els.layoutSelect, layouts);
   const filterPrimaries = isRestrictiveSelection(els.primarySelect, primaries);
-  const filterConnected = isRestrictiveSelection(els.connectedSelect, connectedInputs);
-  const filterSignal = isRestrictiveSelection(els.signalInputSelect, signalInputs);
+  const filterSecondaries = isRestrictiveSelection(els.secondarySelect, secondaries);
+  const audioAny = audioValues.includes("any");
+  const audioSpecific = audioValues.filter((v) => v !== "any");
+  const pipSizeAny = pipSizes.includes("any");
+  const pipSizeSpecific = pipSizes.filter((v) => v !== "any");
+  const connectedAny = connectedInputs.includes("any");
+  const connectedSpecific = connectedInputs.filter((v) => v !== "any");
 
   return state.data.captures.filter((capture) => {
     if (state.excludedCaptures.has(capture.capture_id)) return false;
@@ -235,8 +297,31 @@ function getVisibleCaptures() {
     if (filterPowers && !powers.includes(capture.power_state)) return false;
     if (filterLayouts && !layouts.includes(capture.layout_mode)) return false;
     if (filterPrimaries && !primaries.includes(capture.primary_input)) return false;
-    if (filterConnected && !hasOverlap(capture.connected_inputs ?? [], connectedInputs)) return false;
-    if (filterSignal && !hasOverlap(capture.signal_present_inputs ?? [], signalInputs)) return false;
+    if (filterSecondaries && !secondaries.includes(capture.secondary_input)) return false;
+    if (!audioAny) {
+      const captureAudio = capture.audio_side;
+      if (audioSpecific.length === 0) {
+        if (captureAudio != null) return false;
+      } else {
+        if (!audioSpecific.includes(captureAudio)) return false;
+      }
+    }
+    if (!pipSizeAny) {
+      const sizeLabel = capturePipSizeLabel(capture);
+      if (pipSizeSpecific.length === 0) {
+        if (sizeLabel !== null) return false;
+      } else {
+        if (!pipSizeSpecific.includes(sizeLabel)) return false;
+      }
+    }
+    if (!connectedAny) {
+      const captureConnected = capture.connected_inputs ?? [];
+      if (connectedSpecific.length === 0) {
+        if (captureConnected.length > 0) return false;
+      } else {
+        if (!connectedSpecific.every((v) => captureConnected.includes(v))) return false;
+      }
+    }
     return true;
   });
 }
@@ -656,8 +741,10 @@ function installMultiSelectBehavior() {
     els.powerSelect,
     els.layoutSelect,
     els.primarySelect,
+    els.audioSelect,
+    els.pipSizeSelect,
+    els.secondarySelect,
     els.connectedSelect,
-    els.signalInputSelect,
     els.compareSelect,
   ].forEach((select) => {
     select.addEventListener("mousedown", (event) => {
@@ -680,7 +767,20 @@ function installMultiSelectBehavior() {
         updateFilterSummaries();
         saveFilterState();
         render();
+        syncTestCasePreset();
       });
+    });
+
+    select.addEventListener("contextmenu", (event) => {
+      const option = event.target.closest("option");
+      if (!option) return;
+      event.preventDefault();
+      [...select.options].forEach((o) => { o.selected = o === option; });
+      select.focus();
+      updateFilterSummaries();
+      saveFilterState();
+      render();
+      syncTestCasePreset();
     });
   });
 }
@@ -690,8 +790,10 @@ function updateFilterSummaries() {
   updateFilterSummary(els.powerSelect, "power-select-summary");
   updateFilterSummary(els.layoutSelect, "layout-select-summary");
   updateFilterSummary(els.primarySelect, "primary-select-summary");
+  updateFilterSummary(els.audioSelect, "audio-select-summary");
+  updateFilterSummary(els.pipSizeSelect, "pip-size-select-summary");
+  updateFilterSummary(els.secondarySelect, "secondary-select-summary");
   updateFilterSummary(els.connectedSelect, "connected-select-summary");
-  updateFilterSummary(els.signalInputSelect, "signal-input-select-summary");
   updateFilterSummary(els.compareSelect, "compare-select-summary");
 }
 
@@ -779,8 +881,10 @@ function saveFilterState() {
     power: getSelectedValues(els.powerSelect),
     layout: getSelectedValues(els.layoutSelect),
     primary: getSelectedValues(els.primarySelect),
+    audio: getSelectedValues(els.audioSelect),
+    pipSize: getSelectedValues(els.pipSizeSelect),
+    secondary: getSelectedValues(els.secondarySelect),
     connected: getSelectedValues(els.connectedSelect),
-    signal: getSelectedValues(els.signalInputSelect),
     compare: getSelectedValues(els.compareSelect),
     registerFilter: els.registerFilter.value,
     varyingOnly: els.varyingOnly.checked,
@@ -802,8 +906,10 @@ function applyFilterState() {
   applySelectState(els.powerSelect, saved.power);
   applySelectState(els.layoutSelect, saved.layout);
   applySelectState(els.primarySelect, saved.primary);
+  if (saved.audio) applySelectState(els.audioSelect, saved.audio);
+  applySelectState(els.pipSizeSelect, saved.pipSize);
+  applySelectState(els.secondarySelect, saved.secondary);
   applySelectState(els.connectedSelect, saved.connected);
-  applySelectState(els.signalInputSelect, saved.signal);
   applySelectState(els.compareSelect, saved.compare);
   if (saved.registerFilter != null) els.registerFilter.value = saved.registerFilter;
   if (saved.varyingOnly != null) els.varyingOnly.checked = saved.varyingOnly;
@@ -825,7 +931,7 @@ function applySelectState(select, savedValues) {
 
 function resetAllFilters() {
   localStorage.removeItem(filterStateKey);
-  [els.deviceSelect, els.powerSelect, els.layoutSelect, els.primarySelect, els.connectedSelect, els.signalInputSelect].forEach((sel) => {
+  [els.deviceSelect, els.powerSelect, els.layoutSelect, els.primarySelect, els.audioSelect, els.pipSizeSelect, els.secondarySelect, els.connectedSelect].forEach((sel) => {
     [...sel.options].forEach((o) => { o.selected = true; });
   });
   clearSelections(els.compareSelect);
@@ -840,6 +946,7 @@ function resetAllFilters() {
   els.hideAllNull.checked = false;
   updateFilterSummaries();
   render();
+  syncTestCasePreset();
 }
 
 function getIrrelevantCount(device, reg) {
@@ -982,6 +1089,92 @@ function resetAllAliases() {
   state.aliases = {};
   saveAliases();
   render();
+}
+
+function hydrateTestCaseSelect() {
+  const groups = [
+    { label: "Baseline", slice: [0, 2] },
+    { label: "Group A — Primary: TB", slice: [2, 13] },
+    { label: "Group B — Primary: HDMI", slice: [13, 24] },
+    { label: "Group C — Primary: DP", slice: [24, 35] },
+  ];
+  els.testCaseSelect.innerHTML = '<option value="">— None —</option>';
+  for (const { label, slice } of groups) {
+    const group = document.createElement("optgroup");
+    group.label = label;
+    for (const tc of TEST_CASES.slice(slice[0], slice[1])) {
+      const opt = document.createElement("option");
+      opt.value = String(tc.num);
+      opt.textContent = tc.label;
+      group.appendChild(opt);
+    }
+    els.testCaseSelect.appendChild(group);
+  }
+}
+
+function syncTestCasePreset() {
+  const match = findMatchingTestCase();
+  els.testCaseSelect.value = match ? String(match.num) : "";
+}
+
+function findMatchingTestCase() {
+  const power = getSelectedValues(els.powerSelect).sort();
+  const layout = getSelectedValues(els.layoutSelect).sort();
+  const primary = getSelectedValues(els.primarySelect).sort();
+  const audioValues = getSelectedValues(els.audioSelect);
+  const audioAny = audioValues.includes("any");
+  const audioSpecific = audioValues.filter((v) => v !== "any").sort();
+  const pipSizes = getSelectedValues(els.pipSizeSelect);
+  const pipSizeAny = pipSizes.includes("any");
+  const pipSizeSpecific = pipSizes.filter((v) => v !== "any").sort();
+  const secondary = getSelectedValues(els.secondarySelect).sort();
+  const allSecondary = [...els.secondarySelect.options].map((o) => o.value).sort();
+  const secondaryIsRestricted = !arraysEqual(secondary, allSecondary);
+
+  return TEST_CASES.find((tc) => {
+    if (tc.filters.power && !arraysEqual(power, [...tc.filters.power].sort())) return false;
+    if (tc.filters.layout && !arraysEqual(layout, [...tc.filters.layout].sort())) return false;
+    if (tc.filters.primary && !arraysEqual(primary, [...tc.filters.primary].sort())) return false;
+    if (!audioAny) {
+      if (!tc.filters.audio) return false;
+      if (!arraysEqual(audioSpecific, [...tc.filters.audio].sort())) return false;
+    }
+    if (!pipSizeAny) {
+      if (!tc.filters.size) return false;
+      if (!arraysEqual(pipSizeSpecific, [...tc.filters.size].sort())) return false;
+    }
+    if (secondaryIsRestricted) {
+      if (!tc.filters.secondary) return false;
+      if (!arraysEqual(secondary, [...tc.filters.secondary].sort())) return false;
+    }
+    return true;
+  });
+}
+
+function applyTestCasePreset(tc) {
+  const allValues = (select) => [...select.options].map((o) => o.value);
+  applySelectState(els.powerSelect, tc.filters.power ?? allValues(els.powerSelect));
+  applySelectState(els.layoutSelect, tc.filters.layout ?? allValues(els.layoutSelect));
+  applySelectState(els.primarySelect, tc.filters.primary ?? allValues(els.primarySelect));
+  applySelectState(els.audioSelect, tc.filters.audio ?? ["any"]);
+  applySelectState(els.pipSizeSelect, tc.filters.size ?? ["any"]);
+  applySelectState(els.secondarySelect, tc.filters.secondary ?? allValues(els.secondarySelect));
+  applySelectState(els.connectedSelect, ["any"]);
+  updateFilterSummaries();
+  saveFilterState();
+  render();
+}
+
+function arraysEqual(a, b) {
+  return a.length === b.length && a.every((v, i) => v === b[i]);
+}
+
+function capturePipSizeLabel(capture) {
+  const size = capture.pip?.size;
+  if (size === 1) return "small";
+  if (size === 2) return "medium";
+  if (size === 3) return "large";
+  return null;
 }
 
 function captureStatusCode(capture, deviceOverride = null) {

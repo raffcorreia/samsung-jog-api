@@ -133,6 +133,18 @@ h2 {
   overflow-x: auto;
 }
 
+.preset-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.preset-label select {
+  min-width: 200px;
+}
+
 .controls-row {
   display: flex;
   gap: 20px;
@@ -346,6 +358,14 @@ select[multiple] {
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 14px;
+  align-items: center;
+}
+
+.legend-hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-right: 4px;
 }
 
 .legend-item {

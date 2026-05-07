@@ -70,19 +70,35 @@
                   </div>
                 </label>
                 <label>
+                  <span>Secondary</span>
+                  <select id="secondary-select" multiple></select>
+                  <div class="multi-tools">
+                    <button class="mini-button filter-action" type="button" data-action="all" data-target="secondary-select">All</button>
+                    <button class="mini-button filter-action" type="button" data-action="none" data-target="secondary-select">None</button>
+                  </div>
+                </label>
+                <label>
+                  <span>PIP Size</span>
+                  <select id="pip-size-select" multiple></select>
+                  <div class="multi-tools">
+                    <button class="mini-button filter-action" type="button" data-action="all" data-target="pip-size-select">All</button>
+                    <button class="mini-button filter-action" type="button" data-action="none" data-target="pip-size-select">None</button>
+                  </div>
+                </label>
+                <label>
+                  <span>Audio</span>
+                  <select id="audio-select" multiple></select>
+                  <div class="multi-tools">
+                    <button class="mini-button filter-action" type="button" data-action="all" data-target="audio-select">All</button>
+                    <button class="mini-button filter-action" type="button" data-action="none" data-target="audio-select">None</button>
+                  </div>
+                </label>
+                <label>
                   <span>Connected Input</span>
                   <select id="connected-select" multiple></select>
                   <div class="multi-tools">
                     <button class="mini-button filter-action" type="button" data-action="all" data-target="connected-select">All</button>
                     <button class="mini-button filter-action" type="button" data-action="none" data-target="connected-select">None</button>
-                  </div>
-                </label>
-                <label>
-                  <span>Signal Input</span>
-                  <select id="signal-input-select" multiple></select>
-                  <div class="multi-tools">
-                    <button class="mini-button filter-action" type="button" data-action="all" data-target="signal-input-select">All</button>
-                    <button class="mini-button filter-action" type="button" data-action="none" data-target="signal-input-select">None</button>
                   </div>
                 </label>
                 <label>
@@ -112,10 +128,15 @@
             </div>
           </div><!-- controls-inner -->
           <div class="legend">
+            <span class="legend-hint">Left-click filter option to toggle · Right-click to select exclusively</span>
             <span class="legend-item value">value</span>
             <span class="legend-item null">attempted, unreadable</span>
             <span class="legend-item unattempted">not attempted</span>
             <span class="legend-item changed">changed vs compare</span>
+            <label class="preset-label">
+              <span>Test Case</span>
+              <select id="test-case-select"></select>
+            </label>
           </div>
         </section>
 
