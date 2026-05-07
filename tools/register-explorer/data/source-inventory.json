@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T14:49:54+00:00",
+  "generated_at": "2026-05-07T17:44:40+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -126,114 +126,6 @@
     },
     {
       "path": "register-captures/20260507-025110-single-source-hdmi.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-025405-pip-main-hdmi-window-tb-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-025521-pip-main-hdmi-window-tb-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-025747-pip-main-hdmi-window-tb-size-2-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-025924-pip-main-hdmi-window-tb-size-2-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-030205-pip-main-hdmi-window-tb-size-3-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-030458-pip-main-hdmi-window-tb-size-3-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-031253-pip-main-hdmi-window-dp-size-3-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-031445-pip-main-hdmi-window-dp-size-3-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-031657-pip-main-hdmi-window-dp-size-2-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-031903-pip-main-hdmi-window-dp-size-2-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-032102-pip-main-hdmi-window-dp-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-032350-pip-main-hdmi-window-dp-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-032638-pbp-left-hdmi-right-dp-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-032755-pbp-left-hdmi-right-dp-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-033109-pbp-left-hdmi-right-dp-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-033414-pbp-left-hdmi-right-dp-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-033632-pbp-left-hdmi-right-dp-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-033835-pbp-left-hdmi-right-tb-audio-right.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-034052-pbp-left-hdmi-right-tb-audio-right.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-034248-pbp-left-hdmi-right-tb-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-034407-pbp-left-hdmi-right-tb-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-034553-single-source-dp.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-034753-single-source-dp.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-035007-pip-main-dp-window-tb-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-035126-pip-main-dp-window-tb-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-035301-pip-main-dp-window-tb-size-2-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-035457-pip-main-dp-window-tb-size-2-top-left.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
