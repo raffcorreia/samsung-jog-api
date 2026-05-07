@@ -748,6 +748,7 @@ function installMultiSelectBehavior() {
     els.compareSelect,
   ].forEach((select) => {
     select.addEventListener("mousedown", (event) => {
+      if (event.button !== 0) return;
       const option = event.target.closest("option");
       if (!option) return;
       const previous = new Set(getSelectedValues(select));
