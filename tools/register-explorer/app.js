@@ -6,6 +6,8 @@ const dataUrls = {
 const aliasStorageKey = "register-explorer-aliases-v1";
 const excludedCapturesKey = "register-explorer-excluded-v1";
 const irrelevantCountsKey = "register-explorer-irrelevant-v1";
+const constantsKey = "register-explorer-constants-v1";
+const relevantsKey = "register-explorer-relevants-v1";
 const filterStateKey = "register-explorer-filters-v1";
 const defaultAliases = {
   "0x37_ddc:0x10": "brightness",
@@ -24,6 +26,11 @@ const defaultAliases = {
   "0x58:0xE1": "pipeline byte 1 / osd guard",
   "0x58:0xE2": "pipeline byte 2",
   "0x58:0xE3": "pipeline byte 3",
+};
+
+const DEVICE_LABELS = {
+  "0x37_ddc": "0x37 (DDC)",
+  "0x50": "0x50 (EDID)",
 };
 
 const TEST_CASES = [
@@ -73,6 +80,8 @@ const state = {
   aliases: loadAliases(),
   excludedCaptures: loadExcluded(),
   irrelevantCounts: loadIrrelevantCounts(),
+  constants: loadConstants(),
+  relevants: loadRelevants(),
 };
 
 const els = {
@@ -155,7 +164,7 @@ function buildDeviceColumns(captures) {
 }
 
 function hydrateControls() {
-  fillMultiSelect(els.deviceSelect, [...state.deviceColumns.keys()]);
+  fillMultiSelectLabeled(els.deviceSelect, [...state.deviceColumns.keys()], DEVICE_LABELS);
   fillMultiSelect(els.powerSelect, facetValues("power_state"));
   fillMultiSelect(els.layoutSelect, facetValues("layout_mode"));
   fillMultiSelect(els.primarySelect, facetValues("primary_input"));
@@ -182,6 +191,16 @@ function fillMultiSelect(select, values, selectedValues = values) {
     .map(
       (value) =>
         `<option value="${escapeHtml(value)}"${selected.has(value) ? " selected" : ""}>${escapeHtml(value)}</option>`,
+    )
+    .join("");
+}
+
+function fillMultiSelectLabeled(select, values, labels, selectedValues = values) {
+  const selected = new Set(selectedValues);
+  select.innerHTML = values
+    .map(
+      (value) =>
+        `<option value="${escapeHtml(value)}"${selected.has(value) ? " selected" : ""}>${escapeHtml(labels[value] ?? value)}</option>`,
     )
     .join("");
 }
@@ -413,16 +432,24 @@ function renderMeta(captures, columns) {
   `;
 
   els.registerSummary.innerHTML = `
-    <div><strong>${columns.length}</strong> visible register(s)${irrelevantCount > 0 ? ` · <strong>${irrelevantCount}</strong> irrelevant` : ""}</div>
+    <div><strong>${columns.length}</strong> visible register(s)${irrelevantCount > 0 ? ` · <strong>${irrelevantCount}</strong> irrelevant` : ""}${state.constants.size > 0 ? ` · <strong>${state.constants.size}</strong> constant` : ""}</div>
     <div><strong>${nullCount}</strong> attempted null cell(s)</div>
     <div>${activeRegisterFilterSummary()}</div>
     <div class="header-actions">
       <button class="mini-button" id="mark-visible-irrelevant" type="button">Mark Visible as Irrelevant</button>
+      <button class="mini-button" id="mark-intra-pair-irrelevant" type="button">Mark Intra-pair Noise</button>
+      <button class="mini-button" id="mark-visible-constants" type="button">Mark Visible as Constants</button>
+      <button class="mini-button" id="mark-visible-relevant" type="button">Mark Visible as Relevant</button>
       <button class="mini-button danger" id="reset-irrelevancy" type="button">Reset Irrelevancy</button>
+      <button class="mini-button danger" id="reset-constants" type="button">Reset Constants</button>
     </div>
   `;
   document.querySelector("#mark-visible-irrelevant")?.addEventListener("click", markVisibleAsIrrelevant);
+  document.querySelector("#mark-intra-pair-irrelevant")?.addEventListener("click", markIntraPairNoiseAsIrrelevant);
+  document.querySelector("#mark-visible-constants")?.addEventListener("click", markVisibleAsConstants);
+  document.querySelector("#mark-visible-relevant")?.addEventListener("click", markVisibleAsRelevant);
   document.querySelector("#reset-irrelevancy")?.addEventListener("click", resetIrrelevancy);
+  document.querySelector("#reset-constants")?.addEventListener("click", resetConstants);
 
   const selectedDeviceSummary = selectedDevices.length === 1 ? selectedDevices[0] : `${selectedDevices.length} selected devices`;
   els.inventorySummary.innerHTML = `
@@ -501,7 +528,7 @@ function renderMatrix(captures, columns) {
     for (const column of columns) {
       const cellState = valueState(capture, column.device, column.reg);
       const cell = document.createElement("td");
-      cell.className = `cell ${cellState.kind}${changedAgainstAny(capture, compareCaptures, column.device, column.reg) ? " changed" : ""}`;
+      cell.className = `cell ${cellState.kind}${changedAgainstAny(capture, compareCaptures, column.device, column.reg) ? " changed" : ""}${isConstant(column.device, column.reg) ? " constant" : ""}`;
       if (
         state.selectedCell &&
         state.selectedCell.captureId === capture.capture_id &&
@@ -512,7 +539,9 @@ function renderMatrix(captures, columns) {
       }
       const irrCount = getIrrelevantCount(column.device, column.reg);
       const badge = irrCount > 0 ? `<span class="irr-count">${irrCount}</span>` : "";
-      cell.innerHTML = `${badge}<span class="cell-value">${escapeHtml(formatCellState(cellState))}</span><span class="cell-irr-controls"><button class="irr-btn" type="button" data-delta="-1">−</button><button class="irr-btn" type="button" data-delta="1">+</button></span>`;
+      const relList = getRelevants(column.device, column.reg);
+      const relBadge = relList.length > 0 ? `<span class="rel-list">${relList.join("·")}</span>` : "";
+      cell.innerHTML = `${badge}<span class="cell-value">${escapeHtml(formatCellState(cellState))}</span>${relBadge}<span class="cell-irr-controls"><button class="irr-btn" type="button" data-delta="-1">−</button><button class="irr-btn" type="button" data-delta="1">+</button></span>`;
       cell.querySelectorAll(".irr-btn").forEach((btn) => {
         btn.addEventListener("click", (e) => {
           e.stopPropagation();
@@ -588,6 +617,10 @@ function renderCellDetail(capture, device, reg, cellState, compareCaptures) {
       <dt>Attempted</dt><dd>${isAttempted(devicePayload, reg) ? "yes" : "no"}</dd>
       <dt>Raw Detail</dt><dd class="mono">${escapeHtml(JSON.stringify(detail ?? {}, null, 0))}</dd>
     </dl>
+    <hr style="margin:10px 0;border:none;border-top:1px solid var(--line)">
+    <h2 style="margin-bottom:6px">Register Relevance</h2>
+    <p style="margin:0 0 6px;font-size:0.78rem;color:var(--muted)">Comma-separated test case numbers</p>
+    <input id="relevants-edit" type="text" value="${escapeHtml(getRelevants(device, reg).join(", "))}" placeholder="e.g. 3, 7, 14" style="width:100%" />
     <div class="header-actions">
       <button class="mini-button" id="rename-current-register" type="button">Rename Register</button>
       <button class="mini-button" id="reset-current-register" type="button">Reset Label</button>
@@ -595,6 +628,11 @@ function renderCellDetail(capture, device, reg, cellState, compareCaptures) {
   `;
   document.querySelector("#rename-current-register")?.addEventListener("click", () => renameAlias(device, reg));
   document.querySelector("#reset-current-register")?.addEventListener("click", () => resetAlias(device, reg));
+  document.querySelector("#relevants-edit")?.addEventListener("change", (e) => {
+    const parsed = e.target.value.split(/[\s,]+/).map((s) => parseInt(s, 10)).filter((n) => !isNaN(n));
+    setRelevants(device, reg, parsed);
+    render();
+  });
 }
 
 function renderCaptureDetail(capture) {
@@ -873,6 +911,85 @@ function saveIrrelevantCounts() {
   localStorage.setItem(irrelevantCountsKey, JSON.stringify(state.irrelevantCounts));
 }
 
+function loadConstants() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(constantsKey) || "[]"));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveConstants() {
+  localStorage.setItem(constantsKey, JSON.stringify([...state.constants]));
+}
+
+function isConstant(device, reg) {
+  return state.constants.has(columnKey(device, reg));
+}
+
+function markVisibleAsConstants() {
+  const captures = getVisibleCaptures();
+  const columns = getVisibleColumns(captures);
+  if (!columns.length) { window.alert("No visible registers to mark."); return; }
+  if (!window.confirm(`Mark ${columns.length} visible register(s) as constants?`)) return;
+  for (const { device, reg } of columns) state.constants.add(columnKey(device, reg));
+  saveConstants();
+  render();
+}
+
+function resetConstants() {
+  if (!state.constants.size) return;
+  if (!window.confirm(`Clear all ${state.constants.size} constant mark(s)?`)) return;
+  state.constants.clear();
+  saveConstants();
+  render();
+}
+
+function loadRelevants() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(relevantsKey) || "{}");
+    return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, Array.isArray(v) ? v : []]));
+  } catch {
+    return {};
+  }
+}
+
+function saveRelevants() {
+  localStorage.setItem(relevantsKey, JSON.stringify(state.relevants));
+}
+
+function getRelevants(device, reg) {
+  return state.relevants[columnKey(device, reg)] ?? [];
+}
+
+function setRelevants(device, reg, list) {
+  const key = columnKey(device, reg);
+  const sorted = [...new Set(list.filter((n) => Number.isInteger(n)))].sort((a, b) => a - b);
+  if (sorted.length === 0) {
+    delete state.relevants[key];
+  } else {
+    state.relevants[key] = sorted;
+  }
+  saveRelevants();
+}
+
+function markVisibleAsRelevant() {
+  const captures = getVisibleCaptures();
+  const columns = getVisibleColumns(captures);
+  if (!columns.length) { window.alert("No visible registers."); return; }
+  const tcVal = els.testCaseSelect.value;
+  const num = tcVal ? parseInt(tcVal, 10) : NaN;
+  if (isNaN(num)) { window.alert("Select a test case first."); return; }
+  if (!window.confirm(`Add test case ${num} to relevance list of ${columns.length} visible register(s)?`)) return;
+  for (const { device, reg } of columns) {
+    const key = columnKey(device, reg);
+    const list = state.relevants[key] ?? [];
+    if (!list.includes(num)) state.relevants[key] = [...list, num].sort((a, b) => a - b);
+  }
+  saveRelevants();
+  render();
+}
+
 function loadFilterState() {
   try {
     return JSON.parse(localStorage.getItem(filterStateKey) || "null");
@@ -991,6 +1108,53 @@ function markVisibleAsIrrelevant() {
   if (!window.confirm(`Add 1 to the irrelevancy count for ${columns.length} visible register(s)?`)) return;
   for (const { device, reg } of columns) {
     const key = columnKey(device, reg);
+    state.irrelevantCounts[key] = (state.irrelevantCounts[key] ?? 0) + 1;
+  }
+  saveIrrelevantCounts();
+  render();
+}
+
+function markIntraPairNoiseAsIrrelevant() {
+  const selectedDevices = getSelectedValues(els.deviceSelect);
+  const allCaptures = state.data.captures.filter((c) => !state.excludedCaptures.has(c.capture_id));
+
+  function capturesForTestCase(tc) {
+    return allCaptures.filter((c) => {
+      if (tc.filters.power && !tc.filters.power.includes(c.power_state)) return false;
+      if (tc.filters.layout && !tc.filters.layout.includes(c.layout_mode)) return false;
+      if (tc.filters.primary && !tc.filters.primary.includes(c.primary_input)) return false;
+      if (tc.filters.secondary && !tc.filters.secondary.includes(c.secondary_input)) return false;
+      if (tc.filters.audio && !tc.filters.audio.includes(c.audio_side)) return false;
+      if (tc.filters.size && !tc.filters.size.includes(capturePipSizeLabel(c))) return false;
+      return true;
+    });
+  }
+
+  const noisy = new Set();
+  let testedCount = 0;
+  for (const tc of TEST_CASES) {
+    const pair = capturesForTestCase(tc);
+    if (pair.length < 2) continue;
+    testedCount++;
+    const [a, b] = pair;
+    for (const device of selectedDevices) {
+      const regs = state.deviceColumns.get(device) ?? [];
+      for (const reg of regs) {
+        const va = valueState(a, device, reg);
+        const vb = valueState(b, device, reg);
+        if (va.kind !== vb.kind || va.value !== vb.value) {
+          noisy.add(columnKey(device, reg));
+        }
+      }
+    }
+  }
+
+  if (!noisy.size) {
+    window.alert(`Checked ${testedCount} test case(s) — no intra-pair differences found.`);
+    return;
+  }
+  if (!window.confirm(`Checked ${testedCount} test case(s). Add 1 to the irrelevancy count for ${noisy.size} register(s) that differ within at least one pair?`)) return;
+  for (const key of noisy) {
     state.irrelevantCounts[key] = (state.irrelevantCounts[key] ?? 0) + 1;
   }
   saveIrrelevantCounts();
