@@ -32,6 +32,26 @@ BUS = 13
 DEVICE = 0x58
 KEY_REGS = (0x3C, 0x3D, 0x3E, 0xA1, 0xA3, 0xA5)
 
+_MAX_READS = 5
+
+
+def _read_majority(bus: smbus2.SMBus, device: int, reg: int) -> int | None:
+    counts: dict[int, int] = {}
+    for _ in range(_MAX_READS):
+        try:
+            val = bus.read_byte_data(device, reg)
+            counts[val] = counts.get(val, 0) + 1
+            if counts[val] >= 2:
+                return val
+        except OSError:
+            pass
+    if not counts:
+        return None
+    best = max(counts, key=lambda v: counts[v])
+    if counts[best] < 2:
+        return None
+    return best
+
 
 @dataclass(frozen=True)
 class Signature:
@@ -56,11 +76,11 @@ SIGNATURES = [
 def read_key_regs(bus: smbus2.SMBus) -> dict[int, int] | None:
     result = {}
     for reg in KEY_REGS:
-        try:
-            result[reg] = bus.read_byte_data(DEVICE, reg)
-        except OSError as e:
-            print(f"  Read error on 0x{reg:02X}: {e}", file=sys.stderr)
+        val = _read_majority(bus, DEVICE, reg)
+        if val is None:
+            print(f"  Read error on 0x{reg:02X}: all {_MAX_READS} attempts failed", file=sys.stderr)
             return None
+        result[reg] = val
     return result
 
 
@@ -83,11 +103,8 @@ def dump_all(bus: smbus2.SMBus) -> None:
         vals = []
         for col in range(16):
             reg = row + col
-            try:
-                v = bus.read_byte_data(DEVICE, reg)
-                vals.append(f"{v:02X}")
-            except OSError:
-                vals.append("--")
+            v = _read_majority(bus, DEVICE, reg)
+            vals.append(f"{v:02X}" if v is not None else "--")
         print(f"  0x{row:02X}: {' '.join(vals)}")
 
 

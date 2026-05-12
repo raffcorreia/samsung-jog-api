@@ -111,6 +111,8 @@ const els = {
   irrelevantsOnly: document.querySelector("#irrelevants-only"),
   hideAllNull: document.querySelector("#hide-all-null"),
   hideAllZero: document.querySelector("#hide-all-zero"),
+  hideConstants: document.querySelector("#hide-constants"),
+  hideNoConsensus: document.querySelector("#hide-no-consensus"),
   registerSummary: document.querySelector("#register-summary"),
   inventorySummary: document.querySelector("#inventory-summary"),
   matrixHead: document.querySelector("#matrix-table thead"),
@@ -247,6 +249,8 @@ function bindEvents() {
     els.irrelevantsOnly,
     els.hideAllNull,
     els.hideAllZero,
+    els.hideConstants,
+    els.hideNoConsensus,
   ].forEach((element) => {
     element.addEventListener("change", () => {
       updateFilterSummaries();
@@ -359,6 +363,8 @@ function getVisibleColumns(captures) {
   const irrelevantsOnly = els.irrelevantsOnly.checked;
   const hideAllNull = els.hideAllNull.checked;
   const hideAllZero = els.hideAllZero.checked;
+  const hideConstants = els.hideConstants.checked;
+  const hideNoConsensus = els.hideNoConsensus.checked;
   const selectedDevices = getSelectedValues(els.deviceSelect);
   const columns = [];
 
@@ -385,6 +391,8 @@ function getVisibleColumns(captures) {
       if (irrelevantsOnly && irrCount === 0) continue;
       if (hideAllNull && states.some((s) => s.kind === "null") && states.every((s) => s.kind !== "value")) continue;
       if (hideAllZero && states.some((s) => s.kind === "value") && states.every((s) => s.kind !== "value" || s.value === 0)) continue;
+      if (hideConstants && isConstant(device, reg)) continue;
+      if (hideNoConsensus && hasNoConsensus(device, reg)) continue;
 
       columns.push({ device, reg });
     }
@@ -436,12 +444,12 @@ function renderMeta(captures, columns) {
     <div><strong>${nullCount}</strong> attempted null cell(s)</div>
     <div>${activeRegisterFilterSummary()}</div>
     <div class="header-actions">
-      <button class="mini-button" id="mark-visible-irrelevant" type="button">Mark Visible as Irrelevant</button>
-      <button class="mini-button" id="mark-intra-pair-irrelevant" type="button">Mark Intra-pair Noise</button>
-      <button class="mini-button" id="mark-visible-constants" type="button">Mark Visible as Constants</button>
-      <button class="mini-button" id="mark-visible-relevant" type="button">Mark Visible as Relevant</button>
-      <button class="mini-button danger" id="reset-irrelevancy" type="button">Reset Irrelevancy</button>
-      <button class="mini-button danger" id="reset-constants" type="button">Reset Constants</button>
+      <button class="mini-button" id="mark-visible-irrelevant" type="button" title="Increment the irrelevancy count by 1 for every currently visible register. Registers with high counts are hidden by the irrelevancy filter.">Mark Visible as Irrelevant</button>
+      <button class="mini-button" id="mark-intra-pair-irrelevant" type="button" title="Scan test case pairs (two captures of the same logical state) and increment the irrelevancy count for any register whose value differs within a pair — those are noise, not signal.">Mark Intra-pair Noise</button>
+      <button class="mini-button" id="mark-visible-constants" type="button" title="Tag every currently visible register as a constant. Constants are always shown at 100% opacity regardless of other filters.">Mark Visible as Constants</button>
+      <button class="mini-button" id="mark-visible-relevant" type="button" title="Add the selected test case number to the relevance list of every currently visible register. Requires a test case to be selected.">Mark Visible as Relevant</button>
+      <button class="mini-button danger" id="reset-irrelevancy" type="button" title="Clear all irrelevancy counts globally. Cannot be undone.">Reset Irrelevancy</button>
+      <button class="mini-button danger" id="reset-constants" type="button" title="Remove all constant tags globally. Cannot be undone.">Reset Constants</button>
     </div>
   `;
   document.querySelector("#mark-visible-irrelevant")?.addEventListener("click", markVisibleAsIrrelevant);
@@ -456,8 +464,8 @@ function renderMeta(captures, columns) {
     <div><strong>${namedVisible}</strong> visible register(s) have labels</div>
     <div><strong>${Object.keys(state.aliases).length}</strong> custom rename(s) saved locally</div>
     <div class="header-actions">
-      <button class="mini-button" id="reset-device-aliases" type="button">Reset Device Labels</button>
-      <button class="mini-button" id="reset-all-aliases" type="button">Reset All Labels</button>
+      <button class="mini-button" id="reset-device-aliases" type="button" title="Remove all custom register labels for the currently selected device(s).">Reset Device Labels</button>
+      <button class="mini-button" id="reset-all-aliases" type="button" title="Remove every custom register and device label saved locally.">Reset All Labels</button>
     </div>
     <div class="hint">Device reset applies to ${escapeHtml(selectedDeviceSummary)}.</div>
   `;
@@ -476,6 +484,8 @@ function activeRegisterFilterSummary() {
   if (els.irrelevantsOnly.checked) filters.push("irrelevants only");
   if (els.hideAllNull.checked) filters.push("all-null hidden");
   if (els.hideAllZero.checked) filters.push("all-zero hidden");
+  if (els.hideConstants.checked) filters.push("constants hidden");
+  if (els.hideNoConsensus.checked) filters.push("no-consensus hidden");
   return filters.length ? filters.join(" · ") : "all matching registers shown";
 }
 
@@ -622,8 +632,8 @@ function renderCellDetail(capture, device, reg, cellState, compareCaptures) {
     <p style="margin:0 0 6px;font-size:0.78rem;color:var(--muted)">Comma-separated test case numbers</p>
     <input id="relevants-edit" type="text" value="${escapeHtml(getRelevants(device, reg).join(", "))}" placeholder="e.g. 3, 7, 14" style="width:100%" />
     <div class="header-actions">
-      <button class="mini-button" id="rename-current-register" type="button">Rename Register</button>
-      <button class="mini-button" id="reset-current-register" type="button">Reset Label</button>
+      <button class="mini-button" id="rename-current-register" type="button" title="Set a custom display label for this register.">Rename Register</button>
+      <button class="mini-button" id="reset-current-register" type="button" title="Remove the custom label and restore the default register name.">Reset Label</button>
     </div>
   `;
   document.querySelector("#rename-current-register")?.addEventListener("click", () => renameAlias(device, reg));
@@ -654,7 +664,7 @@ function renderCaptureDetail(capture) {
       <dt>Notes</dt><dd>${escapeHtml((capture.notes ?? []).join(" | ") || "—")}</dd>
     </dl>
     <div class="header-actions">
-      <button class="mini-button danger" id="delete-capture-btn" type="button">Delete Capture</button>
+      <button class="mini-button danger" id="delete-capture-btn" type="button" title="Permanently delete this capture file from disk. Cannot be undone.">Delete Capture</button>
     </div>
   `;
   document.querySelector("#delete-capture-btn")?.addEventListener("click", () => deleteCapture(capture.capture_id));
@@ -927,6 +937,12 @@ function isConstant(device, reg) {
   return state.constants.has(columnKey(device, reg));
 }
 
+function hasNoConsensus(device, reg) {
+  return state.data.captures.some(
+    (c) => c.devices?.[device]?.read_stats?.retry_detail?.[reg]?.no_consensus === true
+  );
+}
+
 function markVisibleAsConstants() {
   const captures = getVisibleCaptures();
   const columns = getVisibleColumns(captures);
@@ -1019,6 +1035,8 @@ function saveFilterState() {
     irrelevantsOnly: els.irrelevantsOnly.checked,
     hideAllNull: els.hideAllNull.checked,
     hideAllZero: els.hideAllZero.checked,
+    hideConstants: els.hideConstants.checked,
+    hideNoConsensus: els.hideNoConsensus.checked,
   };
   localStorage.setItem(filterStateKey, JSON.stringify(saved));
 }
@@ -1045,6 +1063,8 @@ function applyFilterState() {
   if (saved.irrelevantsOnly != null) els.irrelevantsOnly.checked = saved.irrelevantsOnly;
   if (saved.hideAllNull != null) els.hideAllNull.checked = saved.hideAllNull;
   if (saved.hideAllZero != null) els.hideAllZero.checked = saved.hideAllZero;
+  if (saved.hideConstants != null) els.hideConstants.checked = saved.hideConstants;
+  if (saved.hideNoConsensus != null) els.hideNoConsensus.checked = saved.hideNoConsensus;
 }
 
 function applySelectState(select, savedValues) {
@@ -1070,6 +1090,8 @@ function resetAllFilters() {
   els.irrelevantsOnly.checked = false;
   els.hideAllNull.checked = false;
   els.hideAllZero.checked = false;
+  els.hideConstants.checked = false;
+  els.hideNoConsensus.checked = false;
   updateFilterSummaries();
   render();
   syncTestCasePreset();

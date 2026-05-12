@@ -194,23 +194,62 @@ def scan_ddc(bus: SMBus) -> dict[str, Any]:
     }
 
 
+_MAX_READS = 5
+REG_DELAY = 0.02  # between different registers
+
+
+def _read_majority_detail(bus: SMBus, device: int, reg_num: int) -> tuple[int | None, int, bool, str | None]:
+    """Read with majority voting, returning (value, attempts, no_consensus, last_error)."""
+    counts: dict[int, int] = {}
+    last_error: str | None = None
+    for i in range(_MAX_READS):
+        try:
+            val = bus.read_byte_data(device, reg_num)
+            counts[val] = counts.get(val, 0) + 1
+            if counts[val] >= 2:
+                return val, i + 1, False, None
+        except OSError as exc:
+            last_error = str(exc)
+
+    if not counts:
+        return None, _MAX_READS, True, last_error
+
+    best = max(counts, key=lambda v: counts[v])
+    return best, _MAX_READS, counts[best] < 2, last_error
+
+
 def scan_device(bus: SMBus, device: int) -> dict[str, Any]:
     values = empty_register_map()
     errors: dict[str, str] = {}
+    retry_detail: dict[str, Any] = {}
+    total_reads = 0
     for reg_num in range(256):
         reg = f"0x{reg_num:02X}"
-        try:
-            values[reg] = bus.read_byte_data(device, reg_num)
-        except OSError as exc:
-            values[reg] = None
-            errors[reg] = str(exc)
-        time.sleep(0.02)
+        val, attempts, no_consensus, last_error = _read_majority_detail(bus, device, reg_num)
+        total_reads += attempts
+        values[reg] = val
+        if last_error and val is None:
+            errors[reg] = last_error
+        if attempts > 2 or no_consensus:
+            retry_detail[reg] = {"attempts": attempts, "no_consensus": no_consensus}
+        time.sleep(REG_DELAY)
+
+    read_stats = {
+        "total_reads": total_reads,
+        "registers_with_retries": sum(1 for d in retry_detail.values() if d["attempts"] > 2),
+        "registers_no_consensus": sum(1 for d in retry_detail.values() if d["no_consensus"]),
+        "retry_detail": retry_detail,
+    }
+    if read_stats["registers_no_consensus"]:
+        print(f"  WARNING: {read_stats['registers_no_consensus']} register(s) never reached consensus after {_MAX_READS} reads.")
+
     return {
         "kind": "i2c_registers",
         "scan_scope": "full_256",
         "attempted_registers": full_hex_range(),
         "values": values,
         "errors": errors,
+        "read_stats": read_stats,
     }
 
 
