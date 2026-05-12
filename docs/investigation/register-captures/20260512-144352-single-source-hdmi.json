@@ -1,24 +1,24 @@
 {
-  "capture_id": "20260507-183738-single-source-dp",
-  "captured_at": "2026-05-07T18:37:38+00:00",
+  "capture_id": "20260512-144352-single-source-hdmi",
+  "captured_at": "2026-05-12T14:43:52+00:00",
   "monitor_bus": "/dev/i2c-13",
   "source": {
     "tool": "tools/scripts/collect-register-capture.py",
     "tool_version": 1
   },
-  "state_label": "Single source: DP",
+  "state_label": "Single source: HDMI",
   "power_state": "on",
   "signal_state": "active",
   "layout_mode": "single",
   "connected_inputs": [
-    "hdmi",
     "dp",
+    "hdmi",
     "tb"
   ],
   "signal_present_inputs": [
-    "dp"
+    "hdmi"
   ],
-  "primary_input": "dp",
+  "primary_input": "hdmi",
   "secondary_input": null,
   "audio_side": null,
   "pip": {
@@ -33,7 +33,9 @@
     "include_in_explorer": true,
     "metadata_certainty": "high"
   },
-  "notes": [],
+  "notes": [
+    "y"
+  ],
   "devices": {
     "0x3A": {
       "kind": "i2c_registers",
@@ -554,7 +556,13 @@
         "0xFE": 0,
         "0xFF": 0
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x50": {
       "kind": "i2c_registers",
@@ -1075,7 +1083,13 @@
         "0xFE": 0,
         "0xFF": 171
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x54": {
       "kind": "i2c_registers",
@@ -1355,7 +1369,7 @@
         "0x0D": 0,
         "0x0E": 0,
         "0x0F": 0,
-        "0x10": 3,
+        "0x10": 1,
         "0x11": 0,
         "0x12": 0,
         "0x13": 0,
@@ -1596,7 +1610,13 @@
         "0xFE": 0,
         "0xFF": 0
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x58": {
       "kind": "i2c_registers",
@@ -1920,8 +1940,8 @@
         "0x39": 0,
         "0x3A": 0,
         "0x3B": 69,
-        "0x3C": 218,
-        "0x3D": 1,
+        "0x3C": 48,
+        "0x3D": 58,
         "0x3E": 5,
         "0x3F": 0,
         "0x40": 132,
@@ -2020,10 +2040,10 @@
         "0x9D": 0,
         "0x9E": 0,
         "0x9F": 4,
-        "0xA0": 244,
+        "0xA0": 245,
         "0xA1": 33,
         "0xA2": 255,
-        "0xA3": 222,
+        "0xA3": 221,
         "0xA4": 0,
         "0xA5": 179,
         "0xA6": 255,
@@ -2076,7 +2096,7 @@
         "0xD5": 0,
         "0xD6": 0,
         "0xD7": 3,
-        "0xD8": 0,
+        "0xD8": 3,
         "0xD9": 3,
         "0xDA": 3,
         "0xDB": 3,
@@ -2084,8 +2104,8 @@
         "0xDD": 3,
         "0xDE": 3,
         "0xDF": 3,
-        "0xE0": 64,
-        "0xE1": 78,
+        "0xE0": 128,
+        "0xE1": 226,
         "0xE2": 0,
         "0xE3": 0,
         "0xE4": 0,
@@ -2117,7 +2137,13 @@
         "0xFE": 1,
         "0xFF": 69
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x37_ddc": {
       "kind": "ddc_vcp",
@@ -2477,7 +2503,7 @@
         "0x5D": 0,
         "0x5E": 0,
         "0x5F": 0,
-        "0x60": 3,
+        "0x60": 1,
         "0x61": 0,
         "0x62": 3,
         "0x63": 0,
@@ -2573,7 +2599,7 @@
         "0xBD": 0,
         "0xBE": 0,
         "0xBF": 0,
-        "0xC0": 226,
+        "0xC0": 238,
         "0xC1": 0,
         "0xC2": 0,
         "0xC3": 0,
@@ -2635,7 +2661,7 @@
         "0xFB": 0,
         "0xFC": 0,
         "0xFD": 0,
-        "0xFE": 1,
+        "0xFE": 2,
         "0xFF": 0
       },
       "details": {
@@ -4562,7 +4588,7 @@
         "0x60": {
           "name": "Input Source",
           "status": "ok",
-          "value": 3,
+          "value": 1,
           "max": 3,
           "type": "C",
           "raw": [
@@ -4575,8 +4601,8 @@
             "0x0",
             "0x3",
             "0x0",
-            "0x3",
-            "0xd4"
+            "0x1",
+            "0xd6"
           ]
         },
         "0x61": {
@@ -6482,7 +6508,7 @@
         "0xC0": {
           "name": "Unknown (0xC0)",
           "status": "ok",
-          "value": 226,
+          "value": 238,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6495,8 +6521,8 @@
             "0xff",
             "0xff",
             "0x0",
-            "0xe2",
-            "0x96"
+            "0xee",
+            "0x9a"
           ]
         },
         "0xC1": {
@@ -7722,7 +7748,7 @@
         "0xFE": {
           "name": "Unknown (0xFE)",
           "status": "ok",
-          "value": 1,
+          "value": 2,
           "max": 2,
           "type": "C",
           "raw": [
@@ -7735,8 +7761,8 @@
             "0x0",
             "0x2",
             "0x0",
-            "0x1",
-            "0x49"
+            "0x2",
+            "0x4a"
           ]
         },
         "0xFF": {
@@ -7762,5 +7788,5 @@
       }
     }
   },
-  "test_case": 25
+  "test_case": 14
 }

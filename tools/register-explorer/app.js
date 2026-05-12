@@ -355,7 +355,8 @@ function getVisibleCaptures() {
   }).sort((a, b) => {
     const ta = a.test_case ?? Infinity;
     const tb = b.test_case ?? Infinity;
-    return ta !== tb ? ta - tb : a.capture_id.localeCompare(b.capture_id);
+    if (ta !== tb) return ta - tb;
+    return (a.captured_at ?? "").localeCompare(b.captured_at ?? "");
   });
 }
 

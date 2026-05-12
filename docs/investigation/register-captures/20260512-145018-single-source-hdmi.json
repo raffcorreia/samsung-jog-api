@@ -1,6 +1,6 @@
 {
-  "capture_id": "20260507-025110-single-source-hdmi",
-  "captured_at": "2026-05-07T02:51:10+00:00",
+  "capture_id": "20260512-145018-single-source-hdmi",
+  "captured_at": "2026-05-12T14:50:18+00:00",
   "monitor_bus": "/dev/i2c-13",
   "source": {
     "tool": "tools/scripts/collect-register-capture.py",
@@ -11,7 +11,9 @@
   "signal_state": "active",
   "layout_mode": "single",
   "connected_inputs": [
-    "hdmi"
+    "dp",
+    "hdmi",
+    "tb"
   ],
   "signal_present_inputs": [
     "hdmi"
@@ -31,7 +33,9 @@
     "include_in_explorer": true,
     "metadata_certainty": "high"
   },
-  "notes": [],
+  "notes": [
+    "y"
+  ],
   "devices": {
     "0x3A": {
       "kind": "i2c_registers",
@@ -303,9 +307,9 @@
         "0x05": 0,
         "0x06": 0,
         "0x07": 0,
-        "0x08": 49,
-        "0x09": 223,
-        "0x0A": 34,
+        "0x08": 39,
+        "0x09": 228,
+        "0x0A": 52,
         "0x0B": 0,
         "0x0C": 0,
         "0x0D": 0,
@@ -552,7 +556,13 @@
         "0xFE": 0,
         "0xFF": 0
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x50": {
       "kind": "i2c_registers",
@@ -1073,7 +1083,13 @@
         "0xFE": 0,
         "0xFF": 171
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x54": {
       "kind": "i2c_registers",
@@ -1353,7 +1369,7 @@
         "0x0D": 0,
         "0x0E": 0,
         "0x0F": 0,
-        "0x10": 3,
+        "0x10": 1,
         "0x11": 0,
         "0x12": 0,
         "0x13": 0,
@@ -1594,7 +1610,13 @@
         "0xFE": 0,
         "0xFF": 0
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 512,
+        "registers_with_retries": 0,
+        "registers_no_consensus": 0,
+        "retry_detail": {}
+      }
     },
     "0x58": {
       "kind": "i2c_registers",
@@ -1918,9 +1940,9 @@
         "0x39": 0,
         "0x3A": 0,
         "0x3B": 69,
-        "0x3C": 9,
-        "0x3D": 143,
-        "0x3E": 4,
+        "0x3C": 248,
+        "0x3D": 55,
+        "0x3E": 3,
         "0x3F": 0,
         "0x40": 132,
         "0x41": 132,
@@ -2021,9 +2043,9 @@
         "0xA0": 245,
         "0xA1": 33,
         "0xA2": 255,
-        "0xA3": 220,
+        "0xA3": 222,
         "0xA4": 0,
-        "0xA5": 0,
+        "0xA5": 179,
         "0xA6": 255,
         "0xA7": 248,
         "0xA8": 0,
@@ -2083,7 +2105,7 @@
         "0xDE": 3,
         "0xDF": 3,
         "0xE0": 128,
-        "0xE1": 0,
+        "0xE1": 226,
         "0xE2": 0,
         "0xE3": 0,
         "0xE4": 0,
@@ -2115,7 +2137,18 @@
         "0xFE": 1,
         "0xFF": 69
       },
-      "errors": {}
+      "errors": {},
+      "read_stats": {
+        "total_reads": 515,
+        "registers_with_retries": 1,
+        "registers_no_consensus": 1,
+        "retry_detail": {
+          "0x3C": {
+            "attempts": 5,
+            "no_consensus": true
+          }
+        }
+      }
     },
     "0x37_ddc": {
       "kind": "ddc_vcp",
@@ -2571,7 +2604,7 @@
         "0xBD": 0,
         "0xBE": 0,
         "0xBF": 0,
-        "0xC0": 220,
+        "0xC0": 238,
         "0xC1": 0,
         "0xC2": 0,
         "0xC3": 0,
@@ -2633,7 +2666,7 @@
         "0xFB": 0,
         "0xFC": 0,
         "0xFD": 0,
-        "0xFE": 1,
+        "0xFE": 2,
         "0xFF": 0
       },
       "details": {
@@ -6480,7 +6513,7 @@
         "0xC0": {
           "name": "Unknown (0xC0)",
           "status": "ok",
-          "value": 220,
+          "value": 238,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6493,8 +6526,8 @@
             "0xff",
             "0xff",
             "0x0",
-            "0xdc",
-            "0xa8"
+            "0xee",
+            "0x9a"
           ]
         },
         "0xC1": {
@@ -7720,7 +7753,7 @@
         "0xFE": {
           "name": "Unknown (0xFE)",
           "status": "ok",
-          "value": 1,
+          "value": 2,
           "max": 2,
           "type": "C",
           "raw": [
@@ -7733,8 +7766,8 @@
             "0x0",
             "0x2",
             "0x0",
-            "0x1",
-            "0x49"
+            "0x2",
+            "0x4a"
           ]
         },
         "0xFF": {

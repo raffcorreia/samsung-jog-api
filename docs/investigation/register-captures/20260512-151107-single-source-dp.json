@@ -1,12 +1,12 @@
 {
-  "capture_id": "20260512-130124-single-source-tb",
-  "captured_at": "2026-05-12T13:01:24+00:00",
+  "capture_id": "20260512-151107-single-source-dp",
+  "captured_at": "2026-05-12T15:11:07+00:00",
   "monitor_bus": "/dev/i2c-13",
   "source": {
     "tool": "tools/scripts/collect-register-capture.py",
     "tool_version": 1
   },
-  "state_label": "Single source: TB",
+  "state_label": "Single source: DP",
   "power_state": "on",
   "signal_state": "active",
   "layout_mode": "single",
@@ -16,9 +16,9 @@
     "tb"
   ],
   "signal_present_inputs": [
-    "tb"
+    "dp"
   ],
-  "primary_input": "tb",
+  "primary_input": "dp",
   "secondary_input": null,
   "audio_side": null,
   "pip": {
@@ -33,7 +33,9 @@
     "include_in_explorer": true,
     "metadata_certainty": "high"
   },
-  "notes": [],
+  "notes": [
+    "y"
+  ],
   "devices": {
     "0x3A": {
       "kind": "i2c_registers",
@@ -1889,9 +1891,9 @@
         "0x08": 55,
         "0x09": 0,
         "0x0A": 0,
-        "0x0B": 129,
-        "0x0C": 52,
-        "0x0D": 0,
+        "0x0B": 130,
+        "0x0C": 211,
+        "0x0D": 255,
         "0x0E": 4,
         "0x0F": 224,
         "0x10": 3,
@@ -1938,9 +1940,9 @@
         "0x39": 0,
         "0x3A": 0,
         "0x3B": 69,
-        "0x3C": 17,
-        "0x3D": 118,
-        "0x3E": 5,
+        "0x3C": 29,
+        "0x3D": 31,
+        "0x3E": 0,
         "0x3F": 0,
         "0x40": 132,
         "0x41": 132,
@@ -2038,10 +2040,10 @@
         "0x9D": 0,
         "0x9E": 0,
         "0x9F": 4,
-        "0xA0": 240,
-        "0xA1": 34,
+        "0xA0": 245,
+        "0xA1": 33,
         "0xA2": 255,
-        "0xA3": 0,
+        "0xA3": 221,
         "0xA4": 0,
         "0xA5": 0,
         "0xA6": 255,
@@ -2102,8 +2104,8 @@
         "0xDD": 3,
         "0xDE": 3,
         "0xDF": 3,
-        "0xE0": 244,
-        "0xE1": 0,
+        "0xE0": 128,
+        "0xE1": 226,
         "0xE2": 0,
         "0xE3": 0,
         "0xE4": 0,
@@ -2137,23 +2139,19 @@
       },
       "errors": {},
       "read_stats": {
-        "total_reads": 519,
-        "registers_with_retries": 4,
+        "total_reads": 517,
+        "registers_with_retries": 3,
         "registers_no_consensus": 1,
         "retry_detail": {
-          "0x0C": {
-            "attempts": 4,
-            "no_consensus": false
-          },
           "0x3C": {
             "attempts": 5,
             "no_consensus": true
           },
-          "0xBF": {
+          "0xA5": {
             "attempts": 3,
             "no_consensus": false
           },
-          "0xD9": {
+          "0xDA": {
             "attempts": 3,
             "no_consensus": false
           }
@@ -2424,7 +2422,7 @@
       "values": {
         "0x00": 0,
         "0x01": 0,
-        "0x02": 255,
+        "0x02": 2,
         "0x03": 0,
         "0x04": 0,
         "0x05": 0,
@@ -2518,7 +2516,7 @@
         "0x5D": 0,
         "0x5E": 0,
         "0x5F": 0,
-        "0x60": 4,
+        "0x60": 3,
         "0x61": 0,
         "0x62": 3,
         "0x63": 0,
@@ -2594,9 +2592,9 @@
         "0xA9": 0,
         "0xAA": 0,
         "0xAB": 0,
-        "0xAC": 23364,
+        "0xAC": 23264,
         "0xAD": 0,
-        "0xAE": 6010,
+        "0xAE": 6000,
         "0xAF": 0,
         "0xB0": 0,
         "0xB1": 0,
@@ -2614,7 +2612,7 @@
         "0xBD": 0,
         "0xBE": 0,
         "0xBF": 0,
-        "0xC0": 236,
+        "0xC0": 238,
         "0xC1": 0,
         "0xC2": 0,
         "0xC3": 0,
@@ -2723,7 +2721,7 @@
         "0x02": {
           "name": "Unknown (0x02)",
           "status": "ok",
-          "value": 255,
+          "value": 2,
           "max": 255,
           "type": "C",
           "raw": [
@@ -2736,8 +2734,8 @@
             "0x0",
             "0xff",
             "0x0",
-            "0xff",
-            "0xb6"
+            "0x2",
+            "0x4b"
           ]
         },
         "0x03": {
@@ -4603,7 +4601,7 @@
         "0x60": {
           "name": "Input Source",
           "status": "ok",
-          "value": 4,
+          "value": 3,
           "max": 3,
           "type": "C",
           "raw": [
@@ -4616,8 +4614,8 @@
             "0x0",
             "0x3",
             "0x0",
-            "0x4",
-            "0xd3"
+            "0x3",
+            "0xd4"
           ]
         },
         "0x61": {
@@ -6123,7 +6121,7 @@
         "0xAC": {
           "name": "Unknown (0xAC)",
           "status": "ok",
-          "value": 23364,
+          "value": 23264,
           "max": 65281,
           "type": "C",
           "raw": [
@@ -6135,9 +6133,9 @@
             "0x0",
             "0xff",
             "0x1",
-            "0x5b",
-            "0x44",
-            "0xf9"
+            "0x5a",
+            "0xe0",
+            "0x5c"
           ]
         },
         "0xAD": {
@@ -6163,7 +6161,7 @@
         "0xAE": {
           "name": "Unknown (0xAE)",
           "status": "ok",
-          "value": 6010,
+          "value": 6000,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6176,8 +6174,8 @@
             "0xff",
             "0xff",
             "0x17",
-            "0x7a",
-            "0x77"
+            "0x70",
+            "0x7d"
           ]
         },
         "0xAF": {
@@ -6523,7 +6521,7 @@
         "0xC0": {
           "name": "Unknown (0xC0)",
           "status": "ok",
-          "value": 236,
+          "value": 238,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6536,8 +6534,8 @@
             "0xff",
             "0xff",
             "0x0",
-            "0xec",
-            "0x98"
+            "0xee",
+            "0x9a"
           ]
         },
         "0xC1": {
@@ -7803,5 +7801,5 @@
       }
     }
   },
-  "test_case": 3
+  "test_case": 25
 }

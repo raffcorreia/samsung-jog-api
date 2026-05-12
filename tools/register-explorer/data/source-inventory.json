@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T14:21:31+00:00",
+  "generated_at": "2026-05-12T15:15:46+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -30,10 +30,6 @@
     },
     {
       "path": "register-captures/20260506-170841-idle-no-active-source.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260506-171413-single-source-tb.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
@@ -114,14 +110,6 @@
     },
     {
       "path": "register-captures/20260507-024739-pbp-left-tb-right-hdmi-audio-right.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-024949-single-source-hdmi.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-025110-single-source-hdmi.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
@@ -273,10 +261,6 @@
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
-      "path": "register-captures/20260507-183738-single-source-dp.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
       "path": "register-captures/20260507-184015-pip-main-dp-window-tb-size-1-top-left.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
@@ -293,7 +277,23 @@
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
-      "path": "register-captures/20260512-130124-single-source-tb.json",
+      "path": "register-captures/20260512-144352-single-source-hdmi.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-145018-single-source-hdmi.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-145913-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-150518-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-151107-single-source-dp.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]
