@@ -352,6 +352,10 @@ function getVisibleCaptures() {
       }
     }
     return true;
+  }).sort((a, b) => {
+    const ta = a.test_case ?? Infinity;
+    const tb = b.test_case ?? Infinity;
+    return ta !== tb ? ta - tb : a.capture_id.localeCompare(b.capture_id);
   });
 }
 

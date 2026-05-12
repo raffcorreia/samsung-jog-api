@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T13:37:42+00:00",
+  "generated_at": "2026-05-12T14:21:31+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",
@@ -8302,7 +8302,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 1
     },
     {
       "capture_id": "20260505-213141-standby",
@@ -16579,7 +16580,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 1
     },
     {
       "capture_id": "20260506-170446-idle-no-active-source",
@@ -21906,7 +21908,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 2
     },
     {
       "capture_id": "20260506-170841-idle-no-active-source",
@@ -27236,7 +27239,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 2
     },
     {
       "capture_id": "20260506-171413-single-source-tb",
@@ -35001,7 +35005,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 3
     },
     {
       "capture_id": "20260506-175838-pip-main-tb-window-hdmi-size-1-top-left",
@@ -42767,7 +42772,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 4
     },
     {
       "capture_id": "20260506-180032-pip-main-tb-window-hdmi-size-1-top-left",
@@ -50533,7 +50539,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 4
     },
     {
       "capture_id": "20260506-180221-pip-main-tb-window-hdmi-size-2-top-left",
@@ -58299,7 +58306,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 5
     },
     {
       "capture_id": "20260506-180336-pip-main-tb-window-hdmi-size-2-top-left",
@@ -66065,7 +66073,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 5
     },
     {
       "capture_id": "20260506-180513-pip-main-tb-window-hdmi-size-3-top-left",
@@ -73831,7 +73840,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 6
     },
     {
       "capture_id": "20260506-180632-pip-main-tb-window-hdmi-size-3-top-left",
@@ -81597,7 +81607,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 6
     },
     {
       "capture_id": "20260506-181119-pip-main-tb-window-dp-size-3-top-left",
@@ -89363,7 +89374,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 7
     },
     {
       "capture_id": "20260506-181246-pip-main-tb-window-dp-size-3-top-left",
@@ -97129,7 +97141,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 7
     },
     {
       "capture_id": "20260506-181443-pip-main-tb-window-dp-size-2-top-left",
@@ -104895,7 +104908,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 8
     },
     {
       "capture_id": "20260506-181958-pip-main-tb-window-dp-size-2-top-left",
@@ -112661,7 +112675,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 8
     },
     {
       "capture_id": "20260507-022411-pip-main-tb-window-dp-size-1-top-left",
@@ -120427,7 +120442,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 9
     },
     {
       "capture_id": "20260507-022538-pip-main-tb-window-dp-size-1-top-left",
@@ -128193,7 +128209,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 9
     },
     {
       "capture_id": "20260507-023113-pbp-left-tb-right-dp-audio-left",
@@ -135959,7 +135976,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 10
     },
     {
       "capture_id": "20260507-023326-pbp-left-tb-right-dp-audio-left",
@@ -143725,7 +143743,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 10
     },
     {
       "capture_id": "20260507-023628-pbp-left-tb-right-dp-audio-right",
@@ -151491,7 +151510,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 11
     },
     {
       "capture_id": "20260507-023820-pbp-left-tb-right-dp-audio-right",
@@ -159257,7 +159277,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 11
     },
     {
       "capture_id": "20260507-024212-pbp-left-tb-right-hdmi-audio-left",
@@ -167023,7 +167044,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 12
     },
     {
       "capture_id": "20260507-024411-pbp-left-tb-right-hdmi-audio-left",
@@ -174789,7 +174811,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 12
     },
     {
       "capture_id": "20260507-024609-pbp-left-tb-right-hdmi-audio-right",
@@ -182555,7 +182578,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 13
     },
     {
       "capture_id": "20260507-024739-pbp-left-tb-right-hdmi-audio-right",
@@ -190321,7 +190345,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 13
     },
     {
       "capture_id": "20260507-024949-single-source-hdmi",
@@ -198086,7 +198111,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 14
     },
     {
       "capture_id": "20260507-025110-single-source-hdmi",
@@ -205849,7 +205875,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 14
     },
     {
       "capture_id": "20260507-040016-pip-main-dp-window-tb-size-3-top-left",
@@ -213615,7 +213642,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 28
     },
     {
       "capture_id": "20260507-040142-pip-main-dp-window-tb-size-3-top-left",
@@ -221381,7 +221409,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 28
     },
     {
       "capture_id": "20260507-040355-pip-main-dp-window-hdmi-size-3-top-left",
@@ -229147,7 +229176,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 29
     },
     {
       "capture_id": "20260507-040511-pip-main-dp-window-hdmi-size-3-top-left",
@@ -236913,7 +236943,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 29
     },
     {
       "capture_id": "20260507-040653-pip-main-dp-window-hdmi-size-2-top-left",
@@ -244679,7 +244710,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 30
     },
     {
       "capture_id": "20260507-040812-pip-main-dp-window-hdmi-size-2-top-left",
@@ -252445,7 +252477,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 30
     },
     {
       "capture_id": "20260507-040952-pip-main-dp-window-hdmi-size-1-top-left",
@@ -260211,7 +260244,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 31
     },
     {
       "capture_id": "20260507-041109-pip-main-dp-window-hdmi-size-1-top-left",
@@ -267977,7 +268011,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 31
     },
     {
       "capture_id": "20260507-041334-pbp-left-dp-right-hdmi-audio-right",
@@ -275743,7 +275778,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 32
     },
     {
       "capture_id": "20260507-041536-pbp-left-dp-right-hdmi-audio-right",
@@ -283509,7 +283545,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 32
     },
     {
       "capture_id": "20260507-041753-pbp-left-dp-right-hdmi-audio-left",
@@ -291275,7 +291312,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 33
     },
     {
       "capture_id": "20260507-041953-pbp-left-dp-right-hdmi-audio-left",
@@ -299041,7 +299079,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 33
     },
     {
       "capture_id": "20260507-042141-pbp-left-dp-right-tb-audio-right",
@@ -306807,7 +306846,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 34
     },
     {
       "capture_id": "20260507-042256-pbp-left-dp-right-tb-audio-right",
@@ -314573,7 +314613,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 34
     },
     {
       "capture_id": "20260507-042437-pbp-left-dp-right-tb-audio-left",
@@ -322339,7 +322380,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 35
     },
     {
       "capture_id": "20260507-042600-pbp-left-dp-right-tb-audio-left",
@@ -330105,7 +330147,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 35
     },
     {
       "capture_id": "20260507-175408-pip-main-hdmi-window-tb-size-1-top-left",
@@ -337871,7 +337914,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 15
     },
     {
       "capture_id": "20260507-175515-pip-main-hdmi-window-tb-size-1-top-left",
@@ -345637,7 +345681,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 15
     },
     {
       "capture_id": "20260507-180158-pip-main-hdmi-window-tb-size-2-top-left",
@@ -353403,7 +353448,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 16
     },
     {
       "capture_id": "20260507-180302-pip-main-hdmi-window-tb-size-2-top-left",
@@ -361169,7 +361215,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 16
     },
     {
       "capture_id": "20260507-181051-pip-main-hdmi-window-tb-size-3-top-left",
@@ -368935,7 +368982,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 17
     },
     {
       "capture_id": "20260507-181155-pip-main-hdmi-window-tb-size-3-top-left",
@@ -376701,7 +376749,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 17
     },
     {
       "capture_id": "20260507-181409-pip-main-hdmi-window-dp-size-3-top-left",
@@ -384467,7 +384516,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 18
     },
     {
       "capture_id": "20260507-181513-pip-main-hdmi-window-dp-size-3-top-left",
@@ -392233,7 +392283,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 18
     },
     {
       "capture_id": "20260507-181656-pip-main-hdmi-window-dp-size-2-top-left",
@@ -399999,7 +400050,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 19
     },
     {
       "capture_id": "20260507-181800-pip-main-hdmi-window-dp-size-2-top-left",
@@ -407765,7 +407817,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 19
     },
     {
       "capture_id": "20260507-182001-pip-main-hdmi-window-dp-size-1-top-left",
@@ -415531,7 +415584,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 20
     },
     {
       "capture_id": "20260507-182104-pip-main-hdmi-window-dp-size-1-top-left",
@@ -423297,7 +423351,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 20
     },
     {
       "capture_id": "20260507-182320-pbp-left-hdmi-right-dp-audio-right",
@@ -431063,7 +431118,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 21
     },
     {
       "capture_id": "20260507-182424-pbp-left-hdmi-right-dp-audio-right",
@@ -438829,7 +438885,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 21
     },
     {
       "capture_id": "20260507-182627-pbp-left-hdmi-right-dp-audio-left",
@@ -446595,7 +446652,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 22
     },
     {
       "capture_id": "20260507-182731-pbp-left-hdmi-right-dp-audio-left",
@@ -454361,7 +454419,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 22
     },
     {
       "capture_id": "20260507-182925-pbp-left-hdmi-right-tb-audio-right",
@@ -462127,7 +462186,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 23
     },
     {
       "capture_id": "20260507-183029-pbp-left-hdmi-right-tb-audio-right",
@@ -469893,7 +469953,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 23
     },
     {
       "capture_id": "20260507-183207-pbp-left-hdmi-right-tb-audio-left",
@@ -477659,7 +477720,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 24
     },
     {
       "capture_id": "20260507-183311-pbp-left-hdmi-right-tb-audio-left",
@@ -485425,7 +485487,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 24
     },
     {
       "capture_id": "20260507-183634-single-source-dp",
@@ -493190,7 +493253,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 25
     },
     {
       "capture_id": "20260507-183738-single-source-dp",
@@ -500955,7 +501019,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 25
     },
     {
       "capture_id": "20260507-184015-pip-main-dp-window-tb-size-1-top-left",
@@ -508721,7 +508786,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 26
     },
     {
       "capture_id": "20260507-184119-pip-main-dp-window-tb-size-1-top-left",
@@ -516487,7 +516553,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 26
     },
     {
       "capture_id": "20260507-184314-pip-main-dp-window-tb-size-2-top-left",
@@ -524253,7 +524320,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 27
     },
     {
       "capture_id": "20260507-184418-pip-main-dp-window-tb-size-2-top-left",
@@ -532019,7 +532087,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 27
     },
     {
       "capture_id": "20260512-130124-single-source-tb",
@@ -539825,7 +539894,8 @@
             }
           }
         }
-      }
+      },
+      "test_case": 3
     }
   ]
 }
