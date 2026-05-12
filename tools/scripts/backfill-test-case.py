@@ -88,6 +88,12 @@ def main() -> None:
 
     for path in paths:
         data = json.loads(path.read_text())
+        if data.get("jog_button") is not None:
+            # jog-button-scan.py assigns test_case directly — leave it alone
+            tc = data.get("test_case")
+            status = f"TC {tc:2d}" if tc is not None else "  NONE"
+            print(f"  {status}  {path.name}  (jog — preserved)")
+            continue
         tc = match_test_case(data)
         data["test_case"] = tc
         path.write_text(json.dumps(data, indent=2) + "\n")
