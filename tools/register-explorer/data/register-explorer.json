@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T13:07:06+00:00",
+  "generated_at": "2026-05-12T13:37:42+00:00",
   "source_root": "docs/investigation",
   "notes": [
     "Null means the register or VCP code was attempted but did not produce a readable value.",
@@ -532034,6 +532034,8 @@
       "signal_state": "active",
       "layout_mode": "single",
       "connected_inputs": [
+        "dp",
+        "hdmi",
         "tb"
       ],
       "signal_present_inputs": [

@@ -113,10 +113,12 @@ const els = {
   hideAllZero: document.querySelector("#hide-all-zero"),
   hideConstants: document.querySelector("#hide-constants"),
   hideNoConsensus: document.querySelector("#hide-no-consensus"),
+  relevantOnly: document.querySelector("#relevants-only"),
   registerSummary: document.querySelector("#register-summary"),
   inventorySummary: document.querySelector("#inventory-summary"),
   matrixHead: document.querySelector("#matrix-table thead"),
   matrixBody: document.querySelector("#matrix-table tbody"),
+  copyCsvBtn: document.querySelector("#copy-csv-btn"),
   cellDetail: document.querySelector("#cell-detail"),
   captureDetail: document.querySelector("#capture-detail"),
 };
@@ -251,6 +253,7 @@ function bindEvents() {
     els.hideAllZero,
     els.hideConstants,
     els.hideNoConsensus,
+    els.relevantOnly,
   ].forEach((element) => {
     element.addEventListener("change", () => {
       updateFilterSummaries();
@@ -285,6 +288,7 @@ function bindEvents() {
   });
 
   document.querySelector("#reset-all-filters")?.addEventListener("click", resetAllFilters);
+  els.copyCsvBtn?.addEventListener("click", copyMatrixCsv);
 }
 
 function render() {
@@ -365,6 +369,7 @@ function getVisibleColumns(captures) {
   const hideAllZero = els.hideAllZero.checked;
   const hideConstants = els.hideConstants.checked;
   const hideNoConsensus = els.hideNoConsensus.checked;
+  const relevantOnly = els.relevantOnly.checked;
   const selectedDevices = getSelectedValues(els.deviceSelect);
   const columns = [];
 
@@ -393,6 +398,7 @@ function getVisibleColumns(captures) {
       if (hideAllZero && states.some((s) => s.kind === "value") && states.every((s) => s.kind !== "value" || s.value === 0)) continue;
       if (hideConstants && isConstant(device, reg)) continue;
       if (hideNoConsensus && hasNoConsensus(device, reg)) continue;
+      if (relevantOnly && getRelevants(device, reg).length === 0) continue;
 
       columns.push({ device, reg });
     }
@@ -450,6 +456,7 @@ function renderMeta(captures, columns) {
       <button class="mini-button" id="mark-visible-relevant" type="button" title="Add the selected test case number to the relevance list of every currently visible register. Requires a test case to be selected.">Mark Visible as Relevant</button>
       <button class="mini-button danger" id="reset-irrelevancy" type="button" title="Clear all irrelevancy counts globally. Cannot be undone.">Reset Irrelevancy</button>
       <button class="mini-button danger" id="reset-constants" type="button" title="Remove all constant tags globally. Cannot be undone.">Reset Constants</button>
+      <button class="mini-button danger" id="reset-relevants" type="button" title="Remove all test case relevance assignments globally. Cannot be undone.">Reset Relevants</button>
     </div>
   `;
   document.querySelector("#mark-visible-irrelevant")?.addEventListener("click", markVisibleAsIrrelevant);
@@ -458,6 +465,7 @@ function renderMeta(captures, columns) {
   document.querySelector("#mark-visible-relevant")?.addEventListener("click", markVisibleAsRelevant);
   document.querySelector("#reset-irrelevancy")?.addEventListener("click", resetIrrelevancy);
   document.querySelector("#reset-constants")?.addEventListener("click", resetConstants);
+  document.querySelector("#reset-relevants")?.addEventListener("click", resetRelevants);
 
   const selectedDeviceSummary = selectedDevices.length === 1 ? selectedDevices[0] : `${selectedDevices.length} selected devices`;
   els.inventorySummary.innerHTML = `
@@ -486,6 +494,7 @@ function activeRegisterFilterSummary() {
   if (els.hideAllZero.checked) filters.push("all-zero hidden");
   if (els.hideConstants.checked) filters.push("constants hidden");
   if (els.hideNoConsensus.checked) filters.push("no-consensus hidden");
+  if (els.relevantOnly.checked) filters.push("relevants only");
   return filters.length ? filters.join(" · ") : "all matching registers shown";
 }
 
@@ -1037,6 +1046,7 @@ function saveFilterState() {
     hideAllZero: els.hideAllZero.checked,
     hideConstants: els.hideConstants.checked,
     hideNoConsensus: els.hideNoConsensus.checked,
+    relevantOnly: els.relevantOnly.checked,
   };
   localStorage.setItem(filterStateKey, JSON.stringify(saved));
 }
@@ -1065,6 +1075,7 @@ function applyFilterState() {
   if (saved.hideAllZero != null) els.hideAllZero.checked = saved.hideAllZero;
   if (saved.hideConstants != null) els.hideConstants.checked = saved.hideConstants;
   if (saved.hideNoConsensus != null) els.hideNoConsensus.checked = saved.hideNoConsensus;
+  if (saved.relevantOnly != null) els.relevantOnly.checked = saved.relevantOnly;
 }
 
 function applySelectState(select, savedValues) {
@@ -1072,6 +1083,42 @@ function applySelectState(select, savedValues) {
   const available = new Set([...select.options].map((o) => o.value));
   const toSelect = new Set(savedValues.filter((v) => available.has(v)));
   [...select.options].forEach((o) => { o.selected = toSelect.has(o.value); });
+}
+
+function csvEscape(value) {
+  const s = String(value ?? "");
+  return s.includes(",") || s.includes('"') || s.includes("\n") ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+async function copyMatrixCsv() {
+  const captures = getVisibleCaptures();
+  const columns = getVisibleColumns(captures);
+  if (!captures.length || !columns.length) {
+    window.alert("Nothing visible to copy.");
+    return;
+  }
+
+  const header = [
+    "capture_id",
+    "state",
+    ...columns.map(({ device, reg }) => {
+      const alias = getAlias(device, reg);
+      return alias ? `${alias} (${device}:${reg})` : `${device}:${reg}`;
+    }),
+  ];
+
+  const rows = captures.map((capture) => [
+    capture.capture_id,
+    capture.state_label ?? "",
+    ...columns.map(({ device, reg }) => formatCellState(valueState(capture, device, reg))),
+  ]);
+
+  const csv = [header, ...rows].map((row) => row.map(csvEscape).join(",")).join("\n");
+
+  await navigator.clipboard.writeText(csv);
+  const orig = els.copyCsvBtn.textContent;
+  els.copyCsvBtn.textContent = "Copied!";
+  setTimeout(() => { els.copyCsvBtn.textContent = orig; }, 1500);
 }
 
 function resetAllFilters() {
@@ -1092,6 +1139,7 @@ function resetAllFilters() {
   els.hideAllZero.checked = false;
   els.hideConstants.checked = false;
   els.hideNoConsensus.checked = false;
+  els.relevantOnly.checked = false;
   updateFilterSummaries();
   render();
   syncTestCasePreset();
@@ -1110,6 +1158,15 @@ function adjustIrrelevancy(device, reg, delta) {
     state.irrelevantCounts[key] = next;
   }
   saveIrrelevantCounts();
+  render();
+}
+
+function resetRelevants() {
+  const count = Object.keys(state.relevants).length;
+  if (!count) return;
+  if (!window.confirm(`Clear all ${count} relevance assignment(s)?`)) return;
+  state.relevants = {};
+  saveRelevants();
   render();
 }
 

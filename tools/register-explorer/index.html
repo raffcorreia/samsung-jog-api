@@ -117,15 +117,16 @@
               </div>
               <div class="toggle-panel">
                 <label class="check"><input id="varying-only" type="checkbox" /><span>Varying only</span></label>
-                <label class="check"><input id="attempted-only" type="checkbox" /><span>Attempted by all</span></label>
-                <label class="check"><input id="labeled-only" type="checkbox" /><span>Labeled only</span></label>
-                <label class="check"><input id="diff-only" type="checkbox" /><span>Changed vs compare</span></label>
-                <label class="check"><input id="equals-only" type="checkbox" /><span>Equal only</span></label>
                 <label class="check"><input id="hide-irrelevants" type="checkbox" /><span>Hide irrelevants</span></label>
-                <label class="check"><input id="irrelevants-only" type="checkbox" /><span>Irrelevants only</span></label>
+                <label class="check"><input id="relevants-only" type="checkbox" /><span>Relevants only</span></label>
                 <label class="check"><input id="hide-all-null" type="checkbox" /><span>Hide all-null</span></label>
-                <label class="check"><input id="hide-all-zero" type="checkbox" /><span>Hide all-zero</span></label>
+                <label class="check"><input id="diff-only" type="checkbox" /><span>Changed vs compare</span></label>
                 <label class="check"><input id="hide-constants" type="checkbox" /><span>Hide constants</span></label>
+                <label class="check"><input id="equals-only" type="checkbox" /><span>Equal only</span></label>
+                <label class="check"><input id="irrelevants-only" type="checkbox" /><span>Irrelevants only</span></label>
+                <label class="check"><input id="labeled-only" type="checkbox" /><span>Labeled only</span></label>
+                <label class="check"><input id="hide-all-zero" type="checkbox" /><span>Hide all-zero</span></label>
+                <label class="check"><input id="attempted-only" type="checkbox" /><span>Attempted by all</span></label>
                 <label class="check"><input id="hide-no-consensus" type="checkbox" /><span>Hide no-consensus</span></label>
               </div>
             </div>
@@ -160,6 +161,7 @@
       </div>
 
       <section class="matrix card">
+        <button class="mini-button" id="copy-csv-btn" type="button" title="Copy the visible matrix as CSV to the clipboard">Copy CSV</button>
         <div class="matrix-scroll">
           <table id="matrix-table">
             <thead></thead>
