@@ -6,7 +6,7 @@ Track **Phase 24: DDC Capability Investigation** per [Implementation Plan](./pla
 
 ## Status
 
-**In progress.** DDC VCP scan and raw I2C register scan complete. Monitor state model partially characterized. Software integration pending.
+**Investigation complete.** Full 35-test-case capture matrix recorded and analysed. Interactive register explorer built and deployed. Layout-mode detection via I2C proven not feasible from observable registers; primary input and physical port presence are reliably readable. Software integration and physical port connectivity experiment (HDMI-only isolation) remain as follow-on work.
 
 ---
 
@@ -135,101 +135,104 @@ Investigation scripts: `tools/scripts/collect-register-capture.py`.
 
 ---
 
+### Interactive register explorer
+
+Built and deployed at `tools/register-explorer/` — a local, server-optional interactive HTML page that loads all canonical capture JSON files and presents them in a single navigable view.
+
+**Features:**
+
+- All five devices in one view: `0x3A`, `0x50`, `0x54`, `0x58`, `0x37_ddc`
+- Test-case preset buttons (TC1–TC50+) that pre-fill all filter dropdowns in one click
+- Filter by: power state, layout mode, primary input, secondary input, PIP size, audio side, jog button, signal state, metadata certainty, OSD visibility
+- "Show only varying registers" toggle — hides registers constant across the filtered capture set
+- Per-register value colour coding and user-defined labels
+- Relevant/irrelevant register tagging persisted in browser localStorage
+- Cell click shows raw value and source filename
+- Side-by-side capture comparison mode
+
+**Build:** `tools/scripts/build-register-explorer-data.py` regenerates `tools/register-explorer/data/register-explorer.json` from all captures under `docs/investigation/register-captures/`. Run after every new capture import.
+
+**Capture pipeline:** `tools/scripts/collect-register-capture.py` (interactive, runs on Pi) → scp pull → patch `jog_button` and `metadata_certainty` fields → `tools/scripts/backfill-test-case.py` → `build-register-explorer-data.py`.
+
+---
+
+### Full 35-test-case capture matrix
+
+All 35 canonical test cases captured and imported with double-pass verification (two independent captures per test case, majority-vote reads per register). Total capture set: 81 files covering all single, PIP, and PBP combinations across TB, HDMI, and DP inputs; standby and idle baselines included.
+
+Capture read strategy: majority-vote per register (up to 5 reads, 3-match consensus), flagging registers that never reached consensus. All captures use `flags.include_in_explorer: true` and `flags.metadata_certainty: "high"`.
+
+---
+
+### Comprehensive register analysis — layout-mode detection
+
+After importing the full matrix and analysing all varying registers across all five devices (`0x3A`, `0x50`, `0x54`, `0x58`, `0x37_ddc`), the following was established:
+
+**What is reliably readable:**
+
+| Register | Meaning | Values |
+|----------|---------|--------|
+| `0x37_ddc VCP 0x60` | Primary input source | `0x04`=TB, `0x01`=HDMI, `0x03`=DP |
+| `0x58:0xBC` | Active vs standby/idle | `0x01`=active, `0x00`=standby or idle |
+
+**VCP 0x60** is stable and consistent across all 35 test cases (one anomaly on TC15, likely a transient). It identifies the primary source regardless of layout mode, PIP size, or audio side. Standby also returns `0x04` (same as TB), so `0x58:0xBC` is required to distinguish TB-active from standby.
+
+**What is not detectable from registers:**
+
+| State dimension | Conclusion |
+|----------------|------------|
+| Layout mode (single / PIP / PBP) | Not encoded in any observable register across all five devices |
+| Secondary / window input source | Not detectable independently of primary input |
+| PIP size | `0x58:0xE0–0xE3` vary with PIP configuration but encode pixel geometry (resolution + size combined); the same values appear in single-source states. No clean size enum exists. |
+| Audio side (left / right) | Not detectable from any register |
+
+**Device-level conclusions:**
+
+- **`0x3A` (HDCP 1.4 receiver):** Registers `0x08`–`0x09` (Ri') and `0x0A` (Pj') do vary across captures but carry HDCP link-verification frame counters that update every 128 frames (~2s at 60 Hz). The values reflect HDCP session timing, not layout state. All 11 HDMI-primary captures share identical Ri' values regardless of single/PIP/PBP layout, confirming session-based rather than layout-based encoding.
+- **`0x50` (EDID ROM):** Many registers vary but encode PIP window pixel geometry, not a layout mode flag. Not useful for state detection.
+- **`0x54`:** Register `0x10` varies, but its behaviour is governed by physical port connectivity rather than display layout (see connectivity experiment below).
+- **`0x58`:** Registers `0x3C`, `0x3D`, `0x3E`, `0xA0`, `0xA3` are free-running counters with no layout correlation. `0xE0–0xE3` encode pipeline geometry whose same values appear across single-source and multi-source states, making layout inference impossible.
+- **`0x37_ddc` (raw register scan):** All responding registers return `0x6E` or `0xBE` (device address echo). The `0x37` device is a protocol-only DDC/CI controller, not a memory-mapped register bank. VCP codes must be accessed via DDC/CI protocol, not raw I2C byte reads.
+
+---
+
+### Physical port connectivity experiment
+
+Targeted experiment to determine whether the physical presence of each cable (regardless of whether it is the active source) is detectable from registers. Single-source test cases TC3 (TB primary), TC14 (HDMI primary), and TC25 (DP primary) were captured across all reachable port-connected subsets by disconnecting cables one at a time. Two passes per configuration for stability verification.
+
+**Configurations tested:**
+
+- TC3: `dp+hdmi+tb` (baseline) vs `hdmi+tb` (DP cable removed)
+- TC14: `dp+hdmi+tb` (baseline) vs `dp+hdmi` (TB removed) vs `hdmi+tb` (DP removed) vs `hdmi` (both removed)
+- TC25: `dp+hdmi+tb` (baseline) vs `dp+hdmi` (TB removed)
+
+**Results:**
+
+| Register | TB removed | DP removed | Notes |
+|----------|-----------|-----------|-------|
+| `0x58:0xA1` | `0x21/0x22 → 0x00` | no change | **TB physical connection indicator** |
+| `0x58:0xA3` | no change | `0xDC–0xDE → 0x01` | **DP physical connection indicator** |
+| `0x54:0x10` | `0x01 → 0x03` | `0x01 → 0x03` | Changes on either removal; not port-specific alone |
+| `0x37_ddc:0xFE` | `0x02 → 0x01` | `0x02 → 0x01` | `0x02` only when all three ports present |
+| `0x58:0xA5` | `0xB3 → 0x00` | no change | Mirrors `0xA1` but noisy within groups |
+
+**Decoding rules:**
+
+- **`0x58:0xA1 = 0x00`** → TB cable is not physically connected. Non-zero (typically `0x21` or `0x22`) → TB present. Stable across all passes; does not change when DP is removed.
+- **`0x58:0xA3 = 0x01`** → DP cable is not physically connected. Values in the `0xDA–0xE0` range → DP present. The specific value within that range is a cycling counter and varies between passes; only the `0x01` sentinel is significant. Does not change when TB is removed.
+- **`0x54:0x10`** alone cannot identify which port is absent; it requires combination with `0xA1` and `0xA3` to disambiguate. Additional context: `0x54:0x10 = 0x01` also appears when DP is connected but not the primary source (single-TB or single-HDMI with all ports present), and `0x03` when DP is the primary source even with all ports connected — so this register reflects both DP-active state and DP-absent state as the same value.
+- **`0x37_ddc:0xFE`** is a useful "all three connected" gate: `0x02` confirms dp+hdmi+tb all present; any other value means at least one port is missing, but does not identify which.
+
+**Not yet tested:** HDMI cable removal with TB and DP still connected. No HDMI-specific isolation register has been identified from the data collected. A `dp+tb` (HDMI removed) capture set would be needed to confirm or rule out a HDMI presence indicator.
+
+---
+
 ## Remaining work
 
-- Re-capture all PBP states (6 combos × 2 sound positions) with clean protocol — E0–E3 data contaminated
-- Re-capture single-source states (TB, DP, HDMI) for clean E0–E3 baseline
-- Capture missing PIP states: all TB-main/DP-pip and HDMI-main/DP-pip combos (9 states never captured)
-- Software integration: feed VCP 0x60 + `0x58:0x48` into the monitor state model
+- **HDMI isolation capture:** repeat connectivity experiment with only HDMI disconnected (dp+tb connected) on TC3 or TC25 to find or rule out a HDMI-specific presence register
+- **Software integration:** wire `VCP 0x60` + `0x58:0xBC` into the monitor state model as the primary-input and power-state signals
+- **Port presence integration:** expose `0x58:0xA1` (TB) and `0x58:0xA3` (DP) in the state model for cable-presence detection
 - Verify DDC write reliability (input switching, brightness) under normal operating conditions
-
-### Next: interactive register explorer
-
-The flat markdown matrix (`phase-24-full-matrix.md`) is not navigable at scale — 29 rows × 768+ columns (256 DDC + 256 `0x58` + 256 `0x54`) cannot be meaningfully reviewed as static text.
-
-The explorer must be backed by capture files that include the observed monitor state as first-class metadata. Register values alone are not enough; each capture has to record the operator-asserted ground truth so characterization does not depend on inferring state from the same registers under analysis.
-
-**Required capture metadata:**
-
-- Power state: `on` or `standby`
-- Signal state: `active` or `idle/no-signal`
-- Layout mode: `single`, `PBP`, or `PIP`
-- Connected inputs present on the monitor cabling
-- Inputs currently sending usable images
-- Primary/left input: `HDMI`, `DP`, or `TB`
-- Secondary/right input when applicable
-- Audio side: `left` or `right`
-- PIP main input and PIP window input when applicable
-- PIP size and window position when applicable
-- Whether OSD is visible at capture time
-- Whether the capture is contaminated or otherwise untrusted
-- Free-text notes for anything unusual during the read
-
-**Canonical raw capture shape:**
-
-```json
-{
-  "capture_id": "2026-05-02T01:03:33-04:00_pip_dp_main_hdmi_window_size1_top_right",
-  "timestamp": "2026-05-02T01:03:33-04:00",
-  "bus": 13,
-  "state_label": "main: DP / pip: HDMI / size 1 / top-right",
-  "power_state": "on",
-  "signal_state": "active",
-  "layout_mode": "pip",
-  "connected_inputs": ["dp", "hdmi", "tb"],
-  "signal_present_inputs": ["dp", "hdmi", "tb"],
-  "primary_input": "dp",
-  "secondary_input": "hdmi",
-  "audio_side": "right",
-  "pip": {
-    "main_input": "dp",
-    "window_input": "hdmi",
-    "size": 1,
-    "position": "top-right"
-  },
-  "flags": {
-    "osd_visible": false,
-    "contaminated": false
-  },
-  "notes": "",
-  "devices": {
-    "0x37_ddc": {
-      "0x60": 3,
-      "0xD6": 1
-    },
-    "0x54": {
-      "0x00": 17,
-      "0x01": 44
-    },
-    "0x58": {
-      "0x02": 121,
-      "0x48": 15,
-      "0x4A": 2,
-      "0xA1": 33,
-      "0xE0": 64,
-      "0xE1": 78,
-      "0xE2": 0,
-      "0xE3": 0
-    }
-  }
-}
-```
-
-Raw captures should remain the source of truth. Any FE-friendly flattened dataset should be generated from these files rather than replacing them.
-
-**Hypothesis to test:** `0x37_ddc`, `0x54`, and `0x58` may not be the only useful endpoints on the monitor-facing bus (`/dev/i2c-13`). Run a discovery pass against all readable device addresses, compare state-to-state variation, and promote any additional device to first-class analysis only if its registers track monitor state in a meaningful way.
-
-**Goal:** a local interactive HTML page (no server required) that loads all scan JSONL files directly and allows:
-
-- All devices in a single view: `0x37_ddc`, `0x54`, `0x58`
-- Display states as rows, registers as columns
-- Filter: show only registers that vary across states (hide constants)
-- Filter by device, mode type (single / PBP / PIP / idle), specific state
-- Sort rows and columns
-- Color rules: highlight specific values, mark registers as noisy/excluded, flag contaminated captures
-- Click a cell to see the raw value and which scan file it came from
-
-This replaces the static matrix as the primary analysis tool and unblocks characterizing `0x54` properly.
 
 ---
 
