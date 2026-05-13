@@ -99,6 +99,7 @@ const els = {
   pipSizeSelect: document.querySelector("#pip-size-select"),
   secondarySelect: document.querySelector("#secondary-select"),
   connectedSelect: document.querySelector("#connected-select"),
+  jogButtonSelect: document.querySelector("#jog-button-select"),
   testCaseSelect: document.querySelector("#test-case-select"),
   registerFilter: document.querySelector("#register-filter"),
   compareSelect: document.querySelector("#compare-select"),
@@ -141,7 +142,7 @@ async function init() {
 }
 
 async function fetchJson(url) {
-  const response = await fetch(url);
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Failed to load ${url}: ${response.status}`);
   }
@@ -176,6 +177,7 @@ function hydrateControls() {
   fillMultiSelect(els.pipSizeSelect, ["any", "small", "medium", "large"], ["any"]);
   fillMultiSelect(els.secondarySelect, facetValues("secondary_input"));
   fillMultiSelect(els.connectedSelect, ["any", "dp", "hdmi", "tb"], ["any"]);
+  fillMultiSelect(els.jogButtonSelect, ["none", "center", "up", "down", "left", "right"]);
   fillCompareSelect();
   applyFilterState();
   installMultiSelectBehavior();
@@ -265,8 +267,10 @@ function bindEvents() {
 
   els.testCaseSelect.addEventListener("change", () => {
     const num = parseInt(els.testCaseSelect.value, 10);
+    if (isNaN(num)) { state.activeJogTc = null; return; }
     const tc = TEST_CASES.find((t) => t.num === num);
-    if (tc) applyTestCasePreset(tc);
+    if (tc) { state.activeJogTc = null; applyTestCasePreset(tc); }
+    else applyJogTcPreset(num);
   });
 
   els.registerFilter.addEventListener("input", () => { saveFilterState(); render(); });
@@ -309,6 +313,7 @@ function getVisibleCaptures() {
   const pipSizes = getSelectedValues(els.pipSizeSelect);
   const secondaries = getSelectedValues(els.secondarySelect);
   const connectedInputs = getSelectedValues(els.connectedSelect);
+  const jogButtonValues = getSelectedValues(els.jogButtonSelect);
   const filterPowers = isRestrictiveSelection(els.powerSelect, powers);
   const filterLayouts = isRestrictiveSelection(els.layoutSelect, layouts);
   const filterPrimaries = isRestrictiveSelection(els.primarySelect, primaries);
@@ -345,11 +350,18 @@ function getVisibleCaptures() {
     }
     if (!connectedAny) {
       const captureConnected = capture.connected_inputs ?? [];
-      if (connectedSpecific.length === 0) {
-        if (captureConnected.length > 0) return false;
-      } else {
-        if (!connectedSpecific.every((v) => captureConnected.includes(v))) return false;
+      if (captureConnected.length > 0) {
+        if (connectedSpecific.length === 0) {
+          return false;
+        } else {
+          if (!connectedSpecific.every((v) => captureConnected.includes(v))) return false;
+        }
       }
+      // empty connected_inputs = unknown; pass the filter regardless
+    }
+    if (isRestrictiveSelection(els.jogButtonSelect, jogButtonValues)) {
+      const btnKey = capture.jog_button ?? "none";
+      if (!jogButtonValues.includes(btnKey)) return false;
     }
     return true;
   }).sort((a, b) => {
@@ -812,6 +824,7 @@ function installMultiSelectBehavior() {
     els.pipSizeSelect,
     els.secondarySelect,
     els.connectedSelect,
+    els.jogButtonSelect,
     els.compareSelect,
   ].forEach((select) => {
     select.addEventListener("mousedown", (event) => {
@@ -1038,6 +1051,7 @@ function saveFilterState() {
     pipSize: getSelectedValues(els.pipSizeSelect),
     secondary: getSelectedValues(els.secondarySelect),
     connected: getSelectedValues(els.connectedSelect),
+    jogButton: getSelectedValues(els.jogButtonSelect),
     compare: getSelectedValues(els.compareSelect),
     registerFilter: els.registerFilter.value,
     varyingOnly: els.varyingOnly.checked,
@@ -1067,6 +1081,7 @@ function applyFilterState() {
   applySelectState(els.pipSizeSelect, saved.pipSize);
   applySelectState(els.secondarySelect, saved.secondary);
   applySelectState(els.connectedSelect, saved.connected);
+  if (saved.jogButton) applySelectState(els.jogButtonSelect, saved.jogButton);
   applySelectState(els.compareSelect, saved.compare);
   if (saved.registerFilter != null) els.registerFilter.value = saved.registerFilter;
   if (saved.varyingOnly != null) els.varyingOnly.checked = saved.varyingOnly;
@@ -1127,8 +1142,9 @@ async function copyMatrixCsv() {
 }
 
 function resetAllFilters() {
+  els.testCaseSelect.value = "";
   localStorage.removeItem(filterStateKey);
-  [els.deviceSelect, els.powerSelect, els.layoutSelect, els.primarySelect, els.audioSelect, els.pipSizeSelect, els.secondarySelect, els.connectedSelect].forEach((sel) => {
+  [els.deviceSelect, els.powerSelect, els.layoutSelect, els.primarySelect, els.audioSelect, els.pipSizeSelect, els.secondarySelect, els.connectedSelect, els.jogButtonSelect].forEach((sel) => {
     [...sel.options].forEach((o) => { o.selected = true; });
   });
   clearSelections(els.compareSelect);
@@ -1363,6 +1379,24 @@ function hydrateTestCaseSelect() {
     }
     els.testCaseSelect.appendChild(group);
   }
+
+  const jogNums = [...new Set(
+    state.data.captures
+      .filter((c) => (c.test_case ?? 0) >= 50)
+      .map((c) => c.test_case)
+  )].sort((a, b) => a - b);
+  if (jogNums.length > 0) {
+    const group = document.createElement("optgroup");
+    group.label = "Jog Scans";
+    for (const num of jogNums) {
+      const sample = state.data.captures.find((c) => c.test_case === num);
+      const opt = document.createElement("option");
+      opt.value = String(num);
+      opt.textContent = `${num} — ${sample?.state_label ?? "JOG"}`;
+      group.appendChild(opt);
+    }
+    els.testCaseSelect.appendChild(group);
+  }
 }
 
 function syncTestCasePreset() {
@@ -1404,6 +1438,23 @@ function findMatchingTestCase() {
   });
 }
 
+function applyJogTcPreset(num) {
+  const sample = state.data.captures.find((c) => c.test_case === num);
+  const baseTcNum = sample?.base_test_case;
+  const baseTc = baseTcNum != null ? TEST_CASES.find((t) => t.num === baseTcNum) : null;
+  if (baseTc) {
+    applyTestCasePreset(baseTc);
+    // Override jog button filter to the specific button for this jog TC
+    const btn = sample?.jog_button;
+    if (btn) applySelectState(els.jogButtonSelect, [btn]);
+    updateFilterSummaries();
+    saveFilterState();
+    render();
+  } else {
+    render();
+  }
+}
+
 function applyTestCasePreset(tc) {
   const allValues = (select) => [...select.options].map((o) => o.value);
   applySelectState(els.powerSelect, tc.filters.power ?? allValues(els.powerSelect));
@@ -1413,6 +1464,7 @@ function applyTestCasePreset(tc) {
   applySelectState(els.pipSizeSelect, tc.filters.size ?? ["any"]);
   applySelectState(els.secondarySelect, tc.filters.secondary ?? allValues(els.secondarySelect));
   applySelectState(els.connectedSelect, ["any"]);
+  applySelectState(els.jogButtonSelect, [...els.jogButtonSelect.options].map((o) => o.value));
   updateFilterSummaries();
   saveFilterState();
   render();

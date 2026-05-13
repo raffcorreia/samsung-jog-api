@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-12T15:42:33+00:00",
+  "generated_at": "2026-05-13T15:04:42+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -294,6 +294,50 @@
     },
     {
       "path": "register-captures/20260512-151107-single-source-dp.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180405-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180418-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180431-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180443-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180455-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180502-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180508-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180514-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180520-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260512-180526-jog-center-single-source-tb.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260513-145855-single-source-tb.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]

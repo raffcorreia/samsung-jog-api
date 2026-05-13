@@ -50,7 +50,7 @@ except ImportError:
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RAW_CAPTURE_ROOT = REPO_ROOT / "docs" / "investigation" / "register-captures"
 DEFAULT_BUS = 13
-DEFAULT_DEVICES = [0x3A, 0x50, 0x54, 0x58]
+DEFAULT_DEVICES = [0x58]
 DEFAULT_HOST = "10.0.0.116"
 DEFAULT_PORT = 8756
 
