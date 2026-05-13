@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T16:02:25+00:00",
+  "generated_at": "2026-05-13T16:06:11+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -338,6 +338,10 @@
     },
     {
       "path": "register-captures/20260513-160115-single-source-dp.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260513-160504-single-source-dp.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]
