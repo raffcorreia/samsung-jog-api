@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T15:41:48+00:00",
+  "generated_at": "2026-05-13T15:50:29+00:00",
   "notes": [
     "This inventory records which investigation sources were promoted into explorer data and which were intentionally excluded."
   ],
@@ -166,14 +166,6 @@
     },
     {
       "path": "register-captures/20260507-042600-pbp-left-dp-right-tb-audio-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-175408-pip-main-hdmi-window-tb-size-1-top-left.json",
-      "decision": "Included: canonical capture marked include_in_explorer=true."
-    },
-    {
-      "path": "register-captures/20260507-175515-pip-main-hdmi-window-tb-size-1-top-left.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     },
     {
@@ -350,6 +342,10 @@
     },
     {
       "path": "register-captures/20260513-154040-pip-main-hdmi-window-tb-size-1-top-left.json",
+      "decision": "Included: canonical capture marked include_in_explorer=true."
+    },
+    {
+      "path": "register-captures/20260513-154922-single-source-dp.json",
       "decision": "Included: canonical capture marked include_in_explorer=true."
     }
   ]
