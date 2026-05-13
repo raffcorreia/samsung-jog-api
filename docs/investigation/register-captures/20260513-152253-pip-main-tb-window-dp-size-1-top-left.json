@@ -1,6 +1,6 @@
 {
-  "capture_id": "20260513-151648-pip-main-tb-window-dp-size-1-top-left",
-  "captured_at": "2026-05-13T15:16:48+00:00",
+  "capture_id": "20260513-152253-pip-main-tb-window-dp-size-1-top-left",
+  "captured_at": "2026-05-13T15:22:53+00:00",
   "monitor_bus": "/dev/i2c-13",
   "source": {
     "tool": "tools/scripts/collect-register-capture.py",
@@ -1890,7 +1890,7 @@
         "0x08": 55,
         "0x09": 0,
         "0x0A": 0,
-        "0x0B": 129,
+        "0x0B": 130,
         "0x0C": 211,
         "0x0D": 255,
         "0x0E": 4,
@@ -1939,9 +1939,9 @@
         "0x39": 0,
         "0x3A": 0,
         "0x3B": 69,
-        "0x3C": 16,
-        "0x3D": 58,
-        "0x3E": 0,
+        "0x3C": 68,
+        "0x3D": 109,
+        "0x3E": 7,
         "0x3F": 0,
         "0x40": 132,
         "0x41": 132,
@@ -2039,12 +2039,12 @@
         "0x9D": 0,
         "0x9E": 0,
         "0x9F": 4,
-        "0xA0": 244,
+        "0xA0": 240,
         "0xA1": 33,
         "0xA2": 255,
-        "0xA3": 221,
+        "0xA3": 218,
         "0xA4": 0,
-        "0xA5": 180,
+        "0xA5": 0,
         "0xA6": 255,
         "0xA7": 248,
         "0xA8": 0,
@@ -2138,10 +2138,14 @@
       },
       "errors": {},
       "read_stats": {
-        "total_reads": 515,
-        "registers_with_retries": 1,
+        "total_reads": 516,
+        "registers_with_retries": 2,
         "registers_no_consensus": 1,
         "retry_detail": {
+          "0x21": {
+            "attempts": 3,
+            "no_consensus": false
+          },
           "0x3C": {
             "attempts": 5,
             "no_consensus": true
@@ -2603,7 +2607,7 @@
         "0xBD": 0,
         "0xBE": 0,
         "0xBF": 0,
-        "0xC0": 245,
+        "0xC0": 246,
         "0xC1": 0,
         "0xC2": 0,
         "0xC3": 0,
@@ -6512,7 +6516,7 @@
         "0xC0": {
           "name": "Unknown (0xC0)",
           "status": "ok",
-          "value": 245,
+          "value": 246,
           "max": 65535,
           "type": "C",
           "raw": [
@@ -6525,8 +6529,8 @@
             "0xff",
             "0xff",
             "0x0",
-            "0xf5",
-            "0x81"
+            "0xf6",
+            "0x82"
           ]
         },
         "0xC1": {
@@ -7792,6 +7796,6 @@
       }
     }
   },
-  "test_case": 9,
-  "jog_button": "none"
+  "jog_button": "none",
+  "test_case": 9
 }
