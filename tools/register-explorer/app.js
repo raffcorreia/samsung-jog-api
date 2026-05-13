@@ -1464,7 +1464,7 @@ function applyTestCasePreset(tc) {
   applySelectState(els.pipSizeSelect, tc.filters.size ?? ["any"]);
   applySelectState(els.secondarySelect, tc.filters.secondary ?? allValues(els.secondarySelect));
   applySelectState(els.connectedSelect, ["any"]);
-  applySelectState(els.jogButtonSelect, [...els.jogButtonSelect.options].map((o) => o.value));
+  applySelectState(els.jogButtonSelect, ["none"]);
   updateFilterSummaries();
   saveFilterState();
   render();

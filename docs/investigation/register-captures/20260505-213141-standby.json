@@ -8274,5 +8274,6 @@
       }
     }
   },
-  "test_case": 1
+  "test_case": 1,
+  "jog_button": "none"
 }

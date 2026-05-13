@@ -7763,5 +7763,6 @@
       }
     }
   },
-  "test_case": 5
+  "test_case": 5,
+  "jog_button": "none"
 }

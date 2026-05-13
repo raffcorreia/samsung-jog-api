@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T15:04:42+00:00",
+  "generated_at": "2026-05-13T15:11:18+00:00",
   "notes": [
     "These scans are global capability probes, not state-tagged monitor captures.",
     "Values are normalized conservatively: scalar current/SL values are exposed when available, otherwise null."

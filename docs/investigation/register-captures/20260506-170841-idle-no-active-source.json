@@ -5327,5 +5327,6 @@
       }
     }
   },
-  "test_case": 2
+  "test_case": 2,
+  "jog_button": "none"
 }
