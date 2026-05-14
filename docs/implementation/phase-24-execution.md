@@ -210,7 +210,7 @@ Targeted experiment to determine whether the physical presence of each cable (re
 
 | Register | TB removed | DP removed | Notes |
 |----------|-----------|-----------|-------|
-| `0x58:0xA1` | `0x21/0x22 → 0x00` | no change | **TB physical connection indicator** |
+| `0x58:0xA1` | non-zero → `0x00` | no change | **TB physical connection indicator** |
 | `0x58:0xA3` | no change | `0xDC–0xDE → 0x01` | **DP physical connection indicator** |
 | `0x54:0x10` | `0x01 → 0x03` | `0x01 → 0x03` | Changes on either removal; not port-specific alone |
 | `0x37_ddc:0xFE` | `0x02 → 0x01` | `0x02 → 0x01` | `0x02` only when all three ports present |
@@ -218,7 +218,7 @@ Targeted experiment to determine whether the physical presence of each cable (re
 
 **Decoding rules:**
 
-- **`0x58:0xA1 = 0x00`** → TB cable is not physically connected. Non-zero (typically `0x21` or `0x22`) → TB present. Stable across all passes; does not change when DP is removed.
+- **`0x58:0xA1 = 0x00`** → TB cable is not physically connected. Any non-zero value → TB present. Stable across all passes; does not change when DP is removed. The specific non-zero value varies between passes (`0x21` and `0x22` observed in single-source states) and may differ in PIP/PBP configurations — only the zero/non-zero distinction is reliable.
 - **`0x58:0xA3 = 0x01`** → DP cable is not physically connected. Values in the `0xDA–0xE0` range → DP present. The specific value within that range is a cycling counter and varies between passes; only the `0x01` sentinel is significant. Does not change when TB is removed.
 - **`0x54:0x10`** alone cannot identify which port is absent; it requires combination with `0xA1` and `0xA3` to disambiguate. Additional context: `0x54:0x10 = 0x01` also appears when DP is connected but not the primary source (single-TB or single-HDMI with all ports present), and `0x03` when DP is the primary source even with all ports connected — so this register reflects both DP-active state and DP-absent state as the same value.
 - **`0x37_ddc:0xFE`** is a useful "all three connected" gate: `0x02` confirms dp+hdmi+tb all present; any other value means at least one port is missing, but does not identify which.
