@@ -25,7 +25,7 @@ Full VCP code enumeration via `ddcutil` (later replaced by direct raw I2C DDC/CI
 - No capability string (`0xF3` returns no data on this monitor)
 - VCP 0x60 is stable, unaffected by OSD or on-screen messages
 
-Full results in `docs/investigation/ddc-scan/`.
+Full results in [`docs/investigation/ddc-scan/`](../investigation/ddc-scan/README.md).
 
 ---
 
@@ -129,15 +129,15 @@ All 6 input combinations × 2 sound positions scanned. **E0–E3 data for PBP is
 
 ### Scan evidence
 
-All scan evidence committed to `docs/investigation/i2c-scan/` and `docs/investigation/ddc-scan/`. Full findings, contamination notes, register reference, and scan file index are in [`docs/investigation/i2c-scan/README.md`](../investigation/i2c-scan/README.md).
+All scan evidence committed to [`docs/investigation/i2c-scan/`](../investigation/i2c-scan/README.md) and [`docs/investigation/ddc-scan/`](../investigation/ddc-scan/README.md). Full findings, contamination notes, register reference, and scan file index are in [`docs/investigation/i2c-scan/README.md`](../investigation/i2c-scan/README.md).
 
-Investigation scripts: `tools/scripts/collect-register-capture.py`.
+Investigation scripts: [`tools/scripts/collect-register-capture.py`](../../tools/scripts/collect-register-capture.py).
 
 ---
 
 ### Interactive register explorer
 
-Built and deployed at `tools/register-explorer/` — a local, server-optional interactive HTML page that loads all canonical capture JSON files and presents them in a single navigable view.
+Built and deployed at [`tools/register-explorer/`](../../tools/register-explorer/index.html) — a local, server-optional interactive HTML page that loads all canonical capture JSON files and presents them in a single navigable view.
 
 **Features:**
 
@@ -150,9 +150,9 @@ Built and deployed at `tools/register-explorer/` — a local, server-optional in
 - Cell click shows raw value and source filename
 - Side-by-side capture comparison mode
 
-**Build:** `tools/scripts/build-register-explorer-data.py` regenerates `tools/register-explorer/data/register-explorer.json` from all captures under `docs/investigation/register-captures/`. Run after every new capture import.
+**Build:** [`tools/scripts/build-register-explorer-data.py`](../../tools/scripts/build-register-explorer-data.py) regenerates `tools/register-explorer/data/register-explorer.json` from all captures under [`docs/investigation/register-captures/`](../investigation/register-captures/). Run after every new capture import.
 
-**Capture pipeline:** `tools/scripts/collect-register-capture.py` (interactive, runs on Pi) → scp pull → patch `jog_button` and `metadata_certainty` fields → `tools/scripts/backfill-test-case.py` → `build-register-explorer-data.py`.
+**Capture pipeline:** [`tools/scripts/collect-register-capture.py`](../../tools/scripts/collect-register-capture.py) (interactive, runs on Pi) → scp pull → patch `jog_button` and `metadata_certainty` fields → [`tools/scripts/backfill-test-case.py`](../../tools/scripts/backfill-test-case.py) → `build-register-explorer-data.py`.
 
 ---
 
