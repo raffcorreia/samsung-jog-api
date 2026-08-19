@@ -85,19 +85,28 @@ The system is expected to support three operating modes:
 
 ## Documentation index
 
-Project definition:
+Use these section indexes to navigate the repository documentation:
+
+- [Hardware Reference](docs/hardware/README.md) — GPIO wiring, Raspberry Pi pinout, monitor connections, schematics, and bills of materials
+- [Implementation Plan](docs/implementation/plan.md) — planned phases and links to phase execution records
+- [Investigation Data](docs/investigation/) — register captures, I2C/DDC scans, and hardware-analysis notes
+- [Runbooks](docs/runbooks/) — Raspberry Pi preparation, deployment, and hardware bring-up procedures
+
+Core project documents:
 
 - [Requirements](docs/requirements.md)
 - [Solution Overview](docs/design/solution-overview.md)
+- [Architecture](docs/architecture.md)
 - [Implementation Plan](docs/implementation/plan.md)
 - [Test Strategy](docs/testing/test-strategy.md)
 - [Code Guidelines](docs/development/code-guidelines.md)
 
-Reference and reverse-engineering notes:
+Hardware and reverse-engineering entry points:
 
-- [Architecture](docs/architecture.md)
-- [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
-- [Observation BOM](docs/hardware/observation-bom.md)
+- [Hardware Reference index](docs/hardware/README.md)
+- [Raspberry Pi 5 GPIO schema and 40-pin header reference](docs/hardware/pi5-gpio-schema.md)
+- [Protoboard schematic and Raspberry Pi pinout diagram](docs/hardware/protoboard-schematic.md)
+- [CJ791 JOG board notes](docs/hardware/cj791-jog-board.md)
 - [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
 
 Operational docs:
@@ -124,9 +133,10 @@ Recommended reading order:
 1. [README.md](README.md)
 2. [Requirements](docs/requirements.md)
 3. [Solution Overview](docs/design/solution-overview.md)
-4. [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
-5. [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
-6. [Implementation Plan](docs/implementation/plan.md)
+4. [Hardware Reference](docs/hardware/README.md)
+5. [CJ791 JOG Board Notes](docs/hardware/cj791-jog-board.md)
+6. [CJ791 DDC and VCP Behavior](docs/ddc/cj791-vcp-behavior.md)
+7. [Implementation Plan](docs/implementation/plan.md)
 
 ## Safety and scope
 

@@ -2,6 +2,8 @@
 
 This schema maps the existing Phase 6 discrete protoboard wiring onto a Raspberry Pi 5 16GB host for Phase 20 validation.
 
+[Hardware Reference](README.md) · [Protoboard schematic](protoboard-schematic.md) · [Project README](../../README.md)
+
 The Raspberry Pi 5 keeps the same 40-pin GPIO header pinout used by the earlier Raspberry Pi deck host. Phase 20 therefore uses the same BCM GPIO assignments as `backend/src/pi_deck/hardware/protoboard_pins.py` unless validation proves a Pi 5-specific compatibility issue.
 
 ## Interfaces
@@ -40,6 +42,8 @@ Use BCM numbering in software and the physical header pins below for wiring.
 ## 40-Pin Header Reference
 
 Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin reference to identify pin `1` before wiring. Do not rely on cable color or ribbon orientation alone.
+
+![Raspberry Pi 40-pin GPIO header with project connections](../assets/hardware/raspberry-pi-pinout.svg)
 
 | Physical | Function | Phase 20 use | Physical | Function | Phase 20 use |
 | --- | --- | --- | --- | --- | --- |

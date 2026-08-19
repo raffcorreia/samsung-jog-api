@@ -2,6 +2,8 @@
 
 This note matches the KiCad schematic and names every active component explicitly.
 
+[Hardware Reference](README.md) · [Raspberry Pi 5 GPIO schema](pi5-gpio-schema.md) · [Project README](../../README.md)
+
 ## Interfaces
 
 ### Monitor Harness `J1`

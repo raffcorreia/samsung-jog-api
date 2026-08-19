@@ -2,17 +2,28 @@
 
 Living reference documents for the Samsung CJ791 JOG project hardware. These are named by artifact, not by the phase that created them. Phase-specific decisions and validation evidence belong in the corresponding execution records under `docs/implementation/`.
 
-## Documents
+Return to the [project README](../../README.md), or choose a hardware topic below.
+
+## Raspberry Pi and current protoboard
 
 | Document | What it covers |
 |---|---|
-| [cj791-jog-board.md](cj791-jog-board.md) | Samsung CJ791 front-panel JOG board: connector pinout, measured signal levels, resistor-ladder values |
-| [observation-bom.md](observation-bom.md) | Component list for the CN1001 bus observation circuit (KEY_ADC1, KEY_ADC2, KEY_LED conditioning path) |
-| [analog-drive-bom.md](analog-drive-bom.md) | Component list for the analog JOG drive circuit (resistor-ladder reproduction) |
-| [hdmi-ddc-transport.md](hdmi-ddc-transport.md) | HDMI and DDC/CI transport strategy: signal path, level shifting, and host integration |
-| [protoboard-bom.md](protoboard-bom.md) | Component list for the Phase 6 discrete-component protoboard (current bring-up hardware) |
-| [protoboard-schematic.md](protoboard-schematic.md) | Wiring and circuit description for the Phase 6 protoboard, including display power control additions |
-| [pi5-gpio-schema.md](pi5-gpio-schema.md) | Raspberry Pi 5 GPIO assignment table: BCM numbers, physical pins, signal names, and direction |
+| [Raspberry Pi 5 GPIO schema](pi5-gpio-schema.md) | BCM numbers, physical pins, signal names, direction, and a visual 40-pin header reference |
+| [Protoboard schematic](protoboard-schematic.md) | Wiring and circuit description for the Phase 6 protoboard, including the Raspberry Pi pinout diagram and display power control additions |
+| [Protoboard BOM](protoboard-bom.md) | Component list for the Phase 6 discrete-component protoboard (current bring-up hardware) |
+
+## Monitor interface and circuit references
+
+| Document | What it covers |
+|---|---|
+| [CJ791 JOG board](cj791-jog-board.md) | Samsung CJ791 front-panel JOG board connector pinout, measured signal levels, and resistor-ladder values |
+| [Observation circuit BOM](observation-bom.md) | Components for the CN1001 bus observation circuit (`KEY_ADC1`, `KEY_ADC2`, and `KEY_LED` conditioning) |
+| [Analog drive circuit BOM](analog-drive-bom.md) | Components for reproducing the analog JOG resistor ladder |
+| [HDMI and DDC transport](hdmi-ddc-transport.md) | HDMI/DDC/CI signal path, level shifting, and host integration |
+
+## Diagrams and images
+
+Diagrams are kept under [`docs/assets/hardware/`](../assets/hardware/) and are presented from the relevant reference document. For GPIO wiring, start with the [Raspberry Pi 5 GPIO schema](pi5-gpio-schema.md); for the complete circuit, use the [protoboard schematic](protoboard-schematic.md).
 
 ## Naming rule
 
