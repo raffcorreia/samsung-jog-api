@@ -6,7 +6,7 @@ Track **Phase 24: DDC Capability Investigation** per [Implementation Plan](./pla
 
 ## Status
 
-**Investigation complete.** Full 35-test-case capture matrix recorded and analysed. Interactive register explorer built and deployed. Layout-mode detection via I2C proven not feasible from observable registers; primary input and physical port presence are reliably readable. Software integration and physical port connectivity experiment (HDMI-only isolation) remain as follow-on work.
+**Investigation work complete; phase remains open for follow-on integration.** Full 35-test-case capture matrix recorded and analysed. Interactive register explorer built and deployed. Layout-mode detection via I2C proven not feasible from observable registers; primary input and physical port presence are reliably readable. Software integration and the remaining physical port connectivity experiment (HDMI-only isolation) are still open.
 
 ---
 
@@ -233,6 +233,49 @@ Targeted experiment to determine whether the physical presence of each cable (re
 - **Software integration:** wire `VCP 0x60` + `0x58:0xBC` into the monitor state model as the primary-input and power-state signals
 - **Port presence integration:** expose `0x58:0xA1` (TB) and `0x58:0xA3` (DP) in the state model for cable-presence detection
 - Verify DDC write reliability (input switching, brightness) under normal operating conditions
+
+---
+
+## Final HDMI display-output reversion
+
+2026-06-28: Reverted the Pi 5 display path to the attached Waveshare DSI panel and disabled HDMI as a Linux display output while keeping HDMI electrically available for monitor DDC/CI.
+
+Runtime state before reversion:
+
+- `HDMI-A-1` was enabled at `3440x1440`
+- `DSI-2` was disabled
+- `/boot/firmware/cmdline.txt` disabled only `HDMI-A-2`
+
+Applied:
+
+- runtime switch: `DSI-2` on at `1280x800`, `HDMI-A-1` off
+- persistent boot config: `/boot/firmware/cmdline.txt` now includes both `video=HDMI-A-2:d` and `video=HDMI-A-1:d`
+- backup created on the Pi: `/boot/firmware/cmdline.txt.phase24-hdmi-display-disable-20260628-220612.bak`
+
+Post-reboot verification:
+
+```text
+cmdline: console=serial0,115200 console=tty1 root=PARTUUID=92f59897-02 rootfstype=ext4 fsck.repair=yes rootwait cfg80211.ieee80211_regdom=CA video=HDMI-A-2:d video=HDMI-A-1:d
+
+wlr-randr:
+DSI-2 "(null) (null) (DSI-2)"
+  Enabled: yes
+  Modes:
+    1280x800 px, 60.026001 Hz (preferred, current)
+  Position: 0,0
+  Transform: normal
+  Scale: 1.000000
+```
+
+Raw DDC/CI over the monitor bus remained functional after HDMI video output was disabled:
+
+```text
+0x10 ('ok', {'current': 59, 'max': 100})
+0x60 ('ok', {'current': 4, 'max': 3})
+0xD6 ('ok', {'current': 1, 'max': 4})
+```
+
+Conclusion: the Pi can stop sending a video image to the Samsung HDMI input and still communicate with the monitor over the HDMI/DDC I2C path. This restores the intended operating model: DSI for the control-deck UI, HDMI/DDC for monitor communication only.
 
 ---
 
