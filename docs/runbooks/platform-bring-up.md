@@ -165,7 +165,7 @@ python3 scripts/pi-deck-host-health.py
 
 Use the **default text output** in Markdown execution records. `--json` is optional (tooling/archives only), not the main documentation format.
 
-See [Phase 9 execution record](../implementation/phase-9-execution.md#host-health-snapshot-baseline) for an example. Feature phases (**10–28**) must record an updated snapshot when closing the phase ([Host health gate](../implementation/plan.md#host-health-gate-feature-phases-1028)).
+See [Phase 9 execution record](../implementation/phase-9-execution.md#host-health-snapshot-baseline) for an example. Feature phases (**10–33**) must record an updated snapshot when closing the phase ([Host health gate](../implementation/plan.md#host-health-gate-feature-phases-1033)).
 
 ## Related documents
 

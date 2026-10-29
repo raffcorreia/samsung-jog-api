@@ -260,3 +260,5 @@ Remaining open items before the Pi 5 comparison can be fully closed:
 - Repeat display quality, brightness ceiling, and color validation on the replacement panel
 - Validate touch on the replacement panel
 - Decide whether future phases proceed on Pi 5 as the primary target
+
+These items are now carried by [Phase 25: Replacement Display and Final Pi 5 Host Cutover](./phase-25-execution.md), which also records the decision to use the Raspberry Pi 5 8GB as the final project host.
