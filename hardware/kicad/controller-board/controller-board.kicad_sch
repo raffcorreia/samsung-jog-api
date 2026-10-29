@@ -8201,7 +8201,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22k"
+		(property "Value" "22R"
 			(at 389.4460 61.468 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8305,7 +8305,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "22k"
+		(property "Value" "22R"
 			(at 397.8280 132.588 90)
 			(show_name no)
 			(do_not_autoplace no)

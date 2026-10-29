@@ -104,13 +104,13 @@ Current documented reference values from the existing hardware notes:
 - idle: `3.3V` to `GND`
 - `Down`: `3.3 kOhm` to `GND`
 - `Right`: `9 kOhm` to `GND`
-- `Up`: `22.6 kOhm` to `GND`
+- `Up`: `22.6 Ohm` to `GND`
 - `Left`: `32.8 kOhm` to `GND`
 
 ### `KEY_ADC1`
 
 - idle: `3.3V` to `GND`
-- `Center`: `23 kOhm` to `GND`
+- `Center`: `23 Ohm` to `GND`
 
 These values are not assumed correct for controller design until revalidated here.
 
@@ -213,9 +213,9 @@ The previously documented resistance values were explicitly reconfirmed and rema
 | --- | --- | --- | --- | --- | --- |
 | `KEY_ADC2` | `Down` | resistance to `GND` | `3.3 kOhm` | no | reconfirmed |
 | `KEY_ADC2` | `Right` | resistance to `GND` | `9 kOhm` | no | reconfirmed |
-| `KEY_ADC2` | `Up` | resistance to `GND` | `22.6 kOhm` | no | reconfirmed |
+| `KEY_ADC2` | `Up` | resistance to `GND` | `22.6 Ohm` | no | reconfirmed |
 | `KEY_ADC2` | `Left` | resistance to `GND` | `32.8 kOhm` | no | reconfirmed |
-| `KEY_ADC1` | `Center` | resistance to `GND` | `23 kOhm` | no | reconfirmed |
+| `KEY_ADC1` | `Center` | resistance to `GND` | `23 Ohm` | no | reconfirmed |
 
 These earlier disconnected measurements now coexist with the later powered-and-connected voltage set above. Both are preserved because the powered measurements are directly useful for the observation-circuit thresholds, while the disconnected values remain relevant to understanding the passive `JOG` behavior.
 

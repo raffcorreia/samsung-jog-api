@@ -600,12 +600,12 @@ Measured resistor-to-ground values with the joystick board disconnected:
 
 - `Down`: `3.3 kOhm`
 - `Right`: `9 kOhm`
-- `Up`: `22.6 kOhm`
+- `Up`: `22.6 Ohm`
 - `Left`: `32.8 kOhm`
 
 `KEY_ADC1`
 
-- `Center`: `23 kOhm`
+- `Center`: `23 Ohm`
 
 ### Hardware paths
 

@@ -4613,7 +4613,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22k"
+		(property "Value" "22R"
 			(at 146.304 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4694,7 +4694,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22k"
+		(property "Value" "22R"
 			(at 145.796 115.316 0)
 			(show_name no)
 			(do_not_autoplace no)

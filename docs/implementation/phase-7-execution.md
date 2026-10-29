@@ -195,8 +195,8 @@ All resistors and capacitors on both boards use **0603** metric footprints:
 | R8 | 30k 1% 0603 | KEY_ADC2 LEFT | C22984 | Basic |
 | R9 | 10k 1% 0603 | KEY_ADC2 RIGHT | C25804 | Basic |
 | R10 | 3.3k 1% 0603 | KEY_ADC2 DOWN | C22978 | Basic |
-| R11 | 22k 1% 0603 | KEY_ADC2 UP | C31850 | Basic |
-| R12 | 22k 1% 0603 | KEY_ADC1 CENTER | C31850 | Basic |
+| R11 | 22 Ohm 1% 0603 | KEY_ADC2 UP | — | TBD |
+| R12 | 22 Ohm 1% 0603 | KEY_ADC1 CENTER | — | TBD |
 | R13–R17 | 100k 1% 0603 | Enable default-off pull-downs | C25803 | Basic |
 | C1 | 1u 0603 | Bulk +3V3 decoupling | C15849 | Basic |
 | C2–C7 | 100n 0603 | Per-IC local decoupling | C14663 | Basic |
