@@ -2,42 +2,47 @@
 
 ## Phase Index
 
+| Phase | Name | Status |
+|---|---|---|
+| [0](#phase-0-documentation-and-evidence-capture) | Documentation and Evidence Capture | completed |
+| [1](#phase-1-host-preparation-and-conservative-os-cleanup) | Host Preparation and Conservative OS Cleanup | completed |
+| [2](#phase-2-hardware-validation) | Hardware Validation | completed |
+| [3](#phase-3-bus-observation-circuit-design) | Bus Observation Circuit Design | completed |
+| [4](#phase-4-analog-drive-circuit-design) | Analog Drive Circuit Design | completed |
+| [5](#phase-5-hdmi-and-ddc-communication-design) | HDMI and DDC Communication Design | completed |
+| [6](#phase-6-discrete-component-protoboard-validation) | Discrete-Component Protoboard Validation | completed |
+| [7](#phase-7-integrated-controller-board-design) | Integrated Controller Board Design | in progress (parallel) |
+| [8](#phase-8-gpio-assignment-and-low-level-control-prototype) | GPIO Assignment and Low-Level Control Prototype | completed |
+| [9](#phase-9-local-platform-bring-up) | Local Platform Bring-Up | completed |
+| [10](#phase-10-local-api) | Local API | completed |
+| [11](#phase-11-low-level-jog-console-ui) | Low-Level JOG Console UI | completed |
+| [12](#phase-12-deployment-and-version-tracking) | Deployment and Version Tracking | completed |
+| [13](#phase-13-full-screen-ui-layout-with-placeholders) | Full-Screen UI Layout with Placeholders | completed |
+| [14](#phase-14-log-architecture-refactor) | Log Architecture Refactor | completed |
+| [15](#phase-15-observation-bus-and-hardware-interface) | Observation Bus and Hardware Interface | completed |
+| [16](#phase-16-recording-and-replay-subsystem) | Recording and Replay Subsystem | parked — hardware validation pending |
+| [17](#phase-17-development-fixture) | Development Fixture | completed |
+| [18](#phase-18-display-and-touch-validation) | Display and Touch Validation | completed |
+| [19](#phase-19-display-usability-and-power-hardening) | Display Usability and Power Hardening | completed |
+| [20](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation) | Raspberry Pi 5 Rebuild and Display Performance Validation | completed — display-quality work deferred |
+| [21](#phase-21-display-power-control-circuit) | Display Power Control Circuit | completed |
+| [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
+| [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
+| [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | open — follow-on integration pending |
+| [25](#phase-25-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | next |
+| [26](#phase-26-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
+| [27](#phase-27-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
+| [28](#phase-28-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
+| [29](#phase-29-productized-monitor-features) | Productized Monitor Features | planned |
+| [30](#phase-30-dashboard-data-source-spike) | Dashboard Data-Source Spike | planned |
+| [31](#phase-31-dashboard-widgets) | Dashboard Widgets | planned |
+| [32](#phase-32-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
+| [33](#phase-33-stabilization) | Stabilization | planned |
+
+Supporting sections:
+
 - [Host health gate (feature phases 10–33)](#host-health-gate-feature-phases-1033)
-- [Phase 0: Documentation and Evidence Capture](#phase-0-documentation-and-evidence-capture)
-- [Phase 1: Host Preparation and Conservative OS Cleanup](#phase-1-host-preparation-and-conservative-os-cleanup)
-- [Phase 2: Hardware Validation](#phase-2-hardware-validation)
-- [Phase 3: Bus Observation Circuit Design](#phase-3-bus-observation-circuit-design)
-- [Phase 4: Analog Drive Circuit Design](#phase-4-analog-drive-circuit-design)
-- [Phase 5: HDMI and DDC Communication Design](#phase-5-hdmi-and-ddc-communication-design)
-- [Phase 6: Discrete-Component Protoboard Validation](#phase-6-discrete-component-protoboard-validation)
-- [Phase 7: Integrated Controller Board Design](#phase-7-integrated-controller-board-design)
-- [Phase 8: GPIO Assignment and Low-Level Control Prototype](#phase-8-gpio-assignment-and-low-level-control-prototype)
-- [Phase 9: Local Platform Bring-Up](#phase-9-local-platform-bring-up)
-- [Phase 10: Local API](#phase-10-local-api)
-- [Phase 11: Low-Level JOG Console UI](#phase-11-low-level-jog-console-ui)
-- [Phase 12: Deployment and Version Tracking](#phase-12-deployment-and-version-tracking)
-- [Phase 13: Full-Screen UI Layout with Placeholders](#phase-13-full-screen-ui-layout-with-placeholders)
-- [Phase 14: Log Architecture Refactor](#phase-14-log-architecture-refactor)
-- [Phase 15: Observation Bus and Hardware Interface](#phase-15-observation-bus-and-hardware-interface)
-- [Phase 16: Recording and Replay Subsystem](#phase-16-recording-and-replay-subsystem)
-- [Phase 17: Development Fixture](#phase-17-development-fixture)
-- [Phase 18: Display and Touch Validation](#phase-18-display-and-touch-validation)
-- [Phase 19: Display Usability and Power Hardening](#phase-19-display-usability-and-power-hardening)
-- [Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation)
-- [Phase 21: Display Power Control Circuit](#phase-21-display-power-control-circuit)
-- [Phase 22: Physical Display and Pi Power Button](#phase-22-physical-display-and-pi-power-button)
-- [Phase 23: Documentation Reorganization](#phase-23-documentation-reorganization)
-- [Phase 24: DDC Capability Investigation](#phase-24-ddc-capability-investigation)
-- [Phase 25: Replacement Display and Final Pi 5 Host Cutover](#phase-25-replacement-display-and-final-pi-5-host-cutover)
-- [Phase 26: LED Feedback Characterization and Monitor State Model](#phase-26-led-feedback-characterization-and-monitor-state-model)
-- [Phase 27: State Investigation and Sequence Cleanup](#phase-27-state-investigation-and-sequence-cleanup)
-- [Phase 28: Deck Settings, Block Editor, and Recording Visualisation](#phase-28-deck-settings-block-editor-and-recording-visualisation)
-- [Phase 29: Productized Monitor Features](#phase-29-productized-monitor-features)
-- [Phase 30: Dashboard Data-Source Spike](#phase-30-dashboard-data-source-spike)
-- [Phase 31: Dashboard Widgets](#phase-31-dashboard-widgets)
-- [Phase 32: Custom Hardware Installation, DDC Migration, and Configuration Revert](#phase-32-custom-hardware-installation-ddc-migration-and-configuration-revert)
-- [Phase 33: Stabilization](#phase-33-stabilization)
-- [Deferred: Integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration)
+- [Deferred integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration) — waiting for Phase 7 hardware
 
 ## Summary
 
