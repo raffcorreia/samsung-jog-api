@@ -29,7 +29,7 @@
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
-| [25](#phase-25-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | next |
+| [25](#phase-25-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
 | [26](#phase-26-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
 | [27](#phase-27-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
 | [28](#phase-28-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
@@ -1290,6 +1290,8 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
 ## Phase 25: Replacement Display and Final Pi 5 Host Cutover
+
+**Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 25 Execution Record](./phase-25-execution.md).
 
 ### Goal
 
