@@ -38,7 +38,7 @@ Current state of the repository:
 - completed: `Phase 21: Display Power Control Circuit` — [execution record](docs/implementation/phase-21-execution.md) (high-side 5V switch + RC soft-start to prevent Pi 5 shutdown on display reconnect; hardware design complete)
 - completed: `Phase 22: Physical Display and Pi Power Button` — [execution record](docs/implementation/phase-22-execution.md) (physical display/Pi power button behavior, PowerMenu updates, and status LED path)
 - completed: `Phase 23: Documentation Reorganization, Versioning, and Deploy Harness` — [execution record](docs/implementation/phase-23-execution.md) (artifact-based naming for all docs and KiCad projects, git-tag versioning, auto-tag on deploy, version panel in settings UI, deploy runbook)
-- open: `Phase 24: DDC Capability Investigation` — [execution record](docs/implementation/phase-24-execution.md) (register/DDC investigation substantially complete; not closed while follow-on DDC/software decisions remain)
+- completed: `Phase 24: DDC Capability Investigation` — [execution record](docs/implementation/phase-24-execution.md) (validated usable DDC reads, documented unsupported state inference, and established the HDMI-disabled/DDC-active operating model; production write support remains deferred)
 - next: `Phase 25: Replacement Display and Final Pi 5 Host Cutover` — [execution record scaffold](docs/implementation/phase-25-execution.md) (replace defective panel and move the baseline to the final Raspberry Pi 5 8GB host)
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts

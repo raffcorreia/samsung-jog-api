@@ -6,7 +6,7 @@ Track **Phase 24: DDC Capability Investigation** per [Implementation Plan](./pla
 
 ## Status
 
-**Investigation work complete; phase remains open for follow-on integration.** Full 35-test-case capture matrix recorded and analysed. Interactive register explorer built and deployed. Layout-mode detection via I2C proven not feasible from observable registers; primary input and physical port presence are reliably readable. Software integration and the remaining physical port connectivity experiment (HDMI-only isolation) are still open.
+**Complete. Closed 2026-10-30.** Full 35-test-case capture matrix recorded and analysed. Interactive register explorer built and deployed. Layout-mode detection via I2C proven not feasible from observable registers; primary input and physical port presence are reliably readable. The investigation produced enough evidence for current product decisions, and implementation work is deferred to later phases.
 
 ---
 
@@ -227,12 +227,14 @@ Targeted experiment to determine whether the physical presence of each cable (re
 
 ---
 
-## Remaining work
+## Deferred follow-on work
 
-- **HDMI isolation capture:** repeat connectivity experiment with only HDMI disconnected (dp+tb connected) on TC3 or TC25 to find or rule out a HDMI-specific presence register
-- **Software integration:** wire `VCP 0x60` + `0x58:0xBC` into the monitor state model as the primary-input and power-state signals
-- **Port presence integration:** expose `0x58:0xA1` (TB) and `0x58:0xA3` (DP) in the state model for cable-presence detection
-- Verify DDC write reliability (input switching, brightness) under normal operating conditions
+These items are not required to close the capability investigation:
+
+- **Optional HDMI isolation capture:** a future `dp+tb` capture with HDMI disconnected may find or rule out an HDMI-specific presence register. Current product behavior does not depend on detecting HDMI cable presence.
+- **Software integration:** wire `VCP 0x60` + `0x58:0xBC` into the monitor state model as the primary-input and power-state signals in the later state-model phase.
+- **Port-presence integration:** expose `0x58:0xA1` (TB) and `0x58:0xA3` (DP) if cable-presence detection becomes a product requirement.
+- **DDC writes:** input switching and brightness writes are not production-supported. Validate their reliability under normal operating conditions before any later phase depends on them.
 
 ---
 
@@ -281,4 +283,4 @@ Conclusion: the Pi can stop sending a video image to the Samsung HDMI input and 
 
 ## Host health gate
 
-*Deferred — investigation phase only; no new service behavior introduced yet. Gate to be satisfied when DDC reads are wired into the control model.*
+*N/A — this phase was an investigation and introduced no service behavior. The phase that integrates DDC reads into the control model inherits the host health gate.*

@@ -8,7 +8,7 @@ Track **Phase 25: Replacement Display and Final Pi 5 Host Cutover** per [Impleme
 
 **Planned / next.**
 
-Phase 24 remains open for DDC investigation follow-on work. Phase 25 is an inserted platform phase to replace the defective display panel and cut the project over to the final Raspberry Pi 5 8GB host before continuing planned feature work.
+Phase 24's DDC capability investigation is complete. Phase 25 is an inserted platform phase to replace the defective display panel and cut the project over to the final Raspberry Pi 5 8GB host before continuing planned feature work.
 
 ## Working Goal
 

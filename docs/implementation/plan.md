@@ -28,7 +28,7 @@
 | [21](#phase-21-display-power-control-circuit) | Display Power Control Circuit | completed |
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
-| [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | open — follow-on integration pending |
+| [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
 | [25](#phase-25-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | next |
 | [26](#phase-26-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
 | [27](#phase-27-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
@@ -1299,7 +1299,7 @@ Replace the defective Waveshare DSI panel, standardize the control deck on the f
 
 Phase 20 proved that Raspberry Pi 5 performance resolves the Pi 2 kiosk responsiveness problem, but the available DSI panel was physically defective. That invalidated display quality, brightness ceiling, color validation, and touch confidence on the final display hardware. A replacement panel has now arrived, and the project decision is to use a Raspberry Pi 5 8GB as the final deck host rather than continuing with the earlier temporary Pi 5 validation unit.
 
-This phase is an inserted platform phase. It does **not** close Phase 24's DDC investigation and it does not start the planned LED/state-model work. It establishes a trustworthy final physical baseline first.
+This phase is an inserted platform phase. Phase 24's DDC investigation is complete; this phase does not start the planned LED/state-model integration work. It establishes a trustworthy final physical baseline first.
 
 ### Scope
 
