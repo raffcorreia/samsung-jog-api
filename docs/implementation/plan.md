@@ -24,7 +24,7 @@
 | [17](#phase-17-development-fixture) | Development Fixture | completed |
 | [18](#phase-18-display-and-touch-validation) | Display and Touch Validation | completed |
 | [19](#phase-19-display-usability-and-power-hardening) | Display Usability and Power Hardening | completed |
-| [20](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation) | Raspberry Pi 5 Rebuild and Display Performance Validation | completed — display-quality work deferred |
+| [20](#phase-20-raspberry-pi-5-rebuild-and-display-performance-validation) | Raspberry Pi 5 Rebuild and Display Performance Validation | completed |
 | [21](#phase-21-display-power-control-circuit) | Display Power Control Circuit | completed |
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
@@ -957,7 +957,7 @@ Harden the Waveshare DSI display experience after Phase 18 bring-up by adding op
 
 ## Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation
 
-**Status:** planned. See [Phase 20 Execution Record](./phase-20-execution.md).
+**Status:** completed. See [Phase 20 Execution Record](./phase-20-execution.md). Healthy-panel validation identified during this phase is tracked by Phase 25.
 
 ### Goal
 
@@ -1358,7 +1358,7 @@ Run the validation in this order so regressions are attributable:
 - DSI is the only Linux display output; HDMI remains usable for DDC/CI communication only
 - JOG drive, observation bus, display power, status LED, and DDC readback all pass on the final host
 - safe brightness and display power behavior are documented for the replacement panel
-- Phase 20's display-quality open items are either closed or carried forward with new evidence from the healthy panel
+- Phase 20's transferred display-quality validation items are closed with new evidence from the healthy panel or explicitly carried forward
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
 ## Phase 26: LED Feedback Characterization and Monitor State Model
