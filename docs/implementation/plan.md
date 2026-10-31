@@ -29,15 +29,15 @@
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
-| [25](#phase-25-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
-| [26](#phase-26-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
-| [27](#phase-27-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
-| [28](#phase-28-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
-| [29](#phase-29-productized-monitor-features) | Productized Monitor Features | planned |
-| [30](#phase-30-dashboard-data-source-spike) | Dashboard Data-Source Spike | planned |
-| [31](#phase-31-dashboard-widgets) | Dashboard Widgets | planned |
-| [32](#phase-32-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
-| [33](#phase-33-stabilization) | Stabilization | planned |
+| [40](#phase-40-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
+| [41](#phase-41-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
+| [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
+| [43](#phase-43-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
+| [44](#phase-44-productized-monitor-features) | Productized Monitor Features | planned |
+| [45](#phase-45-dashboard-data-source-spike) | Dashboard Data-Source Spike | planned |
+| [46](#phase-46-dashboard-widgets) | Dashboard Widgets | planned |
+| [47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
+| [48](#phase-48-stabilization) | Stabilization | planned |
 
 Supporting sections:
 
@@ -957,7 +957,7 @@ Harden the Waveshare DSI display experience after Phase 18 bring-up by adding op
 
 ## Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation
 
-**Status:** completed. See [Phase 20 Execution Record](./phase-20-execution.md). Healthy-panel validation identified during this phase is tracked by Phase 25.
+**Status:** completed. See [Phase 20 Execution Record](./phase-20-execution.md). Healthy-panel validation identified during this phase is tracked by Phase 40.
 
 ### Goal
 
@@ -1265,7 +1265,7 @@ Use repeatable low-level control and replay to fully characterize how `DDC` can 
 
 `DDC` investigation uses the `HDMI` connection as the transport. Supporting two monitors (e.g. the Samsung CJ791 alongside a development display) may require temporary monitor configuration changes — input source settings, display clone/extend mode, or EDID-related workarounds. These changes are investigation-phase workarounds only.
 
-When the custom hardware (Phase 7 integrated board) is installed, `DDC` communication will migrate to direct `I2C` and the `HDMI` connection will no longer be required for control. All monitor configuration changes forced during this phase must be reverted at that point. See [Phase 32](#phase-32-custom-hardware-installation-ddc-migration-and-configuration-revert).
+When the custom hardware (Phase 7 integrated board) is installed, `DDC` communication will migrate to direct `I2C` and the `HDMI` connection will no longer be required for control. All monitor configuration changes forced during this phase must be reverted at that point. See [Phase 47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert).
 
 ### Tasks
 
@@ -1276,7 +1276,7 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 - document `DDC` behavior during source cycling and related workflows
 - feed normalized `DDC` status into the control model
 - add verification coverage for supported `DDC` reads and writes
-- record all monitor configuration changes made during this phase so they can be cleanly reverted in Phase 32
+- record all monitor configuration changes made during this phase so they can be cleanly reverted in Phase 47
 
 ### Deliverables
 
@@ -1289,9 +1289,9 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 25: Replacement Display and Final Pi 5 Host Cutover
+## Phase 40: Replacement Display and Final Pi 5 Host Cutover
 
-**Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 25 Execution Record](./phase-25-execution.md).
+**Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 40 Execution Record](./phase-40-execution.md).
 
 ### Goal
 
@@ -1348,7 +1348,7 @@ Run the validation in this order so regressions are attributable:
 
 - final Raspberry Pi 5 8GB host running the deployed control deck
 - replacement DSI panel installed and validated
-- Phase 25 execution record with final host identity, display validation, DDC-only HDMI verification, and host health evidence
+- Phase 40 execution record with final host identity, display validation, DDC-only HDMI verification, and host health evidence
 - updated final-host/display notes in the relevant runbooks or hardware docs
 - explicit decision on the display brightness cap and whether prior panel-quality concerns are resolved
 
@@ -1363,7 +1363,7 @@ Run the validation in this order so regressions are attributable:
 - Phase 20's transferred display-quality validation items are closed with new evidence from the healthy panel or explicitly carried forward
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
-## Phase 26: LED Feedback Characterization and Monitor State Model
+## Phase 41: LED Feedback Characterization and Monitor State Model
 
 ### Goal
 
@@ -1427,7 +1427,7 @@ Send a known JOG command that reliably produces a `KEY_LED` blink. If the LED re
 - monitor state is reliably detected and surfaced in the UI
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 27: State Investigation and Sequence Cleanup
+## Phase 42: State Investigation and Sequence Cleanup
 
 ### Goal
 
@@ -1460,7 +1460,7 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 - important monitor workflows are represented by stable, reusable, named sequence files
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 28: Deck Settings, Block Editor, and Recording Visualisation
+## Phase 43: Deck Settings, Block Editor, and Recording Visualisation
 
 ### Goal
 
@@ -1515,15 +1515,15 @@ Phase 16 validated that the Samsung CJ791 requires a minimum hold duration of **
 - text mode and block mode produce identical V1 JSON for the same sequence
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 29: Productized Monitor Features
+## Phase 44: Productized Monitor Features
 
 ### Goal
 
-Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 28.
+Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 43.
 
 ### Background
 
-The recording subsystem (Phase 16) and the deck settings (Phase 28) together provide the full execution stack for monitor control. Phase 29 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 29 promotes them to named, always-accessible UI controls.
+The recording subsystem (Phase 16) and the deck settings (Phase 43) together provide the full execution stack for monitor control. Phase 44 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 44 promotes them to named, always-accessible UI controls.
 
 ### Scope
 
@@ -1537,7 +1537,7 @@ The recording subsystem (Phase 16) and the deck settings (Phase 28) together pro
 - define a `FeatureSlot` model: a named slot (e.g. `pip_enable`, `pip_disable`, `input_hdmi`, `input_dp`) with an optional assigned recording ID
 - persist slot assignments via REST: `GET /api/v1/features` and `PUT /api/v1/features/{slot}`
 - add feature slot assignment UI to the recording workspace: each recording can be assigned to a slot from its detail view
-- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 28; unassigned slots show as inactive
+- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 43; unassigned slots show as inactive
 - implement source switching in `DDC` mode and `Blind` mode where DDC commands exist; fall back to recording-backed blind mode otherwise
 - expose proper error handling and failure states (recording not found, playback busy, sequence error)
 - preserve access to the raw JOG controller behind a manual-control entry point
@@ -1553,11 +1553,11 @@ The recording subsystem (Phase 16) and the deck settings (Phase 28) together pro
 ### Exit criteria
 
 - operators can assign a recording to a named feature slot and run it from the main UI with a single button press
-- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 28
+- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 43
 - the deck supports the intended monitor-control feature set beyond raw JOG commands
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 30: Dashboard Data-Source Spike
+## Phase 45: Dashboard Data-Source Spike
 
 ### Goal
 
@@ -1589,7 +1589,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 - the project knows how dashboard data will be sourced before deeper widget work begins
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 31: Dashboard Widgets
+## Phase 46: Dashboard Widgets
 
 ### Goal
 
@@ -1621,7 +1621,7 @@ Implement the dashboard side of the product using the data-source decisions from
 - the dashboard is useful and stable without compromising the monitor-control surface
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 32: Custom Hardware Installation, DDC Migration, and Configuration Revert
+## Phase 47: Custom Hardware Installation, DDC Migration, and Configuration Revert
 
 ### Goal
 
@@ -1665,10 +1665,10 @@ This phase also incorporates the deferred GPIO and software migration from the P
 - Phase 7 integrated board is the sole hardware interface; Phase 6 protoboard is retired
 - `DDC` over `I2C` passes the same capability checks as Phase 24 `HDMI` DDC
 - monitor configuration is clean — no Phase 24 workarounds remain
-- all productized features from Phase 29 pass regression on final hardware
+- all productized features from Phase 44 pass regression on final hardware
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
-## Phase 33: Stabilization
+## Phase 48: Stabilization
 
 ### Goal
 

@@ -1,20 +1,20 @@
-# Phase 25 Execution Record
+# Phase 40 Execution Record
 
 ## Purpose
 
-Track **Phase 25: Replacement Display and Final Pi 5 Host Cutover** per [Implementation Plan](./plan.md).
+Track **Phase 40: Replacement Display and Final Pi 5 Host Cutover** per [Implementation Plan](./plan.md).
 
 ## Status
 
 **Blocked.**
 
-Phase 24's DDC capability investigation is complete. Phase 25 is an inserted platform phase to replace the defective display panel and cut the project over to the final Raspberry Pi 5 8GB host before continuing planned feature work.
+Phase 24's DDC capability investigation is complete. Phase 40 is an inserted platform phase to replace the defective display panel and cut the project over to the final Raspberry Pi 5 8GB host before continuing planned feature work.
 
 ## Blocker
 
 On 2026-10-30, the replacement panel was installed and produced a working image, but its touch cable was found to be physically damaged. Live software diagnostics on the final Pi 5 host confirmed that the expected boot configuration was present, the Goodix controller probed successfully as `ID 9271`, the `Goodix-TS` driver bound to I2C device `11-0014`, and Linux created `/dev/input/event7`. A direct raw-input test produced no touch events, ruling out the kiosk UI, Chromium, Wayland coordinate mapping, and application code as the cause.
 
-Phase 25 cannot complete touch mapping, sustained kiosk validation, or acceptance of the replacement panel while the damaged touch path remains installed. Resume the phase after the touch cable or panel assembly has been repaired or replaced, then repeat the cold-boot Goodix probe, raw input-event, coordinate-mapping, and sustained display validation checks.
+Phase 40 cannot complete touch mapping, sustained kiosk validation, or acceptance of the replacement panel while the damaged touch path remains installed. Resume the phase after the touch cable or panel assembly has been repaired or replaced, then repeat the cold-boot Goodix probe, raw input-event, coordinate-mapping, and sustained display validation checks.
 
 ## Working Goal
 

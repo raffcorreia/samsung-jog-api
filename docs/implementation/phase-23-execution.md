@@ -16,7 +16,7 @@ Track **Phase 23: Documentation Reorganization, Versioning, and Deploy Harness**
 - `scripts/deploy.sh` auto-tags HEAD on `main` (patch bump, pushed to origin) before computing version so `git describe` picks up the new tag immediately; branch deploys are never tagged
 - Added `VersionPanel` to `SettingsPage` as the topmost section (before Network), fetching version via `fetchStatus()`
 - Expanded `scripts/deploy.sh` header and `docs/runbooks/platform-bring-up.md` with SSH key setup steps, `~/.ssh/config` alias pattern, and full env var reference (`PI_TARGET`, `FORCE_BUILD`)
-- Added log-reduction and SD card IO/corruption-risk task to Phase 33 Stabilization
+- Added log-reduction and SD card IO/corruption-risk task to Phase 48 Stabilization
 
 ### KiCad project renames
 

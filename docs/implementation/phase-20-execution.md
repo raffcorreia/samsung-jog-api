@@ -6,7 +6,7 @@ Track **Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation** pe
 
 ## Status
 
-**Complete. Closed 2026-04-29.** The Pi 5 platform and performance decision was completed in this phase. Healthy-panel validation identified after the available panel proved defective is tracked by Phase 25 and does not leave Phase 20 open.
+**Complete. Closed 2026-04-29.** The Pi 5 platform and performance decision was completed in this phase. Healthy-panel validation identified after the available panel proved defective is tracked by Phase 40 and does not leave Phase 20 open.
 
 ## Working Goal
 
@@ -256,7 +256,7 @@ The Pi 5 resolves the primary performance complaint from Phase 19: WebSocket bus
 
 Phase 20 is complete. The project accepted the Pi 5 platform and subsequently selected the Raspberry Pi 5 8GB as the final project host.
 
-The following healthy-panel validation is carried by [Phase 25: Replacement Display and Final Pi 5 Host Cutover](./phase-25-execution.md):
+The following healthy-panel validation is carried by [Phase 40: Replacement Display and Final Pi 5 Host Cutover](./phase-40-execution.md):
 
 - repeat display quality, brightness ceiling, and color validation on the replacement panel
 - validate touch on the replacement panel
