@@ -38,8 +38,9 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 ### Dashboard and widgets
 
 - The UI must display a clock widget.
-- The UI must display a month calendar widget with today's date selected and today's appointments list.
-- The UI must display a notes widget.
+- The main dashboard must display one large LED communication monitor in place of the former Calendar and Notes placeholders.
+- The communication monitor must display raw `KEY_LED` transitions, capture health, timing statistics, and decoder state without treating ordinary stock blinking as valid custom traffic.
+- The small JOG-adjacent LED must remain available as the simple interpreted indicator state.
 - The UI must display system performance widgets including:
   - throttling status
   - CPU usage
@@ -47,6 +48,18 @@ The target monitor is currently the Samsung `LC34J791WTNXZA / CJ791`.
 - The performance area must support a detailed view showing:
   - storage usage
   - network usage
+
+### Custom LED communication receiver
+
+- The conditioned `KEY_LED` GPIO must remain receive-only.
+- Raw transition capture must timestamp the new physical level with a monotonic high-resolution clock before semantic conversion or event coalescing.
+- Capture buffering must be bounded, and rejected glitches, dropped edges, and overruns must be reported rather than hidden.
+- Captures must be exportable in a versioned format and replayable without connected monitor hardware.
+- Input polarity, glitch threshold, buffer capacity, decoder timing, and framing parameters must remain configurable during characterization.
+- Ordinary steady LED state and stock blinking must remain valid non-protocol behavior and must not cause application actions.
+- Only complete, structurally valid frames may be exposed as custom messages; truncated, mistimed, unsupported, oversized, or integrity-invalid candidates must be rejected.
+- The raw capture path must coexist with the existing interpreted LED events, recordings, and physical status-indicator behavior.
+- The initial implementation must not define or transmit a joystick-bus command protocol.
 
 ### Monitor control
 

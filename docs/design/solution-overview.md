@@ -655,9 +655,10 @@ That means:
 Expected early ownership model:
 
 - clock: frontend-local
-- calendar and appointments: backend-provided data with normal API fetch
-- notes: local application data
+- LED communication monitor: raw capture and statistics from a dedicated bounded backend service, delivered to the frontend in batches
 - host performance: backend-provided host metrics
+
+The Calendar and Notes placeholders established in Phase 13 are removed from the main dashboard in Phase 25. The communication monitor remains architecturally separate from the ordinary semantic LED indicator and from the live log so high-rate raw edges cannot overwhelm either path.
 
 ## HDMI and DDC transport design
 

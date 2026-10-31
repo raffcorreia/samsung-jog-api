@@ -8,7 +8,7 @@ Track **Phase 40: Replacement Display and Final Pi 5 Host Cutover** per [Impleme
 
 **Blocked.**
 
-Phase 24's DDC capability investigation is complete. Phase 40 is an inserted platform phase to replace the defective display panel and cut the project over to the final Raspberry Pi 5 8GB host before continuing planned feature work.
+Phase 24's DDC capability investigation is complete. Phase 25 now owns the raw custom LED communication receiver and monitor UI. Phase 40 remains the inserted platform phase that replaces the defective display panel and cuts the project over to the final Raspberry Pi 5 8GB host before later semantic monitor-state work.
 
 ## Blocker
 

@@ -29,6 +29,7 @@
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
+| [25](#phase-25-custom-led-communication-receiver-and-monitor-ui) | Custom LED Communication Receiver and Monitor UI | planned |
 | [40](#phase-40-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
 | [41](#phase-41-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
 | [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
@@ -56,10 +57,10 @@ The overall strategy is:
 4. bring up low-level control end to end
 5. add recording and replay so monitor workflows can be investigated repeatably
 6. improve the recording workspace with settings and a block-mode editor
-7. investigate `DDC` and `LED` behavior using those repeatable tools
+7. investigate `DDC` behavior and build the receive-only custom `KEY_LED` communication path
 8. stabilize the final deck hardware platform when replacement/final parts arrive
-9. turn validated findings into productized monitor features
-10. finish dashboard and stabilization work
+9. characterize higher-level monitor state and turn validated findings into productized monitor features
+10. finish the remaining dashboard and stabilization work
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
 
@@ -1289,6 +1290,110 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
+## Phase 25: Custom LED Communication Receiver and Monitor UI
+
+**Status:** planned. See [Phase 25 Execution Record](./phase-25-execution.md).
+
+### Goal
+
+Implement the client side of the monitor firmware's custom output channel by capturing every transition on the conditioned `KEY_LED` GPIO with monotonic timestamps, preserving the existing ordinary LED behavior, and replacing the Calendar and Notes dashboard placeholders with one large communication-monitor widget.
+
+This phase is receiver-first. It measures what the complete monitor-to-deck path can reliably carry before any production bitrate, framing constants, CRC parameters, message identifiers, or joystick-bus command protocol are frozen.
+
+### Scope
+
+- safe, receive-only observation of the already conditioned `KEY_LED` GPIO
+- raw electrical-level edge capture before debounce, polling, semantic conversion, or event coalescing
+- bounded buffering, configurable glitch rejection, explicit overrun accounting, and capture metadata
+- versioned edge-log export and deterministic offline replay
+- interval and jitter statistics for the firmware speed-test ladder
+- modular differential-Manchester decoder and sliding frame-acquisition scaffolding with configurable timing/framing parameters
+- batched backend delivery suitable for the kiosk UI and remote LAN browsers
+- one large LED communication monitor in the right dashboard panel, replacing the Calendar and Notes placeholders
+- preservation of the small JOG-adjacent LED as the simple semantic indicator
+
+### Safety and protocol boundaries
+
+- the client remains electrically receive-only and must never source current onto the monitor indicator line
+- raw captures preserve the sampled electrical level; polarity interpretation is configuration, not destructive rewriting of captured data
+- the existing `bus/led_changed` path, recording behavior, status LED mirroring, and ordinary stock LED indication remain available beside raw capture
+- stock blinking and arbitrary idle transitions are untrusted garbage, not protocol messages
+- incomplete, malformed, mistimed, unsupported, oversized, or CRC-invalid candidates must never reach application actions
+- final half-bit duration, sync word, field widths, CRC polynomial, message numeric mapping, and maximum payload remain configurable until characterization is complete
+- this phase does not invent or implement the future deck-to-monitor joystick-bus command encoding
+
+### Backend and capture tasks
+
+- introduce a dedicated raw-edge callback that records `time.monotonic_ns()`, the new physical GPIO level, and elapsed time from the preceding accepted edge at callback time
+- keep the raw path independent from the current coalesced `ObservationBusService` sampling path so rapid transitions cannot collapse into one semantic state change
+- feed accepted edges into a bounded thread-safe buffer without blocking the GPIO callback
+- make buffer capacity, electrical polarity, and minimum accepted edge interval configurable
+- count rejected glitches, dropped edges, buffer overruns, capture restarts, and replay/decoder rejection reasons
+- define and document a versioned edge-log format containing clock information, capture settings, timestamps, levels, intervals, and terminal counters
+- implement capture start/stop/clear/status/export operations and deterministic replay of saved logs without connected monitor hardware
+- compute edge-interval minimum, maximum, median, percentiles, and jitter summaries without discarding the underlying samples
+- batch raw edge updates for WebSocket delivery so edge rate cannot create one broadcast task or UI render per transition
+- bound WebSocket backlog and make client lag/drop behavior observable
+- add a mock/replay source so the complete backend and UI can be tested off-device
+
+### Decoder and characterization tasks
+
+- implement a decoder interface whose half-bit duration and tolerance are runtime/test inputs
+- add a differential-Manchester candidate decoder without coupling raw capture to that encoding
+- implement continuous sliding acquisition over training, sync, bounded header/length, payload, and CRC validation hooks
+- reacquire after leading garbage, mid-frame attachment, truncation, missing/extra edges, invalid timing, and corrupt candidates
+- exercise the firmware ladder at `200, 100, 50, 25, 20, 10, 5, 2, 1 ms`, stopping at the measured reliability boundary and adding intermediate timings where useful
+- report received/missing sequence numbers, valid/invalid candidates, false acquisitions, CRC results when final vectors are available, interval distribution, glitches, and overruns
+- test both exclusive transmitter bursts and normal coexistence with stock LED behavior
+- select no production timing until a long zero-error run establishes a repeatable boundary with margin
+
+### UI changes
+
+- remove `CalendarWidget` and `NotesWidget` from the home-page right panel
+- add one large LED communication monitor occupying the full right-panel area
+- show current raw electrical level separately from interpreted indicator state
+- render a bounded live waveform/timeline with edge markers and interval labels appropriate to the selected time scale
+- show capture state, elapsed time, accepted/rejected edge counts, overruns, current interval, interval statistics, and decoder/acquisition state
+- provide capture start/stop, clear, export, replay, and display-window controls
+- surface configuration for polarity, glitch threshold, buffer size, decoder timing, and tolerance without implying those are final protocol constants
+- keep high-rate sample data out of the ordinary live log; log capture lifecycle, warnings, overruns, and validated frame summaries instead
+- preserve the fixed JOG column and bottom live-log band at the `1280×800` kiosk target
+- ensure the monitor remains usable from remote LAN browsers and does not grow memory or render work without bound
+
+### Tests
+
+- unit-test edge timestamps, physical levels, interval calculation, glitch filtering, buffer wrap/overrun behavior, and counter accuracy
+- replay golden raw logs through statistics and decoder paths deterministically
+- inject polarity inversion, leading/trailing/inter-frame garbage, start-mid-frame input, timing jitter, missing/extra edges, truncation, invalid length, unsupported version/type, and corrupt CRC
+- prove invalid or incomplete candidates produce no application action
+- verify ordinary `bus/led_changed`, recording, and status-indicator behavior remains unchanged
+- test WebSocket batching, slow/disconnected clients, bounded frontend history, and reconnect recovery
+- test the new widget at `1280×800` and responsive remote-browser sizes
+- update frontend tests to prove Calendar and Notes are absent from the home page and the communication monitor is present
+
+### Deliverables
+
+- safe raw `KEY_LED` transition receiver with monotonic timestamps
+- bounded capture buffer, counters, capture API, batched WebSocket stream, and documented edge-log schema
+- export/replay tooling and representative test captures
+- configurable decoder/acquisition framework with differential-Manchester candidate support
+- speed-ladder and jitter report identifying the reliable capture boundary or documenting remaining hardware/firmware blockers
+- large LED communication monitor widget replacing Calendar and Notes on the home screen
+- updated requirements, architecture notes, API/event schema documentation, and Phase 25 execution evidence
+
+### Exit criteria
+
+- the 200 ms baseline is captured and replayed correctly with raw physical levels and monotonic timestamps
+- capture overruns and rejected glitches are visible and never silently discarded
+- saved edge logs reproduce the same statistics and decoder results offline
+- stock blinking, arbitrary garbage, polarity inversion, corrupted frames, and truncated frames produce no accepted application message
+- acquisition can attach mid-stream and recover at the next valid candidate
+- the speed ladder identifies a repeatable reliability boundary, or an evidence-backed blocker is recorded without inventing production constants
+- existing semantic LED behavior and recordings pass regression tests
+- the home page contains the large communication monitor instead of Calendar and Notes while preserving the JOG and live-log layout
+- frontend and backend test suites pass
+- satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
+
 ## Phase 40: Replacement Display and Final Pi 5 Host Cutover
 
 **Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 40 Execution Record](./phase-40-execution.md).
@@ -1301,7 +1406,7 @@ Replace the defective Waveshare DSI panel, standardize the control deck on the f
 
 Phase 20 proved that Raspberry Pi 5 performance resolves the Pi 2 kiosk responsiveness problem, but the available DSI panel was physically defective. That invalidated display quality, brightness ceiling, color validation, and touch confidence on the final display hardware. A replacement panel has now arrived, and the project decision is to use a Raspberry Pi 5 8GB as the final deck host rather than continuing with the earlier temporary Pi 5 validation unit.
 
-This phase is an inserted platform phase. Phase 24's DDC investigation is complete; this phase does not start the planned LED/state-model integration work. It establishes a trustworthy final physical baseline first.
+This phase is an inserted platform phase. Phase 24's DDC investigation is complete, and Phase 25 owns the raw custom LED communication receiver and monitor UI. This phase establishes a trustworthy final physical baseline before the later semantic monitor-state work.
 
 ### Scope
 
@@ -1367,7 +1472,7 @@ Run the validation in this order so regressions are attributable:
 
 ### Goal
 
-Determine how useful `KEY_LED` is as a control-feedback signal, fully characterise monitor power states from the existing observation bus, and update the UI to reflect those states.
+Build on Phase 25's raw communication receiver to determine how useful `KEY_LED` is as a semantic control-feedback signal, fully characterise monitor power states from the observation bus, and update the UI to reflect those states.
 
 ### Scope
 
@@ -1376,6 +1481,8 @@ Determine how useful `KEY_LED` is as a control-feedback signal, fully characteri
 - OSD boundary cues
 - monitor state detection: **ON / IDLE / OFF / POWERED OFF**
 - UI representation of all four monitor states
+
+Raw edge capture, transport characterization, decoder infrastructure, and the communication-monitor widget are owned by Phase 25 and are not reimplemented here.
 
 ### Background
 
@@ -1598,8 +1705,6 @@ Implement the dashboard side of the product using the data-source decisions from
 ### Scope
 
 - clock
-- calendar and appointments
-- notes
 - host performance
 - optional weather
 

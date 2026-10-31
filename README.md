@@ -39,6 +39,7 @@ Current state of the repository:
 - completed: `Phase 22: Physical Display and Pi Power Button` — [execution record](docs/implementation/phase-22-execution.md) (physical display/Pi power button behavior, PowerMenu updates, and status LED path)
 - completed: `Phase 23: Documentation Reorganization, Versioning, and Deploy Harness` — [execution record](docs/implementation/phase-23-execution.md) (artifact-based naming for all docs and KiCad projects, git-tag versioning, auto-tag on deploy, version panel in settings UI, deploy runbook)
 - completed: `Phase 24: DDC Capability Investigation` — [execution record](docs/implementation/phase-24-execution.md) (validated usable DDC reads, documented unsupported state inference, and established the HDMI-disabled/DDC-active operating model; production write support remains deferred)
+- planned: `Phase 25: Custom LED Communication Receiver and Monitor UI` — [execution record](docs/implementation/phase-25-execution.md) (raw timestamped `KEY_LED` capture, replay/decoder infrastructure, speed characterization, and a large communication monitor replacing Calendar and Notes)
 - blocked: `Phase 40: Replacement Display and Final Pi 5 Host Cutover` — [execution record](docs/implementation/phase-40-execution.md) (replacement panel image works, but its touch cable is physically damaged; touch validation awaits repair or replacement)
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
