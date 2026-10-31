@@ -23,7 +23,7 @@ export interface StatusPayload {
   signals: SignalSnapshot;
 }
 
-export type WsCategory = "command" | "bus" | "control" | "log" | "ddc" | "recording" | "display";
+export type WsCategory = "command" | "bus" | "control" | "log" | "ddc" | "recording" | "display" | "led_comm";
 
 export interface WsEventV1 {
   v: 1;
@@ -31,6 +31,48 @@ export interface WsEventV1 {
   type: string;
   ts: string;
   data: Record<string, unknown>;
+}
+
+export interface LedCommunicationEdge {
+  seq: number;
+  monotonic_ns: number;
+  level: 0 | 1;
+  interval_ns: number | null;
+}
+
+export interface LedStateFrame {
+  edge_seq: number;
+  monotonic_ns: number;
+  raw_hex: string;
+  sequence: number;
+  layout: "single" | "pip" | "pbp" | "unknown";
+  input1: "none" | "hdmi" | "dp" | "tb" | "unknown";
+  input2: "none" | "hdmi" | "dp" | "tb" | "unknown";
+  crc: number;
+}
+
+export interface LedCommunicationStatus {
+  capturing: boolean;
+  level: 0 | 1 | null;
+  accepted_edges: number;
+  rejected_glitches: number;
+  overruns: number;
+  buffered_edges: number;
+  buffer_size: number;
+  glitch_ns: number;
+  half_bit_ns: number;
+  tolerance: number;
+  intervals: { min_ns: number | null; median_ns: number | null; max_ns: number | null };
+  valid_frames: number;
+  missing_frames: number;
+  decoder_rejections: number;
+  latest_frame: LedStateFrame | null;
+}
+
+export interface LedCommunicationState {
+  status: LedCommunicationStatus | null;
+  edges: readonly LedCommunicationEdge[];
+  frames: readonly LedStateFrame[];
 }
 
 export interface CommandRejectedBody {

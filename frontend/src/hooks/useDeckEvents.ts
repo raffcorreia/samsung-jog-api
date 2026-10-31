@@ -11,6 +11,7 @@ import {
   deleteLiveLog,
   deleteRecording,
   fetchDisplayPower,
+  fetchLedCommunicationStatus,
   fetchRecordingContent,
   fetchRecordingLibrary,
   fetchRecordingState,
@@ -29,6 +30,10 @@ import {
 import { formatBusLedLogMessage } from "../log/busLogFormat";
 import type {
   JogAction,
+  LedCommunicationEdge,
+  LedCommunicationState,
+  LedCommunicationStatus,
+  LedStateFrame,
   RecordingLibrary,
   RecordingState,
   SignalSnapshot,
@@ -95,6 +100,7 @@ export interface DeckEventsState {
   logLines: readonly string[];
   recordingState: RecordingState;
   recordings: RecordingLibrary;
+  ledCommunication: LedCommunicationState;
   pushLogLine: (line: string) => void;
   clearServerLog: () => Promise<void>;
   refreshStatus: () => Promise<void>;
@@ -147,6 +153,11 @@ export function useDeckEvents(): DeckEventsState {
   const [logLines, setLogLines] = useState<string[]>([]);
   const [recordingState, setRecordingState] = useState<RecordingState>(EMPTY_RECORDING_STATE);
   const [recordings, setRecordings] = useState<RecordingLibrary>({ items: [] });
+  const [ledCommunication, setLedCommunication] = useState<LedCommunicationState>({
+    status: null,
+    edges: [],
+    frames: [],
+  });
   const prevSignalsRef = useRef<SignalSnapshot | null>(null);
 
   const hardwareHeld = useMemo(
@@ -366,6 +377,9 @@ export function useDeckEvents(): DeckEventsState {
     void refreshStatus();
     void refreshRecordingState();
     void refreshRecordings();
+    void fetchLedCommunicationStatus()
+      .then((ledStatus) => setLedCommunication((prev) => ({ ...prev, status: ledStatus })))
+      .catch(() => {});
     fetchDisplayPower().then((p) => setDisplayOn(p.on)).catch(() => {});
     let stopped = false;
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -519,6 +533,28 @@ export function useDeckEvents(): DeckEventsState {
           });
         }
 
+        if (parsed.category === "led_comm" && parsed.type === "sync") {
+          const ledStatus = parsed.data.status as LedCommunicationStatus;
+          const edges = Array.isArray(parsed.data.edges)
+            ? (parsed.data.edges as LedCommunicationEdge[])
+            : [];
+          setLedCommunication({ status: ledStatus, edges: edges.slice(-240), frames: [] });
+        }
+        if (parsed.category === "led_comm" && parsed.type === "edge_batch") {
+          const ledStatus = parsed.data.status as LedCommunicationStatus;
+          const edges = Array.isArray(parsed.data.edges)
+            ? (parsed.data.edges as LedCommunicationEdge[])
+            : [];
+          const frames = Array.isArray(parsed.data.frames)
+            ? (parsed.data.frames as LedStateFrame[])
+            : [];
+          setLedCommunication((prev) => ({
+            status: ledStatus,
+            edges: [...prev.edges, ...edges].slice(-240),
+            frames: [...prev.frames, ...frames].slice(-16),
+          }));
+        }
+
         if (parsed.category === "display" && parsed.type === "open_power_menu") {
           setOpenPowerMenuTick((n) => n + 1);
         }
@@ -574,6 +610,7 @@ export function useDeckEvents(): DeckEventsState {
       logLines,
       recordingState,
       recordings,
+      ledCommunication,
       pushLogLine,
       clearServerLog,
       refreshStatus,
@@ -602,6 +639,7 @@ export function useDeckEvents(): DeckEventsState {
       logLines,
       recordingState,
       recordings,
+      ledCommunication,
       pushLogLine,
       clearServerLog,
       refreshStatus,

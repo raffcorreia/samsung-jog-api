@@ -8,10 +8,9 @@ import { RecordingWorkspace } from "../components/RecordingWorkspace";
 import { VersionBadge } from "../components/VersionBadge";
 import type { DeckEventsState } from "../hooks/useDeckEvents";
 import type { RecordingSummary } from "../types";
-import { CalendarWidget } from "../widgets/CalendarWidget";
 import { JogWidget } from "../widgets/JogWidget";
+import { LedCommunicationWidget } from "../widgets/LedCommunicationWidget";
 import { LiveLogWidget } from "../widgets/LiveLogWidget";
-import { NotesWidget } from "../widgets/NotesWidget";
 import { OsdMockPanel } from "../widgets/OsdMockPanel";
 
 import styles from "./HomePage.module.css";
@@ -84,10 +83,9 @@ export function HomePage({ deck }: { deck: DeckEventsState }) {
         </button>
       </div>
 
-      {/* Right panel — placeholder widgets */}
+      {/* Right panel — raw monitor LED communication */}
       <div className={styles.rightPanel}>
-        <CalendarWidget />
-        <NotesWidget />
+        <LedCommunicationWidget state={deck.ledCommunication} />
       </div>
 
       {/* Log band — fixed height, scrolls inside */}

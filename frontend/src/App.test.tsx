@@ -20,6 +20,28 @@ const { statusPayload } = vi.hoisted(() => ({
 
 vi.mock("./api/client", () => ({
   fetchStatus: vi.fn(() => Promise.resolve(statusPayload)),
+  fetchLedCommunicationStatus: vi.fn(() => Promise.resolve({
+    capturing: true,
+    level: null,
+    accepted_edges: 0,
+    rejected_glitches: 0,
+    overruns: 0,
+    buffered_edges: 0,
+    buffer_size: 4096,
+    glitch_ns: 250000,
+    half_bit_ns: 10000000,
+    tolerance: 0.35,
+    intervals: { min_ns: null, median_ns: null, max_ns: null },
+    valid_frames: 0,
+    missing_frames: 0,
+    decoder_rejections: 0,
+    latest_frame: null,
+  })),
+  startLedCommunication: vi.fn(),
+  stopLedCommunication: vi.fn(),
+  clearLedCommunication: vi.fn(),
+  replayLedCommunication: vi.fn(),
+  ledCommunicationExportUrl: vi.fn(() => "/api/v1/led-communication/export"),
   fetchRecordingLibrary: vi.fn(() => Promise.resolve({ items: [] })),
   fetchRecordingState: vi.fn(() =>
     Promise.resolve({
@@ -85,6 +107,8 @@ describe("App", () => {
     render(<App />);
 
     expect(await screen.findByTestId("jog-pad")).toBeInTheDocument();
+    expect(screen.getByTestId("led-communication-monitor")).toBeInTheDocument();
+    expect(screen.queryByText("April 2026")).not.toBeInTheDocument();
 
     const ws = instances[0];
     expect(ws).toBeDefined();
@@ -104,6 +128,52 @@ describe("App", () => {
     await waitFor(() => {
       expect(screen.getByRole("log")).toHaveTextContent("release - up 80ms");
     });
+
+    await act(async () => {
+      ws.onmessage?.({
+        data: JSON.stringify({
+          v: 1,
+          category: "led_comm",
+          type: "edge_batch",
+          ts: "2026-01-01T00:00:01Z",
+          data: {
+            edges: [
+              { seq: 1, monotonic_ns: 1_000_000_000, level: 0, interval_ns: null },
+              { seq: 2, monotonic_ns: 1_010_000_000, level: 1, interval_ns: 10_000_000 },
+            ],
+            frames: [],
+            status: {
+              capturing: true,
+              level: 1,
+              accepted_edges: 2,
+              rejected_glitches: 0,
+              overruns: 0,
+              buffered_edges: 2,
+              buffer_size: 4096,
+              glitch_ns: 250000,
+              half_bit_ns: 10000000,
+              tolerance: 0.35,
+              intervals: { min_ns: 10000000, median_ns: 10000000, max_ns: 10000000 },
+              valid_frames: 1,
+              missing_frames: 0,
+              decoder_rejections: 0,
+              latest_frame: {
+                edge_seq: 2,
+                monotonic_ns: 1_000_000_000,
+                raw_hex: "ffff2dd41100232000",
+                sequence: 0,
+                layout: "pbp",
+                input1: "tb",
+                input2: "dp",
+                crc: 0,
+              },
+            },
+          },
+        }),
+      } as MessageEvent);
+    });
+
+    expect(screen.getByText(/#0 · PBP · TB \/ DP/)).toBeInTheDocument();
   });
 
   it("opens the recording workspace from the jog column button", async () => {

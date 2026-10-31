@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import sys
+import time
 from collections.abc import Callable
 
 from gpiozero import DigitalInputDevice
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class KeyLedObserve:
-    """KEY_LED: gpiozero ``DigitalInputDevice``; **active-low** at the pin matches Phase 6 wiring."""
+    """KEY_LED gpiozero input; active-low at the pin matches the Phase 6 wiring."""
 
     def __init__(self, pins: ProtoboardPins | None = None, *, pull_up: bool | None = None) -> None:
         self._pins = pins or ProtoboardPins()
@@ -22,6 +23,7 @@ class KeyLedObserve:
         self._pull_up = pull_up if pull_up is not None else True
         self._edge_cb: Callable[[], None] | None = None
         self._state_cb: Callable[[bool], None] | None = None
+        self._raw_edge_cb: Callable[[int, int], None] | None = None
         self._dev = DigitalInputDevice(
             self._bcm,
             pull_up=self._pull_up,
@@ -53,6 +55,16 @@ class KeyLedObserve:
         self._state_cb = fn
         self._install_hooks()
 
+    def set_raw_edge_callback(self, fn: Callable[[int, int], None] | None) -> None:
+        """Register physical-level edge capture as ``(level, monotonic_ns)``.
+
+        The current conditioned input is active-low, so gpiozero activation is physical level 0
+        and deactivation is physical level 1.  This path deliberately does not rewrite levels as
+        semantic LED on/off state.
+        """
+        self._raw_edge_cb = fn
+        self._install_hooks()
+
     def disable_edge_detect(self) -> None:
         self._edge_cb = None
         self._install_hooks()
@@ -60,6 +72,7 @@ class KeyLedObserve:
     def close(self) -> None:
         self._edge_cb = None
         self._state_cb = None
+        self._raw_edge_cb = None
         self._dev.when_activated = None
         self._dev.when_deactivated = None
         self._dev.close()
@@ -70,19 +83,26 @@ class KeyLedObserve:
         """Rebuild when_activated / when_deactivated to chain both callbacks."""
         edge_cb = self._edge_cb
         state_cb = self._state_cb
+        raw_edge_cb = self._raw_edge_cb
 
-        if edge_cb is None and state_cb is None:
+        if edge_cb is None and state_cb is None and raw_edge_cb is None:
             self._dev.when_activated = None
             self._dev.when_deactivated = None
             return
 
         def _on_active() -> None:
+            timestamp = time.monotonic_ns()
+            if raw_edge_cb is not None:
+                raw_edge_cb(0, timestamp)
             if edge_cb is not None:
                 edge_cb()
             if state_cb is not None:
                 state_cb(True)
 
         def _on_inactive() -> None:
+            timestamp = time.monotonic_ns()
+            if raw_edge_cb is not None:
+                raw_edge_cb(1, timestamp)
             if edge_cb is not None:
                 edge_cb()
             if state_cb is not None:

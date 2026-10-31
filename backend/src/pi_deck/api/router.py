@@ -2,15 +2,23 @@
 
 from __future__ import annotations
 
+import asyncio
+
 from fastapi import APIRouter, Depends, File, Request, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
-import asyncio
-
-from pi_deck.api.deps import get_deck, get_display, get_recordings, get_strip, get_system
+from pi_deck.api.deps import (
+    get_deck,
+    get_display,
+    get_led_communication,
+    get_recordings,
+    get_strip,
+    get_system,
+)
 from pi_deck.models.recordings import (
     RecordingLibraryOut,
     RecordingRejectedOut,
+    RecordingRejectedReason,
     RecordingRenameIn,
     RecordingStateOut,
 )
@@ -19,13 +27,13 @@ from pi_deck.models.schemas import (
     CommandRejectedReason,
     DisplayBrightnessIn,
     DisplayBrightnessOut,
-    LedBrightnessIn,
-    LedBrightnessOut,
     DisplayPowerIn,
     DisplayPowerOut,
     JogHoldIn,
     JogPressIn,
     JogReleaseIn,
+    LedBrightnessIn,
+    LedBrightnessOut,
     LogIn,
     NetworkInfoOut,
     NetworkInterfaceOut,
@@ -34,12 +42,13 @@ from pi_deck.models.schemas import (
     SystemShutdownOut,
     ws_status_connected,
 )
-from pi_deck.services.display_service import DisplayService
-from pi_deck.services.strip_driver import StripDriver
-from pi_deck.services.system_service import SystemService
 from pi_deck.services.deck_control import DeckControlService
+from pi_deck.services.display_service import DisplayService
+from pi_deck.services.led_communication import LedCommunicationService
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.recordings import RecordingService, RecordingServiceError
+from pi_deck.services.strip_driver import StripDriver
+from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 
 api_v1 = APIRouter(prefix="/api/v1")
@@ -57,7 +66,9 @@ def _rejection_message(reason: CommandRejectedReason) -> str:
 def _recording_rejection_response(exc: RecordingServiceError) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
-        content=RecordingRejectedOut(reason=exc.reason, message=exc.message).model_dump(mode="json"),
+        content=RecordingRejectedOut(reason=exc.reason, message=exc.message).model_dump(
+            mode="json"
+        ),
     )
 
 
@@ -140,6 +151,60 @@ async def api_log_entry_from_request(
 async def api_log_clear(deck: DeckControlService = Depends(get_deck)) -> JSONResponse:
     await deck.live_log.clear()
     return JSONResponse({"ok": True})
+
+
+@api_v1.get("/led-communication/status")
+def api_led_communication_status(
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    return JSONResponse(service.status())
+
+
+@api_v1.post("/led-communication/start")
+def api_led_communication_start(
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    return JSONResponse(service.start_capture())
+
+
+@api_v1.post("/led-communication/stop")
+def api_led_communication_stop(
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    return JSONResponse(service.stop_capture())
+
+
+@api_v1.delete("/led-communication/capture")
+def api_led_communication_clear(
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    return JSONResponse(service.clear())
+
+
+@api_v1.get("/led-communication/export")
+def api_led_communication_export(
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    return JSONResponse(
+        service.export(),
+        headers={"Content-Disposition": 'attachment; filename="key-led-capture.json"'},
+    )
+
+
+@api_v1.post("/led-communication/replay")
+async def api_led_communication_replay(
+    request: Request,
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    try:
+        document = await request.json()
+        if not isinstance(document, dict):
+            raise ValueError("edge log must be an object")
+        return JSONResponse(service.replay(document))
+    except (KeyError, TypeError, ValueError) as exc:
+        return JSONResponse(
+            status_code=400, content={"error": "invalid_edge_log", "message": str(exc)}
+        )
 
 
 @api_v1.get("/recordings", response_model=RecordingLibraryOut)
@@ -283,7 +348,9 @@ async def api_recordings_upload(
 
 
 @api_v1.get("/display/brightness", response_model=DisplayBrightnessOut)
-def api_display_brightness_get(display: DisplayService = Depends(get_display)) -> DisplayBrightnessOut:
+def api_display_brightness_get(
+    display: DisplayService = Depends(get_display),
+) -> DisplayBrightnessOut:
     from pi_deck.hardware.display_power import BRIGHTNESS_RAW_MAX
 
     return DisplayBrightnessOut(
@@ -400,6 +467,7 @@ async def websocket_events(ws: WebSocket) -> None:
     hub: WsHub = ws.app.state.ws_hub
     live_log: LiveLogService = ws.app.state.live_log
     recordings: RecordingService = ws.app.state.recordings
+    led_communication: LedCommunicationService = ws.app.state.led_communication
     is_deck = ws.client is not None and ws.client.host in ("127.0.0.1", "::1")
     await hub.connect(ws, is_deck=is_deck)
     try:
@@ -407,6 +475,7 @@ async def websocket_events(ws: WebSocket) -> None:
         await ws.send_json(hello.model_dump(mode="json"))
         await live_log.replay_to(ws)
         await recordings.websocket_sync(ws)
+        await led_communication.websocket_sync(ws)
         connected_log = live_log.record_event(hello.model_dump(mode="json"))
         if connected_log is not None:
             await hub.broadcast_json(connected_log.model_dump(mode="json"))

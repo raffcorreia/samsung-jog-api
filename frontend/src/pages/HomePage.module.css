@@ -87,12 +87,10 @@
   opacity: 1;
 }
 
-/* Right panel — calendar and notes side by side */
+/* Right panel — full communication monitor */
 .rightPanel {
   grid-area: right;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--pad);
+  display: flex;
   padding: var(--pad);
   overflow: hidden;
   min-height: 0;

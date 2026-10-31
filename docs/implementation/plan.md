@@ -29,7 +29,7 @@
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
-| [25](#phase-25-custom-led-communication-receiver-and-monitor-ui) | Custom LED Communication Receiver and Monitor UI | planned |
+| [25](#phase-25-custom-led-communication-receiver-and-monitor-ui) | Custom LED Communication Receiver and Monitor UI | in progress |
 | [40](#phase-40-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
 | [41](#phase-41-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
 | [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
@@ -1292,7 +1292,7 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 
 ## Phase 25: Custom LED Communication Receiver and Monitor UI
 
-**Status:** planned. See [Phase 25 Execution Record](./phase-25-execution.md).
+**Status:** in progress. See [Phase 25 Execution Record](./phase-25-execution.md).
 
 ### Goal
 

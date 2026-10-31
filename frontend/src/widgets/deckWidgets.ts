@@ -7,6 +7,7 @@ export const DECK_WIDGETS = {
   log: "deck-log",
   calendar: "deck-calendar",
   notes: "deck-notes",
+  ledCommunication: "deck-led-communication",
   settings: "deck-settings",
 } as const;
 

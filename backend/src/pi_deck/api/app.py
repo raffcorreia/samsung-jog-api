@@ -14,18 +14,19 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from pi_deck import __version__
+from pi_deck.api.router import api_v1, websocket_events
+from pi_deck.hardware.display_button import DisplayButton
+from pi_deck.hardware.display_power import build_display_power
 from pi_deck.models.schemas import (
     ws_display_open_power_menu,
     ws_display_power_button_held,
     ws_display_power_button_released,
     ws_display_power_changed,
 )
-from pi_deck.api.router import api_v1, websocket_events
-from pi_deck.hardware.display_button import DisplayButton
-from pi_deck.hardware.display_power import build_display_power
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.display_service import DisplayService
 from pi_deck.services.hardware_facade import build_hardware
+from pi_deck.services.led_communication import LedCommunicationService
 from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.observation_bus import ObservationBusService
 from pi_deck.services.recordings import RecordingService
@@ -33,7 +34,6 @@ from pi_deck.services.strip_driver import AMBER, BLUE, GREEN, OFF, RED, LockMode
 from pi_deck.services.system_service import SystemService
 from pi_deck.services.ws_hub import WsHub
 from pi_deck.storage.recordings import RecordingStore
-
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +75,8 @@ async def lifespan(app: FastAPI):
     observation = ObservationBusService(ws_hub=hub, live_log=live_log, hardware=hw)
     observation.add_listener(recordings.observe_event)
     observation.start(asyncio.get_running_loop())
+    led_communication = LedCommunicationService(ws_hub=hub)
+    led_communication.start()
     display_hw = build_display_power(hw.kind)
     display = DisplayService(display_hw)
     display.power_on()
@@ -100,7 +102,10 @@ async def lifespan(app: FastAPI):
         color = (BLUE if active else GREEN) if display.is_on else (OFF if active else RED)
         strip.send(0, color)
 
-    hw.led_observer.set_state_callback(_on_monitor_led)
+    led_observer = getattr(hw, "led_observer", None)
+    if led_observer is not None:
+        led_observer.set_state_callback(_on_monitor_led)
+        led_observer.set_raw_edge_callback(led_communication.on_raw_edge)
 
     strip.send(0, GREEN if display.is_on else RED)
 
@@ -144,6 +149,7 @@ async def lifespan(app: FastAPI):
     app.state.deck = deck
     app.state.hw = hw
     app.state.observation = observation
+    app.state.led_communication = led_communication
     app.state.recordings = recordings
     app.state.display = display
     app.state.display_btn = display_btn
@@ -153,6 +159,9 @@ async def lifespan(app: FastAPI):
     yield
     display_btn.close()
     strip.stop()
+    if led_observer is not None:
+        led_observer.set_raw_edge_callback(None)
+    await led_communication.stop()
     await observation.stop()
     hw.close()
 

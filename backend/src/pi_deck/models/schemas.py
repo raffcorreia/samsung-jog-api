@@ -106,7 +106,9 @@ class WsEventV1(BaseModel):
     """Versioned websocket envelope (category + type + payload)."""
 
     v: Literal[1] = 1
-    category: Literal["command", "bus", "control", "log", "ddc", "recording", "display"]
+    category: Literal[
+        "command", "bus", "control", "log", "ddc", "recording", "display", "led_comm"
+    ]
     type: str
     ts: str
     data: dict[str, Any] = Field(default_factory=dict)

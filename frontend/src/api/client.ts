@@ -1,6 +1,7 @@
 import type {
   CommandRejectedBody,
   JogAction,
+  LedCommunicationStatus,
   LogLevel,
   RecordingLibrary,
   RecordingRejectedBody,
@@ -123,6 +124,41 @@ export async function deleteLiveLog(): Promise<void> {
   if (!r.ok) {
     throw new Error(`log clear failed: ${r.status}`);
   }
+}
+
+export async function fetchLedCommunicationStatus(): Promise<LedCommunicationStatus> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/status`);
+  if (!r.ok) throw new Error(`LED communication status failed: ${r.status}`);
+  return (await r.json()) as LedCommunicationStatus;
+}
+
+async function ledCommunicationAction(action: "start" | "stop"): Promise<LedCommunicationStatus> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/${action}`, { method: "POST" });
+  if (!r.ok) throw new Error(`LED communication ${action} failed: ${r.status}`);
+  return (await r.json()) as LedCommunicationStatus;
+}
+
+export const startLedCommunication = () => ledCommunicationAction("start");
+export const stopLedCommunication = () => ledCommunicationAction("stop");
+
+export async function clearLedCommunication(): Promise<LedCommunicationStatus> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/capture`, { method: "DELETE" });
+  if (!r.ok) throw new Error(`LED communication clear failed: ${r.status}`);
+  return (await r.json()) as LedCommunicationStatus;
+}
+
+export async function replayLedCommunication(document: unknown): Promise<LedCommunicationStatus> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/replay`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(document),
+  });
+  if (!r.ok) throw new Error(`LED communication replay failed: ${r.status}`);
+  return (await r.json()) as LedCommunicationStatus;
+}
+
+export function ledCommunicationExportUrl(): string {
+  return `${apiBase()}/api/v1/led-communication/export`;
 }
 
 export type RecordingResult<T> = { ok: true; body: T } | { ok: false; body: RecordingRejectedBody };

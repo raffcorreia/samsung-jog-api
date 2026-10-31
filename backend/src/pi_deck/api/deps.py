@@ -6,6 +6,7 @@ from fastapi import Request
 
 from pi_deck.services.deck_control import DeckControlService
 from pi_deck.services.display_service import DisplayService
+from pi_deck.services.led_communication import LedCommunicationService
 from pi_deck.services.recordings import RecordingService
 from pi_deck.services.strip_driver import StripDriver
 from pi_deck.services.system_service import SystemService
@@ -17,6 +18,10 @@ def get_deck(request: Request) -> DeckControlService:
 
 def get_recordings(request: Request) -> RecordingService:
     return request.app.state.recordings
+
+
+def get_led_communication(request: Request) -> LedCommunicationService:
+    return request.app.state.led_communication
 
 
 def get_display(request: Request) -> DisplayService:
