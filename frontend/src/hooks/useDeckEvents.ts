@@ -42,6 +42,7 @@ import type {
 } from "../types";
 
 const MAX_LOG = 220;
+const MAX_LED_EDGES = 4096;
 
 const JOG_ACTIONS: readonly JogAction[] = ["up", "down", "left", "right", "center"];
 
@@ -538,7 +539,11 @@ export function useDeckEvents(): DeckEventsState {
           const edges = Array.isArray(parsed.data.edges)
             ? (parsed.data.edges as LedCommunicationEdge[])
             : [];
-          setLedCommunication({ status: ledStatus, edges: edges.slice(-240), frames: [] });
+          setLedCommunication({
+            status: ledStatus,
+            edges: edges.slice(-MAX_LED_EDGES),
+            frames: [],
+          });
         }
         if (parsed.category === "led_comm" && parsed.type === "edge_batch") {
           const ledStatus = parsed.data.status as LedCommunicationStatus;
@@ -550,7 +555,7 @@ export function useDeckEvents(): DeckEventsState {
             : [];
           setLedCommunication((prev) => ({
             status: ledStatus,
-            edges: [...prev.edges, ...edges].slice(-240),
+            edges: [...prev.edges, ...edges].slice(-MAX_LED_EDGES),
             frames: [...prev.frames, ...frames].slice(-16),
           }));
         }

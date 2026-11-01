@@ -309,7 +309,7 @@ class LedCommunicationService:
             self._event("sync", {"status": self.status(), "edges": self._recent_edges()})
         )
 
-    def _recent_edges(self, limit: int = 240) -> list[dict[str, Any]]:
+    def _recent_edges(self, limit: int = DEFAULT_BUFFER_SIZE) -> list[dict[str, Any]]:
         with self._lock:
             return [asdict(edge) for edge in list(self._edges)[-limit:]]
 

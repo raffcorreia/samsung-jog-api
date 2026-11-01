@@ -25,7 +25,13 @@
 .waveform path { fill: none; stroke: #6cb6ff; stroke-width: 2.2; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px rgba(108,182,255,.6)); }
 .axisTop, .axisBottom { position: absolute; left: 7px; z-index: 1; color: #718096; font: .52rem monospace; }
 .axisTop { top: 5px; } .axisBottom { bottom: 5px; }
+.timeScale { position: absolute; right: 7px; bottom: 5px; color: #718096; font: .52rem monospace; }
 .empty { height: 100%; display: grid; place-items: center; color: var(--muted); font: .7rem monospace; }
+
+.scopeControls { display: flex; align-items: center; gap: 7px; }
+.scopeControls button { padding: 5px 9px; border: 1px solid #33465c; border-radius: 6px; background: #111b27; color: var(--text); font-size: .56rem; cursor: pointer; }
+.scopeControls button:disabled { opacity: .35; cursor: default; }
+.scopeControls span { margin-left: auto; color: var(--muted); font: .53rem monospace; }
 
 .metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 7px; }
 .metric { min-width: 0; padding: 7px 8px; border: 1px solid #29384a; border-radius: 7px; background: rgba(26,34,44,.72); }
@@ -42,6 +48,7 @@
 .controls { display: flex; align-items: center; gap: 8px; }
 .controls button, .controls a { padding: 6px 11px; border: 1px solid var(--border-bright); border-radius: 6px; background: #182331; color: var(--text); font-size: .62rem; text-decoration: none; cursor: pointer; }
 .controls button:active { background: #243449; }
+.controls .pauseButton { border-color: #4e87b0; color: #9bd8ff; }
 .config { margin-left: auto; color: var(--muted); font: .56rem monospace; }
 .hiddenInput { display: none; }
 .error { color: var(--danger); font: .58rem monospace; }

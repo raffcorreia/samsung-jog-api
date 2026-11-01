@@ -13,6 +13,8 @@ import styles from "./LedCommunicationWidget.module.css";
 
 const WIDTH = 900;
 const HEIGHT = 170;
+const MIN_WINDOW_NS = 100_000_000;
+const MAX_WINDOW_NS = 60_000_000_000;
 
 function milliseconds(ns: number | null): string {
   return ns === null ? "—" : `${(ns / 1_000_000).toFixed(ns < 10_000_000 ? 2 : 1)} ms`;
@@ -21,27 +23,41 @@ function milliseconds(ns: number | null): string {
 export function LedCommunicationWidget({ state }: { state: LedCommunicationState }) {
   const [localStatus, setLocalStatus] = useState<LedCommunicationStatus | null>(state.status);
   const [error, setError] = useState<string | null>(null);
+  const [windowNs, setWindowNs] = useState(2_000_000_000);
+  const [panOffsetNs, setPanOffsetNs] = useState(0);
+  const [hiddenThroughSeq, setHiddenThroughSeq] = useState(-1);
   const replayRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => setLocalStatus(state.status), [state.status]);
   const status = localStatus ?? state.status;
 
-  const path = useMemo(() => {
-    const edges = state.edges;
+  const visible = useMemo(() => {
+    const edges = state.edges.filter((edge) => edge.seq > hiddenThroughSeq);
     if (edges.length === 0) return "";
-    const start = edges[0].monotonic_ns;
-    const end = edges[edges.length - 1].monotonic_ns;
-    const span = Math.max(1, end - start);
-    let level = edges[0].level;
-    let d = `M 0 ${level ? 30 : 140}`;
-    for (const edge of edges) {
-      const x = ((edge.monotonic_ns - start) / span) * WIDTH;
+    const newest = edges[edges.length - 1].monotonic_ns;
+    const end = newest - panOffsetNs;
+    const start = end - windowNs;
+    const inWindow = edges.filter(
+      (edge) => edge.monotonic_ns >= start && edge.monotonic_ns <= end,
+    );
+    const prior = [...edges].reverse().find((edge) => edge.monotonic_ns < start);
+    const displayed = prior ? [prior, ...inWindow] : inWindow;
+    if (displayed.length === 0) return "";
+    let d = `M 0 ${displayed[0].level ? 30 : 140}`;
+    for (const edge of displayed) {
+      const x = Math.max(0, Math.min(WIDTH, ((edge.monotonic_ns - start) / windowNs) * WIDTH));
       d += ` H ${x.toFixed(2)} V ${edge.level ? 30 : 140}`;
-      level = edge.level;
     }
     d += ` H ${WIDTH}`;
     return d;
-  }, [state.edges]);
+  }, [hiddenThroughSeq, panOffsetNs, state.edges, windowNs]);
+
+  const historySpanNs = useMemo(() => {
+    const edges = state.edges.filter((edge) => edge.seq > hiddenThroughSeq);
+    return edges.length < 2
+      ? 0
+      : edges[edges.length - 1].monotonic_ns - edges[0].monotonic_ns;
+  }, [hiddenThroughSeq, state.edges]);
 
   const run = async (action: () => Promise<LedCommunicationStatus>) => {
     setError(null);
@@ -69,13 +85,33 @@ export function LedCommunicationWidget({ state }: { state: LedCommunicationState
       <div className={styles.waveform} aria-label="Raw KEY_LED waveform">
         <div className={styles.axisTop}>physical 1</div>
         <div className={styles.axisBottom}>physical 0</div>
-        {path ? (
+        {visible ? (
           <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} preserveAspectRatio="none" role="img">
-            <path d={path} />
+            <path d={visible} />
           </svg>
         ) : (
           <div className={styles.empty}>Waiting for raw KEY_LED edges…</div>
         )}
+        <div className={styles.timeScale}>{(windowNs / 1_000_000).toLocaleString()} ms window{panOffsetNs ? ` · ${(panOffsetNs / 1_000_000).toFixed(0)} ms behind live` : " · live edge"}</div>
+      </div>
+
+      <div className={styles.scopeControls}>
+        <button
+          type="button"
+          disabled={Boolean(status?.capturing) || panOffsetNs + windowNs >= historySpanNs}
+          onClick={() => setPanOffsetNs((value) => Math.min(Math.max(0, historySpanNs - windowNs), value + windowNs * 0.75))}
+          aria-label="Scroll waveform left to older time"
+        >← Older</button>
+        <button
+          type="button"
+          disabled={Boolean(status?.capturing) || panOffsetNs === 0}
+          onClick={() => setPanOffsetNs((value) => Math.max(0, value - windowNs * 0.75))}
+          aria-label="Scroll waveform right to newer time"
+        >Newer →</button>
+        <button type="button" onClick={() => setWindowNs((value) => Math.max(MIN_WINDOW_NS, value / 2))}>Zoom in time</button>
+        <button type="button" onClick={() => setWindowNs((value) => Math.min(MAX_WINDOW_NS, value * 2))}>Zoom out time</button>
+        <button type="button" onClick={() => { setPanOffsetNs(0); setWindowNs(2_000_000_000); }}>Live view</button>
+        <span>fixed level scale 0–1</span>
       </div>
 
       <div className={styles.metrics}>
@@ -101,10 +137,15 @@ export function LedCommunicationWidget({ state }: { state: LedCommunicationState
       </div>
 
       <footer className={styles.controls}>
-        <button type="button" onClick={() => void run(status?.capturing ? stopLedCommunication : startLedCommunication)}>
-          {status?.capturing ? "Stop" : "Start"}
+        <button type="button" className={styles.pauseButton} onClick={() => void run(status?.capturing ? stopLedCommunication : startLedCommunication)}>
+          {status?.capturing ? "Pause capture" : "Resume capture"}
         </button>
-        <button type="button" onClick={() => void run(clearLedCommunication)}>Clear</button>
+        <button type="button" onClick={() => {
+          const newestSeq = state.edges.at(-1)?.seq ?? -1;
+          setHiddenThroughSeq(newestSeq);
+          setPanOffsetNs(0);
+          void run(clearLedCommunication);
+        }}>Clear capture</button>
         <a href={ledCommunicationExportUrl()} download="key-led-capture.json">Export</a>
         <button type="button" onClick={() => replayRef.current?.click()}>Replay file</button>
         <input

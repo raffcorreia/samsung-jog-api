@@ -50,6 +50,9 @@ Capture every accepted `KEY_LED` transition with its physical level and monotoni
 - 2026-10-31: Focused backend validation: 27 tests passed. Focused frontend validation: 4 tests passed. Production frontend build passed.
 - 2026-10-31: Full backend collection remains blocked by the pre-existing `test_deploy_version.py` import of missing `_build_version`/`_read_deploy_counter`; full frontend run retains pre-existing SettingsPage mock failures. Neither failure is in the Phase 25 paths.
 - 2026-10-31: Live deployment/1007.7 capture could not run because SSH timed out to both previously documented deck addresses, `10.0.0.11` and `10.0.0.116`.
+- 2026-10-31: Deployed `0.1.12+r92` to the live `pi-deck5` host. The API and updated oscilloscope client are active.
+- 2026-10-31: Added a bounded 4,096-edge browser history, fixed 0–1 level scale, 100 ms–60 s time zoom, pause/resume, clear, older/newer panning while paused, and return-to-live controls.
+- 2026-10-31: Live GPIO capture is interrupt-driven and reports zero overruns. A 986-interval sample had a 21.1 ms minimum and roughly 790 ms median; it contained no interval below 15 ms, and replay across candidate 5–50 ms half-bit periods decoded no frame. A fresh post-deployment sample likewise had a 36.8 ms minimum. The client is therefore receiving transitions, but the conditioned GPIO input does not yet contain the specified dense 10/20 ms waveform.
 
 ## Host health snapshot
 
