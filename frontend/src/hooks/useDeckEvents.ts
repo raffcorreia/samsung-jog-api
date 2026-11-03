@@ -556,7 +556,7 @@ export function useDeckEvents(): DeckEventsState {
           setLedCommunication({
             status: ledStatus,
             edges: edges.slice(-MAX_LED_EDGES),
-            frames: [],
+            frames: Array.isArray(ledStatus.frame_history) ? ledStatus.frame_history : [],
           });
         }
         if (parsed.category === "led_comm" && parsed.type === "edge_batch") {
@@ -579,6 +579,13 @@ export function useDeckEvents(): DeckEventsState {
             ...prev,
             frames: mergeLedFrames(prev.frames, [frame]),
           }));
+        }
+        if (
+          parsed.category === "led_comm"
+          && (parsed.type === "tx" || parsed.type === "command_result")
+        ) {
+          const ledStatus = parsed.data.status as LedCommunicationStatus;
+          setLedCommunication((prev) => ({ ...prev, status: ledStatus }));
         }
 
         if (parsed.category === "display" && parsed.type === "open_power_menu") {

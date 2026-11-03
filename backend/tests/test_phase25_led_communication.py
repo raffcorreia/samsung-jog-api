@@ -1,16 +1,23 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 from fastapi.testclient import TestClient
 
 from pi_deck.api.app import create_app
 from pi_deck.services.led_communication import (
+    DecodedLedFrame,
+    LedCommunicationService,
     LedSemanticClassifier,
     RawLedEdge,
+    command_bits,
+    command_frame,
     crc8,
     decode_led_frames,
     decode_state_frames,
 )
+from pi_deck.services.ws_hub import WsHub
 
 
 @pytest.fixture
@@ -92,12 +99,78 @@ def test_decodes_1007_9_level_and_shared_sequence_frames() -> None:
     assert state.input1 == "dp"
 
 
+def test_decodes_1008_0_ack_hold_and_rate_frames() -> None:
+    ack = decode_led_frames(_edges_for_frame(bytes.fromhex("ffff2dd41610003126")))[0]
+    assert ack.message_type == "ack"
+    assert ack.ack_result == 0
+    assert ack.ack_code == 0
+    assert ack.measured_bit_ticks == 0x31
+
+    hold_payload = bytes.fromhex("13205456")
+    hold_raw = bytes.fromhex("ffff2dd4") + hold_payload + bytes([crc8(hold_payload)])
+    hold = decode_led_frames(_edges_for_frame(hold_raw))[0]
+    assert (hold.message_type, hold.min_raw, hold.max_raw) == ("hold", 0x54, 0x56)
+
+    rate_payload = bytes.fromhex("14210308")
+    rate_raw = bytes.fromhex("ffff2dd4") + rate_payload + bytes([crc8(rate_payload)])
+    rate = decode_led_frames(_edges_for_frame(rate_raw))[0]
+    assert (rate.message_type, rate.shortest_gap_ticks, rate.longest_gap_ticks) == (
+        "rate",
+        3,
+        8,
+    )
+
+
+def test_1008_0_commands_use_frozen_codeword_table_msb_first() -> None:
+    assert command_frame(0) == bytes.fromhex("a55a")
+    assert command_frame(7) == bytes.fromhex("a522")
+    assert command_bits(0) == (1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0)
+    with pytest.raises(ValueError):
+        command_frame(16)
+
+
+def test_command_transmission_waits_for_matching_ack() -> None:
+    async def scenario() -> None:
+        service = LedCommunicationService(ws_hub=WsHub())
+
+        async def sender(bits: tuple[int, ...], bit_time_s: float) -> list[tuple[int, int]]:
+            assert bits == command_bits(7)
+            assert bit_time_s == 0.05
+            await service._publish_frame(  # noqa: SLF001 - exercise ACK correlation boundary
+                DecodedLedFrame(
+                    edge_seq=100,
+                    monotonic_ns=1_000_000_000,
+                    raw_hex="ffff2dd41611073126",
+                    sequence=0x11,
+                    crc=0x26,
+                    message_type="ack",
+                    type_code=0x16,
+                    ack_result=0,
+                    ack_code=7,
+                    measured_bit_ticks=0x31,
+                )
+            )
+            return [(1_000_000_000, 1), (1_050_000_000, 0)]
+
+        service.configure_command_sender(sender)
+        result = await service.send_command(7)
+        assert result["status"] == "ack"
+        assert result["frame_hex"] == "a522"
+        assert result["ack"]["ack_code"] == 7
+        assert service.status()["tx_history"][0]["samples"][0]["level"] == 1
+
+        with pytest.raises(ValueError, match="1 and 50"):
+            await service.send_command(0, bit_time_ms=51)
+
+    asyncio.run(scenario())
+
+
 def test_keeps_crc_valid_unknown_type_for_forward_compatibility() -> None:
-    payload = bytes.fromhex("13060000")
+    payload = bytes.fromhex("18060000")
     raw = bytes.fromhex("ffff2dd4") + payload + bytes([crc8(payload)])
     frame = decode_led_frames(_edges_for_frame(raw))[0]
     assert frame.message_type == "unknown"
-    assert frame.type_code == 0x13
+    assert frame.type_code == 0x18
     assert frame.sequence == 6
 
 
@@ -173,8 +246,20 @@ def test_led_communication_rest_api(client) -> None:
     assert stopped.status_code == 200
     assert stopped.json()["capturing"] is False
 
+    paused_command = client.post(
+        "/api/v1/led-communication/command",
+        json={"command_code": 0, "bit_time_ms": 50},
+    )
+    assert paused_command.status_code == 409
+
     started = client.post("/api/v1/led-communication/start")
     assert started.json()["capturing"] is True
+
+    invalid_command = client.post(
+        "/api/v1/led-communication/command",
+        json={"command_code": 16, "bit_time_ms": 50},
+    )
+    assert invalid_command.status_code == 400
 
     exported = client.get("/api/v1/led-communication/export")
     assert exported.status_code == 200

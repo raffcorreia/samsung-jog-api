@@ -2,6 +2,7 @@ import type {
   CommandRejectedBody,
   JogAction,
   LedCommunicationStatus,
+  MonitorCommandResult,
   LogLevel,
   RecordingLibrary,
   RecordingRejectedBody,
@@ -159,6 +160,22 @@ export async function replayLedCommunication(document: unknown): Promise<LedComm
 
 export function ledCommunicationExportUrl(): string {
   return `${apiBase()}/api/v1/led-communication/export`;
+}
+
+export async function sendMonitorCommand(
+  commandCode: number,
+  bitTimeMs: number,
+): Promise<MonitorCommandResult> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/command`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ command_code: commandCode, bit_time_ms: bitTimeMs }),
+  });
+  const body = await r.json() as MonitorCommandResult | { message?: string };
+  if (!r.ok) {
+    throw new Error("message" in body && body.message ? body.message : `monitor command failed: ${r.status}`);
+  }
+  return body as MonitorCommandResult;
 }
 
 export type RecordingResult<T> = { ok: true; body: T } | { ok: false; body: RecordingRejectedBody };

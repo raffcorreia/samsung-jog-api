@@ -54,6 +54,7 @@ class DeckControlService:
     _control_state: ControlState = ControlState.IDLE
     _hold: dict[JogAction, HoldRecord] = field(default_factory=dict)
     _pulse_in_progress: bool = field(default=False, repr=False)
+    _custom_command_in_progress: bool = field(default=False, repr=False)
 
     def status(self) -> StatusOut:
         return StatusOut(
@@ -98,6 +99,8 @@ class DeckControlService:
 
     async def jog_hold(self, action: str) -> CommandRejectedReason | None:
         """Assert ``action``; same-direction replacement avoids a GPIO glitch."""
+        if self._custom_command_in_progress:
+            return CommandRejectedReason.CONCURRENT_COMMAND
         jog = _ACTION_MAP.get(action)
         if jog is None:
             return CommandRejectedReason.HARDWARE_ERROR
@@ -164,7 +167,7 @@ class DeckControlService:
             )
             return CommandRejectedReason.ACTIVE_HOLDS
 
-        if self._pulse_in_progress:
+        if self._pulse_in_progress or self._custom_command_in_progress:
             await self._emit(
                 ws_command_rejected(
                     reason=CommandRejectedReason.CONCURRENT_COMMAND,
@@ -203,6 +206,47 @@ class DeckControlService:
                 self._control_state = ControlState.IDLE
         finally:
             self._pulse_in_progress = False
+
+    async def send_monitor_command_bits(
+        self,
+        bits: tuple[int, ...],
+        bit_time_s: float,
+    ) -> list[tuple[int, int]]:
+        """Drive an NRZ command through the Center 10 kΩ leg with deadline timing."""
+        if len(bits) != 16 or any(bit not in (0, 1) for bit in bits):
+            raise ValueError("monitor command must contain exactly 16 binary bits")
+        if not 0.001 <= bit_time_s <= 0.050:
+            raise ValueError("monitor command bit time must be 1-50 ms")
+        if self._any_holds() or self._pulse_in_progress or self._custom_command_in_progress:
+            raise RuntimeError("jog control is busy")
+
+        self._custom_command_in_progress = True
+        self._control_state = ControlState.COMMANDING
+
+        def _transmit() -> list[tuple[int, int]]:
+            samples: list[tuple[int, int]] = []
+            # The protocol requires at least 100 ms released before the first high bit.
+            self.hardware.set_jog_line(JogAction.CENTER, False)
+            time.sleep(0.100)
+            deadline = time.monotonic()
+            try:
+                for bit in bits:
+                    self.hardware.set_jog_line(JogAction.CENTER, bool(bit))
+                    samples.append((time.monotonic_ns(), bit))
+                    deadline += bit_time_s
+                    remaining = deadline - time.monotonic()
+                    if remaining > 0:
+                        time.sleep(remaining)
+            finally:
+                self.hardware.set_jog_line(JogAction.CENTER, False)
+                samples.append((time.monotonic_ns(), 0))
+            return samples
+
+        try:
+            return await asyncio.to_thread(_transmit)
+        finally:
+            self._custom_command_in_progress = False
+            self._control_state = ControlState.IDLE
 
     async def _emit(self, event: object) -> None:
         payload = (

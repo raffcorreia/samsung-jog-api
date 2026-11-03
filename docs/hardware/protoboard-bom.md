@@ -13,7 +13,8 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `R1, R3, R15-R20` | `8` | resistor | `100 kOhm` |
 | `R2, R4, R14` | `3` | resistor | `10 kOhm` |
 | `R5-R9` | `5` | resistor | `4.7 kOhm` |
-| `R10-R11` | `2` | resistor | `22 Ohm` |
+| `R10` | `1` | resistor | `10 kOhm` (Center-bus custom communication TX) |
+| `R11` | `1` | resistor | `22 Ohm` |
 | `R12` | `1` | resistor | `3.3 kOhm` |
 | `R13` | `1` | resistor | `30 kOhm` |
 | `J1` | `1` | `1x4` header | monitor harness |
@@ -29,7 +30,7 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `ALERT/RDY` | `GPIO17`, physical pin `11` |
 | `KEY_ADC1` input | `GPIO27`, physical pin `13` |
 | `KEY_LED` input | `GPIO22`, physical pin `15` |
-| `CENTER` | `GPIO5`, physical pin `29` |
+| `CENTER_BUS_TX` | `GPIO5`, physical pin `29` |
 | `UP` | `GPIO6`, physical pin `31` |
 | `DOWN` | `GPIO13`, physical pin `33` |
 | `LEFT` | `GPIO19`, physical pin `35` |

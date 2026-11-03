@@ -1,4 +1,4 @@
-"""Raw KEY_LED capture and 1007.8 STATE-frame decoding.
+"""Raw KEY_LED capture plus the bidirectional custom monitor protocol.
 
 The GPIO callback only timestamps and appends to bounded in-memory queues.  Decoding and
 websocket fan-out run on the asyncio loop, away from gpiozero's helper thread.
@@ -38,6 +38,37 @@ PREAMBLE_SYNC_BITS = tuple(
 )
 MAX_RECOVERY_STATES = 256
 
+COMMAND_CODEWORDS: dict[int, int] = {
+    0x0: 0x5A,
+    0x1: 0x44,
+    0x2: 0x77,
+    0x3: 0x69,
+    0x4: 0x11,
+    0x5: 0x0F,
+    0x6: 0x3C,
+    0x7: 0x22,
+    0x8: 0xDD,
+    0x9: 0xC3,
+    0xA: 0xF0,
+    0xB: 0xEE,
+    0xC: 0x96,
+    0xD: 0x88,
+    0xE: 0xBB,
+    0xF: 0xA5,
+}
+COMMAND_NAMES: dict[int, str] = {
+    0x0: "query",
+    0x1: "single_hdmi",
+    0x2: "single_dp",
+    0x3: "single_tb",
+    0x4: "pbp_hdmi_dp",
+    0x5: "pbp_hdmi_tb",
+    0x6: "pbp_dp_hdmi",
+    0x7: "pbp_dp_tb",
+    0x8: "pbp_tb_hdmi",
+    0x9: "pbp_tb_dp",
+}
+
 
 @dataclass(frozen=True)
 class RawLedEdge:
@@ -62,6 +93,25 @@ class DecodedLedFrame:
     input2: str | None = None
     level: int | None = None
     raw_value: int | None = None
+    min_raw: int | None = None
+    max_raw: int | None = None
+    shortest_gap_ticks: int | None = None
+    longest_gap_ticks: int | None = None
+    ack_result: int | None = None
+    ack_code: int | None = None
+    measured_bit_ticks: int | None = None
+
+
+def command_frame(command_code: int) -> bytes:
+    """Return the frozen page-0 wire bytes; callers never synthesize a codeword."""
+    if command_code not in COMMAND_CODEWORDS:
+        raise ValueError("command code must be between 0 and 15")
+    return bytes((0xA5, COMMAND_CODEWORDS[command_code]))
+
+
+def command_bits(command_code: int) -> tuple[int, ...]:
+    raw = command_frame(command_code)
+    return tuple((raw[index // 8] >> (7 - index % 8)) & 1 for index in range(16))
 
 
 @dataclass
@@ -208,7 +258,7 @@ def decode_led_frames(
     tolerance: float = DEFAULT_TOLERANCE,
     allow_recovery: bool = True,
 ) -> list[DecodedLedFrame]:
-    """Decode CRC-valid 1007.8/1007.9 STATE, LEVEL and forward-compatible frames."""
+    """Decode CRC-valid STATE/LEVEL and 1008.0 diagnostic/ACK frames."""
     frames: list[DecodedLedFrame] = []
     seen_frames: set[tuple[bytes, int]] = set()
     for start in range(max(0, len(edges) - 512), len(edges)):
@@ -296,6 +346,34 @@ def decode_led_frames(
                         raw_value=raw[7],
                     )
                 )
+            elif raw[4] == 0x13:
+                frames.append(
+                    DecodedLedFrame(
+                        **common,
+                        message_type="hold",
+                        min_raw=raw[6],
+                        max_raw=raw[7],
+                    )
+                )
+            elif raw[4] == 0x14:
+                frames.append(
+                    DecodedLedFrame(
+                        **common,
+                        message_type="rate",
+                        shortest_gap_ticks=raw[6],
+                        longest_gap_ticks=raw[7],
+                    )
+                )
+            elif raw[4] == 0x16:
+                frames.append(
+                    DecodedLedFrame(
+                        **common,
+                        message_type="ack",
+                        ack_result=raw[6] >> 4,
+                        ack_code=raw[6] & 0x0F,
+                        measured_bit_ticks=raw[7],
+                    )
+                )
             else:
                 frames.append(DecodedLedFrame(**common, message_type="unknown"))
     return frames
@@ -344,6 +422,7 @@ class LedCommunicationService:
         self._frames: deque[DecodedLedFrame] = deque(maxlen=64)
         self._latest_state: DecodedLedFrame | None = None
         self._latest_level: DecodedLedFrame | None = None
+        self._latest_ack: DecodedLedFrame | None = None
         self._capturing = True
         self._next_seq = 0
         self._last_accepted_ns: int | None = None
@@ -364,6 +443,91 @@ class LedCommunicationService:
         self._burst_valid = False
         self._ended_rejected_bursts: deque[tuple[int, int]] = deque()
         self._drain_task: asyncio.Task[None] | None = None
+        self._command_sender: (
+            Callable[[tuple[int, ...], float], Awaitable[list[tuple[int, int]]]] | None
+        ) = None
+        self._command_lock = asyncio.Lock()
+        self._ack_waiter: tuple[int, asyncio.Future[DecodedLedFrame]] | None = None
+        self._last_command: dict[str, Any] | None = None
+        self._tx_history: deque[dict[str, Any]] = deque(maxlen=64)
+
+    def configure_command_sender(
+        self,
+        sender: Callable[[tuple[int, ...], float], Awaitable[list[tuple[int, int]]]],
+    ) -> None:
+        self._command_sender = sender
+
+    async def send_command(
+        self,
+        command_code: int,
+        *,
+        bit_time_ms: int = 50,
+        ack_timeout_s: float = 3.0,
+    ) -> dict[str, Any]:
+        """Transmit one page-0 command and wait for the matching LED ACK."""
+        if command_code not in COMMAND_CODEWORDS:
+            raise ValueError("command code must be between 0 and 15")
+        if not 1 <= bit_time_ms <= 50:
+            raise ValueError("bit_time_ms must be between 1 and 50")
+        if self._command_sender is None:
+            raise RuntimeError("monitor command transmitter is unavailable")
+        with self._lock:
+            if not self._capturing:
+                raise RuntimeError("resume LED capture before sending a monitor command")
+
+        async with self._command_lock:
+            loop = asyncio.get_running_loop()
+            waiter: asyncio.Future[DecodedLedFrame] = loop.create_future()
+            self._ack_waiter = (command_code, waiter)
+            sent = {
+                "command_code": command_code,
+                "command_name": COMMAND_NAMES.get(command_code, "reserved"),
+                "frame_hex": command_frame(command_code).hex(),
+                "bit_time_ms": bit_time_ms,
+                "status": "waiting_ack",
+            }
+            self._last_command = sent
+            try:
+                samples = await self._command_sender(
+                    command_bits(command_code), bit_time_ms / 1000
+                )
+                transmission = {
+                    **sent,
+                    "monotonic_ns": samples[0][0] if samples else time.monotonic_ns(),
+                    "samples": [
+                        {"monotonic_ns": timestamp, "level": level}
+                        for timestamp, level in samples
+                    ],
+                }
+                with self._lock:
+                    self._tx_history.append(transmission)
+                if self._hub.client_count:
+                    await self._hub.broadcast_json(
+                        self._event(
+                            "tx",
+                            {"transmission": transmission, "status": self.status()},
+                        )
+                    )
+                ack = await asyncio.wait_for(waiter, timeout=ack_timeout_s)
+                result = {**sent, "status": "ack", "ack": asdict(ack)}
+            except TimeoutError:
+                result = {**sent, "status": "timeout", "ack": None}
+            finally:
+                if self._ack_waiter is not None and self._ack_waiter[1] is waiter:
+                    self._ack_waiter = None
+            self._last_command = result
+            if "transmission" in locals():
+                with self._lock:
+                    transmission["status"] = result["status"]
+                    transmission["ack"] = result["ack"]
+                if self._hub.client_count:
+                    await self._hub.broadcast_json(
+                        self._event(
+                            "command_result",
+                            {"transmission": transmission, "status": self.status()},
+                        )
+                    )
+            return result
 
     def configure_semantic_led(
         self,
@@ -440,6 +604,9 @@ class LedCommunicationService:
             self._frames.clear()
             self._latest_state = None
             self._latest_level = None
+            self._latest_ack = None
+            self._tx_history.clear()
+            self._last_command = None
             self._last_accepted_ns = None
             self._accepted = 0
             self._rejected_glitches = 0
@@ -508,6 +675,7 @@ class LedCommunicationService:
         latest_message = asdict(self._frames[-1]) if self._frames else None
         latest_state = asdict(self._latest_state) if self._latest_state is not None else None
         latest_level = asdict(self._latest_level) if self._latest_level is not None else None
+        latest_ack = asdict(self._latest_ack) if self._latest_ack is not None else None
         return {
             "capturing": self._capturing,
             "level": self._last_level,
@@ -526,6 +694,10 @@ class LedCommunicationService:
             "latest_message": latest_message,
             "latest_state": latest_state,
             "latest_level": latest_level,
+            "latest_ack": latest_ack,
+            "last_command": self._last_command,
+            "frame_history": [asdict(frame) for frame in self._frames],
+            "tx_history": list(self._tx_history),
             # Kept for clients deployed before 1007.9; it always means latest STATE.
             "latest_frame": latest_state,
         }
@@ -581,6 +753,8 @@ class LedCommunicationService:
                                 self._latest_state = frame
                             elif frame.message_type == "level":
                                 self._latest_level = frame
+                            elif frame.message_type == "ack":
+                                self._latest_ack = frame
                             self._last_decoded_start_ns = frame.monotonic_ns
                             if self._last_frame_sequence is not None:
                                 advance = (frame.sequence - self._last_frame_sequence) & 0xFF
@@ -648,6 +822,14 @@ class LedCommunicationService:
         self._burst_valid = False
 
     async def _publish_frame(self, frame: DecodedLedFrame) -> None:
+        if frame.message_type == "ack" and self._ack_waiter is not None:
+            expected_code, waiter = self._ack_waiter
+            # RESULT 8/9 frames report CODE 0 because no valid codeword survived; since
+            # commands are strictly serialized, they still belong to the sole pending send.
+            if (
+                frame.ack_code == expected_code or frame.ack_result in (8, 9)
+            ) and not waiter.done():
+                waiter.set_result(frame)
         if self._hub.client_count:
             await self._hub.broadcast_json(self._event("frame", asdict(frame)))
         if self._live_log is not None:
@@ -661,6 +843,22 @@ class LedCommunicationService:
                 message = (
                     f"LEVEL frame - seq={frame.sequence} level={frame.level} "
                     f"raw=0x{frame.raw_value:02X} CRC=valid{acquisition}"
+                )
+            elif frame.message_type == "hold":
+                message = (
+                    f"HOLD frame - seq={frame.sequence} min_raw=0x{frame.min_raw:02X} "
+                    f"max_raw=0x{frame.max_raw:02X} CRC=valid{acquisition}"
+                )
+            elif frame.message_type == "rate":
+                message = (
+                    f"RATE frame - seq={frame.sequence} shortest={frame.shortest_gap_ticks} "
+                    f"longest={frame.longest_gap_ticks} ticks CRC=valid{acquisition}"
+                )
+            elif frame.message_type == "ack":
+                message = (
+                    f"ACK frame - seq={frame.sequence} result={frame.ack_result} "
+                    f"code={frame.ack_code} measured={frame.measured_bit_ticks} ticks "
+                    f"CRC=valid{acquisition}"
                 )
             else:
                 message = (

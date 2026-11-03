@@ -28,7 +28,7 @@ There is no `J2` or `J3` header in this phase.
 | `ADS1115 ALERT/RDY` | `GPIO17`, physical pin `11` |
 | `KEY_ADC1` input | `GPIO27`, physical pin `13` |
 | `KEY_LED` input | `GPIO22`, physical pin `15` |
-| `CENTER` drive | `GPIO5`, physical pin `29` |
+| `CENTER_BUS_TX` drive | `GPIO5`, physical pin `29` |
 | `UP` drive | `GPIO6`, physical pin `31` |
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
@@ -77,14 +77,20 @@ Each drive channel uses:
 - one `2N3904` low-side transistor
 - one action resistor between the monitor key line and the transistor collector
 
-### Center
+### Center bus / custom communication TX
 
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `R5` | `4.7 kOhm` | `GPIO5 -> Q3 base` |
 | `R15` | `100 kOhm` | `Q3 base -> GND` |
 | `Q3` | `2N3904` | emitter `-> GND`, collector `-> R10` |
-| `R10` | `22 Ohm` | `MON_KEY_ADC1 -> Q3 collector` |
+| `R10` | `10 kOhm` | `MON_KEY_ADC1 -> Q3 collector`; custom NRZ command bit asserted by `GPIO5` |
+
+`GPIO5` still controls the Center-line transistor; no additional Pi pin is used. The
+custom firmware interprets the switched `10 kOhm` state as communication band 3 and the
+released transistor as bit 0. This replaces the protoboard's former `22 Ohm` Pi-driven
+native-Center emulation. The physical joystick's separate approximately `23 Ohm` Center
+switch can remain connected, but it must not be pressed during a custom frame.
 
 ### Up
 

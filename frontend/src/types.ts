@@ -46,7 +46,7 @@ export interface LedStateFrame {
   raw_hex: string;
   sequence: number;
   crc: number;
-  message_type?: "state" | "level" | "unknown";
+  message_type?: "state" | "level" | "hold" | "rate" | "ack" | "unknown";
   type_code?: number;
   acquisition_recovered?: boolean;
   layout?: "single" | "pip" | "pbp" | "unknown" | null;
@@ -54,6 +54,32 @@ export interface LedStateFrame {
   input2?: "none" | "hdmi" | "dp" | "tb" | "unknown" | null;
   level?: number | null;
   raw_value?: number | null;
+  min_raw?: number | null;
+  max_raw?: number | null;
+  shortest_gap_ticks?: number | null;
+  longest_gap_ticks?: number | null;
+  ack_result?: number | null;
+  ack_code?: number | null;
+  measured_bit_ticks?: number | null;
+}
+
+export interface MonitorCommandResult {
+  command_code: number;
+  command_name: string;
+  frame_hex: string;
+  bit_time_ms: number;
+  status: "waiting_ack" | "ack" | "timeout";
+  ack?: LedStateFrame | null;
+}
+
+export interface MonitorTxSample {
+  monotonic_ns: number;
+  level: 0 | 1;
+}
+
+export interface MonitorTransmission extends MonitorCommandResult {
+  monotonic_ns: number;
+  samples: MonitorTxSample[];
 }
 
 export interface LedCommunicationStatus {
@@ -75,6 +101,10 @@ export interface LedCommunicationStatus {
   latest_message?: LedStateFrame | null;
   latest_state?: LedStateFrame | null;
   latest_level?: LedStateFrame | null;
+  latest_ack?: LedStateFrame | null;
+  last_command?: MonitorCommandResult | null;
+  frame_history?: LedStateFrame[];
+  tx_history?: MonitorTransmission[];
 }
 
 export interface LedCommunicationState {

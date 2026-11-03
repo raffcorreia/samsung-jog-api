@@ -33,7 +33,7 @@ Use BCM numbering in software and the physical header pins below for wiring.
 | `KEY_ADC1` input | `GPIO27`, physical pin `13` |
 | `KEY_LED` input | `GPIO22`, physical pin `15` |
 | `display_power_en` output (Phase 21) | `GPIO24`, physical pin `18` |
-| `CENTER` drive | `GPIO5`, physical pin `29` |
+| `CENTER_BUS_TX` drive | `GPIO5`, physical pin `29` |
 | `UP` drive | `GPIO6`, physical pin `31` |
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
@@ -61,7 +61,7 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 | `23` | `GPIO11` | unused | `24` | `GPIO8` | unused |
 | `25` | `GND` | common ground | `26` | `GPIO7` | unused |
 | `27` | `GPIO0 / ID_SD` | leave unused | `28` | `GPIO1 / ID_SC` | leave unused |
-| `29` | `GPIO5` | `CENTER` drive | `30` | `GND` | common ground |
+| `29` | `GPIO5` | `CENTER_BUS_TX` drive (switched 10 kOhm on `KEY_ADC1`) | `30` | `GND` | common ground |
 | `31` | `GPIO6` | `UP` drive | `32` | `GPIO12` | unused |
 | `33` | `GPIO13` | `DOWN` drive | `34` | `GND` | common ground |
 | `35` | `GPIO19` | `LEFT` drive | `36` | `GPIO16` | unused |

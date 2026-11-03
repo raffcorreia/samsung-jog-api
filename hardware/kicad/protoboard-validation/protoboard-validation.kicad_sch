@@ -4613,7 +4613,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22R"
+		(property "Value" "10k"
 			(at 146.304 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4646,7 +4646,7 @@
 				)
 			)
 		)
-		(property "Description" "CENTER action resistor"
+		(property "Description" "CENTER bus custom communication resistor"
 			(at 146.05 93.98 90)
 			(hide yes)
 			(show_name no)

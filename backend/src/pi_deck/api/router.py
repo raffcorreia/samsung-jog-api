@@ -207,6 +207,33 @@ async def api_led_communication_replay(
         )
 
 
+@api_v1.post("/led-communication/command")
+async def api_led_communication_command(
+    request: Request,
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    """Send one table-defined 1008.0 command and return its matching ACK or timeout."""
+    try:
+        body = await request.json()
+        if not isinstance(body, dict):
+            raise ValueError("request body must be an object")
+        command_code = int(body.get("command_code"))
+        bit_time_ms = int(body.get("bit_time_ms", 50))
+        return JSONResponse(
+            await service.send_command(command_code, bit_time_ms=bit_time_ms)
+        )
+    except (TypeError, ValueError) as exc:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "invalid_monitor_command", "message": str(exc)},
+        )
+    except RuntimeError as exc:
+        return JSONResponse(
+            status_code=409,
+            content={"error": "monitor_command_busy", "message": str(exc)},
+        )
+
+
 @api_v1.get("/recordings", response_model=RecordingLibraryOut)
 def api_recordings_library(
     recordings: RecordingService = Depends(get_recordings),
