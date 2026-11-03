@@ -13,7 +13,6 @@ from pi_deck.hardware.protoboard_pins import ProtoboardPins
 
 logger = logging.getLogger(__name__)
 
-
 class KeyLedObserve:
     """KEY_LED gpiozero input; active-low at the pin matches the Phase 6 wiring."""
 
@@ -24,6 +23,7 @@ class KeyLedObserve:
         self._edge_cb: Callable[[], None] | None = None
         self._state_cb: Callable[[bool], None] | None = None
         self._raw_edge_cb: Callable[[int, int], None] | None = None
+        self._last_level: int | None = None
         self._dev = DigitalInputDevice(
             self._bcm,
             pull_up=self._pull_up,
@@ -91,22 +91,37 @@ class KeyLedObserve:
             return
 
         def _on_active() -> None:
-            timestamp = time.monotonic_ns()
-            if raw_edge_cb is not None:
-                raw_edge_cb(0, timestamp)
-            if edge_cb is not None:
-                edge_cb()
-            if state_cb is not None:
-                state_cb(True)
+            self._dispatch_level(0, time.monotonic_ns())
 
         def _on_inactive() -> None:
-            timestamp = time.monotonic_ns()
-            if raw_edge_cb is not None:
-                raw_edge_cb(1, timestamp)
-            if edge_cb is not None:
-                edge_cb()
-            if state_cb is not None:
-                state_cb(False)
+            self._dispatch_level(1, time.monotonic_ns())
 
         self._dev.when_activated = _on_active
         self._dev.when_deactivated = _on_inactive
+
+    def _dispatch_level(self, level: int, timestamp_ns: int) -> None:
+        """Fan out one physical transition without letting one consumer block the others."""
+        if level == self._last_level:
+            return
+        self._last_level = level
+        edge_cb = self._edge_cb
+        state_cb = self._state_cb
+        raw_edge_cb = self._raw_edge_cb
+
+        # Preserve the pre-Phase-25 semantic consumers first. Raw communication capture is an
+        # additional observer and must never prevent ordinary LED status from being delivered.
+        if edge_cb is not None:
+            try:
+                edge_cb()
+            except Exception:
+                logger.exception("KEY_LED generic edge callback failed")
+        if state_cb is not None:
+            try:
+                state_cb(level == 0)
+            except Exception:
+                logger.exception("KEY_LED state callback failed")
+        if raw_edge_cb is not None:
+            try:
+                raw_edge_cb(level, timestamp_ns)
+            except Exception:
+                logger.exception("KEY_LED raw capture callback failed")

@@ -44,7 +44,7 @@ Capture every accepted `KEY_LED` transition with its physical level and monotoni
 
 - 2026-10-31: Added callback-time physical GPIO level capture using `time.monotonic_ns()`, independent of the coalesced semantic observation path.
 - 2026-10-31: Added bounded raw-edge and WebSocket queues, glitch and overrun counters, timing statistics, JSON export/replay, and start/stop/clear/status APIs.
-- 2026-10-31: Added the polarity-independent 1007.7 decoder for `FFFF 2DD4`, version/type `0x11`, sequence, layout/inputs, and CRC-8 polynomial `0x07`.
+- 2026-10-31: Added the polarity-independent 1007.8-compatible decoder for `FFFF 2DD4`, version/type `0x11`, sequence, layout/inputs, and CRC-8 polynomial `0x07`.
 - 2026-10-31: Golden PBP and PIP frames decode successfully after leading garbage and under polarity inversion. Corrupt CRC and truncated-frame tests reject the input.
 - 2026-10-31: Replaced Calendar and Notes on the home screen with the raw waveform, capture health, timing statistics, valid/missing frame counts, decoded state, export, and replay controls. The small semantic LED remains beside the JOG pad.
 - 2026-10-31: Focused backend validation: 27 tests passed. Focused frontend validation: 4 tests passed. Production frontend build passed.
@@ -53,6 +53,8 @@ Capture every accepted `KEY_LED` transition with its physical level and monotoni
 - 2026-10-31: Deployed `0.1.12+r92` to the live `pi-deck5` host. The API and updated oscilloscope client are active.
 - 2026-10-31: Added a bounded 4,096-edge browser history, fixed 0–1 level scale, 100 ms–60 s time zoom, pause/resume, clear, older/newer panning while paused, and return-to-live controls.
 - 2026-10-31: Live GPIO capture is interrupt-driven and reports zero overruns. A 986-interval sample had a 21.1 ms minimum and roughly 790 ms median; it contained no interval below 15 ms, and replay across candidate 5–50 ms half-bit periods decoded no frame. A fresh post-deployment sample likewise had a 36.8 ms minimum. The client is therefore receiving transitions, but the conditioned GPIO input does not yet contain the specified dense 10/20 ms waveform.
+- 2026-11-02: Updated the decoder for 1007.9 shared-sequence STATE (`0x11`) and LEVEL (`0x12`) frames, including CRC-valid unknown-type retention. The UI now updates immediately from validated frame events while displaying latest message and latest known STATE separately.
+- 2026-11-02: Added 30 ms semantic LED classification: protocol bursts remain raw oscilloscope traffic, stable levels produce ordinary LED on/off events, valid messages produce one decoded log entry, and invalid bursts produce one summary.
 
 ## Host health snapshot
 

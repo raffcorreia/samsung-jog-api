@@ -41,6 +41,7 @@
 
 .framePanel { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; padding: 9px 11px; border: 1px solid #294962; border-radius: 8px; background: rgba(20,46,66,.48); }
 .framePanel strong { display: block; margin-top: 2px; font-size: .72rem; }
+.knownState { display: block; margin-top: 4px; color: var(--muted); font: .56rem monospace; }
 .eyebrow { color: var(--muted); font-size: .54rem; text-transform: uppercase; }
 .framePanel code { color: #8fd3ff; font-size: .64rem; }
 .frameCount { color: #73e6a0; font: 700 .62rem monospace; }

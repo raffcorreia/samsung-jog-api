@@ -74,9 +74,11 @@ async def lifespan(app: FastAPI):
     )
     observation = ObservationBusService(ws_hub=hub, live_log=live_log, hardware=hw)
     observation.add_listener(recordings.observe_event)
-    observation.start(asyncio.get_running_loop())
-    led_communication = LedCommunicationService(ws_hub=hub)
-    led_communication.start()
+    led_observer = getattr(hw, "led_observer", None)
+    initial_monitor_active = bool(led_observer.is_active) if led_observer is not None else False
+    if led_observer is not None:
+        observation.enable_external_led_semantics(initial_active=initial_monitor_active)
+    led_communication = LedCommunicationService(ws_hub=hub, live_log=live_log)
     display_hw = build_display_power(hw.kind)
     display = DisplayService(display_hw)
     display.power_on()
@@ -84,7 +86,7 @@ async def lifespan(app: FastAPI):
     strip = StripDriver(num_leds=1, hw_mode=hw.kind)
     strip.start()
 
-    _monitor_active = False
+    _monitor_active = initial_monitor_active
 
     def _on_power_changed(on: bool) -> None:
         color = (BLUE if _monitor_active else GREEN) if on else (OFF if _monitor_active else RED)
@@ -102,12 +104,20 @@ async def lifespan(app: FastAPI):
         color = (BLUE if active else GREEN) if display.is_on else (OFF if active else RED)
         strip.send(0, color)
 
-    led_observer = getattr(hw, "led_observer", None)
     if led_observer is not None:
-        led_observer.set_state_callback(_on_monitor_led)
+        async def _on_stable_monitor_led(active: bool) -> None:
+            _on_monitor_led(active)
+            await observation.accept_led_state(active)
+
+        led_communication.configure_semantic_led(
+            initial_active=initial_monitor_active,
+            callback=_on_stable_monitor_led,
+        )
         led_observer.set_raw_edge_callback(led_communication.on_raw_edge)
 
-    strip.send(0, GREEN if display.is_on else RED)
+    strip.send(0, (BLUE if _monitor_active else GREEN) if display.is_on else RED)
+    observation.start(asyncio.get_running_loop())
+    led_communication.start()
 
     def _btn_short_press() -> None:
         if not display.is_on:

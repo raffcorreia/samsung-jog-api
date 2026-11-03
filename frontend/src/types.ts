@@ -45,10 +45,15 @@ export interface LedStateFrame {
   monotonic_ns: number;
   raw_hex: string;
   sequence: number;
-  layout: "single" | "pip" | "pbp" | "unknown";
-  input1: "none" | "hdmi" | "dp" | "tb" | "unknown";
-  input2: "none" | "hdmi" | "dp" | "tb" | "unknown";
   crc: number;
+  message_type?: "state" | "level" | "unknown";
+  type_code?: number;
+  acquisition_recovered?: boolean;
+  layout?: "single" | "pip" | "pbp" | "unknown" | null;
+  input1?: "none" | "hdmi" | "dp" | "tb" | "unknown" | null;
+  input2?: "none" | "hdmi" | "dp" | "tb" | "unknown" | null;
+  level?: number | null;
+  raw_value?: number | null;
 }
 
 export interface LedCommunicationStatus {
@@ -67,6 +72,9 @@ export interface LedCommunicationStatus {
   missing_frames: number;
   decoder_rejections: number;
   latest_frame: LedStateFrame | null;
+  latest_message?: LedStateFrame | null;
+  latest_state?: LedStateFrame | null;
+  latest_level?: LedStateFrame | null;
 }
 
 export interface LedCommunicationState {

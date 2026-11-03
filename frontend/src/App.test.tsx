@@ -173,7 +173,32 @@ describe("App", () => {
       } as MessageEvent);
     });
 
-    expect(screen.getByText(/#0 · PBP · TB \/ DP/)).toBeInTheDocument();
+    expect(screen.getAllByText(/#0 · PBP · TB \/ DP/).length).toBeGreaterThan(0);
+
+    await act(async () => {
+      ws.onmessage?.({
+        data: JSON.stringify({
+          v: 1,
+          category: "led_comm",
+          type: "frame",
+          ts: "2026-01-01T00:00:02Z",
+          data: {
+            edge_seq: 120,
+            monotonic_ns: 2_000_000_000,
+            raw_hex: "ffff2dd4120102309a",
+            sequence: 1,
+            crc: 0x9a,
+            message_type: "level",
+            type_code: 0x12,
+            level: 2,
+            raw_value: 0x30,
+          },
+        }),
+      } as MessageEvent);
+    });
+
+    expect(screen.getByText("LEVEL #1 · band 2 connected · raw 0x30 (48)")).toBeInTheDocument();
+    expect(screen.getByText(/Latest STATE: #0 · PBP · TB \/ DP/)).toBeInTheDocument();
   });
 
   it("opens the recording workspace from the jog column button", async () => {

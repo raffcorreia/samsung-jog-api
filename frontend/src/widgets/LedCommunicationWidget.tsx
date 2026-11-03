@@ -7,7 +7,7 @@ import {
   startLedCommunication,
   stopLedCommunication,
 } from "../api/client";
-import type { LedCommunicationState, LedCommunicationStatus } from "../types";
+import type { LedCommunicationState, LedCommunicationStatus, LedStateFrame } from "../types";
 import { DECK_WIDGETS } from "./deckWidgets";
 import styles from "./LedCommunicationWidget.module.css";
 
@@ -68,14 +68,18 @@ export function LedCommunicationWidget({ state }: { state: LedCommunicationState
     }
   };
 
-  const frame = status?.latest_frame;
+  const latestMessage = state.frames.at(-1) ?? status?.latest_message ?? status?.latest_frame;
+  const latestState =
+    [...state.frames].reverse().find((candidate) => frameType(candidate) === "state")
+    ?? status?.latest_state
+    ?? status?.latest_frame;
 
   return (
     <section className={styles.widget} data-widget={DECK_WIDGETS.ledCommunication} data-testid="led-communication-monitor">
       <header className={styles.header}>
         <div>
           <h2>Monitor LED communication</h2>
-          <p>1007.7 · 10 ms biphase-mark · STATE frames</p>
+          <p>1007.9 · 10 ms biphase-mark · STATE + LEVEL frames</p>
         </div>
         <div className={styles.liveState} data-capturing={status?.capturing ? "true" : "false"}>
           <span />{status?.capturing ? "CAPTURING" : "STOPPED"}
@@ -125,14 +129,17 @@ export function LedCommunicationWidget({ state }: { state: LedCommunicationState
 
       <div className={styles.framePanel}>
         <div>
-          <span className={styles.eyebrow}>Latest validated STATE frame</span>
-          {frame ? (
-            <strong>#{frame.sequence} · {frame.layout.toUpperCase()} · {frame.input1.toUpperCase()} / {frame.input2.toUpperCase()}</strong>
+          <span className={styles.eyebrow}>Latest validated message</span>
+          {latestMessage ? (
+            <strong>{formatFrame(latestMessage)}</strong>
           ) : (
-            <strong>No valid frame decoded</strong>
+            <strong>No valid message decoded</strong>
           )}
+          <span className={styles.knownState}>
+            Latest STATE: {latestState ? formatState(latestState) : "not received since service start"}
+          </span>
         </div>
-        <code>{frame?.raw_hex ?? "ffff 2dd4 11 … crc"}</code>
+        <code>{latestMessage?.raw_hex ?? "ffff 2dd4 1x … crc"}</code>
         <div className={styles.frameCount}>{status?.valid_frames ?? 0} valid · {status?.missing_frames ?? 0} missing</div>
       </div>
 
@@ -169,4 +176,40 @@ export function LedCommunicationWidget({ state }: { state: LedCommunicationState
 
 function Metric({ label, value, warn = false }: { label: string; value: string; warn?: boolean }) {
   return <div className={styles.metric} data-warn={warn ? "true" : "false"}><span>{label}</span><strong>{value}</strong></div>;
+}
+
+function frameType(frame: LedStateFrame): "state" | "level" | "unknown" {
+  return frame.message_type ?? (frame.layout ? "state" : "unknown");
+}
+
+function formatState(frame: LedStateFrame): string {
+  return `#${frame.sequence} · ${(frame.layout ?? "unknown").toUpperCase()} · ${(frame.input1 ?? "unknown").toUpperCase()} / ${(frame.input2 ?? "none").toUpperCase()}`;
+}
+
+function formatFrame(frame: LedStateFrame): string {
+  const type = frameType(frame);
+  const recovered = frame.acquisition_recovered ? " · recovered" : "";
+  if (type === "state") return `STATE ${formatState(frame)}${recovered}`;
+  if (type === "level") {
+    const raw = frame.raw_value === null || frame.raw_value === undefined
+      ? "—"
+      : `0x${frame.raw_value.toString(16).padStart(2, "0").toUpperCase()} (${frame.raw_value})`;
+    return `LEVEL #${frame.sequence} · ${levelMeaning(frame)} · raw ${raw}${recovered}`;
+  }
+  const typeCode = frame.type_code === undefined
+    ? "??"
+    : frame.type_code.toString(16).padStart(2, "0").toUpperCase();
+  return `UNKNOWN #${frame.sequence} · type 0x${typeCode}${recovered}`;
+}
+
+function levelMeaning(frame: LedStateFrame): string {
+  if (frame.level === 2 || frame.level === 3 || frame.level === 4) {
+    return `band ${frame.level} connected`;
+  }
+  if (frame.level !== 0) return `band ${frame.level ?? "—"}`;
+  const raw = frame.raw_value;
+  if (raw === null || raw === undefined) return "none";
+  if (raw >= 0x78 && raw <= 0x7f) return "released";
+  if (raw <= 0x19) return "Center / band 1";
+  return "none / dead zone";
 }

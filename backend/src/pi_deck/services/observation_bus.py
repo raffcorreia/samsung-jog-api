@@ -46,7 +46,29 @@ class ObservationBusService:
         self._edge_coalesce = CoalesceGate()
         self._last_signals: SignalSnapshot | None = None
         self._led_prev: bool | None = None
+        self._external_led_semantics = False
+        self._semantic_led_active = False
         self._listeners: list[Callable[[dict[str, object]], Awaitable[None] | None]] = []
+
+    def enable_external_led_semantics(self, *, initial_active: bool) -> None:
+        """Use the communication classifier, not raw fast edges, for LED status events."""
+        self._external_led_semantics = True
+        self._semantic_led_active = initial_active
+        self._led_prev = initial_active
+
+    async def accept_led_state(self, active: bool) -> None:
+        """Publish one stable LED state produced by the raw-edge classifier."""
+        lock = self._observe_lock
+        if lock is None:
+            return
+        async with lock:
+            self._semantic_led_active = active
+            if self._last_signals is not None and self._last_signals.key_led_active != active:
+                self._last_signals = self._last_signals.model_copy(
+                    update={"key_led_active": active}
+                )
+                await self._emit(ws_bus_snapshot(signals=self._last_signals))
+            await self._emit_led_if_changed(active)
 
     def add_listener(
         self,
@@ -128,7 +150,7 @@ class ObservationBusService:
         self._observe_lock = None
 
     def _install_live_gpio_edges(self, hw: LiveDeckHardware) -> None:
-        """gpiozero edge callbacks (helper thread) only schedule asyncio work — never block the loop."""
+        """Schedule asyncio work from gpiozero's helper thread without blocking it."""
         if sys.platform != "linux":
             return
 
@@ -145,7 +167,8 @@ class ObservationBusService:
             )
         else:
             logger.warning(
-                "observation: KEY edge IRQs partial or off (KEY_ADC1=%s KEY_LED=%s); asyncio poll backup",
+                "observation: KEY edge IRQs partial or off "
+                "(KEY_ADC1=%s KEY_LED=%s); asyncio poll backup",
                 ok_adc1,
                 ok_led,
             )
@@ -249,6 +272,9 @@ class ObservationBusService:
             logger.exception("observation: read_bus_snapshot failed")
             return
 
+        if self._external_led_semantics:
+            snap = snap.model_copy(update={"key_led_active": self._semantic_led_active})
+
         if self._last_signals is None:
             self._last_signals = snap
             if self._led_prev is None:
@@ -268,7 +294,7 @@ class ObservationBusService:
             return
 
         if snap != self._last_signals:
-            # Steady state: first iteration always returned from the ``_last_signals is None`` branch.
+            # The first iteration always returned from the ``_last_signals is None`` branch.
             prev_sig = self._last_signals
             for msg in bus_delta_log_messages(prev_sig, snap):
                 await self._live_log.publish(level="info", source="bus", message=msg)

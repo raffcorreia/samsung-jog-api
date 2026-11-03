@@ -44,6 +44,20 @@ import type {
 const MAX_LOG = 220;
 const MAX_LED_EDGES = 4096;
 
+function mergeLedFrames(
+  existing: readonly LedStateFrame[],
+  incoming: readonly LedStateFrame[],
+): readonly LedStateFrame[] {
+  const merged = [...existing];
+  for (const frame of incoming) {
+    const duplicate = merged.some(
+      (current) => current.edge_seq === frame.edge_seq && current.raw_hex === frame.raw_hex,
+    );
+    if (!duplicate) merged.push(frame);
+  }
+  return merged.slice(-16);
+}
+
 const JOG_ACTIONS: readonly JogAction[] = ["up", "down", "left", "right", "center"];
 
 function emptyHardwareHeld(): Record<JogAction, boolean> {
@@ -556,7 +570,14 @@ export function useDeckEvents(): DeckEventsState {
           setLedCommunication((prev) => ({
             status: ledStatus,
             edges: [...prev.edges, ...edges].slice(-MAX_LED_EDGES),
-            frames: [...prev.frames, ...frames].slice(-16),
+            frames: mergeLedFrames(prev.frames, frames),
+          }));
+        }
+        if (parsed.category === "led_comm" && parsed.type === "frame") {
+          const frame = parsed.data as unknown as LedStateFrame;
+          setLedCommunication((prev) => ({
+            ...prev,
+            frames: mergeLedFrames(prev.frames, [frame]),
           }));
         }
 

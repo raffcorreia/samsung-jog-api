@@ -1,4 +1,4 @@
-"""Live log: ``bus/snapshot`` does not append a dump row; semantic lines use ``bus_delta_log_messages``."""
+"""Live-log tests for snapshots and concise semantic bus messages."""
 
 from __future__ import annotations
 
