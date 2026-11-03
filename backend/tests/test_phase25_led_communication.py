@@ -6,6 +6,9 @@ import pytest
 from fastapi.testclient import TestClient
 
 from pi_deck.api.app import create_app
+from pi_deck.hardware.protoboard_pins import JogAction, ProtoboardPins
+from pi_deck.services.deck_control import DeckControlService
+from pi_deck.services.hardware_facade import MockDeckHardware
 from pi_deck.services.led_communication import (
     DecodedLedFrame,
     LedCommunicationService,
@@ -17,6 +20,7 @@ from pi_deck.services.led_communication import (
     decode_led_frames,
     decode_state_frames,
 )
+from pi_deck.services.live_log import LiveLogService
 from pi_deck.services.ws_hub import WsHub
 
 
@@ -162,6 +166,37 @@ def test_command_transmission_waits_for_matching_ack() -> None:
         with pytest.raises(ValueError, match="1 and 50"):
             await service.send_command(0, bit_time_ms=51)
 
+    asyncio.run(scenario())
+
+
+def test_command_tx_uses_dedicated_gpio_not_native_center_branch() -> None:
+    class TrackingHardware(MockDeckHardware):
+        def __init__(self) -> None:
+            super().__init__()
+            self.jog_calls: list[tuple[JogAction, bool]] = []
+            self.communication_calls: list[bool] = []
+
+        def set_jog_line(self, action: JogAction, active: bool) -> None:
+            self.jog_calls.append((action, active))
+            super().set_jog_line(action, active)
+
+        def set_communication_line(self, active: bool) -> None:
+            self.communication_calls.append(active)
+            super().set_communication_line(active)
+
+    async def scenario() -> None:
+        hardware = TrackingHardware()
+        hub = WsHub()
+        deck = DeckControlService(hardware, hub, LiveLogService(hub), "test")
+        await deck.send_monitor_command_bits(command_bits(0), 0.001)
+        assert hardware.jog_calls == []
+        assert hardware.communication_calls[0] is False
+        assert True in hardware.communication_calls
+        assert hardware.communication_calls[-1] is False
+
+    pins = ProtoboardPins()
+    assert pins.drive_center == 5
+    assert pins.communication_tx == 12
     asyncio.run(scenario())
 
 

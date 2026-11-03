@@ -212,7 +212,7 @@ class DeckControlService:
         bits: tuple[int, ...],
         bit_time_s: float,
     ) -> list[tuple[int, int]]:
-        """Drive an NRZ command through the Center 10 kΩ leg with deadline timing."""
+        """Drive NRZ through the dedicated 10 kΩ KEY_ADC1 branch with deadline timing."""
         if len(bits) != 16 or any(bit not in (0, 1) for bit in bits):
             raise ValueError("monitor command must contain exactly 16 binary bits")
         if not 0.001 <= bit_time_s <= 0.050:
@@ -226,19 +226,19 @@ class DeckControlService:
         def _transmit() -> list[tuple[int, int]]:
             samples: list[tuple[int, int]] = []
             # The protocol requires at least 100 ms released before the first high bit.
-            self.hardware.set_jog_line(JogAction.CENTER, False)
+            self.hardware.set_communication_line(False)
             time.sleep(0.100)
             deadline = time.monotonic()
             try:
                 for bit in bits:
-                    self.hardware.set_jog_line(JogAction.CENTER, bool(bit))
+                    self.hardware.set_communication_line(bool(bit))
                     samples.append((time.monotonic_ns(), bit))
                     deadline += bit_time_s
                     remaining = deadline - time.monotonic()
                     if remaining > 0:
                         time.sleep(remaining)
             finally:
-                self.hardware.set_jog_line(JogAction.CENTER, False)
+                self.hardware.set_communication_line(False)
                 samples.append((time.monotonic_ns(), 0))
             return samples
 

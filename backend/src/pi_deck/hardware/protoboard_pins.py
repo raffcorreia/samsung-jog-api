@@ -39,6 +39,7 @@ class ProtoboardPins:
     key_adc1_digital: int = 27
     key_led_digital: int = 22
     drive_center: int = 5
+    communication_tx: int = 12
     drive_up: int = 6
     drive_down: int = 13
     drive_left: int = 19

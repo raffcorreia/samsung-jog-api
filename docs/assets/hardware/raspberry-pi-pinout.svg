@@ -101,7 +101,7 @@
   <circle cx="988"  cy="356" r="27" class="pin unused"  /><text x="988"  y="356" class="pin-num">26</text>
   <circle cx="1062" cy="356" r="27" class="pin reserved"/><text x="1062" y="356" class="pin-num">28</text>
   <circle cx="1136" cy="356" r="27" class="pin unused"  /><text x="1136" y="356" class="pin-num">30</text>
-  <circle cx="1210" cy="356" r="27" class="pin unused"  /><text x="1210" y="356" class="pin-num">32</text>
+  <circle cx="1210" cy="356" r="27" class="pin drive"   /><text x="1210" y="356" class="pin-num">32</text>
   <circle cx="1284" cy="356" r="27" class="pin unused"  /><text x="1284" y="356" class="pin-num">34</text>
   <circle cx="1358" cy="356" r="27" class="pin unused"  /><text x="1358" y="356" class="pin-num">36</text>
   <circle cx="1432" cy="356" r="27" class="pin unused"  /><text x="1432" y="356" class="pin-num">38</text>
@@ -185,7 +185,7 @@
   <text x="586" y="758" class="callout-sub">Pin 19  GPIO10   SPI MOSI → U2 → WS2811 DIN</text>
 
   <!-- ═══════════════════════════════════════════════════════════
-       CALLOUT: JOG drive outputs  (pins 29, 31, 33, 35, 37)
+       CALLOUT: JOG and communication outputs
   ══════════════════════════════════════════════════════════════ -->
   <rect x="880" y="520" width="440" height="200" rx="10" class="callout"/>
   <text x="902" y="548" class="callout-title">JOG drive outputs</text>
@@ -195,7 +195,8 @@
   <text x="902" y="620" class="callout-sub">Pin 33  GPIO13   DOWN   → Q5 base</text>
   <text x="902" y="642" class="callout-sub">Pin 35  GPIO19   LEFT   → Q6 base</text>
   <text x="902" y="664" class="callout-sub">Pin 37  GPIO26   RIGHT  → Q7 base</text>
-  <text x="902" y="706" class="callout-dim">Each output drives one 2N3904 low-side switch.</text>
+  <text x="902" y="686" class="callout-sub">Pin 32  GPIO12   COMM TX → Q10 base (10 kΩ)</text>
+  <text x="902" y="706" class="callout-dim">Each output drives its own 2N3904 low-side switch.</text>
 
   <!-- ═══════════════════════════════════════════════════════════
        SUMMARY TABLE
@@ -223,8 +224,8 @@
   <text x="810"  y="902" class="table-text">Pin 19  GPIO10  SPI MOSI → LED</text>
   <text x="810"  y="922" class="table-text">Pin 18  GPIO24  display_power_en</text>
 
-  <text x="1100" y="860" class="table-head">JOG Drive (2N3904)</text>
-  <text x="1100" y="882" class="table-text">Pin 29/31/33/35/37</text>
-  <text x="1100" y="902" class="table-text">GPIO5 / GPIO6 / GPIO13 / GPIO19 / GPIO26</text>
-  <text x="1100" y="922" class="table-text">CENTER / UP / DOWN / LEFT / RIGHT</text>
+  <text x="1100" y="860" class="table-head">JOG / Communication Drive</text>
+  <text x="1100" y="882" class="table-text">JOG: pins 29/31/33/35/37</text>
+  <text x="1100" y="902" class="table-text">COMM TX: pin 32 / GPIO12</text>
+  <text x="1100" y="922" class="table-text">Independent 22 Ω Center and 10 kΩ TX legs</text>
 </svg>

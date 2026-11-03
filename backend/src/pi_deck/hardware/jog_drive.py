@@ -19,13 +19,26 @@ class JogDrive:
         for action in JogAction:
             bcm = self._pins.drive_bcm(action)
             self._outs[action] = OutputDevice(bcm, active_high=True, initial_value=False)
+        self._communication_out = OutputDevice(
+            self._pins.communication_tx,
+            active_high=True,
+            initial_value=False,
+        )
 
     def release_all(self) -> None:
         for out in self._outs.values():
             out.off()
+        self._communication_out.off()
+
+    def set_communication_line(self, active: bool) -> None:
+        """Switch the dedicated 10 kΩ KEY_ADC1 communication branch."""
+        if active:
+            self._communication_out.on()
+        else:
+            self._communication_out.off()
 
     def set_line(self, action: JogAction, active: bool) -> None:
-        """Turn one drive line on or off without affecting other lines (multitouch / multicommand)."""
+        """Turn one drive line on or off without affecting the other drive lines."""
         out = self._outs[action]
         if active:
             out.on()
@@ -44,6 +57,7 @@ class JogDrive:
         self.release_all()
 
     def close(self) -> None:
+        self._communication_out.close()
         for out in self._outs.values():
             out.close()
         self._outs.clear()

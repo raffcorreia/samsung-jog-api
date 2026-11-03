@@ -33,7 +33,8 @@ Use BCM numbering in software and the physical header pins below for wiring.
 | `KEY_ADC1` input | `GPIO27`, physical pin `13` |
 | `KEY_LED` input | `GPIO22`, physical pin `15` |
 | `display_power_en` output (Phase 21) | `GPIO24`, physical pin `18` |
-| `CENTER_BUS_TX` drive | `GPIO5`, physical pin `29` |
+| `CENTER` drive | `GPIO5`, physical pin `29` |
+| `CENTER_BUS_TX` custom communication | `GPIO12`, physical pin `32` |
 | `UP` drive | `GPIO6`, physical pin `31` |
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
@@ -61,8 +62,8 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 | `23` | `GPIO11` | unused | `24` | `GPIO8` | unused |
 | `25` | `GND` | common ground | `26` | `GPIO7` | unused |
 | `27` | `GPIO0 / ID_SD` | leave unused | `28` | `GPIO1 / ID_SC` | leave unused |
-| `29` | `GPIO5` | `CENTER_BUS_TX` drive (switched 10 kOhm on `KEY_ADC1`) | `30` | `GND` | common ground |
-| `31` | `GPIO6` | `UP` drive | `32` | `GPIO12` | unused |
+| `29` | `GPIO5` | `CENTER` drive (switched 22 Ohm on `KEY_ADC1`) | `30` | `GND` | common ground |
+| `31` | `GPIO6` | `UP` drive | `32` | `GPIO12` | `CENTER_BUS_TX` (switched 10 kOhm on `KEY_ADC1`) |
 | `33` | `GPIO13` | `DOWN` drive | `34` | `GND` | common ground |
 | `35` | `GPIO19` | `LEFT` drive | `36` | `GPIO16` | unused |
 | `37` | `GPIO26` | `RIGHT` drive | `38` | `GPIO20` | unused |
@@ -91,6 +92,7 @@ The expected software map remains:
 | `key_led_digital` | `22` | `15` |
 | `display_power_en` | `24` | `18` |
 | `drive_center` | `5` | `29` |
+| `communication_tx` | `12` | `32` |
 | `drive_up` | `6` | `31` |
 | `drive_down` | `13` | `33` |
 | `drive_left` | `19` | `35` |
@@ -104,6 +106,8 @@ If Phase 20 requires a different pin factory, set it in the systemd environment 
 - `ADS1115 ALERT/RDY` toggles or is observable on `GPIO17`
 - `KEY_ADC1` and `KEY_LED` digital inputs read idle and active states correctly
 - each drive GPIO actuates only its intended `JOG` direction
+- `GPIO5` asserts only the native 22 Ohm Center branch and `GPIO12` asserts only the
+  custom 10 kOhm communication branch; the two are never active together
 - no unused GPIO on the header is accidentally connected to the protoboard
 - display touch/panel devices enumerate on the DSI path and do not collide with the project I2C bus
 - host health snapshot shows no active under-voltage or throttling during sustained kiosk use

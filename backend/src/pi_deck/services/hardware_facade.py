@@ -33,6 +33,9 @@ class DeckHardwareFacade(Protocol):
     def set_jog_line(self, action: JogAction, active: bool) -> None:
         """Drive one jog line high/low without clearing other lines (multicommand)."""
 
+    def set_communication_line(self, active: bool) -> None:
+        """Switch the dedicated 10 kΩ resistor branch on KEY_ADC1."""
+
     def read_bus_snapshot(self) -> SignalSnapshot:
         """Observed KEY_ADC1, KEY_ADC2 (decoded), KEY_LED — single source for telemetry and REST."""
 
@@ -83,6 +86,9 @@ class LiveDeckHardware:
     def set_jog_line(self, action: JogAction, active: bool) -> None:
         self._drive.set_line(action, active)
 
+    def set_communication_line(self, active: bool) -> None:
+        self._drive.set_communication_line(active)
+
     def read_bus_snapshot(self) -> SignalSnapshot:
         adc1 = self._adc1.is_active
         led = self._led.is_active
@@ -115,6 +121,7 @@ class MockDeckHardware:
         self._led_active = False
         self._lines_on: set[JogAction] = set()
         self._change_notifier: Callable[[], None] | None = None
+        self._communication_active = False
 
     @property
     def kind(self) -> str:
@@ -123,6 +130,10 @@ class MockDeckHardware:
     @property
     def active_drive_lines(self) -> set[JogAction]:
         return set(self._lines_on)
+
+    @property
+    def communication_active(self) -> bool:
+        return self._communication_active
 
     def set_change_notifier(self, fn: Callable[[], None] | None) -> None:
         self._change_notifier = fn
@@ -143,6 +154,11 @@ class MockDeckHardware:
         else:
             self._lines_on.discard(action)
         logger.debug("mock set_jog_line %s %s", action.value, active)
+        self._notify_change()
+
+    def set_communication_line(self, active: bool) -> None:
+        self._communication_active = active
+        logger.debug("mock set communication line %s", active)
         self._notify_change()
 
     def read_bus_snapshot(self) -> SignalSnapshot:

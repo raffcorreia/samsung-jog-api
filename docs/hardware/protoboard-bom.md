@@ -7,16 +7,16 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | Refs | Qty | Part | Value / Use |
 | --- | --- | --- | --- |
 | `U1` | `1` | `ADS1115` breakout | `KEY_ADC2` ADC, powered from `3.3V` |
-| `Q1-Q7` | `7` | `2N3904` | `Q1-Q2` observe, `Q3-Q7` drive |
+| `Q1-Q7, Q10` | `8` | `2N3904` | `Q1-Q2` observe, `Q3-Q7` native JOG drive, `Q10` custom TX |
 | `C1` | `1` | capacitor | `100 nF` |
 | `C2` | `1` | capacitor | `1 uF` |
-| `R1, R3, R15-R20` | `8` | resistor | `100 kOhm` |
+| `R1, R3, R15-R20, R27` | `9` | resistor | `100 kOhm` |
 | `R2, R4, R14` | `3` | resistor | `10 kOhm` |
-| `R5-R9` | `5` | resistor | `4.7 kOhm` |
-| `R10` | `1` | resistor | `10 kOhm` (Center-bus custom communication TX) |
-| `R11` | `1` | resistor | `22 Ohm` |
+| `R5-R9, R26` | `6` | resistor | `4.7 kOhm` |
+| `R10-R11` | `2` | resistor | `22 Ohm` |
 | `R12` | `1` | resistor | `3.3 kOhm` |
 | `R13` | `1` | resistor | `30 kOhm` |
+| `R28` | `1` | resistor | `10 kOhm` (Center-bus custom communication TX) |
 | `J1` | `1` | `1x4` header | monitor harness |
 
 ## Raspberry Pi Wiring
@@ -30,7 +30,8 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `ALERT/RDY` | `GPIO17`, physical pin `11` |
 | `KEY_ADC1` input | `GPIO27`, physical pin `13` |
 | `KEY_LED` input | `GPIO22`, physical pin `15` |
-| `CENTER_BUS_TX` | `GPIO5`, physical pin `29` |
+| `CENTER` | `GPIO5`, physical pin `29` |
+| `CENTER_BUS_TX` | `GPIO12`, physical pin `32` |
 | `UP` | `GPIO6`, physical pin `31` |
 | `DOWN` | `GPIO13`, physical pin `33` |
 | `LEFT` | `GPIO19`, physical pin `35` |

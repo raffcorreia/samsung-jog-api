@@ -1868,7 +1868,7 @@
 		)
 		(uuid "66666666-0000-4000-8000-000000004006")
 	)
-	(text "GPIO5=CENTER  GPIO6=UP  GPIO13=DOWN  GPIO19=LEFT  GPIO26=RIGHT"
+	(text "GPIO5=CENTER  GPIO12=COMM_TX  GPIO6=UP  GPIO13=DOWN  GPIO19=LEFT  GPIO26=RIGHT"
 		(exclude_from_sim no)
 		(at 111.76 200.66 0)
 		(effects
@@ -1877,6 +1877,16 @@
 			)
 		)
 		(uuid "66666666-0000-4000-8000-000000004007")
+	)
+	(text "COMM_TX add-on: GPIO12 -> 4.7k -> Q10 base; Q10 emitter -> GND; KEY_ADC1 -> 10k -> Q10 collector; 100k base pulldown"
+		(exclude_from_sim no)
+		(at 111.76 205.74 0)
+		(effects
+			(font
+				(size 1.1 1.1)
+			)
+		)
+		(uuid "66666666-0000-4000-8000-000000004008")
 	)
 	(text "Phase 21: Display Power Control"
 		(exclude_from_sim no)
@@ -4613,7 +4623,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "22R"
 			(at 146.304 99.06 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4646,7 +4656,7 @@
 				)
 			)
 		)
-		(property "Description" "CENTER bus custom communication resistor"
+		(property "Description" "CENTER action resistor"
 			(at 146.05 93.98 90)
 			(hide yes)
 			(show_name no)
