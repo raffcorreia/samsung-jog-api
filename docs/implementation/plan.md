@@ -29,7 +29,7 @@
 | [22](#phase-22-physical-display-and-pi-power-button) | Physical Display and Pi Power Button | completed |
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
-| [25](#phase-25-custom-led-communication-receiver-and-monitor-ui) | Custom LED Communication Receiver and Monitor UI | in progress |
+| [25](#phase-25-bidirectional-custom-monitor-communication-and-control-ui) | Bidirectional Custom Monitor Communication and Control UI | completed |
 | [40](#phase-40-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
 | [41](#phase-41-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
 | [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
@@ -994,7 +994,7 @@ Run the validation in this order so differences are attributable and the prior p
 - capture Phase 1 baseline artifacts under `docs/investigation/host-prep/` on the Pi 5
 - install the backend service, graphical stack, kiosk autostart, and keyring suppression using existing scripts
 - deploy the current repo to the Pi 5 with `scripts/deploy.sh`
-- update or override `PI_TARGET` for the Pi 5 without changing the deploy script's single canonical workflow
+- update or override `PI_DECK_IP` for the Pi 5 without changing the deploy script's single canonical workflow
 - wire the Pi 5 header according to [Phase 20 Pi 5 GPIO schema](../hardware/pi5-gpio-schema.md)
 - validate `gpiozero` pin factory compatibility on Pi 5; prefer `lgpio` if needed by the OS image, but record the actual setting
 - verify `i2c_arm`, project I2C bus, `ADS1115`, DDC bus, DSI touch/panel bus, and `/sys/class/backlight` paths
@@ -1189,7 +1189,7 @@ The project should follow the same rule already used successfully in code: imple
 **Deploy harness:**
 - fast SSH connectivity pre-check at the top of the deploy script (5 s timeout, single attempt, fail-fast)
 - when the Pi is unreachable: print a clear actionable message and exit immediately — no silent retry hammering
-- `PI_TARGET` is an environment variable (not a config file); when unset or unreachable, the harness prints the exact `export PI_TARGET=user@host` command and stops so the caller can set it for the session
+- `PI_DECK_IP` is read from the environment or ignored `.env.local`; when unset or unreachable, the harness prints actionable guidance and stops so the caller can supply the current address
 - on a fresh shell (clean env) the same prompt surfaces again naturally
 
 ### Tasks
@@ -1221,7 +1221,7 @@ The project should follow the same rule already used successfully in code: imple
 - create an initial git tag `v0.1.0` on the current commit so `git describe` has a base to work from
 
 **Deploy harness:**
-- add a `_check_reachable` step to `scripts/deploy.sh` immediately after the `PI_TARGET` check: attempt one SSH command with `ConnectTimeout=5 ConnectionAttempts=1`; if it fails, print an actionable error with the `export PI_TARGET=…` command and exit 1
+- add a `_check_reachable` step to `scripts/deploy.sh` immediately after the `PI_DECK_IP` check: attempt one SSH command with `ConnectTimeout=5 ConnectionAttempts=1`; if it fails, print an actionable error and exit 1
 - remove any logic that would silently retry or continue past a connectivity failure
 
 ### Deliverables
@@ -1246,7 +1246,7 @@ The project should follow the same rule already used successfully in code: imple
 - no repository cleanup in this phase leaves broken `KiCad` references, broken scripts, or broken Markdown links behind
 - `GET /api/v1/status` returns a version string derived from the git tag and deploy counter, plus `os_version` and `python_version`
 - deploying from main produces `<tag>+r<N>`; deploying from a non-main branch produces `<tag>-dev.<commits>.<hash>.<branch>+r<N>`
-- if `PI_TARGET` is unset or the host is unreachable, the deploy script exits immediately with a message showing the exact `export` command needed
+- if `PI_DECK_IP` is unset or the host is unreachable, the deploy script exits immediately with guidance for supplying the current address
 
 ## Phase 24: DDC Capability Investigation
 
@@ -1290,15 +1290,28 @@ When the custom hardware (Phase 7 integrated board) is installed, `DDC` communic
 - the project knows which `DDC` features are safe to depend on and where `DDC` timing matters
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 25: Custom LED Communication Receiver and Monitor UI
+## Phase 25: Bidirectional Custom Monitor Communication and Control UI
 
-**Status:** in progress. See [Phase 25 Execution Record](./phase-25-execution.md).
+**Status:** completed 2026-11-06. See [Phase 25 Execution Record](./phase-25-execution.md).
 
 ### Goal
 
-Implement the client side of the monitor firmware's custom output channel by capturing every transition on the conditioned `KEY_LED` GPIO with monotonic timestamps, preserving the existing ordinary LED behavior, and replacing the Calendar and Notes dashboard placeholders with one large communication-monitor widget.
+Implement and validate the custom bidirectional monitor/deck communication layer: receive typed monitor messages through conditioned `KEY_LED`, send table-defined commands through the dedicated `KEY_ADC1` branch, preserve ordinary LED/JOG behavior, and provide both a detailed communication workspace and status-aware monitor controls on the deck screen.
 
-This phase is receiver-first. It measures what the complete monitor-to-deck path can reliably carry before any production bitrate, framing constants, CRC parameters, message identifiers, or joystick-bus command protocol are frozen.
+The phase began as a receiver-first characterization story and expanded after that milestone succeeded. It ultimately froze and hardware-tested the transport/framing values, command table, typed responses, unsolicited messages, recovery policy, and operator UI needed to use the link as product infrastructure.
+
+### Delivered expansion beyond the initial story
+
+- implemented the dedicated `KEY_ADC1`/`GPIO12` transmitter and safe arbitration with native Center control
+- froze `A5 xx` short-command frames and delivered query, all single-source modes, all ordered PBP combinations, diagnostic, TB refresh, and WATCH control
+- decoded and surfaced STATE, LEVEL, HOLD, RATE, DIAG, ACK, PRESENCE, WATCH, SCAN, REFRESH, unknown, corrupt, and incomplete traffic
+- correlated multi-message responses while preserving unsolicited monitor messages as first-class events
+- added session evidence, RX/TX histories, live waveform inspection, replay/export, diagnostic interpretation, and response timeout handling
+- expanded the deck home screen with independent LED/refresh/OSD/record controls and a fixed `3 × 2` source/layout control composition
+- made those controls reflect validated monitor STATE: active ordered layouts are selected and disconnected-source controls are dimmed without becoming disabled
+- added coalesced event-driven STATE recovery without periodic status polling
+- preserved responsive behavior for the overall screen; only the monitor-control composition is intentionally fixed
+- retained three unused short command codes (`0xC`, `0xD`, `0xF`) and the option to build future complex operations from short command sequences
 
 ### Scope
 
@@ -1311,16 +1324,18 @@ This phase is receiver-first. It measures what the complete monitor-to-deck path
 - batched backend delivery suitable for the kiosk UI and remote LAN browsers
 - one large LED communication monitor in the right dashboard panel, replacing the Calendar and Notes placeholders
 - preservation of the small JOG-adjacent LED as the simple semantic indicator
+- safe `KEY_ADC1` command transmission, response correlation, and unsolicited-message handling
+- status-aware home-screen source/layout controls driven by validated monitor STATE
 
 ### Safety and protocol boundaries
 
-- the client remains electrically receive-only and must never source current onto the monitor indicator line
+- the `KEY_LED` receiver remains electrically receive-only and must never source current onto the monitor indicator line
 - raw captures preserve the sampled electrical level; polarity interpretation is configuration, not destructive rewriting of captured data
 - the existing `bus/led_changed` path, recording behavior, status LED mirroring, and ordinary stock LED indication remain available beside raw capture
 - stock blinking and arbitrary idle transitions are untrusted garbage, not protocol messages
 - incomplete, malformed, mistimed, unsupported, oversized, or CRC-invalid candidates must never reach application actions
-- final half-bit duration, sync word, field widths, CRC polynomial, message numeric mapping, and maximum payload remain configurable until characterization is complete
-- this phase does not invent or implement the future deck-to-monitor joystick-bus command encoding
+- invalid or uncertain STATE must trigger bounded, event-driven recovery rather than periodic polling that visibly blinks the monitor LED
+- the delivered framing, timing, CRC, type identifiers, and short-command codewords are frozen by implementation and live-hardware evidence in the execution record
 
 ### Backend and capture tasks
 
@@ -1357,7 +1372,7 @@ This phase is receiver-first. It measures what the complete monitor-to-deck path
 - provide capture start/stop, clear, export, replay, and display-window controls
 - surface configuration for polarity, glitch threshold, buffer size, decoder timing, and tolerance without implying those are final protocol constants
 - keep high-rate sample data out of the ordinary live log; log capture lifecycle, warnings, overruns, and validated frame summaries instead
-- preserve the fixed JOG column and bottom live-log band at the `1280×800` kiosk target
+- preserve the fixed monitor-control composition and bottom live-log band at the `1280×800` kiosk target while allowing the surrounding page to remain responsive
 - ensure the monitor remains usable from remote LAN browsers and does not grow memory or render work without bound
 
 ### Tests
@@ -1394,6 +1409,10 @@ This phase is receiver-first. It measures what the complete monitor-to-deck path
 - frontend and backend test suites pass
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
+### Completion result
+
+All original exit criteria were met or superseded by stronger delivered behavior. In addition to the receiver/capture goals, live hardware confirmed deck commands and requests, correlated monitor responses, and pushed/unsolicited messages. The expanded deck screen, state-aware quick controls, corruption recovery, focused backend/frontend suites, production build, deployment `0.1.15+r117`, and post-deployment host-health snapshot are recorded in the [Phase 25 Execution Record](./phase-25-execution.md).
+
 ## Phase 40: Replacement Display and Final Pi 5 Host Cutover
 
 **Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 40 Execution Record](./phase-40-execution.md).
@@ -1406,7 +1425,7 @@ Replace the defective Waveshare DSI panel, standardize the control deck on the f
 
 Phase 20 proved that Raspberry Pi 5 performance resolves the Pi 2 kiosk responsiveness problem, but the available DSI panel was physically defective. That invalidated display quality, brightness ceiling, color validation, and touch confidence on the final display hardware. A replacement panel has now arrived, and the project decision is to use a Raspberry Pi 5 8GB as the final deck host rather than continuing with the earlier temporary Pi 5 validation unit.
 
-This phase is an inserted platform phase. Phase 24's DDC investigation is complete, and Phase 25 owns the raw custom LED communication receiver and monitor UI. This phase establishes a trustworthy final physical baseline before the later semantic monitor-state work.
+This phase is an inserted platform phase. Phase 24's DDC investigation and Phase 25's bidirectional custom monitor communication/control work are complete. This phase establishes a trustworthy final physical baseline before later power-state characterization and product-feature work.
 
 ### Scope
 
@@ -1437,7 +1456,7 @@ Run the validation in this order so regressions are attributable:
 - install or image the final Raspberry Pi 5 8GB host
 - apply required Pi 5 boot configuration: DSI panel overlay, `i2c-dev`, `dtparam=i2c_arm=on`, and HDMI display-output disable flags
 - install backend service, graphical stack, kiosk autostart, and deploy tooling on the final host
-- configure `PI_TARGET` for the final host without hardcoding the target in scripts
+- configure `PI_DECK_IP` for the final host without hardcoding the target in scripts
 - deploy the current repository and confirm the visible version increments
 - verify `PI_DECK_HARDWARE=live` and the selected GPIO backend on the final host
 - install the replacement display panel and inspect for physical defects before drawing software conclusions
@@ -1472,7 +1491,7 @@ Run the validation in this order so regressions are attributable:
 
 ### Goal
 
-Build on Phase 25's raw communication receiver to determine how useful `KEY_LED` is as a semantic control-feedback signal, fully characterise monitor power states from the observation bus, and update the UI to reflect those states.
+Build on Phase 25's validated bidirectional communication and STATE model to characterize the remaining monitor power states from the observation bus and update the UI to reflect them. Phase 25 already owns layout/input/connection status and its event-driven recovery policy; this phase must not duplicate that work.
 
 ### Scope
 
@@ -1482,7 +1501,7 @@ Build on Phase 25's raw communication receiver to determine how useful `KEY_LED`
 - monitor state detection: **ON / IDLE / OFF / POWERED OFF**
 - UI representation of all four monitor states
 
-Raw edge capture, transport characterization, decoder infrastructure, and the communication-monitor widget are owned by Phase 25 and are not reimplemented here.
+Raw edge capture, transport characterization, command/response transport, layout/input/connection STATE, decoder infrastructure, recovery policy, and the communication-monitor widget are owned by Phase 25 and are not reimplemented here.
 
 ### Background
 
@@ -1849,7 +1868,7 @@ The current deploy model (`scripts/deploy.sh`: build → rsync → restart → r
 - **No rollback** — there is no previous-version snapshot or rollback path if a deploy introduces a regression; the deploy counter only goes forward
 - **No staging environment** — code goes directly from the dev machine to the production kiosk with no intermediate validation
 - **Chromium reload is best-effort** — xdotool is not installed by default; the fallback kill-and-relaunch approach depends on display environment variables that may not be available over SSH
-- **Single deploy target** — the script is hard-coded to one Pi; deploying to additional decks would require scripting around `PI_TARGET`
+- **Single deploy target** — the script uses one Pi address from `PI_DECK_IP`; deploying to additional decks requires overriding that environment value
 
 When the project reaches a more stable feature state, consider:
 
