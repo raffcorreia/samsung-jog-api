@@ -38,6 +38,17 @@ describe("TopBar", () => {
     expect(clock.textContent).toMatch(/^\d{2}:\d{2}$/);
   });
 
+  it("renders the version beside the clock", () => {
+    render(
+      <MemoryRouter>
+        <TopBar version="0.1.0+r7" />
+      </MemoryRouter>,
+    );
+    const clock = screen.getByTestId("top-bar-clock");
+    const version = screen.getByTestId("version-badge");
+    expect(clock.nextElementSibling).toBe(version);
+  });
+
   it("renders the settings cog button", () => {
     renderTopBar();
     expect(screen.getByTestId("top-bar-settings")).toBeInTheDocument();

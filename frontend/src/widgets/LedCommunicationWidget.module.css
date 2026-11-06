@@ -11,6 +11,9 @@
 .toolButton { width: 28px; height: 27px; display: grid; place-items: center; padding: 0; border: 1px solid #33465c; border-radius: 5px; background: #111b27; color: #c9d7e5; font: 700 .8rem monospace; text-decoration: none; cursor: pointer; }
 .toolButton:hover, .toolButton[data-active="true"] { border-color: #5d91ba; background: #18304a; color: #a9ddff; }
 .toolButton:disabled { opacity: .28; cursor: default; }
+.toolButton svg { width: 15px; height: 15px; display: block; fill: currentColor; }
+.sessionButton { width: auto; min-width: 76px; padding: 0 7px; display: flex; gap: 5px; font-size: .52rem; }
+.sessionButton b { color: #6cb6ff; }
 .scopeLegend { margin-left: auto; display: flex; align-items: center; gap: 5px; color: var(--muted); font: .53rem monospace; }
 .scopeLegend span, .messageSummary i { width: 14px; height: 3px; display: inline-block; border-radius: 2px; }
 [data-trace="rx"] { background: #6cb6ff; }
@@ -21,8 +24,9 @@
 .waveform path { fill: none; stroke-width: 2.1; vector-effect: non-scaling-stroke; }
 .rxTrace { stroke: #6cb6ff; filter: drop-shadow(0 0 4px rgba(108,182,255,.55)); }
 .txTrace { stroke: #ffae57; stroke-dasharray: 7 4; filter: drop-shadow(0 0 4px rgba(255,174,87,.5)); }
-.axisTop, .axisBottom { position: absolute; left: 7px; z-index: 1; color: #718096; font: .52rem monospace; }
-.axisTop { top: 5px; } .axisBottom { bottom: 5px; }
+.rxAxisHigh, .rxAxisLow, .txAxisHigh, .txAxisLow { position: absolute; left: 7px; z-index: 1; color: #718096; font: .48rem monospace; }
+.rxAxisHigh { top: 4px; } .rxAxisLow { top: 43%; }
+.txAxisHigh { top: 55%; } .txAxisLow { bottom: 4px; }
 .timeScale { position: absolute; right: 7px; bottom: 5px; color: #718096; font: .52rem monospace; }
 .empty { height: 100%; display: grid; place-items: center; color: var(--muted); font: .68rem monospace; }
 
@@ -39,7 +43,7 @@
 .messageSummary strong { margin-top: 2px; font: 700 .62rem monospace; }
 .messageSummary small { margin-top: 2px; color: var(--muted); font: .5rem monospace; }
 
-.sender { display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto; align-items: end; gap: 7px; padding: 7px 8px; border: 1px solid #454331; border-radius: 7px; background: rgba(52,43,24,.38); }
+.sender { display: grid; grid-template-columns: minmax(220px, 1fr) auto auto auto auto; align-items: end; gap: 7px; padding: 7px 8px; border: 1px solid #454331; border-radius: 7px; background: rgba(52,43,24,.38); }
 .sender label { color: var(--muted); font-size: .49rem; text-transform: uppercase; }
 .sender select, .sender input { display: block; height: 28px; margin-top: 3px; padding: 4px 7px; border: 1px solid #48566a; border-radius: 5px; background: #0d151f; color: var(--text); font: .6rem monospace; }
 .sender select { width: 100%; }
@@ -49,9 +53,12 @@
 .sender code { align-self: center; color: #ffbd76; font-size: .62rem; }
 .sender > button { height: 30px; min-width: 78px; padding: 0 12px; border: 1px solid #b67732; border-radius: 5px; background: #6c3d16; color: #fff0da; font: 700 .58rem sans-serif; cursor: pointer; }
 .sender > button:disabled { opacity: .42; cursor: default; }
+.sender > .measureButton { border-color: #c79b36; background: #594711; color: #fff4bd; }
+.sender > .measureButton:not(:disabled):hover { background: #745d16; }
 
 .historyOverlay { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; padding: 25px; background: rgba(3,7,11,.76); backdrop-filter: blur(2px); }
 .historyOverlay > section { width: min(720px, 94%); max-height: 82%; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #46627e; border-radius: 9px; background: #0e1721; box-shadow: 0 18px 55px #000; }
+.historyOverlay > .sessionDialog { width: min(1040px, 97%); max-height: 90%; }
 .historyOverlay header { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid #29384a; }
 .historyOverlay h3 { margin: 0; font-size: .76rem; text-transform: uppercase; }
 .historyOverlay header button { border: 0; background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer; }
@@ -60,6 +67,25 @@
 .historyList strong { overflow: hidden; font: .58rem monospace; text-overflow: ellipsis; white-space: nowrap; }
 .historyList code { color: var(--muted); font-size: .53rem; }
 .historyList p { color: var(--muted); text-align: center; }
+.sessionActions { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid #29384a; }
+.noteBar { display: flex; gap: 7px; padding: 8px 10px; border-bottom: 1px solid #29384a; }
+.noteBar input { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid #3e5872; border-radius: 5px; background: #09111a; color: var(--text); font: .58rem monospace; }
+.noteBar button { min-width: 82px; border: 1px solid #52789b; border-radius: 5px; background: #17334c; color: #cdeaff; font: 700 .53rem sans-serif; }
+.noteBar button:disabled { opacity: .35; }
+.sessionActions button { padding: 5px 9px; border: 1px solid #3e5872; border-radius: 5px; background: #142334; color: var(--text); font: 600 .55rem sans-serif; cursor: pointer; }
+.sessionActions button:disabled { opacity: .35; cursor: default; }
+.sessionActions span { margin-left: auto; color: #73e6a0; font: .54rem monospace; }
+.sessionList label { display: grid; grid-template-columns: 18px 174px 30px 78px 155px minmax(230px, 1fr); align-items: center; gap: 8px; padding: 7px 8px; border-bottom: 1px solid #243140; cursor: pointer; }
+.sessionList label:hover { background: #142131; }
+.sessionList input { margin: 0; accent-color: #6cb6ff; }
+.sessionList time, .sessionList b, .sessionList em, .sessionList code, .sessionList span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: .53rem monospace; }
+.sessionList time { color: #91a1b2; }
+.sessionList b[data-direction="IN"] { color: #6cb6ff; }
+.sessionList b[data-direction="OUT"] { color: #ffae57; }
+.sessionList b[data-direction="NOTE"] { color: #73e6a0; }
+.sessionList em { color: #b8c5d2; font-style: normal; }
+.sessionList code { color: #e7c080; }
+.sessionList span { color: var(--text); }
 .hiddenInput { display: none; }
 .error { color: var(--danger); font: .56rem monospace; }
 

@@ -55,7 +55,7 @@ function mergeLedFrames(
     );
     if (!duplicate) merged.push(frame);
   }
-  return merged.slice(-16);
+  return merged.slice(-4096);
 }
 
 const JOG_ACTIONS: readonly JogAction[] = ["up", "down", "left", "right", "center"];
@@ -580,9 +580,22 @@ export function useDeckEvents(): DeckEventsState {
             frames: mergeLedFrames(prev.frames, [frame]),
           }));
         }
+        if (parsed.category === "led_comm" && parsed.type === "cleared") {
+          const ledStatus = parsed.data.status as LedCommunicationStatus;
+          setLedCommunication({ status: ledStatus, edges: [], frames: [] });
+        }
+        if (parsed.category === "led_comm" && parsed.type === "session") {
+          const ledStatus = parsed.data.status as LedCommunicationStatus;
+          setLedCommunication((prev) => ({ ...prev, status: ledStatus }));
+        }
         if (
           parsed.category === "led_comm"
-          && (parsed.type === "tx" || parsed.type === "command_result")
+          && (
+            parsed.type === "tx_started"
+            || parsed.type === "tx_sample"
+            || parsed.type === "tx"
+            || parsed.type === "command_result"
+          )
         ) {
           const ledStatus = parsed.data.status as LedCommunicationStatus;
           setLedCommunication((prev) => ({ ...prev, status: ledStatus }));

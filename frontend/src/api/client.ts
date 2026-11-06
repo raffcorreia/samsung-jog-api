@@ -1,4 +1,5 @@
 import type {
+  CommunicationHighTestResult,
   CommandRejectedBody,
   JogAction,
   LedCommunicationStatus,
@@ -148,6 +149,17 @@ export async function clearLedCommunication(): Promise<LedCommunicationStatus> {
   return (await r.json()) as LedCommunicationStatus;
 }
 
+export async function addLedCommunicationNote(text: string): Promise<LedCommunicationStatus> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/note`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  const body = await r.json() as LedCommunicationStatus | { message?: string };
+  if (!r.ok) throw new Error("message" in body && body.message ? body.message : `communication note failed: ${r.status}`);
+  return body as LedCommunicationStatus;
+}
+
 export async function replayLedCommunication(document: unknown): Promise<LedCommunicationStatus> {
   const r = await fetch(`${apiBase()}/api/v1/led-communication/replay`, {
     method: "POST",
@@ -176,6 +188,15 @@ export async function sendMonitorCommand(
     throw new Error("message" in body && body.message ? body.message : `monitor command failed: ${r.status}`);
   }
   return body as MonitorCommandResult;
+}
+
+export async function holdCommunicationHighForMeasurement(): Promise<CommunicationHighTestResult> {
+  const r = await fetch(`${apiBase()}/api/v1/led-communication/test-high`, { method: "POST" });
+  const body = await r.json() as CommunicationHighTestResult | { message?: string };
+  if (!r.ok) {
+    throw new Error("message" in body && body.message ? body.message : `communication test failed: ${r.status}`);
+  }
+  return body as CommunicationHighTestResult;
 }
 
 export type RecordingResult<T> = { ok: true; body: T } | { ok: false; body: RecordingRejectedBody };

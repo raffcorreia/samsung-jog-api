@@ -4,7 +4,7 @@ interface Props {
   version: string;
 }
 
-/** Floating version badge — fixed top-left, sourced from status.version. */
+/** Compact version badge shown beside the top-bar clock. */
 export function VersionBadge({ version }: Props) {
   return (
     <div className={styles.badge} data-testid="version-badge">

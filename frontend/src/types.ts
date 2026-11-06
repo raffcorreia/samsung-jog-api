@@ -46,7 +46,7 @@ export interface LedStateFrame {
   raw_hex: string;
   sequence: number;
   crc: number;
-  message_type?: "state" | "level" | "hold" | "rate" | "ack" | "unknown";
+  message_type?: "state" | "level" | "hold" | "rate" | "diag" | "presence" | "watch" | "scan" | "refresh" | "ack" | "bad_crc" | "unknown";
   type_code?: number;
   acquisition_recovered?: boolean;
   layout?: "single" | "pip" | "pbp" | "unknown" | null;
@@ -61,6 +61,24 @@ export interface LedStateFrame {
   ack_result?: number | null;
   ack_code?: number | null;
   measured_bit_ticks?: number | null;
+  connection_mask?: number | null;
+  diagnostic_reads?: number | null;
+  diagnostic_errors?: number | null;
+  diagnostic_conversions_stopped?: boolean | null;
+  diagnostic_timeouts?: number | null;
+  diagnostic_rejected_frames?: number | null;
+  presence_mask?: number | null;
+  presence_window0_state?: number | null;
+  presence_window1_state?: number | null;
+  watch_index?: number | null;
+  watch_value?: number | null;
+  scan_longest_gap_ms?: number | null;
+  scan_last_ms?: number | null;
+  refresh_result?: number | null;
+  refresh_flags?: number | null;
+  crc_valid?: boolean;
+  expected_crc?: number | null;
+  received_at?: string | null;
 }
 
 export interface MonitorCommandResult {
@@ -68,8 +86,19 @@ export interface MonitorCommandResult {
   command_name: string;
   frame_hex: string;
   bit_time_ms: number;
-  status: "waiting_ack" | "ack" | "timeout";
-  ack?: LedStateFrame | null;
+  status: "waiting_response" | "response" | "partial_response" | "timeout" | "superseded";
+  state?: LedStateFrame | null;
+  diagnostic?: LedStateFrame | null;
+  presence?: LedStateFrame | null;
+  scan?: LedStateFrame | null;
+  refresh?: LedStateFrame | null;
+}
+
+export interface CommunicationHighTestResult {
+  ok: true;
+  duration_ms: number;
+  started_monotonic_ns: number;
+  ended_monotonic_ns: number;
 }
 
 export interface MonitorTxSample {
@@ -79,6 +108,7 @@ export interface MonitorTxSample {
 
 export interface MonitorTransmission extends MonitorCommandResult {
   monotonic_ns: number;
+  sent_at?: string | null;
   samples: MonitorTxSample[];
 }
 
@@ -97,14 +127,37 @@ export interface LedCommunicationStatus {
   valid_frames: number;
   missing_frames: number;
   decoder_rejections: number;
+  state_valid?: boolean;
+  state_recovery_pending?: boolean;
+  state_uncertainty_reason?: string | null;
   latest_frame: LedStateFrame | null;
   latest_message?: LedStateFrame | null;
   latest_state?: LedStateFrame | null;
   latest_level?: LedStateFrame | null;
+  latest_diagnostic?: LedStateFrame | null;
+  latest_presence?: LedStateFrame | null;
+  latest_refresh?: LedStateFrame | null;
   latest_ack?: LedStateFrame | null;
   last_command?: MonitorCommandResult | null;
   frame_history?: LedStateFrame[];
+  session_history?: CommunicationSessionRecord[];
   tx_history?: MonitorTransmission[];
+}
+
+export interface CommunicationSessionRecord {
+  id: string;
+  timestamp: string;
+  monotonic_ns: number;
+  direction: "IN" | "OUT" | "NOTE";
+  kind: "REQUEST" | "RESPONSE" | "UNSOLICITED" | "BAD CRC" | "INCOMPLETE" | "NOTE";
+  raw_hex: string | null;
+  command_code?: number;
+  command_name?: string;
+  bit_time_ms?: number;
+  frame?: LedStateFrame;
+  note?: string;
+  reason?: string;
+  bit_count?: number;
 }
 
 export interface LedCommunicationState {

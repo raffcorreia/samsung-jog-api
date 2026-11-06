@@ -1,10 +1,10 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 
-const { statusPayload } = vi.hoisted(() => ({
+const { statusPayload, sendMonitorCommand } = vi.hoisted(() => ({
   statusPayload: {
     version: "0.0-test",
     hardware: "mock" as const,
@@ -16,6 +16,27 @@ const { statusPayload } = vi.hoisted(() => ({
       key_adc2_direction: null,
     },
   },
+  sendMonitorCommand: vi.fn((commandCode: number) => Promise.resolve(
+    commandCode === 0xB
+      ? {
+          command_code: 0xB,
+          command_name: "tb_refresh",
+          frame_hex: "a5ee",
+          bit_time_ms: 25,
+          status: "waiting_response" as const,
+          refresh: null,
+        }
+      : {
+          command_code: 0,
+          command_name: "query",
+          frame_hex: "a55a",
+          bit_time_ms: 25,
+          status: "response" as const,
+          state: { sequence: 4 },
+          diagnostic: null,
+          presence: null,
+        },
+  )),
 }));
 
 vi.mock("./api/client", () => ({
@@ -41,6 +62,13 @@ vi.mock("./api/client", () => ({
   stopLedCommunication: vi.fn(),
   clearLedCommunication: vi.fn(),
   replayLedCommunication: vi.fn(),
+  sendMonitorCommand,
+  holdCommunicationHighForMeasurement: vi.fn(() => Promise.resolve({
+    ok: true,
+    duration_ms: 3000,
+    started_monotonic_ns: 1,
+    ended_monotonic_ns: 3_000_000_001,
+  })),
   ledCommunicationExportUrl: vi.fn(() => "/api/v1/led-communication/export"),
   fetchRecordingLibrary: vi.fn(() => Promise.resolve({ items: [] })),
   fetchRecordingState: vi.fn(() =>
@@ -86,6 +114,7 @@ describe("App", () => {
   });
 
   it("shows status from REST and renders backend log entries", async () => {
+    const user = userEvent.setup();
     const instances: { onmessage: ((ev: MessageEvent) => void) | null }[] = [];
 
     class MockSocket {
@@ -107,8 +136,34 @@ describe("App", () => {
     render(<App />);
 
     expect(await screen.findByTestId("jog-pad")).toBeInTheDocument();
+    expect(screen.getByTestId("led-indicator")).toHaveAttribute("data-led", "on");
     expect(screen.getByTestId("led-communication-monitor")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "HIGH 3s" })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Refresh Thunderbolt connection" }));
+    expect(sendMonitorCommand).toHaveBeenCalledWith(0xB, 25);
+    const quickControls = screen.getByRole("group", { name: "Quick source and layout controls" });
+    for (const label of ["TB | DP", "TB | HDMI", "HDMI | DP", "TB", "HDMI", "DP"]) {
+      expect(within(quickControls).getByRole("button", { name: label })).toBeInTheDocument();
+    }
+    const tbDp = within(quickControls).getByRole("button", { name: "TB | DP" });
+    await waitFor(() => expect(tbDp).toBeEnabled());
+    await user.click(tbDp);
+    expect(sendMonitorCommand).toHaveBeenCalledWith(0x9, 25);
+    expect(screen.getByLabelText(/Speed/)).toHaveAttribute("max", "1000");
+    expect(screen.getByLabelText(/Speed/)).toHaveValue(25);
     expect(screen.queryByText("April 2026")).not.toBeInTheDocument();
+
+    const sendButton = screen.getByRole("button", { name: "SEND" });
+    await waitFor(() => expect(sendButton).toBeEnabled());
+    await user.click(sendButton);
+    await waitFor(() => {
+      expect(screen.getByTestId("led-communication-monitor")).toHaveTextContent(
+        "Query response · STATE #4",
+      );
+    });
+    expect(screen.getByTestId("led-communication-monitor")).toHaveTextContent("RX KEY_LED");
+    expect(screen.getByTestId("led-communication-monitor")).toHaveTextContent("TX KEY_ADC1");
+    expect(screen.getByTestId("led-communication-monitor")).toHaveTextContent("2,000 ms · live");
 
     const ws = instances[0];
     expect(ws).toBeDefined();
@@ -165,6 +220,7 @@ describe("App", () => {
                 layout: "pbp",
                 input1: "tb",
                 input2: "dp",
+                connection_mask: 0x06,
                 crc: 0,
               },
             },
@@ -174,6 +230,13 @@ describe("App", () => {
     });
 
     expect(screen.getAllByText(/#0 · PBP · TB \/ DP/).length).toBeGreaterThan(0);
+    expect(tbDp).toHaveAttribute("aria-pressed", "true");
+    expect(tbDp).toHaveAttribute("data-disconnected", "false");
+    expect(within(quickControls).getByRole("button", { name: "TB | HDMI" }))
+      .toHaveAttribute("data-disconnected", "true");
+    expect(within(quickControls).getByRole("button", { name: "HDMI" }))
+      .toHaveAttribute("data-disconnected", "true");
+    expect(within(quickControls).getByRole("button", { name: "HDMI" })).toBeEnabled();
 
     await act(async () => {
       ws.onmessage?.({

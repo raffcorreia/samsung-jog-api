@@ -22,26 +22,218 @@
   border-right: 1px solid var(--border);
   overflow: hidden;
   position: relative;
-  /* Extra padding so JogPad ring does not clip at edges */
-  padding: 0 0 4px;
+  padding: 0;
 }
 
-/* LED indicator: moved in toward the JogPad so it reads as part of the control cluster. */
-.ledCorner {
+/* Three independent controls at the top of the JOG column. */
+.topControls {
   position: absolute;
-  top: 82px;
-  left: 62px;
+  top: 6px;
+  left: 18px;
+  right: 18px;
   z-index: 5;
+  height: 48px;
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 48px;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.osdTrigger,
+.tbRefreshButton {
+  justify-self: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease,
+    opacity 0.12s ease;
+  opacity: 0.7;
+}
+
+.osdTrigger:hover,
+.osdTrigger:focus-visible,
+.tbRefreshButton:hover:not(:disabled),
+.tbRefreshButton:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  opacity: 1;
+}
+
+.tbRefreshButton {
+  min-width: 42px;
+  font-size: 1.45rem;
+  line-height: 1;
+  color: #9cc7ee;
+  white-space: nowrap;
+}
+
+.tbRefreshButton[data-pending="true"] > span {
+  display: inline-block;
+  animation: refreshSpin 0.8s linear infinite;
+}
+
+@keyframes refreshSpin {
+  to { transform: rotate(360deg); }
+}
+
+.tbRefreshButton:disabled {
+  cursor: wait;
+  opacity: 0.45;
+}
+
+/* Fixed 3×2 appliance grid: never wraps, scrolls, or responsively rearranges. */
+.quickControls {
+  position: absolute;
+  top: 64px;
+  left: 12px;
+  right: 12px;
+  z-index: 4;
+  height: 160px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 8px;
+  overflow: hidden;
+}
+
+.quickControlButton {
+  min-width: 0;
+  min-height: 0;
+  padding: 7px 9px 4px;
+  border: 1px solid var(--border-bright);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  color: #dceaf5;
+  cursor: pointer;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease,
+    color 0.12s ease;
+}
+
+.quickControlButton:hover:not(:disabled),
+.quickControlButton:focus-visible {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--surface-elevated) 88%, var(--accent) 12%);
+  color: #ffffff;
+}
+
+.quickControlButton:active:not(:disabled),
+.quickControlButton[data-pending="true"] {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: var(--accent);
+}
+
+.quickControlButton[data-selected="true"] {
+  color: #ffffff;
+  border-color: #65c8ff;
+  background: color-mix(in srgb, var(--accent) 28%, var(--surface));
+  box-shadow:
+    inset 0 0 0 1px rgba(101, 200, 255, 0.3),
+    0 0 12px rgba(73, 177, 232, 0.2);
+}
+
+.quickControlButton[data-disconnected="true"] {
+  color: #687681;
+  border-color: #3c4750;
+  background: color-mix(in srgb, var(--surface) 92%, #26313a 8%);
+  opacity: 0.58;
+}
+
+.quickControlButton[data-disconnected="true"]:hover:not(:disabled),
+.quickControlButton[data-disconnected="true"]:focus-visible {
+  color: #9aa9b5;
+  border-color: #6d7b86;
+  opacity: 0.82;
+}
+
+.quickControlButton[data-selected="true"][data-disconnected="true"] {
+  border-color: #5792b3;
+  box-shadow:
+    inset 0 0 0 1px rgba(101, 200, 255, 0.24),
+    0 0 10px rgba(73, 177, 232, 0.14);
+}
+
+.quickControlButton:disabled {
+  cursor: wait;
+  opacity: 0.48;
+}
+
+.monitorIcon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.monitorScreen {
+  width: 100%;
+  height: 42px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: stretch;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  background: rgba(108, 182, 255, 0.04);
+}
+
+.monitorScreen > span {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.monitorScreen > span[data-source="HDMI"] {
+  font-size: 0.62rem;
+  letter-spacing: -0.025em;
+}
+
+.monitorScreen[data-split="true"] > span + span {
+  border-left: 1px solid currentColor;
+}
+
+.monitorStand {
+  position: relative;
+  width: 28px;
+  height: 7px;
+  border-bottom: 2px solid currentColor;
+}
+
+.monitorStand::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 7px;
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.ledControl {
+  display: flex;
+  align-items: center;
+  justify-self: start;
 }
 
 .recordButton {
-  position: absolute;
-  top: 74px;
-  right: 28px;
-  z-index: 5;
+  justify-self: end;
   width: 48px;
   height: 48px;
   padding: 0;
@@ -61,30 +253,6 @@
 
 .recordButton:active {
   filter: brightness(0.85);
-}
-
-/* Dev OSD trigger — small button at the bottom of the left column */
-.osdTrigger {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  transform: translateX(-50%);
-  padding: 4px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: none;
-  color: var(--muted);
-  font-size: 1.2rem;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: color 0.1s, border-color 0.1s;
-  opacity: 0.6;
-}
-
-.osdTrigger:hover {
-  color: var(--accent);
-  border-color: var(--accent-dim);
-  opacity: 1;
 }
 
 /* Right panel — full communication monitor */

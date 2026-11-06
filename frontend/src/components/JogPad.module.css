@@ -3,9 +3,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
-  padding: var(--pad);
+  padding: var(--pad) var(--pad) 8px;
   min-height: 0;
   touch-action: none;
 }

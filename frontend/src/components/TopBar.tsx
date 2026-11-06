@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { setDisplayPower } from "../api/client";
 import { PowerMenu } from "./PowerMenu";
+import { VersionBadge } from "./VersionBadge";
 
 import styles from "./TopBar.module.css";
 
@@ -37,11 +38,13 @@ function Clock() {
  */
 export function TopBar({
   title,
+  version,
   openPowerMenuTick = 0,
   displayOn = true,
   powerButtonHeld = false,
 }: {
   title?: string;
+  version?: string;
   openPowerMenuTick?: number;
   displayOn?: boolean;
   powerButtonHeld?: boolean;
@@ -172,6 +175,7 @@ export function TopBar({
           </button>
 
           <Clock />
+          {version && <VersionBadge version={version} />}
         </div>
 
         {!isHome && (
