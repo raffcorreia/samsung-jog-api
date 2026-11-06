@@ -5,7 +5,7 @@
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
-  grid-template-columns: var(--deck-left-col, 260px) 1fr;
+  grid-template-columns: var(--deck-left-col, 350px) minmax(0, 1fr);
   grid-template-rows: 1fr var(--deck-log-height, 200px);
   grid-template-areas:
     "left right"
@@ -19,10 +19,15 @@
   grid-area: left;
   display: flex;
   flex-direction: column;
+  width: var(--deck-left-col, 350px);
+  min-width: var(--deck-left-col, 350px);
+  min-height: 552px;
   border-right: 1px solid var(--border);
   overflow: hidden;
   position: relative;
-  padding: 0;
+  /* The controls above are absolute so their geometry never reflows. Reserve their
+     complete 224px footprint plus a 4px gap before the bottom-aligned JOG region. */
+  padding: 228px 0 0;
 }
 
 /* Three independent controls at the top of the JOG column. */
