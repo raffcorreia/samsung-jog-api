@@ -1,6 +1,6 @@
 # Memory Index
 
-- [Project Overview](project_overview.md) — CJ791 JOG emulator: Phases 24 and 25 complete; Phase 26 display cutover blocked on damaged touch hardware; Phase 27 power-state characterization deferred; Phase 7 KiCad in progress
+- [Project Overview](project_overview.md) — CJ791 JOG emulator: Phases 24 and 25 complete; Phase 26 display cutover blocked on damaged touch hardware; Phases 27–31 retained but deferred; Phase 7 KiCad in progress
 - [No cd feedback](feedback_no_cd.md) — Never use cd; pass paths directly to commands (e.g. `npm test --prefix frontend/`)
 
 **Deck UI (kiosk):** Phase 13 complete. Fixed widget geometry on **1280×800** — top bar `48px`, left JOG column `350px`, bottom log band `200px`. JOG and log regions do **not** resize each other when log text grows (scroll inside log). No portal/landing-page chrome; `pi-deck` naming lives in the status/version area, not duplicated as marketing chrome.

@@ -42,6 +42,7 @@ Current state of the repository:
 - completed: `Phase 25: Bidirectional Custom Monitor Communication and Control UI` — [execution record](docs/implementation/phase-25-execution.md) (hardware-confirmed `KEY_LED` receive and `KEY_ADC1` command paths, typed responses and unsolicited messages, capture/replay/session tooling, state-aware deck controls, event-driven status recovery, and the large communication monitor)
 - blocked: `Phase 26: Replacement Display and Final Pi 5 Host Cutover` — [execution record](docs/implementation/phase-26-execution.md) (work has started; replacement panel image works, but its touch cable is physically damaged, so touch validation awaits repair or replacement)
 - deferred: `Phase 27: Monitor Power-State Characterization` (the custom communication STATE model supersedes the planned LED-feedback characterization; remaining ON/IDLE/OFF/POWERED-OFF work is intentionally deferred)
+- deferred: `Phases 28–31` retain sequence cleanup, recording settings/editor, advanced productized features, and dashboard data-source planning for future reconsideration
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

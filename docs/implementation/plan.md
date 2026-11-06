@@ -32,10 +32,10 @@
 | [25](#phase-25-bidirectional-custom-monitor-communication-and-control-ui) | Bidirectional Custom Monitor Communication and Control UI | completed |
 | [26](#phase-26-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
 | [27](#phase-27-monitor-power-state-characterization) | Monitor Power-State Characterization | deferred |
-| [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
-| [43](#phase-43-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
-| [44](#phase-44-productized-monitor-features) | Productized Monitor Features | planned |
-| [45](#phase-45-dashboard-data-source-spike) | Dashboard Data-Source Spike | planned |
+| [28](#phase-28-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | deferred |
+| [29](#phase-29-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | deferred |
+| [30](#phase-30-productized-monitor-features) | Productized Monitor Features | deferred |
+| [31](#phase-31-dashboard-data-source-spike) | Dashboard Data-Source Spike | deferred |
 | [46](#phase-46-dashboard-widgets) | Dashboard Widgets | planned |
 | [47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
 | [48](#phase-48-stabilization) | Stabilization | planned |
@@ -1545,7 +1545,9 @@ Send a known JOG command that reliably produces a `KEY_LED` blink. If the LED re
 - monitor state is reliably detected and surfaced in the UI
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 42: State Investigation and Sequence Cleanup
+## Phase 28: State Investigation and Sequence Cleanup
+
+**Status:** deferred. The tasks remain valid for recorded or OSD-driven workflows that are not covered by Phase 25's direct custom commands, but they are not currently required.
 
 ### Goal
 
@@ -1578,7 +1580,9 @@ Turn raw recordings and low-level investigation into reusable, cleaner monitor w
 - important monitor workflows are represented by stable, reusable, named sequence files
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 43: Deck Settings, Block Editor, and Recording Visualisation
+## Phase 29: Deck Settings, Block Editor, and Recording Visualisation
+
+**Status:** deferred. Preserve the settings and editor design for future recording-heavy workflows; direct custom commands have reduced its current priority.
 
 ### Goal
 
@@ -1633,15 +1637,17 @@ Phase 16 validated that the Samsung CJ791 requires a minimum hold duration of **
 - text mode and block mode produce identical V1 JSON for the same sequence
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 44: Productized Monitor Features
+## Phase 30: Productized Monitor Features
+
+**Status:** deferred. Retain the feature-slot and macro concepts, but reassess their scope against Phase 25's already-productized direct source/layout controls before implementation.
 
 ### Goal
 
-Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 43.
+Turn validated monitor workflows into real user-facing features. Productized features are backed by recordings from the Phase 16 library: a named feature slot (PIP, input source, etc.) is assigned a recording, and pressing the feature button runs that recording using the global deck settings from Phase 29.
 
 ### Background
 
-The recording subsystem (Phase 16) and the deck settings (Phase 43) together provide the full execution stack for monitor control. Phase 44 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features such as enabling PIP or switching input source are sequences of JOG interactions that have already been captured and validated as recordings — Phase 44 promotes them to named, always-accessible UI controls.
+The recording subsystem (Phase 16) and the deck settings (Phase 29) together provide the full execution stack for monitor control. Phase 30 exposes that stack as operator-friendly feature buttons rather than raw JOG commands or manual recording playback. Features not already handled by Phase 25's direct command controls can be captured and validated as recordings, then promoted to named, always-accessible UI controls.
 
 ### Scope
 
@@ -1655,7 +1661,7 @@ The recording subsystem (Phase 16) and the deck settings (Phase 43) together pro
 - define a `FeatureSlot` model: a named slot (e.g. `pip_enable`, `pip_disable`, `input_hdmi`, `input_dp`) with an optional assigned recording ID
 - persist slot assignments via REST: `GET /api/v1/features` and `PUT /api/v1/features/{slot}`
 - add feature slot assignment UI to the recording workspace: each recording can be assigned to a slot from its detail view
-- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 43; unassigned slots show as inactive
+- add a feature panel to the main UI: one button per assigned slot; pressing it runs the assigned recording using the live deck settings from Phase 29; unassigned slots show as inactive
 - implement source switching in `DDC` mode and `Blind` mode where DDC commands exist; fall back to recording-backed blind mode otherwise
 - expose proper error handling and failure states (recording not found, playback busy, sequence error)
 - preserve access to the raw JOG controller behind a manual-control entry point
@@ -1671,11 +1677,13 @@ The recording subsystem (Phase 16) and the deck settings (Phase 43) together pro
 ### Exit criteria
 
 - operators can assign a recording to a named feature slot and run it from the main UI with a single button press
-- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 43
+- feature execution uses the global deck settings (`min_click_ms`, `led_timeout_ms`) from Phase 29
 - the deck supports the intended monitor-control feature set beyond raw JOG commands
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
-## Phase 45: Dashboard Data-Source Spike
+## Phase 31: Dashboard Data-Source Spike
+
+**Status:** deferred. Retain these decisions as the prerequisite for dashboard widgets when dashboard work becomes a priority.
 
 ### Goal
 
@@ -1711,7 +1719,7 @@ Decide how dashboard data will be sourced before widget implementation expands.
 
 ### Goal
 
-Implement the dashboard side of the product using the data-source decisions from the previous phase.
+Implement the dashboard side of the product using the data-source decisions from Phase 31.
 
 ### Scope
 
@@ -1781,7 +1789,7 @@ This phase also incorporates the deferred GPIO and software migration from the P
 - Phase 7 integrated board is the sole hardware interface; Phase 6 protoboard is retired
 - `DDC` over `I2C` passes the same capability checks as Phase 24 `HDMI` DDC
 - monitor configuration is clean — no Phase 24 workarounds remain
-- all productized features from Phase 44 pass regression on final hardware
+- all productized features from Phase 30 pass regression on final hardware
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
 ## Phase 48: Stabilization
