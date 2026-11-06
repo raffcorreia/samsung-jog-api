@@ -7,6 +7,7 @@ import logging
 import platform
 import sys
 import time
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Literal, cast
 
@@ -34,6 +35,8 @@ _ACTION_MAP: dict[str, JogAction] = {
 _STR_FOR_ACTION: dict[JogAction, str] = {v: k for k, v in _ACTION_MAP.items()}
 
 _MAX_HOLD_S = 20.0
+_COMMUNICATION_MEASUREMENT_S = 3.0
+_MAX_COMMUNICATION_BIT_TIME_S = 1.0
 
 
 @dataclass
@@ -55,6 +58,14 @@ class DeckControlService:
     _hold: dict[JogAction, HoldRecord] = field(default_factory=dict)
     _pulse_in_progress: bool = field(default=False, repr=False)
     _custom_command_in_progress: bool = field(default=False, repr=False)
+    _communication_sample_listener: Callable[[int, int], None] | None = field(
+        default=None, repr=False
+    )
+
+    def configure_communication_sample_listener(
+        self, listener: Callable[[int, int], None]
+    ) -> None:
+        self._communication_sample_listener = listener
 
     def status(self) -> StatusOut:
         return StatusOut(
@@ -215,8 +226,8 @@ class DeckControlService:
         """Drive NRZ through the dedicated 10 kΩ KEY_ADC1 branch with deadline timing."""
         if len(bits) != 16 or any(bit not in (0, 1) for bit in bits):
             raise ValueError("monitor command must contain exactly 16 binary bits")
-        if not 0.001 <= bit_time_s <= 0.050:
-            raise ValueError("monitor command bit time must be 1-50 ms")
+        if not 0.001 <= bit_time_s <= _MAX_COMMUNICATION_BIT_TIME_S:
+            raise ValueError("monitor command bit time must be 1-1000 ms")
         if self._any_holds() or self._pulse_in_progress or self._custom_command_in_progress:
             raise RuntimeError("jog control is busy")
 
@@ -232,18 +243,50 @@ class DeckControlService:
             try:
                 for bit in bits:
                     self.hardware.set_communication_line(bool(bit))
-                    samples.append((time.monotonic_ns(), bit))
+                    timestamp = time.monotonic_ns()
+                    samples.append((timestamp, bit))
+                    if self._communication_sample_listener is not None:
+                        self._communication_sample_listener(timestamp, bit)
                     deadline += bit_time_s
                     remaining = deadline - time.monotonic()
                     if remaining > 0:
                         time.sleep(remaining)
             finally:
                 self.hardware.set_communication_line(False)
-                samples.append((time.monotonic_ns(), 0))
+                timestamp = time.monotonic_ns()
+                samples.append((timestamp, 0))
+                if self._communication_sample_listener is not None:
+                    self._communication_sample_listener(timestamp, 0)
             return samples
 
         try:
             return await asyncio.to_thread(_transmit)
+        finally:
+            self._custom_command_in_progress = False
+            self._control_state = ControlState.IDLE
+
+    async def hold_communication_high_for_measurement(self) -> list[tuple[int, int]]:
+        """Assert only the custom ``KEY_ADC1`` transmitter for three seconds, then release it."""
+        if self._any_holds() or self._pulse_in_progress or self._custom_command_in_progress:
+            raise RuntimeError("jog control is busy")
+
+        self._custom_command_in_progress = True
+        self._control_state = ControlState.COMMANDING
+
+        def _hold_high() -> list[tuple[int, int]]:
+            samples: list[tuple[int, int]] = []
+            self.hardware.set_communication_line(False)
+            try:
+                self.hardware.set_communication_line(True)
+                samples.append((time.monotonic_ns(), 1))
+                time.sleep(_COMMUNICATION_MEASUREMENT_S)
+            finally:
+                self.hardware.set_communication_line(False)
+                samples.append((time.monotonic_ns(), 0))
+            return samples
+
+        try:
+            return await asyncio.to_thread(_hold_high)
         finally:
             self._custom_command_in_progress = False
             self._control_state = ControlState.IDLE

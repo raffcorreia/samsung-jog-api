@@ -80,6 +80,7 @@ async def lifespan(app: FastAPI):
         observation.enable_external_led_semantics(initial_active=initial_monitor_active)
     led_communication = LedCommunicationService(ws_hub=hub, live_log=live_log)
     led_communication.configure_command_sender(deck.send_monitor_command_bits)
+    deck.configure_communication_sample_listener(led_communication.on_tx_sample)
     display_hw = build_display_power(hw.kind)
     display = DisplayService(display_hw)
     display.power_on()

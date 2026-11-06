@@ -158,7 +158,15 @@ class ObservationBusService:
             self._schedule_observe_from_thread(hw)
 
         ok_adc1 = hw.adc1_observer.enable_edge_detect(_kick)
-        ok_led = hw.led_observer.enable_edge_detect(_kick)
+        if self._external_led_semantics:
+            # LedCommunicationService owns the high-rate KEY_LED callback. Registering the
+            # generic observation callback as well adds work on every 10 ms protocol edge and
+            # can starve the raw receiver. Stable semantic changes come back through
+            # accept_led_state(); the normal 25 ms observation poll remains active.
+            hw.led_observer.disable_edge_detect()
+            ok_led = True
+        else:
+            ok_led = hw.led_observer.enable_edge_detect(_kick)
         if ok_adc1 and ok_led:
             logger.info(
                 "observation: KEY_ADC1 / KEY_LED edge IRQs (gpiozero) on BCM %s / %s",

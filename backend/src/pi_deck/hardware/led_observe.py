@@ -23,7 +23,6 @@ class KeyLedObserve:
         self._edge_cb: Callable[[], None] | None = None
         self._state_cb: Callable[[bool], None] | None = None
         self._raw_edge_cb: Callable[[int, int], None] | None = None
-        self._last_level: int | None = None
         self._dev = DigitalInputDevice(
             self._bcm,
             pull_up=self._pull_up,
@@ -101,15 +100,17 @@ class KeyLedObserve:
 
     def _dispatch_level(self, level: int, timestamp_ns: int) -> None:
         """Fan out one physical transition without letting one consumer block the others."""
-        if level == self._last_level:
-            return
-        self._last_level = level
         edge_cb = self._edge_cb
         state_cb = self._state_cb
         raw_edge_cb = self._raw_edge_cb
 
-        # Preserve the pre-Phase-25 semantic consumers first. Raw communication capture is an
-        # additional observer and must never prevent ordinary LED status from being delivered.
+        # Protocol edges are only 10 ms apart. Capture and timestamp them before scheduling any
+        # ordinary telemetry work, matching the receiver path that was proven on the deck.
+        if raw_edge_cb is not None:
+            try:
+                raw_edge_cb(level, timestamp_ns)
+            except Exception:
+                logger.exception("KEY_LED raw capture callback failed")
         if edge_cb is not None:
             try:
                 edge_cb()
@@ -120,8 +121,3 @@ class KeyLedObserve:
                 state_cb(level == 0)
             except Exception:
                 logger.exception("KEY_LED state callback failed")
-        if raw_edge_cb is not None:
-            try:
-                raw_edge_cb(level, timestamp_ns)
-            except Exception:
-                logger.exception("KEY_LED raw capture callback failed")

@@ -175,10 +175,10 @@ def api_led_communication_stop(
 
 
 @api_v1.delete("/led-communication/capture")
-def api_led_communication_clear(
+async def api_led_communication_clear(
     service: LedCommunicationService = Depends(get_led_communication),
 ) -> JSONResponse:
-    return JSONResponse(service.clear())
+    return JSONResponse(await service.clear_and_publish())
 
 
 @api_v1.get("/led-communication/export")
@@ -207,18 +207,35 @@ async def api_led_communication_replay(
         )
 
 
+@api_v1.post("/led-communication/note")
+async def api_led_communication_note(
+    request: Request,
+    service: LedCommunicationService = Depends(get_led_communication),
+) -> JSONResponse:
+    try:
+        body = await request.json()
+        if not isinstance(body, dict):
+            raise ValueError("request body must be an object")
+        return JSONResponse(await service.add_note(str(body.get("text", ""))))
+    except (TypeError, ValueError) as exc:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "invalid_communication_note", "message": str(exc)},
+        )
+
+
 @api_v1.post("/led-communication/command")
 async def api_led_communication_command(
     request: Request,
     service: LedCommunicationService = Depends(get_led_communication),
 ) -> JSONResponse:
-    """Send one table-defined 1008.0 command and return its matching ACK or timeout."""
+    """Send one table-defined command and return its 1008.2+ STATE/DIAG response."""
     try:
         body = await request.json()
         if not isinstance(body, dict):
             raise ValueError("request body must be an object")
         command_code = int(body.get("command_code"))
-        bit_time_ms = int(body.get("bit_time_ms", 50))
+        bit_time_ms = int(body.get("bit_time_ms", 25))
         return JSONResponse(
             await service.send_command(command_code, bit_time_ms=bit_time_ms)
         )
@@ -232,6 +249,29 @@ async def api_led_communication_command(
             status_code=409,
             content={"error": "monitor_command_busy", "message": str(exc)},
         )
+
+
+@api_v1.post("/led-communication/test-high")
+async def api_led_communication_test_high(
+    deck: DeckControlService = Depends(get_deck),
+) -> JSONResponse:
+    """Hold only the custom communication GPIO high for a fixed three-second measurement."""
+    try:
+        samples = await deck.hold_communication_high_for_measurement()
+    except RuntimeError as exc:
+        return JSONResponse(
+            status_code=409,
+            content={"error": "monitor_command_busy", "message": str(exc)},
+        )
+    started_ns, ended_ns = samples[0][0], samples[-1][0]
+    return JSONResponse(
+        {
+            "ok": True,
+            "duration_ms": round((ended_ns - started_ns) / 1_000_000),
+            "started_monotonic_ns": started_ns,
+            "ended_monotonic_ns": ended_ns,
+        }
+    )
 
 
 @api_v1.get("/recordings", response_model=RecordingLibraryOut)
