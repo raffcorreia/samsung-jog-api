@@ -40,7 +40,7 @@
 | [47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
 | [48](#phase-48-stabilization) | Stabilization | planned |
 | [50](#phase-50-security-authentication-and-presence-aware-locking) | Security, Authentication, and Presence-Aware Locking | planned |
-| [60](#phase-60-osd-navigation-model-and-monitor-control-emulator) | OSD Navigation Model and Monitor-Control Emulator | planned |
+| [60](#phase-60-osd-navigation-model-and-monitor-control-emulator) | OSD Navigation Model and Monitor-Control Emulator | deferred |
 
 Supporting sections:
 
@@ -1910,7 +1910,18 @@ Add a security foundation for the local kiosk and remote clients: user authentic
 
 ## Phase 60: OSD Navigation Model and Monitor-Control Emulator
 
-**Status:** planned. The firmware screen census provides strong rendering evidence, but the reachable navigation graph, focus transitions, guards, timeouts, and hardware-dependent behavior require a separate investigation before the deck can reliably emulate the monitor OSD.
+**Status:** deferred. The monitor reopens Menu at its last selected item rather than a deterministic initial focus. The deck therefore cannot know the current OSD focus precisely after startup, physical JOG use, missed events, or external interaction. A reliable implementation requires a new monitor-firmware protocol response or pushed message that reports the authoritative OSD screen and selected item, followed by another firmware release, hardware validation, and regression cycle. That cost is not currently justified, so the deck will live without OSD navigation emulation unless the feature is reprioritized.
+
+### Deferral decision
+
+- the existing custom STATE message reports layout, inputs, and connection presence, but not OSD screen/focus
+- assuming a fixed starting item is invalid because Menu remembers the last selected option
+- tracking only deck-generated JOG actions cannot recover from physical monitor input, application restart, missed/corrupt traffic, or any other out-of-band change
+- timeout/close establishes that the OSD is closed, but opening it again still does not reveal the remembered focus
+- implementing this correctly would require a firmware protocol extension, a new firmware build/version, response and unsolicited-message semantics, deck decoder/UI changes, and full live validation
+- an emulator that merely guesses would violate the project's rule that uncertain monitor state must not be presented as confirmed
+
+Retain the investigation and implementation plan below as future work, but do not begin it until authoritative OSD screen/focus reporting exists and the value of the feature justifies the firmware and validation effort.
 
 ### Goal
 

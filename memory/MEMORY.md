@@ -2,7 +2,7 @@
 
 - [Project Overview](project_overview.md) — CJ791 JOG emulator: Phases 24 and 25 complete; Phase 26 display cutover blocked on damaged touch hardware; Phases 27–31 retained but deferred; Phase 7 KiCad in progress
 - Phase 50 is planned for login/lock security, authorization, fingerprint-scanner preparation, and presence-plus-monitor-idle automatic locking.
-- Phase 60 is planned for OSD navigation investigation and a certainty-aware OSD emulator in the monitor-control widget, using the companion firmware census as rendering evidence rather than a presumed navigation map.
+- Phase 60 OSD navigation/emulation is deferred: Menu reopens at its remembered last selection, so authoritative focus requires a future firmware protocol extension and validation cycle.
 - [No cd feedback](feedback_no_cd.md) — Never use cd; pass paths directly to commands (e.g. `npm test --prefix frontend/`)
 
 **Deck UI (kiosk):** Phase 13 complete. Fixed widget geometry on **1280×800** — top bar `48px`, left JOG column `350px`, bottom log band `200px`. JOG and log regions do **not** resize each other when log text grows (scroll inside log). No portal/landing-page chrome; `pi-deck` naming lives in the status/version area, not duplicated as marketing chrome.

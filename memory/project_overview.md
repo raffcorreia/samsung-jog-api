@@ -12,7 +12,7 @@ Hardware + software project to build a Raspberry Pi 2B-based control deck for a 
 
 **Security:** Phase 50 is planned for application login/locking, authorization of sensitive widgets and actions, fingerprint-scanner preparation with fallback authentication, and evaluation of Shortwave/short-range presence sensing to lock after sustained absence plus monitor idle.
 
-**OSD emulator:** Phase 60 is planned to investigate the real OSD navigation graph using the companion firmware screen census plus safe live traces, then add a simulate/control/follow emulator to the fixed monitor-control widget with explicit certainty and resynchronization.
+**OSD emulator:** Phase 60 is deferred. Menu remembers and reopens at its last selected item, so the deck cannot know authoritative focus without a new firmware response/pushed message reporting OSD screen/focus. Retain the census/navigation plan, but do not implement it unless the firmware and validation cost is later justified.
 
 **Phase 13 UI state:** Full-screen deck shell is implemented and deployed (`0.1.0+r20`). The real JogPad remains the priority control and lives in the fixed left column. The clock uses `DSEG7 Classic` seven-segment font, enlarged and vertically centered without increasing the `48px` top bar. Settings cog is top-right. LED is an 8mm-style gray default indicator and should turn blue only for future blink/feedback events, not for steady backend `key_led_active`. Record control exists as a visual/logging stub in the upper-right of the JOG column. Calendar, notes, settings, and OSD popup are realistic stubs/placeholders for later phases.
 

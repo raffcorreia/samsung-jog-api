@@ -660,7 +660,7 @@ Expected early ownership model:
 
 The Calendar and Notes placeholders established in Phase 13 are removed from the main dashboard in Phase 25. The communication monitor remains architecturally separate from the ordinary semantic LED indicator and from the live log so high-rate raw edges cannot overwhelm either path.
 
-Phase 60 plans a separate OSD navigation model and emulator within the fixed monitor-control widget. Firmware census images and callback evidence are reference material, not proof of live reachability. The emulator must distinguish simulated, inferred, and monitor-confirmed state; out-of-band physical navigation or missing evidence forces an explicit unknown/resynchronization state.
+Phase 60 retains a deferred OSD navigation model and emulator concept. Firmware census images and callback evidence are reference material, not proof of live reachability. Because Menu reopens at its remembered last selection, the deck cannot establish authoritative focus from an OSD-closed baseline; implementation is deferred until monitor firmware can report current OSD screen/focus through a validated response or pushed message.
 
 ## HDMI and DDC transport design
 

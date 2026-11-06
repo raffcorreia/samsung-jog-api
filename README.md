@@ -44,7 +44,7 @@ Current state of the repository:
 - deferred: `Phase 27: Monitor Power-State Characterization` (the custom communication STATE model supersedes the planned LED-feedback characterization; remaining ON/IDLE/OFF/POWERED-OFF work is intentionally deferred)
 - deferred: `Phases 28–31` retain sequence cleanup, recording settings/editor, advanced productized features, and dashboard data-source planning for future reconsideration
 - planned: `Phase 50: Security, Authentication, and Presence-Aware Locking` covers login/lock flows, authorization for sensitive capabilities, fingerprint-scanner preparation, and Shortwave/short-range presence-triggered locking
-- planned: `Phase 60: OSD Navigation Model and Monitor-Control Emulator` will turn the firmware OSD census plus new live navigation evidence into a safe, certainty-aware OSD emulator inside the monitor-control widget
+- deferred: `Phase 60: OSD Navigation Model and Monitor-Control Emulator` is retained for future reconsideration, but accurate focus tracking requires a new firmware protocol response/pushed message and another firmware validation cycle because Menu reopens at its remembered last selection
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation
