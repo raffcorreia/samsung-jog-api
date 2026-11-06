@@ -30,8 +30,8 @@
 | [23](#phase-23-documentation-reorganization) | Documentation Reorganization | completed |
 | [24](#phase-24-ddc-capability-investigation) | DDC Capability Investigation | completed |
 | [25](#phase-25-bidirectional-custom-monitor-communication-and-control-ui) | Bidirectional Custom Monitor Communication and Control UI | completed |
-| [40](#phase-40-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
-| [41](#phase-41-led-feedback-characterization-and-monitor-state-model) | LED Feedback Characterization and Monitor State Model | planned |
+| [26](#phase-26-replacement-display-and-final-pi-5-host-cutover) | Replacement Display and Final Pi 5 Host Cutover | blocked |
+| [27](#phase-27-monitor-power-state-characterization) | Monitor Power-State Characterization | deferred |
 | [42](#phase-42-state-investigation-and-sequence-cleanup) | State Investigation and Sequence Cleanup | planned |
 | [43](#phase-43-deck-settings-block-editor-and-recording-visualisation) | Deck Settings, Block Editor, and Recording Visualisation | planned |
 | [44](#phase-44-productized-monitor-features) | Productized Monitor Features | planned |
@@ -958,7 +958,7 @@ Harden the Waveshare DSI display experience after Phase 18 bring-up by adding op
 
 ## Phase 20: Raspberry Pi 5 Rebuild and Display Performance Validation
 
-**Status:** completed. See [Phase 20 Execution Record](./phase-20-execution.md). Healthy-panel validation identified during this phase is tracked by Phase 40.
+**Status:** completed. See [Phase 20 Execution Record](./phase-20-execution.md). Healthy-panel validation identified during this phase is tracked by Phase 26.
 
 ### Goal
 
@@ -1413,9 +1413,9 @@ The phase began as a receiver-first characterization story and expanded after th
 
 All original exit criteria were met or superseded by stronger delivered behavior. In addition to the receiver/capture goals, live hardware confirmed deck commands and requests, correlated monitor responses, and pushed/unsolicited messages. The expanded deck screen, state-aware quick controls, corruption recovery, focused backend/frontend suites, production build, deployment `0.1.15+r117`, and post-deployment host-health snapshot are recorded in the [Phase 25 Execution Record](./phase-25-execution.md).
 
-## Phase 40: Replacement Display and Final Pi 5 Host Cutover
+## Phase 26: Replacement Display and Final Pi 5 Host Cutover
 
-**Status:** blocked. The replacement display produces a working image, but its touch cable is physically damaged. See [Phase 40 Execution Record](./phase-40-execution.md).
+**Status:** blocked. Work has started, but the replacement display's physically damaged touch cable prevents completion. See [Phase 26 Execution Record](./phase-26-execution.md).
 
 ### Goal
 
@@ -1472,7 +1472,7 @@ Run the validation in this order so regressions are attributable:
 
 - final Raspberry Pi 5 8GB host running the deployed control deck
 - replacement DSI panel installed and validated
-- Phase 40 execution record with final host identity, display validation, DDC-only HDMI verification, and host health evidence
+- Phase 26 execution record with final host identity, display validation, DDC-only HDMI verification, and host health evidence
 - updated final-host/display notes in the relevant runbooks or hardware docs
 - explicit decision on the display brightness cap and whether prior panel-quality concerns are resolved
 
@@ -1487,17 +1487,16 @@ Run the validation in this order so regressions are attributable:
 - Phase 20's transferred display-quality validation items are closed with new evidence from the healthy panel or explicitly carried forward
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase's execution record
 
-## Phase 41: LED Feedback Characterization and Monitor State Model
+## Phase 27: Monitor Power-State Characterization
+
+**Status:** deferred. Phase 25's custom communication STATE messages supersede the planned LED characterization for layout, input, and connection status. The remaining power-state work is useful but is not currently required.
 
 ### Goal
 
-Build on Phase 25's validated bidirectional communication and STATE model to characterize the remaining monitor power states from the observation bus and update the UI to reflect them. Phase 25 already owns layout/input/connection status and its event-driven recovery policy; this phase must not duplicate that work.
+If needed later, build on Phase 25's validated bidirectional communication and STATE model to characterize the remaining monitor power states and update the UI to reflect them. Phase 25 already owns layout/input/connection status and its event-driven recovery policy; this phase must not duplicate that work or re-characterize LED signaling already displaced by custom firmware communication.
 
 ### Scope
 
-- input-change feedback
-- idle behavior
-- OSD boundary cues
 - monitor state detection: **ON / IDLE / OFF / POWERED OFF**
 - UI representation of all four monitor states
 
@@ -1530,26 +1529,19 @@ Send a known JOG command that reliably produces a `KEY_LED` blink. If the LED re
 
 ### Tasks
 
-- use recording and replay to correlate `KEY_LED` behavior with repeated monitor actions
-- repeat controlled monitor sequences while observing `KEY_LED`
-- record blink patterns and timing across all four states
-- identify any repeatable LED cues that can be used to gate continuation
 - implement passive POWERED OFF detection from simultaneous + persistent bus hold
-- implement active probe (JOG → LED response) for ON vs OFF/IDLE discrimination
-- determine where LED feedback is useful and where it is too ambiguous
-- add verification coverage for LED event detection and timing assumptions
+- determine whether custom STATE, DDC, and passive bus evidence are sufficient for ON vs OFF/IDLE discrimination before considering an active probe
+- add verification coverage for the selected power-state evidence and timing assumptions
 - update the UI to surface monitor state (ON / IDLE / OFF / POWERED OFF) — IDLE is already partially represented via the live LED indicator
 
 ### Deliverables
 
-- validated `LED` behavior model across all four monitor states
 - software monitor-state detector driven from the existing observation bus
 - UI updated to represent ON / IDLE / OFF / POWERED OFF
-- guidance on where `wait_led` events are meaningful
+- documented evidence hierarchy across custom STATE, DDC, and passive observation signals
 
 ### Exit criteria
 
-- the project knows when LED feedback can be trusted as part of sequence execution
 - monitor state is reliably detected and surfaced in the UI
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
 
