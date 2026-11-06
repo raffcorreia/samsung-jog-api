@@ -40,6 +40,7 @@
 | [47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
 | [48](#phase-48-stabilization) | Stabilization | planned |
 | [50](#phase-50-security-authentication-and-presence-aware-locking) | Security, Authentication, and Presence-Aware Locking | planned |
+| [60](#phase-60-osd-navigation-model-and-monitor-control-emulator) | OSD Navigation Model and Monitor-Control Emulator | planned |
 
 Supporting sections:
 
@@ -1906,6 +1907,108 @@ Add a security foundation for the local kiosk and remote clients: user authentic
 - the fingerprint path has a validated architecture and fallback even if scanner hardware is not installed in the first delivery
 - presence sensing never authenticates a user and only triggers lock after sustained absence plus validated monitor idle
 - false-lock, failure, reconnect, and monitor wake/idle scenarios are tested on the deck hardware
+
+## Phase 60: OSD Navigation Model and Monitor-Control Emulator
+
+**Status:** planned. The firmware screen census provides strong rendering evidence, but the reachable navigation graph, focus transitions, guards, timeouts, and hardware-dependent behavior require a separate investigation before the deck can reliably emulate the monitor OSD.
+
+### Goal
+
+Improve the monitor-control widget with a touch-friendly OSD navigation emulator that represents the monitor's real menu hierarchy, focus, values, modal states, and JOG transitions without pretending that inferred state is confirmed monitor state.
+
+The emulator should help users understand and control OSD-only features from the deck. It may drive the real monitor through safe JOG actions, simulate navigation without transmitting, or follow actions already sent by the deck, but each mode and its certainty must be visually explicit.
+
+### Source evidence
+
+The companion firmware-analysis checkout contains the current source material at `firmware_analysis/osd_screen_census/README.md` (local checkout currently under `samsung/firmware_analysis/osd_screen_census/`). Its deterministic CGAB-1009.0 census:
+
+- executes reviewed constructors and all populated native callback-table entries inside the bounded software emulator
+- retains machine-readable cells, writes, memory/visited-code evidence, focus fragments, failures, and rendered PNGs
+- currently reports 35 gallery-producing executions and 20 deduplicated complete screen layouts
+- includes normal Picture, PIP/PBP, OnScreen Display, System, Information, volume/brightness, and self-diagnosis layouts as well as service, factory-calibration, software-update, and vendor-information screens
+- intentionally does not claim that a rendered screen is reachable, safe, semantically understood, or navigable on live hardware
+
+Phase 60 must preserve that evidence boundary. The census is a rendering/layout source, not a finished navigation specification.
+
+### Investigation scope
+
+**Offline firmware analysis**
+
+- identify the native input dispatcher, screen stack/current-screen state, focus/index variables, return targets, callback tables, value setters, disabled-item guards, modal handlers, and OSD close/timeout paths
+- correlate constructor screens, callback fragments, and alternate focus states into candidate screen nodes without assigning semantics unsupported by evidence
+- recover directional (`UP`, `DOWN`, `LEFT`, `RIGHT`), `ENTER`, return, and long-hold transition behavior where mechanically demonstrable
+- identify dynamic branches governed by active input, layout mode, connection mask, firmware version, feature flags, or monitor state
+- distinguish a complete screen redraw from focus-only, value-only, checkmark, slider, popup, and multi-window deltas
+- produce a machine-readable candidate navigation graph with provenance back to firmware addresses, profiles, census screen IDs, and confidence/evidence
+
+**Safe live-monitor validation**
+
+- establish a repeatable OSD-closed baseline and record the exact monitor firmware, source/layout state, connected inputs, and relevant settings for every navigation trace
+- capture real JOG action sequences, visible screen/focus changes, timeouts, return behavior, wrap/clamp behavior, disabled entries, and dynamic value changes
+- compare live behavior with the offline graph and record disagreements rather than forcing the emulator to match an assumption
+- test physical-monitor JOG input separately from deck-generated JOG so out-of-band navigation and loss of synchronization are understood
+- investigate whether custom communication can safely publish screen/focus/value state or an OSD generation counter; reserve a protocol extension only if it materially improves synchronization
+- do not navigate into or execute service, factory-calibration, software-update, vendor-information, reset, or other potentially destructive paths during ordinary validation; any such investigation requires a separately approved safety procedure
+
+### Navigation model
+
+- define a versioned declarative model for screen nodes, focusable items, displayed values, transitions, guards, actions, modal overlays, parent/return relationships, and timeout behavior
+- assign stable project-owned node/item identifiers and maintain a crosswalk to census `OSD-xxxx` identifiers instead of using gallery sequence numbers as application semantics
+- represent source/layout/firmware-dependent variants explicitly rather than multiplying nearly identical screens without explanation
+- attach provenance and confidence to every transition: firmware-proven, live-confirmed, inferred, or unknown
+- preserve unknown transitions and unsupported values as unknown; never silently choose a plausible next screen
+- keep dangerous or research-only screens outside the normal user navigation graph
+
+### Monitor-control widget
+
+- add an OSD-emulation surface inside the fixed-size monitor-control widget without allowing it to resize, overlap, or push the JOG and quick controls out of their reserved regions
+- reproduce the useful visual structure of normal OSD screens using project-native HTML/CSS/SVG or licensed/generated assets rather than embedding firmware screenshots as the interactive UI
+- show the current emulated screen, focused item, value, breadcrumb/return path, operating mode, and certainty/synchronization state
+- support explicit modes such as `Simulate`, `Control monitor`, and `Follow deck actions`; never transmit JOG commands from simulation-only mode
+- provide touch targets that map to monitor JOG directions and Enter while preserving access to the existing physical-style JOG control
+- update the emulator from deck-generated JOG actions, direct custom commands, validated STATE messages, OSD timeout rules, and any future OSD-specific pushed messages
+- mark the model `Unknown / resync required` after physical monitor interaction, missed/corrupt evidence, application restart without a known baseline, unexpected STATE changes, or a transition absent from the validated graph
+- offer a safe resynchronization path, normally close/wait for OSD timeout and return to a documented baseline; do not issue periodic probing that causes visible monitor feedback
+- keep service, calibration, firmware-update, vendor, and destructive screens hidden from the ordinary control surface
+
+### Data and API work
+
+- choose where the versioned navigation model lives and how firmware-specific variants are selected
+- expose emulator state, mode, certainty, current node/focus/value, last transition, and resync requirement through typed backend/frontend interfaces
+- serialize only project-owned model data; do not copy firmware binaries or unreviewed generated census artifacts into this repository
+- record emulator transitions and model mismatches in bounded diagnostic history without flooding the normal live log
+- define import/update tooling that can consume reviewed census/navigation evidence from the companion repository while producing a reviewable diff
+
+### Tests
+
+- unit-test graph validation, unreachable/dangling nodes, transition guards, focus movement, wrap/clamp behavior, value editing, modal return, and timeout closure
+- replay captured JOG traces against the model and prove the same screen/focus sequence is produced
+- test source/layout/connection variants and disabled-item behavior
+- test simulation mode produces no hardware/API side effects
+- test monitor-control mode sends exactly the expected JOG actions and stops on rejection, uncertainty, timeout, or lost synchronization
+- test physical/out-of-band interaction, corrupt/missing status, restart, and unexpected transitions force an explicit unknown/resync state
+- add visual regression coverage for normal OSD layouts at the fixed deck geometry and responsive surrounding page sizes
+- validate the final model and widget on the live monitor without entering excluded destructive/research screens
+
+### Deliverables
+
+- reviewed OSD navigation investigation with firmware and live-hardware evidence
+- versioned, provenance-bearing navigation graph for supported normal OSD screens
+- census-to-project screen/item crosswalk and documented exclusions
+- OSD navigation emulator integrated into the monitor-control widget
+- simulate/control/follow modes with explicit certainty and safe resynchronization
+- typed API/state integration, diagnostic mismatch history, automated tests, and operator documentation
+- documented backlog of unknown, firmware-dependent, dangerous, or unvalidated navigation paths
+
+### Exit criteria
+
+- every supported emulator transition is backed by firmware evidence, live validation, or an explicit visible inference label
+- normal Picture, PIP/PBP, OnScreen Display, System, Information, and common value/popup workflows can be navigated from a documented baseline
+- simulated navigation never transmits and monitor-control navigation sends only the validated JOG sequence for the selected transition
+- physical/out-of-band navigation and missing/corrupt evidence cannot leave the UI claiming a false confirmed OSD position
+- the emulator can enter an explicit unknown state and recover through a tested, non-destructive resynchronization workflow
+- excluded service, factory, update, vendor, reset, and other dangerous/research screens cannot be reached from the ordinary deck UI
+- the fixed monitor-control widget, JOG, quick controls, communication panel, and responsive page remain usable without overlap at the deck target
 
 ## Later Extensions
 
