@@ -43,6 +43,7 @@ Current state of the repository:
 - blocked: `Phase 26: Replacement Display and Final Pi 5 Host Cutover` — [execution record](docs/implementation/phase-26-execution.md) (work has started; replacement panel image works, but its touch cable is physically damaged, so touch validation awaits repair or replacement)
 - deferred: `Phase 27: Monitor Power-State Characterization` (the custom communication STATE model supersedes the planned LED-feedback characterization; remaining ON/IDLE/OFF/POWERED-OFF work is intentionally deferred)
 - deferred: `Phases 28–31` retain sequence cleanup, recording settings/editor, advanced productized features, and dashboard data-source planning for future reconsideration
+- planned: `Phase 50: Security, Authentication, and Presence-Aware Locking` covers login/lock flows, authorization for sensitive capabilities, fingerprint-scanner preparation, and Shortwave/short-range presence-triggered locking
 - in parallel: `Phase 7: Integrated Controller Board Design` (KiCad / layout in progress)
 - repository now includes Phase 1 runbooks and host-preparation scripts
 - repository now includes a Phase 2 execution record for hardware validation

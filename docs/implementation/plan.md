@@ -39,6 +39,7 @@
 | [46](#phase-46-dashboard-widgets) | Dashboard Widgets | planned |
 | [47](#phase-47-custom-hardware-installation-ddc-migration-and-configuration-revert) | Custom Hardware Installation, DDC Migration, and Configuration Revert | planned |
 | [48](#phase-48-stabilization) | Stabilization | planned |
+| [50](#phase-50-security-authentication-and-presence-aware-locking) | Security, Authentication, and Presence-Aware Locking | planned |
 
 Supporting sections:
 
@@ -1827,6 +1828,84 @@ Harden the system for regular use.
 
 - the system is stable enough for regular daily use
 - satisfy the [Host health gate](#host-health-gate-feature-phases-1033) in this phase’s execution record
+
+## Phase 50: Security, Authentication, and Presence-Aware Locking
+
+**Status:** planned. Security becomes necessary as future widgets and deck capabilities expose private information or sensitive actions.
+
+### Goal
+
+Add a security foundation for the local kiosk and remote clients: user authentication, a touch-friendly login and lock screen, authorization for sensitive widgets and actions, and a hardware path for future fingerprint and presence detection.
+
+### Security model and boundaries
+
+- define a threat model covering casual local access, unattended-deck access, LAN/API access, stolen session credentials, and physical access to the Raspberry Pi
+- identify which existing and planned widgets/actions are public while locked, authenticated-user only, or administrative
+- preserve a useful locked display without exposing private widget content, recordings, settings, logs, or sensitive monitor/system actions
+- keep SSH administration under public-key authentication and separate from application login
+- reconcile application authentication with the current LightDM autologin/kiosk boot path: the OS may still start the kiosk automatically, but the application must remain locked until a valid application session exists
+- never make a biometric the only recovery mechanism; retain a secure PIN/password or administrative recovery path
+
+### Scope
+
+- touch-friendly login, lock, logout, failed-attempt, and session-expiry flows
+- local application identity, credential enrollment, secure credential storage, and session management
+- authorization checks in both the UI and backend API; hiding a control in the browser is not sufficient protection
+- optional role/capability model if different users or widgets need different permissions
+- remote-client authentication and protection of WebSocket/REST operations that currently assume a trusted LAN
+- audit events for login, logout, lock, failed authentication, enrollment changes, and sensitive actions without logging secrets or biometric material
+- fingerprint-reader feasibility and integration design
+- Shortwave/short-range presence-sensor evaluation for unattended-device detection
+- presence-aware automatic locking when the user leaves and the monitor is idle
+
+### Tasks
+
+**Authentication and authorization**
+
+- inventory present and planned sensitive capabilities, including private dashboard widgets, recordings/macros, settings, system power, deployment/administration surfaces, and future account-backed services
+- choose the local identity and session model, password/PIN hashing strategy, secure cookie/token handling, timeout policy, lockout/rate limiting, and credential recovery procedure
+- implement backend authentication middleware and authorization at every protected REST and WebSocket operation
+- implement the login and lock screens with touch-first input, clear locked/unlocked state, manual lock, logout, idle/session timeout, and safe restart behavior
+- ensure the application starts locked after boot unless an explicitly documented trusted-use policy says otherwise
+- redact or suppress sensitive widget data while locked and prevent protected commands from being invoked through direct API calls
+- add security-focused tests for unauthorized access, expired sessions, reconnects, brute-force throttling, logout, restart, and protected WebSocket events
+
+**Fingerprint scanner preparation**
+
+- evaluate fingerprint readers with Linux/Raspberry Pi support, maintainable drivers, suitable USB/UART/I2C integration, enclosure compatibility, and acceptable matching/enrollment behavior
+- decide whether matching and template storage occur inside the sensor, through an OS biometric service, or in application-controlled infrastructure
+- document template protection, enrollment/removal, multiple-user support, sensor failure behavior, spoofing/liveness limitations, and privacy implications
+- design the authentication provider interface so a fingerprint reader can be added without making the login screen or authorization layer device-specific
+- require PIN/password fallback and administrative recovery when the scanner is unavailable or a fingerprint cannot be matched
+
+**Presence-aware locking**
+
+- evaluate an appropriate Shortwave/short-range presence sensor, including sensing technology, range, field of view, mounting, GPIO/USB interface, privacy, power use, false-presence and false-absence behavior, and interference near the display/monitor
+- distinguish presence from interaction: sensor evidence may extend an unlocked session, but must not authenticate a user by itself
+- combine sustained user absence with validated monitor-idle state before automatically locking the deck
+- use configurable dwell and debounce windows so brief movement loss, monitor transitions, or sensor noise do not immediately lock the device
+- define conservative behavior for unavailable, disconnected, or contradictory sensor/monitor-state evidence
+- record presence and auto-lock state transitions without storing raw tracking data
+- bench-test seated use, walking away, another person passing nearby, an empty room, monitor idle/wake transitions, and sensor failure/reconnect
+
+### Deliverables
+
+- documented threat model and protected-capability matrix
+- authenticated backend/API and touch-friendly login/lock experience
+- session, timeout, recovery, audit, and authorization behavior with test coverage
+- fingerprint-reader evaluation and device-independent integration boundary
+- Shortwave/short-range presence-sensor evaluation with mounting and reliability evidence
+- configurable presence-plus-monitor-idle auto-lock policy
+- security operations/recovery documentation
+
+### Exit criteria
+
+- protected widgets, data, commands, REST endpoints, and WebSocket operations cannot be used without an authorized session
+- boot, logout, manual lock, session expiry, and restart produce a predictable locked state without exposing sensitive data
+- credential storage, recovery, rate limiting, and audit behavior are documented and tested
+- the fingerprint path has a validated architecture and fallback even if scanner hardware is not installed in the first delivery
+- presence sensing never authenticates a user and only triggers lock after sustained absence plus validated monitor idle
+- false-lock, failure, reconnect, and monitor wake/idle scenarios are tested on the deck hardware
 
 ## Later Extensions
 

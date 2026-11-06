@@ -562,7 +562,7 @@ Initial settings should be simple toggles or discrete choices such as:
 - default operating mode preference
 - widget visibility
 
-Future authentication or entitlements may later gate parts of the same UI, but that is not part of the current design.
+Future authentication and authorization may gate parts of the same UI. That work is tracked by Phase 50, including login/lock flows, fingerprint-scanner preparation, and presence-aware locking; it is not part of the current widget design.
 
 ## Hardware design
 
