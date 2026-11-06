@@ -4,6 +4,25 @@ This note matches the KiCad schematic and names every active component explicitl
 
 [Hardware Reference](README.md) · [Raspberry Pi 5 GPIO schema](pi5-gpio-schema.md) · [Project README](../../README.md)
 
+## Signal Naming
+
+The monitor harness names are canonical throughout this document. Use them without
+additional monitor prefixes or bus suffixes:
+
+| Signal | J1 pin | Role | Pi-side interface |
+| --- | --- | --- | --- |
+| `KEY_ADC1` | `3` | Center/Enter resistor bus and client-to-monitor custom TX | conditioned sense on `GPIO27`; native Center drive on `GPIO5`; custom TX on `GPIO12` |
+| `KEY_ADC2` | `2` | Up/Down/Left/Right resistor-ladder bus | ADS1115 observation plus drive transistors `Q4-Q7` |
+| `KEY_LED` | `4` | Monitor LED state and monitor-to-client custom RX | conditioned sense on `GPIO22` |
+
+Custom communication uses two different physical signals: `KEY_ADC1` for
+client-to-monitor transmission and `KEY_LED` for monitor-to-client reception.
+`KEY_ADC2` remains the native directional ladder and is not part of the custom
+communication transport.
+
+The dedicated transmitter on `GPIO12` is described as “custom TX on `KEY_ADC1`.” It
+drives `KEY_ADC1` through `Q10`; there is no separate Center communication bus.
+
 ## Interfaces
 
 ### Monitor Harness `J1`
@@ -11,9 +30,9 @@ This note matches the KiCad schematic and names every active component explicitl
 | Pin | Net |
 | --- | --- |
 | `1` | `GND` |
-| `2` | `MON_KEY_ADC2` |
-| `3` | `MON_KEY_ADC1` |
-| `4` | `MON_KEY_LED` |
+| `2` | `KEY_ADC2` |
+| `3` | `KEY_ADC1` |
+| `4` | `KEY_LED` |
 
 ### Raspberry Pi Direct GPIO Wiring
 
@@ -26,10 +45,10 @@ There is no `J2` or `J3` header in this phase.
 | `I2C SDA` | `GPIO2`, physical pin `3` |
 | `I2C SCL` | `GPIO3`, physical pin `5` |
 | `ADS1115 ALERT/RDY` | `GPIO17`, physical pin `11` |
-| `KEY_ADC1` input | `GPIO27`, physical pin `13` |
-| `KEY_LED` input | `GPIO22`, physical pin `15` |
+| `KEY_ADC1` conditioned sense | `GPIO27`, physical pin `13` |
+| `KEY_LED` conditioned sense / custom RX | `GPIO22`, physical pin `15` |
 | `CENTER` drive | `GPIO5`, physical pin `29` |
-| `CENTER_BUS_TX` custom communication | `GPIO12`, physical pin `32` |
+| custom TX on `KEY_ADC1` | `GPIO12`, physical pin `32` |
 | `UP` drive | `GPIO6`, physical pin `31` |
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
@@ -44,13 +63,13 @@ There is no `J2` or `J3` header in this phase.
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `U1` | `ADS1115` | `AIN0 -> R20`, `SDA -> GPIO2`, `SCL -> GPIO3`, `ALERT/RDY -> GPIO17`, `VDD -> 3.3V`, `GND -> GND` |
-| `R20` | `100 kOhm` | `MON_KEY_ADC2 -> ADS1115 AIN0` series isolation resistor |
+| `R20` | `100 kOhm` | `KEY_ADC2 -> ADS1115 AIN0` series isolation resistor |
 | `C1` | `100 nF` | `3.3V` to `GND` near `U1` |
 | `C2` | `1 uF` | `3.3V` to `GND` near `U1` |
 
 `AIN1`, `AIN2`, and `AIN3` are unused in this phase. `ADDR` is strapped to `GND`.
 
-`R20` was added after display bring-up exposed a power-sequencing defect: with the Pi off, the unpowered `ADS1115` input could load `MON_KEY_ADC2` and pull the monitor line near a valid key state. The `100 kOhm` series resistor prevents the unpowered ADC from disturbing the monitor. Bench check: with the Pi off, and even with Pi power disconnected, the monitor no longer sees a false `KEY_ADC2` action.
+`R20` was added after display bring-up exposed a power-sequencing defect: with the Pi off, the unpowered `ADS1115` input could load `KEY_ADC2` and pull the monitor line near a valid key state. The `100 kOhm` series resistor prevents the unpowered ADC from disturbing the monitor. Bench check: with the Pi off, and even with Pi power disconnected, the monitor no longer sees a false `KEY_ADC2` action.
 
 ## Observation Channels
 
@@ -58,7 +77,7 @@ There is no `J2` or `J3` header in this phase.
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `R1` | `100 kOhm` | `MON_KEY_ADC1 -> Q1 base` |
+| `R1` | `100 kOhm` | `KEY_ADC1 -> Q1 base` |
 | `Q1` | `2N3904` | base from `R1`, collector (`C`) to `GPIO27`, emitter (`E`) to `GND` |
 | `R2` | `10 kOhm` | `3.3V -> GPIO27` pull-up |
 
@@ -66,7 +85,7 @@ There is no `J2` or `J3` header in this phase.
 
 | Ref | Value | Connection |
 | --- | --- | --- |
-| `R3` | `100 kOhm` | `MON_KEY_LED -> Q2 base` |
+| `R3` | `100 kOhm` | `KEY_LED -> Q2 base` |
 | `Q2` | `2N3904` | base from `R3`, collector (`C`) to `GPIO22`, emitter (`E`) to `GND` |
 | `R4` | `10 kOhm` | `3.3V -> GPIO22` pull-up |
 
@@ -83,21 +102,21 @@ Each drive channel uses:
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `R5` | `4.7 kOhm` | `GPIO5 -> Q3 base` |
-| `R15` | `100 kOhm` | `Q3 base -> GND` |
+| `R15` | `100 kOhm` | `Q3 base -> GND`; default-off during boot/reset |
 | `Q3` | `2N3904` | emitter `-> GND`, collector `-> R10` |
-| `R10` | `22 Ohm` | `MON_KEY_ADC1 -> Q3 collector`; native Center asserted by `GPIO5` |
+| `R10` | `22 Ohm` | `KEY_ADC1 -> Q3 collector`; native Center asserted by `GPIO5` |
 
-### Center-bus custom communication TX
+### Custom TX on `KEY_ADC1`
 
 | Ref | Value | Connection |
 | --- | --- | --- |
 | `R26` | `4.7 kOhm` | `GPIO12` (physical pin 32) `-> Q10 base` |
 | `R27` | `100 kOhm` | `Q10 base -> GND`; default-off during boot/reset |
 | `Q10` | `2N3904` | emitter `-> GND`, collector `-> R28` |
-| `R28` | `10 kOhm` | `MON_KEY_ADC1 -> Q10 collector`; custom NRZ bit asserted by `GPIO12` |
+| `R28` | `10 kOhm` | `KEY_ADC1 -> Q10 collector`; custom NRZ bit asserted by `GPIO12` |
 
 The native Center and custom transmitter are two independent low-side branches on the
-same `MON_KEY_ADC1` bus. `GPIO5` selects approximately `22 Ohm` for a native Center press;
+same `KEY_ADC1` bus. `GPIO5` selects approximately `22 Ohm` for a native Center press;
 `GPIO12` selects `10 kOhm` for a custom bit 1. Both transistors off is the released/bit-0
 state. Software arbitration must never assert both branches simultaneously.
 
@@ -108,7 +127,7 @@ state. Software arbitration must never assert both branches simultaneously.
 | `R6` | `4.7 kOhm` | `GPIO6 -> Q4 base` |
 | `R16` | `100 kOhm` | `Q4 base -> GND` |
 | `Q4` | `2N3904` | emitter `-> GND`, collector `-> R11` |
-| `R11` | `22 Ohm` | `MON_KEY_ADC2 -> Q4 collector` |
+| `R11` | `22 Ohm` | `KEY_ADC2 -> Q4 collector` |
 
 ### Down
 
@@ -117,7 +136,7 @@ state. Software arbitration must never assert both branches simultaneously.
 | `R7` | `4.7 kOhm` | `GPIO13 -> Q5 base` |
 | `R17` | `100 kOhm` | `Q5 base -> GND` |
 | `Q5` | `2N3904` | emitter `-> GND`, collector `-> R12` |
-| `R12` | `3.3 kOhm` | `MON_KEY_ADC2 -> Q5 collector` |
+| `R12` | `3.3 kOhm` | `KEY_ADC2 -> Q5 collector` |
 
 ### Left
 
@@ -126,7 +145,7 @@ state. Software arbitration must never assert both branches simultaneously.
 | `R8` | `4.7 kOhm` | `GPIO19 -> Q6 base` |
 | `R18` | `100 kOhm` | `Q6 base -> GND` |
 | `Q6` | `2N3904` | emitter `-> GND`, collector `-> R13` |
-| `R13` | `30 kOhm` | `MON_KEY_ADC2 -> Q6 collector` |
+| `R13` | `30 kOhm` | `KEY_ADC2 -> Q6 collector` |
 
 ### Right
 
@@ -135,7 +154,7 @@ state. Software arbitration must never assert both branches simultaneously.
 | `R9` | `4.7 kOhm` | `GPIO26 -> Q7 base` |
 | `R19` | `100 kOhm` | `Q7 base -> GND` |
 | `Q7` | `2N3904` | emitter `-> GND`, collector `-> R14` |
-| `R14` | `10 kOhm` | `MON_KEY_ADC2 -> Q7 collector` |
+| `R14` | `10 kOhm` | `KEY_ADC2 -> Q7 collector` |
 
 ## Display Power Control Block (Phase 21)
 

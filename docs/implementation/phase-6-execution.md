@@ -110,7 +110,7 @@ The Phase 6 protoboard schematic is split into three practical blocks:
 
 ### Observation base resistors — increased from `10 kOhm` to `100 kOhm`
 
-The initial protoboard used `10 kOhm` resistors for `R1` (`MON_KEY_ADC1 → Q1 base`) and `R3` (`MON_KEY_LED → Q2 base`). During bench testing the `10 kOhm` value on `R1` caused the monitor OSD to misbehave whenever the `KEY1` action was active. Both `R1` and `R3` were increased to `100 kOhm` to keep the observation path consistently high-impedance across all monitored lines. The schematic and BOM already reflect these corrected values.
+The initial protoboard used `10 kOhm` resistors for `R1` (`KEY_ADC1 → Q1 base`) and `R3` (`KEY_LED → Q2 base`). During bench testing the `10 kOhm` value on `R1` caused the monitor OSD to misbehave whenever the `KEY1` action was active. Both `R1` and `R3` were increased to `100 kOhm` to keep the observation path consistently high-impedance across all monitored lines. The schematic and BOM already reflect these corrected values.
 
 The root cause is the transistor-based observation topology: the base resistor directly sets how much current is drawn from the monitor bus while the key line is active. A `10 kOhm` base resistor presents enough loading to disturb the resistor-ladder decoding on `KEY_ADC1`.
 
@@ -132,9 +132,9 @@ Note: this sensitivity is specific to the Phase 6 transistor-based observation p
 
 ### `KEY_ADC2` ADC isolation — added `100 kOhm` series resistor
 
-During Phase 18 display/power bring-up, a Phase 6 power-sequencing defect was found: when the Raspberry Pi was powered off, the `ADS1115` also lost power, but `MON_KEY_ADC2` remained connected directly to `ADS1115 AIN0`. The unpowered ADC input loaded/clamped the monitor key line to about `1.3V`, which is close to the measured `KEY_ADC2 down` state and caused the monitor to see a false key action.
+During Phase 18 display/power bring-up, a Phase 6 power-sequencing defect was found: when the Raspberry Pi was powered off, the `ADS1115` also lost power, but `KEY_ADC2` remained connected directly to `ADS1115 AIN0`. The unpowered ADC input loaded/clamped the monitor key line to about `1.3V`, which is close to the measured `KEY_ADC2 down` state and caused the monitor to see a false key action.
 
-The protoboard was updated with a `100 kOhm` series isolation resistor (`R20`) between `MON_KEY_ADC2` and `ADS1115 AIN0`.
+The protoboard was updated with a `100 kOhm` series isolation resistor (`R20`) between `KEY_ADC2` and `ADS1115 AIN0`.
 
 Validation result:
 

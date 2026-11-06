@@ -12,12 +12,15 @@ The Raspberry Pi 5 keeps the same 40-pin GPIO header pinout used by the earlier 
 
 No monitor-side wiring changes are planned for Phase 20.
 
+The canonical harness names are `KEY_ADC1`, `KEY_ADC2`, and `KEY_LED`; no alternate
+monitor-prefixed aliases are used.
+
 | Pin | Net |
 | --- | --- |
 | `1` | `GND` |
-| `2` | `MON_KEY_ADC2` |
-| `3` | `MON_KEY_ADC1` |
-| `4` | `MON_KEY_LED` |
+| `2` | `KEY_ADC2` |
+| `3` | `KEY_ADC1` |
+| `4` | `KEY_LED` |
 
 ### Raspberry Pi 5 Direct GPIO Wiring
 
@@ -30,11 +33,11 @@ Use BCM numbering in software and the physical header pins below for wiring.
 | `I2C SDA` | `GPIO2`, physical pin `3` |
 | `I2C SCL` | `GPIO3`, physical pin `5` |
 | `ADS1115 ALERT/RDY` | `GPIO17`, physical pin `11` |
-| `KEY_ADC1` input | `GPIO27`, physical pin `13` |
-| `KEY_LED` input | `GPIO22`, physical pin `15` |
+| `KEY_ADC1` conditioned sense | `GPIO27`, physical pin `13` |
+| `KEY_LED` conditioned sense / custom RX | `GPIO22`, physical pin `15` |
 | `display_power_en` output (Phase 21) | `GPIO24`, physical pin `18` |
 | `CENTER` drive | `GPIO5`, physical pin `29` |
-| `CENTER_BUS_TX` custom communication | `GPIO12`, physical pin `32` |
+| custom TX on `KEY_ADC1` | `GPIO12`, physical pin `32` |
 | `UP` drive | `GPIO6`, physical pin `31` |
 | `DOWN` drive | `GPIO13`, physical pin `33` |
 | `LEFT` drive | `GPIO19`, physical pin `35` |
@@ -54,8 +57,8 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 | `7` | `GPIO4` | display toggle button SW1 (Phase 22) | `8` | `GPIO14` | unused |
 | `9` | `GND` | common ground | `10` | `GPIO15` | unused |
 | `11` | `GPIO17` | `ADS1115 ALERT/RDY` | `12` | `GPIO18` | unused |
-| `13` | `GPIO27` | `KEY_ADC1` input | `14` | `GND` | common ground |
-| `15` | `GPIO22` | `KEY_LED` input | `16` | `GPIO23` | unused |
+| `13` | `GPIO27` | `KEY_ADC1` conditioned sense | `14` | `GND` | common ground |
+| `15` | `GPIO22` | `KEY_LED` conditioned sense / custom RX | `16` | `GPIO23` | unused |
 | `17` | `3.3V` | optional logic / ADC rail | `18` | `GPIO24` | `display_power_en` (Phase 21) |
 | `19` | `GPIO10` | WS2812B LED SPI0 MOSI direct (level shifter removed — caused corruption) | `20` | `GND` | common ground |
 | `21` | `GPIO9` | unused | `22` | `GPIO25` | unused |
@@ -63,7 +66,7 @@ Use the board silkscreen, square pad, or a known-good Raspberry Pi 40-pin refere
 | `25` | `GND` | common ground | `26` | `GPIO7` | unused |
 | `27` | `GPIO0 / ID_SD` | leave unused | `28` | `GPIO1 / ID_SC` | leave unused |
 | `29` | `GPIO5` | `CENTER` drive (switched 22 Ohm on `KEY_ADC1`) | `30` | `GND` | common ground |
-| `31` | `GPIO6` | `UP` drive | `32` | `GPIO12` | `CENTER_BUS_TX` (switched 10 kOhm on `KEY_ADC1`) |
+| `31` | `GPIO6` | `UP` drive | `32` | `GPIO12` | custom TX (switched 10 kOhm on `KEY_ADC1`) |
 | `33` | `GPIO13` | `DOWN` drive | `34` | `GND` | common ground |
 | `35` | `GPIO19` | `LEFT` drive | `36` | `GPIO16` | unused |
 | `37` | `GPIO26` | `RIGHT` drive | `38` | `GPIO20` | unused |

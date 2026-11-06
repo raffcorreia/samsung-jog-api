@@ -122,7 +122,7 @@ All 17 signals mapped to BCM GPIO numbers. I2C is fixed at GPIO2/GPIO3. UART pin
 
 > This table records the earlier Phase 7 integrated-board proposal. The active Pi 5
 > protoboard map supersedes it: GPIO22/pin 15 observes KEY_LED, while GPIO12/pin 32 is
-> now the dedicated 10 kOhm `CENTER_BUS_TX` output. See
+> now the dedicated 10 kOhm custom TX output on `KEY_ADC1`. See
 > [Pi 5 GPIO schema](../hardware/pi5-gpio-schema.md).
 
 Free GPIO pins (not allocated): GPIO7, GPIO8, GPIO9, GPIO11, GPIO14, GPIO15, GPIO18 (7 free).

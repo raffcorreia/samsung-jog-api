@@ -4,6 +4,23 @@ Living reference documents for the Samsung CJ791 JOG project hardware. These are
 
 Return to the [project README](../../README.md), or choose a hardware topic below.
 
+## Signal terminology
+
+Use the monitor connector names without prefixes or suffixes:
+
+| Canonical signal | Meaning |
+| --- | --- |
+| `KEY_ADC1` | Center/Enter resistor bus; also carries client-to-monitor custom transmission |
+| `KEY_ADC2` | Up/Down/Left/Right resistor-ladder bus |
+| `KEY_LED` | Monitor LED feedback; also carries monitor-to-client custom reception |
+
+Former monitor-prefix variants are obsolete documentation aliases and must not be
+used. Older integrated-board KiCad artifacts may still contain labels such as
+`KEY_ADC1_BUS`, `KEY1_IN_GPIO`, or `LED_IN_GPIO`; those identify nets inside those
+historical artifacts, not additional monitor signals. Current protoboard documentation
+uses the three canonical harness names and describes conditioned GPIO connections by
+their GPIO number and function.
+
 ## Raspberry Pi and current protoboard
 
 | Document | What it covers |

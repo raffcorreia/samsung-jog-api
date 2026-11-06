@@ -28,10 +28,10 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `SDA` | `GPIO2`, physical pin `3` |
 | `SCL` | `GPIO3`, physical pin `5` |
 | `ALERT/RDY` | `GPIO17`, physical pin `11` |
-| `KEY_ADC1` input | `GPIO27`, physical pin `13` |
-| `KEY_LED` input | `GPIO22`, physical pin `15` |
+| `KEY_ADC1` conditioned sense | `GPIO27`, physical pin `13` |
+| `KEY_LED` conditioned sense / custom RX | `GPIO22`, physical pin `15` |
 | `CENTER` | `GPIO5`, physical pin `29` |
-| `CENTER_BUS_TX` | `GPIO12`, physical pin `32` |
+| custom TX on `KEY_ADC1` | `GPIO12`, physical pin `32` |
 | `UP` | `GPIO6`, physical pin `31` |
 | `DOWN` | `GPIO13`, physical pin `33` |
 | `LEFT` | `GPIO19`, physical pin `35` |
@@ -42,6 +42,6 @@ Each row is grouped by identical part/value, so `Qty` is the total count for tha
 | `J1` Pin | Net |
 | --- | --- |
 | `1` | `GND` |
-| `2` | `MON_KEY_ADC2` |
-| `3` | `MON_KEY_ADC1` |
-| `4` | `MON_KEY_LED` |
+| `2` | `KEY_ADC2` |
+| `3` | `KEY_ADC1` |
+| `4` | `KEY_LED` |
