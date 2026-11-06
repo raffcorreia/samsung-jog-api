@@ -40,7 +40,7 @@ Phase 12 was validated through repeated deploys during Phase 13 UI work. The fin
 `scripts/deploy.sh` is the authorized deploy mechanism. It can be invoked by the agent without per-run confirmation from the repo root:
 
 ```bash
-PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+PI_DECK_IP=192.168.x.x ./scripts/deploy.sh
 ```
 
 ## Exit criteria (from plan)

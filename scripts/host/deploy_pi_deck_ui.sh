@@ -4,10 +4,11 @@
 # Run from your dev machine (SSH key to the Pi required).
 #
 # Usage:
-#   PI_TARGET=user@pi-hostname ./scripts/host/deploy_pi_deck_ui.sh
+#   PI_DECK_IP=192.168.x.x ./scripts/host/deploy_pi_deck_ui.sh
 #
 # Environment:
-#   PI_TARGET    SSH destination — required (e.g. user@pi-hostname or user@192.168.x.x)
+#   PI_DECK_IP    Deck IP address — required (or set it in .env.local)
+#   PI_DECK_USER  SSH user — optional; defaults to rafael
 #
 # The repo on the Pi is expected at ~/samsung-jog-api (login user’s home).
 #
@@ -19,10 +20,20 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
-if [ -z "${PI_TARGET:-}" ]; then
-    echo "ERROR: PI_TARGET is not set. Example: PI_TARGET=user@pi-hostname ./scripts/host/deploy_pi_deck_ui.sh" >&2
+if [ -z "${PI_DECK_IP:-}" ] && [ -f "${REPO_ROOT}/.env.local" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . "${REPO_ROOT}/.env.local"
+    set +a
+fi
+
+if [ -z "${PI_DECK_IP:-}" ]; then
+    echo "ERROR: PI_DECK_IP is not set. Ask for the current deck IP before deploying." >&2
     exit 1
 fi
+
+PI_DECK_USER="${PI_DECK_USER:-rafael}"
+PI_TARGET="${PI_DECK_USER}@${PI_DECK_IP}"
 
 echo "Building frontend → ${REPO_ROOT}/backend/src/pi_deck/static ..."
 (cd "${REPO_ROOT}/frontend" && npm run build)

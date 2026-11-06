@@ -86,7 +86,7 @@ The kiosk script (`scripts/kiosk/pi-deck-chromium-kiosk.sh`) waits for `/health`
 After changing any code, use the canonical deploy script from the dev machine (repo root):
 
 ```bash
-PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+PI_DECK_IP=192.168.x.x ./scripts/deploy.sh
 ```
 
 This builds the frontend, rsyncs all code to the Pi, auto-tags on main, restarts `pi-deck`, and reloads Chromium. Do not rsync partial directories or restart the service manually — use the script so the deploy counter increments and the kiosk picks up the latest assets.
@@ -101,28 +101,22 @@ ssh-copy-id user@192.168.x.x                # copies ~/.ssh/id_ed25519.pub to th
 ssh user@192.168.x.x                        # verify it connects without a password
 ```
 
-Optional — add a `~/.ssh/config` entry so you can use a short alias:
-
-```
-Host pi-deck
-    HostName 192.168.x.x
-    User rafael
-    IdentityFile ~/.ssh/id_ed25519
-```
-
-Then `PI_TARGET=pi-deck ./scripts/deploy.sh` works from any directory.
-
 ### Environment variables
 
 | Variable | Required | Description |
 |---|---|---|
-| `PI_TARGET` | yes | SSH destination, e.g. `rafael@10.0.0.116` or `pi-deck` if using `~/.ssh/config`. |
+| `PI_DECK_IP` | yes | Current deck IP address. Set it in the shell or the ignored `.env.local`. |
+| `PI_DECK_USER` | no | SSH user; defaults to `rafael`. |
 | `FORCE_BUILD` | no | Set to `1` to rebuild the frontend even when no source files changed. |
 
-Persist `PI_TARGET` for your shell session so you don't have to prefix every command:
+Before deploying, check `PI_DECK_IP`. If it is not set in the shell or
+`.env.local`, ask the user for the current deck IP; do not reuse an address from
+old documentation. Persist the value locally so you do not have to prefix every
+command:
 
 ```bash
-export PI_TARGET=rafael@10.0.0.116   # add to ~/.zshrc or ~/.bashrc to make it permanent
+cp .env.example .env.local
+# Edit .env.local and set PI_DECK_IP to the current address.
 ./scripts/deploy.sh
 ```
 

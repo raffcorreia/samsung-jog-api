@@ -125,7 +125,7 @@ Use the **default text output** (not `--json`) when pasting into execution recor
 
 ```bash
 # From dev machine, repo root — canonical deploy (Phase 12+)
-PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+PI_DECK_IP=192.168.x.x ./scripts/deploy.sh
 ```
 
 Then re-run `pi-deck-host-health.py` on the Pi.

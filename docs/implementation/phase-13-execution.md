@@ -163,7 +163,7 @@ Commands run from the dev machine:
 cd frontend
 npm test -- --run
 npm run build
-ssh rafael@10.0.0.11 'python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py'
+ssh "${PI_DECK_USER:-rafael}@${PI_DECK_IP}" 'python3 ~/samsung-jog-api/scripts/pi-deck-host-health.py'
 ```
 
 Results:

@@ -70,7 +70,7 @@ cd ../frontend
 npm test -- --run
 npm run build
 
-PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+PI_DECK_IP=192.168.x.x ./scripts/deploy.sh
 ```
 
 Results:

@@ -70,6 +70,6 @@ hostname: pi-deck
 
 ## Notes
 
-- Deploy: `PI_TARGET=user@host ./scripts/deploy.sh`
+- Deploy: `PI_DECK_IP=192.168.x.x ./scripts/deploy.sh`
 - Bench: `scripts/pi-deck-gpio-probe read-ads --channel 0` on `/dev/i2c-1` `0x48` (AIN0).
 - **Follow-up (later phase):** websocket / `LiveLogService` volume and operator-facing log coalescing (see prior plan note).

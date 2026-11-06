@@ -6,18 +6,19 @@
 # Run from the repository root on your dev machine (SSH key to the Pi required).
 #
 # Usage:
-#   PI_TARGET=user@pi-hostname ./scripts/deploy.sh
+#   PI_DECK_IP=192.168.x.x ./scripts/deploy.sh
 #
-# Persist PI_TARGET for the session so you don't need to prefix every run:
-#   export PI_TARGET=rafael@10.0.0.116
+# Persist PI_DECK_IP in the ignored .env.local file or export it for the session:
+#   export PI_DECK_IP=192.168.x.x
 #   ./scripts/deploy.sh
 #
 # SSH key auth is required (BatchMode — no password prompts). One-time setup:
 #   ssh-keygen -t ed25519 -C "pi-deck-deploy"
-#   ssh-copy-id $PI_TARGET
+#   ssh-copy-id "${PI_DECK_USER:-rafael}@${PI_DECK_IP}"
 #
 # Environment:
-#   PI_TARGET     SSH destination — required (e.g. user@hostname or user@192.168.x.x)
+#   PI_DECK_IP    Deck IP address — required (or set it in .env.local)
+#   PI_DECK_USER  SSH user — optional; defaults to rafael
 #   FORCE_BUILD   Set to 1 to rebuild the frontend even when no source files changed
 
 set -euo pipefail
@@ -25,13 +26,25 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-if [ -z "${PI_TARGET:-}" ]; then
-    echo "ERROR: PI_TARGET is not set." >&2
-    echo "  Set it for this session:" >&2
-    echo "    export PI_TARGET=user@hostname-or-ip" >&2
-    echo "  Then re-run the deploy." >&2
+# Load local deployment settings when they were not already exported. This file
+# is ignored by Git and is intended only for environment-specific values.
+if [ -z "${PI_DECK_IP:-}" ] && [ -f "${REPO_ROOT}/.env.local" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    . "${REPO_ROOT}/.env.local"
+    set +a
+fi
+
+if [ -z "${PI_DECK_IP:-}" ]; then
+    echo "ERROR: PI_DECK_IP is not set." >&2
+    echo "  Ask for the deck's current IP, then either:" >&2
+    echo "    export PI_DECK_IP=192.168.x.x" >&2
+    echo "  or set PI_DECK_IP in ${REPO_ROOT}/.env.local." >&2
     exit 1
 fi
+
+PI_DECK_USER="${PI_DECK_USER:-rafael}"
+PI_TARGET="${PI_DECK_USER}@${PI_DECK_IP}"
 
 # Check connectivity before wasting time on a build or rsync.
 echo "==> Checking connectivity to ${PI_TARGET} ..."
@@ -39,7 +52,7 @@ if ! ssh -o BatchMode=yes -o ConnectTimeout=5 -o ConnectionAttempts=1 \
         "${PI_TARGET}" exit 2>/dev/null; then
     echo "ERROR: Cannot reach ${PI_TARGET}." >&2
     echo "  Verify the host is up and your SSH key is authorised, then:" >&2
-    echo "    export PI_TARGET=${PI_TARGET}" >&2
+    echo "    export PI_DECK_IP=${PI_DECK_IP}" >&2
     echo "  Re-run the deploy once the host is reachable." >&2
     exit 1
 fi

@@ -15,7 +15,7 @@ Track **Phase 23: Documentation Reorganization, Versioning, and Deploy Harness**
 - Removed `dev` from all version strings; format is `0.1.0+r<N>` (main) or `0.1.0+r<N>-branch-slug` (branch)
 - `scripts/deploy.sh` auto-tags HEAD on `main` (patch bump, pushed to origin) before computing version so `git describe` picks up the new tag immediately; branch deploys are never tagged
 - Added `VersionPanel` to `SettingsPage` as the topmost section (before Network), fetching version via `fetchStatus()`
-- Expanded `scripts/deploy.sh` header and `docs/runbooks/platform-bring-up.md` with SSH key setup steps, `~/.ssh/config` alias pattern, and full env var reference (`PI_TARGET`, `FORCE_BUILD`)
+- Expanded `scripts/deploy.sh` header and `docs/runbooks/platform-bring-up.md` with SSH key setup steps and the deployment environment reference (`PI_DECK_IP`, `PI_DECK_USER`, `FORCE_BUILD`).
 - Added log-reduction and SD card IO/corruption-risk task to Phase 48 Stabilization
 
 ### KiCad project renames
@@ -79,7 +79,7 @@ Branch deploys are never auto-tagged. CI/CD automation is a future phase.
 ### Deploy harness
 
 - Added SSH connectivity pre-check at the top of `scripts/deploy.sh`: one attempt, 5 s timeout, fail-fast
-- Unreachable host prints an actionable `export PI_TARGET=…` message and exits immediately — no silent retry or continued execution
+- An unset `PI_DECK_IP` or unreachable host prints actionable guidance and exits immediately—no silent retry or continued execution.
 
 ## Host health gate
 
