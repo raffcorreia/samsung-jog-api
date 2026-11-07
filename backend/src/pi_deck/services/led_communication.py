@@ -276,7 +276,11 @@ def _decode_bits_resilient(
                 continue
             delta = edges[pos + 1].monotonic_ns - edges[pos].monotonic_ns
 
-            if expected in (None, 0) and half_ns * 1.45 <= delta <= half_ns * 2.75:
+            # gpiozero/lgpio callback scheduling can shift alternating edge timestamps by
+            # roughly 7 ms on the deck. A real 20 ms full-bit interval can therefore appear
+            # as either half of a 27/13 ms pair. Sync-prefix constraints and CRC still gate
+            # acceptance, so retain both shapes in the bounded recovery search.
+            if expected in (None, 0) and half_ns * 1.30 <= delta <= half_ns * 2.90:
                 key = (pos + 1, bits << 1)
                 candidate_score = score + abs(delta - half_ns * 2)
                 next_states[key] = min(next_states.get(key, candidate_score), candidate_score)
@@ -324,7 +328,7 @@ def _incomplete_prefix(edges: list[RawLedEdge], half_ns: int) -> tuple[str, int]
                 if pos + 1 >= len(edges):
                     continue
                 delta = edges[pos + 1].monotonic_ns - edges[pos].monotonic_ns
-                if expected in (None, 0) and half_ns * 1.45 <= delta <= half_ns * 2.75:
+                if expected in (None, 0) and half_ns * 1.30 <= delta <= half_ns * 2.90:
                     key = (pos + 1, bits << 1)
                     candidate_score = score + abs(delta - half_ns * 2)
                     next_states[key] = min(

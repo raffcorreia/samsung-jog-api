@@ -747,6 +747,35 @@ def test_recovers_repeated_16ms_4ms_half_bit_pairs() -> None:
     assert frames[0].acquisition_recovered is True
 
 
+def test_recovers_alternating_callback_skew_from_live_deck_capture() -> None:
+    raw = bytes.fromhex("ffff2dd41126030662")
+    edges = _edges_for_frame(raw)
+    distorted: list[RawLedEdge] = []
+    previous: int | None = None
+    for index, edge in enumerate(edges):
+        # Models the live gpiozero callback shape: 10 ms phases become 17/3 ms and
+        # consecutive 20 ms full-bit gaps become 27/13 ms.
+        timestamp = edge.monotonic_ns + (7_000_000 if index % 2 else 0)
+        distorted.append(
+            RawLedEdge(
+                edge.seq,
+                timestamp,
+                edge.level,
+                None if previous is None else timestamp - previous,
+            )
+        )
+        previous = timestamp
+
+    frames = decode_led_frames(distorted)
+
+    assert len(frames) == 1
+    assert frames[0].raw_hex == raw.hex()
+    assert frames[0].layout == "single"
+    assert frames[0].input1 == "tb"
+    assert frames[0].connection_mask == 0x06
+    assert frames[0].acquisition_recovered is True
+
+
 def test_recovers_real_world_17_8ms_2_2ms_half_bit_pair() -> None:
     edges = _edges_for_frame(bytes.fromhex("ffff2dd4115e01067e"))
     distorted = list(edges)
