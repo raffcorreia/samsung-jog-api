@@ -112,7 +112,7 @@
   min-width: 0;
   min-height: 0;
   padding: 7px 9px 4px;
-  border: 1px solid var(--border-bright);
+  border: 2px solid var(--border-bright);
   border-radius: 5px;
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   color: #dceaf5;
@@ -146,17 +146,17 @@
 }
 
 .quickControlButton[data-disconnected="true"] {
-  color: #687681;
-  border-color: #3c4750;
-  background: color-mix(in srgb, var(--surface) 92%, #26313a 8%);
-  opacity: 0.58;
+  color: #74828d;
+  border-color: #596773;
+  background: #11171d;
+  filter: saturate(0.25) brightness(0.78);
 }
 
 .quickControlButton[data-disconnected="true"]:hover:not(:disabled),
 .quickControlButton[data-disconnected="true"]:focus-visible {
   color: #9aa9b5;
-  border-color: #6d7b86;
-  opacity: 0.82;
+  border-color: #83919c;
+  filter: saturate(0.4) brightness(0.92);
 }
 
 .quickControlButton[data-selected="true"][data-disconnected="true"] {
@@ -187,7 +187,7 @@
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   align-items: stretch;
-  border: 2px solid currentColor;
+  border: 3px solid currentColor;
   border-radius: 2px;
   background: rgba(108, 182, 255, 0.04);
 }
@@ -210,14 +210,14 @@
 }
 
 .monitorScreen[data-split="true"] > span + span {
-  border-left: 1px solid currentColor;
+  border-left: 3px solid currentColor;
 }
 
 .monitorStand {
   position: relative;
   width: 28px;
   height: 7px;
-  border-bottom: 2px solid currentColor;
+  border-bottom: 3px solid currentColor;
 }
 
 .monitorStand::before {
@@ -225,7 +225,7 @@
   position: absolute;
   left: 50%;
   top: 0;
-  width: 2px;
+  width: 3px;
   height: 7px;
   background: currentColor;
   transform: translateX(-50%);
