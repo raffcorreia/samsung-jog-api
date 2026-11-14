@@ -44,6 +44,7 @@
 
 Supporting sections:
 
+- [Future Development Ideas](#future-development-ideas) — uncommitted ideas to refine before assigning phases
 - [Host health gate (feature phases 10–33)](#host-health-gate-feature-phases-1033)
 - [Deferred integrated-board GPIO and software migration](#deferred-integrated-board-gpio-and-software-migration) — waiting for Phase 7 hardware
 
@@ -65,6 +66,129 @@ The overall strategy is:
 10. finish the remaining dashboard and stabilization work
 
 This order matters because many higher-level features depend on being able to send low-level `JOG` actions, repeat them, and correlate them with `DDC` and `LED` feedback.
+
+## Future Development Ideas
+
+This backlog captures ideas that may be valuable but are not yet defined well
+enough to become implementation phases. Promote an idea into a numbered phase
+only after its intended outcome, scope, dependencies, and exit criteria are
+clear.
+
+### Haptic feedback for deck interactions
+
+Explore adding haptic feedback to the control deck so touch and physical
+interactions provide immediate, non-visual confirmation. Potential uses include
+acknowledging accepted actions, distinguishing success from errors, indicating
+limits or disabled controls, improving feedback during menu navigation, and
+enhancing interactions with controls such as a rolling button (for example, a
+rotary encoder or wheel with an integrated push button).
+
+Open questions include the preferred haptic actuator, how it would integrate
+with touch and physical controls, GPIO or bus requirements, power and enclosure
+impact, accessibility behavior, and which interactions benefit from tactile
+feedback without becoming noisy or distracting.
+
+### OpenLogi-inspired mouse and keyboard control
+
+Investigate [OpenLogi](https://github.com/AprilNEA/OpenLogi), a local-first
+Logitech Options+ alternative, to determine whether its architecture or
+selected implementations can inform mouse and keyboard control from the deck.
+Relevant areas include Logitech `HID++` communication, device discovery,
+button and gesture mapping, action/workflow modeling, per-application profiles,
+plain-text configuration, and its JSON automation interface.
+
+The investigation should distinguish configuring Logitech devices connected to
+the deck from using the deck as a control surface for another computer. The
+latter may require a host-side agent, a network command protocol, or USB or
+Bluetooth HID emulation in addition to any ideas reused from OpenLogi. Evaluate
+latency, permissions, authentication, failure safety, Linux and Raspberry Pi
+compatibility, and how controls would integrate with the existing deck UI.
+
+OpenLogi's code is offered under MIT or Apache-2.0, but any future reuse must
+verify the license and attribution requirements for the selected source files;
+its separately licensed name, logo, and other brand assets are out of scope.
+
+### Containerized applications on the deck
+
+Investigate whether the Raspberry Pi has enough spare resources to run selected
+applications as Docker containers alongside the existing deck software. Before
+installing Docker or migrating any application, measure the final deck host's
+idle and peak CPU use, available memory and swap, storage capacity and write
+load, thermals, power headroom, and current service startup time.
+
+Use those measurements to identify which existing or future applications would
+benefit from containerization and how many additional containers the deck could
+run without reducing kiosk responsiveness or interfering with monitor control,
+GPIO, I2C, DDC, touch, display, or other hardware access. Consider container
+image storage, SD-card wear, log growth, networking, startup ordering, health
+checks, update and rollback behavior, backups, security boundaries, and whether
+direct host services remain more appropriate for latency-sensitive hardware
+functions.
+
+### Morning workday check-in widget
+
+Explore a widget that asks each morning whether the user is working that day
+and, when relevant, which project the work applies to. Store the response in a
+simple workday history so the deck can track project working days, show recent
+and cumulative totals, and distinguish working days from days off, skipped
+check-ins, and corrected entries.
+
+Consider configurable prompt time and working-week rules, reminder and snooze
+behavior, multiple projects in one day, partial days, retroactive edits, local
+data storage and export, privacy while the deck is locked, and behavior when the
+deck was powered off or unavailable at the scheduled check-in time.
+
+### 3D-printer status and camera widget
+
+Explore a dashboard widget that shows the current state of one or more 3D
+printers together with a live camera view. Candidate information includes
+printer availability, active job and file name, completion percentage,
+estimated time remaining, nozzle and bed temperatures, current layer, paused or
+error state, and a clear idle or offline indication.
+
+Investigate integration through the printer platform's supported API and camera
+stream rather than coupling the deck to a specific printer implementation.
+Consider responsive camera performance on the deck, refresh and bandwidth
+limits, multiple-printer selection, notifications on completion or failure,
+authentication and credential storage, and useful behavior when the printer or
+camera is unavailable. Begin with read-only monitoring; any later controls such
+as pause, resume, cancel, or emergency stop must be explicit, protected against
+accidental activation, and authorized appropriately.
+
+### Kubernetes status widget
+
+Explore a dashboard widget that provides an at-a-glance, read-only view of one
+or more Kubernetes clusters. Candidate information includes API availability,
+node readiness and resource pressure, unhealthy or restarting workloads,
+pending pods, failed jobs, deployment and StatefulSet rollout status, warning
+events, storage health, and a concise count of healthy, degraded, and failed
+resources.
+
+Design the default view for quick operational awareness rather than attempting
+to reproduce a complete Kubernetes dashboard on the deck. Consider cluster and
+namespace filtering, multiple-cluster selection, refresh frequency, alert
+prioritization, drill-down details, offline and stale-data indicators, and
+notifications for important state changes. Access should use a dedicated
+read-only, least-privilege identity with securely stored credentials; any future
+mutating actions must be separately authorized, confirmed, and audited.
+
+### Widget navigation and back-button replacement
+
+Replace the awkward title-bar back button with a clear widget-navigation model.
+The current button appears near the middle of secondary screens and popups,
+looks unbalanced, and does not communicate how the user moves between deck
+widgets. Explore a persistent or easily opened navigation control that exposes
+the available widgets, identifies the current widget, and provides a direct
+route home without requiring repeated back actions.
+
+Define whether the best interaction is a compact widget switcher, navigation
+rail, drawer, tab-like control, or another touch-first pattern that fits the
+deck's `1280x800` target. Remove the back button where direct widget navigation
+makes it redundant; retain a conventionally positioned back or close action
+only for nested details, temporary overlays, or flows with meaningful history.
+Keep navigation placement, icons, labels, selected state, spacing, and touch
+targets consistent across views without competing with titles or right-side
+actions.
 
 ## Host health gate (feature phases 10–33)
 
